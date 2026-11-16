@@ -95,7 +95,7 @@
   }
 }
 
-.awea-business-hours-status-side h2 {
+.awea-business-hours-heading {
   font-size: clamp(2rem, 4.5vw, 2.75rem);
   font-weight: 800;
   letter-spacing: -0.03em;
@@ -106,7 +106,7 @@
   word-break: break-word;
 }
 
-.awea-business-hours-status-side p {
+.awea-business-hours-desc {
   color: #94a3b8;
   font-size: 1.05rem;
   line-height: 1.7;
@@ -116,7 +116,7 @@
   word-break: break-word;
 }
 
-/* Phone Support Box (Stationary on Hover - No Translation) */
+/* Phone Support Box */
 .awea-business-hours-support-box {
   margin-top: auto;
   padding-top: 15px;
@@ -139,12 +139,12 @@
   gap: 14px;
   text-decoration: none;
   color: inherit;
-  transform: none; /* Strictly no translateX */
+  transform: none;
   transition: opacity 0.25s ease;
 }
 
 .awea-business-hours-support-link:hover {
-  transform: none; /* Stays locked in place */
+  transform: none;
   opacity: 0.9;
 }
 
@@ -199,7 +199,7 @@
   padding: 18px 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   box-sizing: border-box;
-  transform: none; /* Strictly no translateX */
+  transform: none;
   transition: border-color 0.3s ease;
 }
 
@@ -239,10 +239,10 @@
   white-space: nowrap;
 }
 
-/* Active Current Day State (No Slide/Shift) */
+/* Active Current Day State */
 .awea-business-hours-row.is-today {
   border-bottom-color: var(--e-global-color-accent, #38bdf8);
-  transform: none; /* Strictly no translateX */
+  transform: none;
 }
 
 .awea-business-hours-row.is-today .awea-business-hours-day {
@@ -277,7 +277,7 @@
     padding: 36px 28px;
   }
 
-  .awea-business-hours-status-side h2 {
+  .awea-business-hours-heading {
     font-size: 2rem;
   }
 

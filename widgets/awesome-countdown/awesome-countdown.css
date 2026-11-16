@@ -23,7 +23,7 @@
   display: none !important;
 }
 
-/* 2. Micro-Interactive Time Cells (Strictly Stationary on Hover - No Lift) */
+/* 2. Micro-Interactive Time Cells */
 .awea-time-cell {
   flex: 1 1 auto;
   min-width: 120px;
@@ -40,11 +40,10 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  transform: none; /* Strictly no hover lift */
+  transform: none;
   transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
 }
 
-/* Cell remains completely locked in place on hover */
 .awea-time-cell:hover {
   transform: none;
 }
@@ -72,14 +71,14 @@
   word-break: break-word;
 }
 
-/* 4. Colon Separators (Smooth Opacity Pulse - No Scale Transform) */
+/* 4. Colon Separators */
 .awea-colon-sep {
   font-size: 28px;
   font-weight: 800;
   color: var(--e-global-color-primary, #4f46e5);
   line-height: 1;
   user-select: none;
-  transform: none; /* Strictly no scale(0.92) */
+  transform: none;
   animation: aweaColonBlink 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
@@ -132,7 +131,7 @@
   }
 
   .awea-colon-sep {
-    display: none; /* Hide colons on 2x2 mobile wrap */
+    display: none;
   }
 
   .awea-countdown-expired {

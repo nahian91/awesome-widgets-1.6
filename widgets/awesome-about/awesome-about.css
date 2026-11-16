@@ -15,6 +15,26 @@
   transform: none;
 }
 
+/* Image Position: Right Swap */
+.awea-about-pos-right .awea-about-visual-container {
+  order: 2;
+  justify-content: flex-end;
+}
+
+.awea-about-pos-right .awea-about-text-content {
+  order: 1;
+}
+
+.awea-about-pos-right .awea-about-floating-circle {
+  right: auto;
+  left: -5%;
+}
+
+.awea-about-pos-right .awea-about-ribbon {
+  left: auto;
+  right: -20px;
+}
+
 /* 1. Visual Framing & Fluid Geometry */
 .awea-about-visual-container {
   position: relative;
@@ -41,15 +61,15 @@
   height: 100%;
   object-fit: cover;
   display: block;
-  transform: none; /* Strictly no scale(1.06) */
+  transform: none;
   transition: opacity 0.3s ease;
 }
 
 .awea-about-visual-container:hover .awea-about-image-frame img {
-  transform: none; /* Stays stationary at 1:1 */
+  transform: none;
 }
 
-/* Floating Secondary Circle (Stationary on Hover - No Scale/Lift) */
+/* Floating Secondary Circle */
 .awea-about-floating-circle {
   position: absolute;
   width: 320px;
@@ -82,7 +102,7 @@
   }
 }
 
-/* Experience Ribbon Badge (Stationary on Hover - No Lift) */
+/* Experience Ribbon Badge */
 .awea-about-ribbon {
   position: absolute;
   bottom: 8%;
@@ -97,7 +117,7 @@
   box-shadow: 0 16px 32px -8px rgba(79, 70, 229, 0.45);
   z-index: 10;
   box-sizing: border-box;
-  transform: none; /* Strictly no translateY(-4px) scale(1.02) */
+  transform: none;
   transition: background-color 0.3s ease;
   line-height: 1.2;
 }
@@ -107,12 +127,21 @@
   position: absolute;
   top: -10px;
   left: 0;
-  border-right: 10px solid rgba(0, 0, 0, 0.3);
-  border-top: 10px solid transparent;
+  width: 10px;
+  height: 10px;
+  background-color: inherit;
+  filter: brightness(0.65);
+  clip-path: polygon(100% 0, 0 100%, 100% 100%);
+}
+
+.awea-about-pos-right .awea-about-ribbon::before {
+  left: auto;
+  right: 0;
+  clip-path: polygon(0 0, 0 100%, 100% 100%);
 }
 
 .awea-about-visual-container:hover .awea-about-ribbon {
-  transform: none; /* Stays locked in place */
+  transform: none;
 }
 
 /* 2. Editorial Content Column */
@@ -160,6 +189,10 @@
   word-break: break-word;
 }
 
+.awea-about-main-desc p:last-child {
+  margin-bottom: 0;
+}
+
 /* Feature Check Matrix */
 .awea-about-feature-box {
   display: grid;
@@ -187,7 +220,7 @@
   display: block;
 }
 
-/* 3. Call to Action Controls (Stationary on Hover - No Lift) */
+/* 3. Call to Action Controls */
 .awea-about-cta-wrapper {
   display: flex;
   align-items: center;
@@ -209,7 +242,7 @@
   font-weight: 700;
   font-size: 0.95rem;
   box-shadow: 0 10px 25px -5px rgba(79, 70, 229, 0.4);
-  transform: none; /* Strictly no translateY(-3px) */
+  transform: none;
   transition: background-color 0.25s ease, box-shadow 0.3s ease, color 0.25s ease;
   line-height: 1.2;
   box-sizing: border-box;
@@ -218,15 +251,15 @@
 .awea-about-prime-btn svg {
   width: 16px;
   height: 16px;
-  transform: none; /* Strictly no translateX(3px) */
+  transform: none;
   transition: none;
 }
 
 .awea-about-prime-btn:hover {
-  transform: none; /* Stays locked in place */
+  transform: none;
 }
 
-/* Phone Trigger (Stationary on Hover - No Scale/Rotate) */
+/* Phone Trigger */
 .awea-about-phone-call {
   display: inline-flex;
   align-items: center;
@@ -248,7 +281,7 @@
   flex-shrink: 0;
   box-shadow: 0 10px 20px -5px rgba(79, 70, 229, 0.35);
   box-sizing: border-box;
-  transform: none; /* Strictly no scale(1.1) rotate(-8deg) */
+  transform: none;
   transition: background-color 0.3s ease;
 }
 
@@ -259,7 +292,7 @@
 }
 
 .awea-about-phone-call:hover .awea-about-icon-circle {
-  transform: none; /* Stays stationary */
+  transform: none;
 }
 
 .awea-about-phone-meta {
@@ -291,6 +324,14 @@
     gap: 50px;
   }
 
+  .awea-about-pos-right .awea-about-visual-container {
+    order: 0;
+  }
+
+  .awea-about-pos-right .awea-about-text-content {
+    order: 0;
+  }
+
   .awea-about-visual-container {
     max-width: 600px;
     margin: 0 auto;
@@ -300,6 +341,7 @@
     width: 240px;
     height: 240px;
     right: 0;
+    left: auto;
     top: 5%;
   }
 }
@@ -315,18 +357,20 @@
     height: 180px;
     border-width: 6px;
     right: -10px;
+    left: auto;
     top: -20px;
   }
 
   .awea-about-ribbon {
     left: 0;
+    right: auto;
     bottom: -15px;
     padding: 12px 24px;
     font-size: 0.95rem;
   }
 
   .awea-about-feature-box {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr !important;
   }
 
   .awea-about-cta-wrapper {

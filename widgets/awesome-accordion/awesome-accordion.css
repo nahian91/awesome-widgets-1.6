@@ -8,7 +8,7 @@
   box-sizing: border-box;
 }
 
-/* 1. Item Shell (Strictly Stationary on Hover - No Lift) */
+/* 1. Item Shell */
 .awea-accordion-item {
   background-color: #ffffff;
   border-style: solid;
@@ -19,7 +19,7 @@
   overflow: hidden;
   box-shadow: 0 4px 15px -3px rgba(0, 0, 0, 0.03);
   box-sizing: border-box;
-  transform: none; /* Strictly no hover lift */
+  transform: none;
   transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
 }
 
@@ -28,7 +28,7 @@
 }
 
 .awea-accordion-item:hover {
-  transform: none; /* Stays locked in place */
+  transform: none;
   box-shadow: 0 8px 25px -4px rgba(0, 0, 0, 0.06);
 }
 
@@ -48,6 +48,7 @@
   user-select: none;
   outline: none;
   box-sizing: border-box;
+  transition: background-color 0.25s ease;
 }
 
 .awea-accordion-header:focus-visible {
@@ -98,13 +99,13 @@
 }
 
 .awea-icon-line.h {
-  width: 14px;
+  width: 16px;
   height: 2px;
 }
 
 .awea-icon-line.v {
   width: 2px;
-  height: 14px;
+  height: 16px;
 }
 
 .awea-accordion-item.is-active .awea-icon-line.v {
@@ -119,8 +120,8 @@
 
 /* Rotating Chevron */
 .awea-icon-chevron {
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   stroke: #64748b;
   display: block;
   transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),

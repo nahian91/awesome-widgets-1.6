@@ -138,7 +138,7 @@
   flex-wrap: wrap;
 }
 
-/* Base Button (Strictly No Hover Lift / No Scale) */
+/* Base Button */
 .awea-cta-btn {
   display: inline-flex;
   align-items: center;
@@ -155,13 +155,13 @@
   border-width: 1.5px;
   border-color: transparent;
   box-sizing: border-box;
-  transform: none; /* Strictly no translateY(-4px) */
+  transform: none;
   transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
   line-height: 1.2;
 }
 
 .awea-cta-btn:hover {
-  transform: none; /* Stays locked in place */
+  transform: none;
 }
 
 .awea-btn-icon {
@@ -188,7 +188,7 @@
 
 .awea-cta-btn-primary:hover .awea-icon-right,
 .awea-cta-btn-primary:hover .awea-icon-left {
-  transform: none; /* Arrow stays stationary */
+  transform: none;
 }
 
 /* Secondary Button Styling */
@@ -203,10 +203,6 @@
    Super Mobile Friendly System (<= 768px)
    ========================================================================== */
 @media (max-width: 768px) {
-  .awea-cta-hero-section {
-    padding: 60px 20px !important;
-  }
-
   .awea-cta-hero-title {
     font-size: 2.25rem;
     letter-spacing: -0.02em;

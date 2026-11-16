@@ -11,7 +11,7 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: inherit;
+  justify-content: center;
   gap: 8px;
 }
 
@@ -24,7 +24,7 @@
   color: var(--e-global-color-primary, #0f172a);
   text-decoration: underline;
   text-underline-offset: 3px;
-  transition: color 0.2s ease;
+  transition: color 0.2s ease, opacity 0.2s ease;
 }
 
 .awea-copyright-wrap a:hover {
@@ -32,8 +32,9 @@
 }
 
 .awea-copyright-divider {
-  opacity: 0.4;
+  opacity: 0.45;
   user-select: none;
+  line-height: 1;
 }
 
 .awea-copyright-extra {
@@ -45,6 +46,7 @@
     flex-direction: column;
     gap: 4px;
   }
+
   .awea-copyright-divider {
     display: none;
   }

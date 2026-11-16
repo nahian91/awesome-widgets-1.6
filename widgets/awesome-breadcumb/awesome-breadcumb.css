@@ -12,6 +12,7 @@
   background-position: center;
   z-index: 1;
   transform: none;
+  --awea-crumb-justify: center;
 }
 
 /* 1. Backdrop Overlay */
@@ -49,6 +50,7 @@
 .awea-breadcrumb-nav {
   display: flex;
   align-items: center;
+  justify-content: var(--awea-crumb-justify, center);
   box-sizing: border-box;
 }
 
@@ -56,6 +58,7 @@
   display: inline-flex;
   flex-wrap: wrap;
   align-items: center;
+  justify-content: var(--awea-crumb-justify, center);
   list-style: none;
   padding: 0;
   margin: 0;
@@ -70,12 +73,12 @@
 
 .awea-breadcrumb-item a {
   text-decoration: none;
-  transform: none; /* Strictly no translateY(-1px) */
+  transform: none;
   transition: color 0.25s ease;
 }
 
 .awea-breadcrumb-item a:hover {
-  transform: none; /* Stays stationary on hover */
+  transform: none;
 }
 
 .awea-breadcrumb-item.is-current {
@@ -104,10 +107,6 @@
 
 /* 5. Responsive Adjustments */
 @media (max-width: 768px) {
-  .awea-breadcrumb-hero {
-    padding: 50px 20px !important;
-  }
-
   .awea-breadcrumb-title {
     font-size: 1.85rem;
     margin-bottom: 10px;

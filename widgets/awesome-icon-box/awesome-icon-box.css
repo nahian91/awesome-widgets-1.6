@@ -15,18 +15,19 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
   box-shadow: 0 4px 15px -3px rgba(0, 0, 0, 0.03);
-  transform: none; /* Strictly no hover lift */
+  transform: none;
   transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
 }
 
-/* Card remains completely locked in place on hover */
 .awea-icon-box:hover {
   transform: none;
 }
 
-/* 1. Ambient Corner Spotlight Glow (Zero Scale on Hover) */
-.awea-icon-box::after {
+/* 1. Ambient Corner Spotlight Glow (Controlled by Switcher) */
+.awea-has-glow-yes .awea-icon-box::after {
   content: "";
   position: absolute;
   bottom: -60px;
@@ -37,17 +38,17 @@
   background: radial-gradient(circle at center, rgba(79, 70, 229, 0.2) 0%, transparent 70%);
   pointer-events: none;
   opacity: 0.25;
-  transform: none; /* Strictly no scale(2.2) */
+  transform: none;
   transition: opacity 0.4s ease;
   z-index: 1;
 }
 
-.awea-icon-box:hover::after {
+.awea-has-glow-yes .awea-icon-box:hover::after {
   transform: none;
   opacity: 0.45;
 }
 
-/* 2. Leading Icon Badge (Zero Rotation / No Scale on Hover) */
+/* 2. Leading Icon Badge */
 .awea-icon-wrapper {
   position: relative;
   z-index: 2;
@@ -65,7 +66,7 @@
   border-width: 0;
   border-color: transparent;
   box-sizing: border-box;
-  transform: none; /* Strictly no scale(1.1) rotate(-8deg) */
+  transform: none;
   transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
@@ -82,7 +83,7 @@
 }
 
 .awea-icon-box:hover .awea-icon-wrapper {
-  transform: none; /* Stays locked in place */
+  transform: none;
   background-color: var(--e-global-color-primary, #4f46e5);
   color: #ffffff;
 }
@@ -117,7 +118,7 @@
   word-break: break-word;
 }
 
-/* 4. Action Button (Stationary on Hover - No Lift / No Gap Shifts) */
+/* 4. Action Button */
 .awea-btn-link {
   position: relative;
   z-index: 2;
@@ -138,13 +139,13 @@
   width: fit-content;
   box-sizing: border-box;
   box-shadow: 0 4px 14px rgba(79, 70, 229, 0.2);
-  transform: none; /* Strictly no translateY(-2px) */
+  transform: none;
   transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
   line-height: 1.2;
 }
 
 .awea-btn-link:hover {
-  gap: 8px; /* Gap stays static */
+  gap: 8px;
   transform: none;
 }
 

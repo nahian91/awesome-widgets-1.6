@@ -7,46 +7,30 @@
   position: relative;
   box-sizing: border-box;
   transform: none;
+  text-align: center;
+  --awea-head-justify: center;
+  --awea-head-ml: auto;
+  --awea-head-mr: auto;
 }
 
-/* 1. Alignment Handling */
-.awea-heading-align-left .awea-section-signature-tag-wrap,
-.awea-heading-align-left .awea-section-signature-divider-wrap,
-.awea-heading-align-left .awea-section-signature-btn-wrap {
+/* 1. Responsive Alignment Handling */
+.awea-section-signature-tag-wrap,
+.awea-section-signature-divider-wrap,
+.awea-section-signature-btn-wrap {
   display: flex;
-  justify-content: flex-start;
-}
-.awea-heading-align-left .awea-section-signature-desc {
-  margin-left: 0;
-  margin-right: auto;
+  justify-content: var(--awea-head-justify, center);
 }
 
-.awea-heading-align-center .awea-section-signature-tag-wrap,
-.awea-heading-align-center .awea-section-signature-divider-wrap,
-.awea-heading-align-center .awea-section-signature-btn-wrap {
-  display: flex;
-  justify-content: center;
-}
-.awea-heading-align-center .awea-section-signature-desc {
-  margin-left: auto;
-  margin-right: auto;
+.awea-section-signature-desc {
+  margin-left: var(--awea-head-ml, auto);
+  margin-right: var(--awea-head-mr, auto);
 }
 
-.awea-heading-align-right .awea-section-signature-tag-wrap,
-.awea-heading-align-right .awea-section-signature-divider-wrap,
-.awea-heading-align-right .awea-section-signature-btn-wrap {
-  display: flex;
-  justify-content: flex-end;
-}
-.awea-heading-align-right .awea-section-signature-desc {
-  margin-left: auto;
-  margin-right: 0;
-}
-
-/* 2. Subheading Pill Badge (Stationary on Hover - No Lift) */
+/* 2. Subheading Pill Badge */
 .awea-section-signature-tag {
   display: inline-flex;
   align-items: center;
+  gap: 8px;
   padding: 8px 22px;
   border-radius: 100px;
   font-size: 0.78rem;
@@ -58,13 +42,27 @@
   border: 1px solid rgba(79, 70, 229, 0.16);
   user-select: none;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
-  transform: none; /* Strictly no translateY(-2px) */
+  transform: none;
   transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
   line-height: 1.2;
 }
 
 .awea-section-signature-tag:hover {
-  transform: none; /* Stays locked in place */
+  transform: none;
+}
+
+.awea-tag-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.awea-tag-icon svg,
+.awea-tag-icon i {
+  width: 13px;
+  height: 13px;
+  font-size: 13px;
 }
 
 /* 3. Main Heading Typography */
@@ -128,7 +126,7 @@
   word-break: break-word;
 }
 
-/* 6. Signature Action Button (Stationary on Hover - No Lift/Scale/Offset) */
+/* 6. Signature Action Button */
 .awea-section-signature-btn {
   display: inline-flex;
   align-items: center;
@@ -144,14 +142,14 @@
   color: #ffffff;
   border: 1.5px solid transparent;
   box-shadow: 0 10px 25px -6px rgba(79, 70, 229, 0.35);
-  transform: none; /* Strictly no translateY(-4px) scale(1.02) */
+  transform: none;
   transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease, box-shadow 0.3s ease;
   line-height: 1.2;
   box-sizing: border-box;
 }
 
 .awea-section-signature-btn:hover {
-  transform: none; /* Stays locked in place */
+  transform: none;
 }
 
 .awea-btn-icon {
@@ -171,7 +169,7 @@
 
 .awea-section-signature-btn:hover .awea-icon-right,
 .awea-section-signature-btn:hover .awea-icon-left {
-  transform: none; /* Strictly no translate offset */
+  transform: none;
 }
 
 /* ==========================================================================

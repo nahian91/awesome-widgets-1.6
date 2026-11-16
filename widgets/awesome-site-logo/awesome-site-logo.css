@@ -6,6 +6,7 @@
   width: 100%;
   position: relative;
   box-sizing: border-box;
+  --awea-logo-align: flex-start;
 }
 
 .awea-site-logo-wrap {
@@ -42,7 +43,7 @@
 
 .awea-site-logo-wrap:hover img,
 .awea-site-logo-wrap:hover svg {
-  transform: none !important; /* Stays locked in place */
+  transform: none !important;
 }
 
 /* Dual / Hover Logo Swap Mechanism */
@@ -56,11 +57,13 @@
   left: 0;
   width: 100%;
   height: 100%;
+  object-fit: contain;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+.awea-site-logo-wrap .has-hover-logo:hover img:first-child,
 .awea-site-logo-wrap .has-hover-logo:hover .awe-primary-logo {
   opacity: 0;
 }
@@ -73,7 +76,7 @@
 .awea-site-logo-wrap .awe-text-logo-group {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: var(--awea-logo-align, flex-start);
 }
 
 .awea-site-logo-wrap .awe-logo-title {

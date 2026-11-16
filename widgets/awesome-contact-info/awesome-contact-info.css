@@ -31,10 +31,11 @@
   word-break: break-word;
 }
 
-/* 2. Contact Card Rows (Strictly Stationary on Hover - No Lift/Slide) */
+/* 2. Contact Card Rows */
 .awea-contact-cards-wrap {
   display: flex;
   flex-direction: column;
+  gap: 14px;
 }
 
 .awea-contact-list-row {
@@ -46,25 +47,24 @@
   border-width: 1px;
   border-color: rgba(15, 23, 42, 0.08);
   border-radius: 20px;
-  margin-bottom: 14px;
+  margin-bottom: 0;
   text-decoration: none;
   color: inherit;
   box-sizing: border-box;
   box-shadow: 0 4px 15px -3px rgba(0, 0, 0, 0.03);
-  transform: none; /* Strictly no translateX(8px) */
+  transform: none;
   transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
 }
 
-.awea-contact-list-row:last-child {
-  margin-bottom: 0 !important;
+.awea-contact-list-row.awea-copy-enabled {
+  cursor: pointer;
 }
 
-/* Stays strictly stationary on hover */
 .awea-contact-list-row:hover {
   transform: none;
 }
 
-/* 3. Leading Icon Badge (Zero Rotation / No Scale on Hover) */
+/* 3. Leading Icon Badge */
 .awea-contact-list-icon {
   width: 52px;
   height: 52px;
@@ -77,7 +77,7 @@
   flex-shrink: 0;
   margin-right: 18px;
   box-sizing: border-box;
-  transform: none; /* Strictly no scale(1.06) rotate(-8deg) */
+  transform: none;
   transition: background-color 0.25s ease, color 0.25s ease;
 }
 
@@ -94,7 +94,7 @@
 }
 
 .awea-contact-list-row:hover .awea-contact-list-icon {
-  transform: none; /* Stays locked in place */
+  transform: none;
   background-color: var(--e-global-color-primary, #4f46e5);
   color: #ffffff;
 }
@@ -134,7 +134,7 @@
   transition: color 0.25s ease;
 }
 
-/* 5. Trailing Action Arrow (Stationary on Hover - Fade/Color Only) */
+/* 5. Trailing Action Arrow */
 .awea-contact-list-arrow {
   opacity: 0.6;
   color: #94a3b8;
@@ -143,7 +143,7 @@
   justify-content: center;
   margin-left: 16px;
   flex-shrink: 0;
-  transform: none; /* Strictly no translateX */
+  transform: none;
   transition: opacity 0.25s ease, color 0.25s ease;
 }
 
@@ -154,11 +154,11 @@
 
 .awea-contact-list-row:hover .awea-contact-list-arrow {
   opacity: 1;
-  transform: none; /* Stays stationary */
+  transform: none;
   color: var(--e-global-color-primary, #4f46e5);
 }
 
-/* 6. Copy-to-Clipboard Micro-Badge (Zero Hover Scale) */
+/* 6. Copy-to-Clipboard Micro-Badge */
 .awea-contact-copy-badge {
   width: 36px;
   height: 36px;
@@ -171,7 +171,7 @@
   flex-shrink: 0;
   color: #64748b;
   cursor: pointer;
-  transform: none; /* Strictly no scale */
+  transform: none;
   transition: background-color 0.2s ease, color 0.2s ease;
   box-sizing: border-box;
 }
@@ -197,7 +197,7 @@
 .awea-contact-list-row.is-copied .awea-contact-copy-badge {
   background-color: #dcfce7;
   color: #16a34a;
-  transform: none; /* No scale on copy confirmation */
+  transform: none;
 }
 
 /* ==========================================================================
@@ -237,7 +237,7 @@
 
   .awea-contact-list-arrow,
   .awea-contact-copy-badge {
-    opacity: 1; /* Always visible and tap-ready on touch viewports */
+    opacity: 1;
     margin-left: 8px;
   }
 }
