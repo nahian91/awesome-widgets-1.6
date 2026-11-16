@@ -1,205 +1,374 @@
 /* ==========================================================================
-   AWEA Icon Box Studio Master Architecture (Zero Hover Zoom / No Scale)
+   AWEA Icon Box — Zero-Shadow Architectural UI (No Corner Glow)
    ========================================================================== */
 
-.awea-icon-box {
+.awea-icb-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
   width: 100%;
-  position: relative;
   box-sizing: border-box;
-  background-color: #ffffff;
-  border-style: solid;
-  border-width: 1px;
-  border-color: rgba(15, 23, 42, 0.08);
-  border-radius: 24px;
-  padding: 40px 32px;
-  overflow: hidden;
+  align-items: stretch;
+}
+
+.awea-icb-card {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   text-align: left;
-  box-shadow: 0 4px 15px -3px rgba(0, 0, 0, 0.03);
-  transform: none;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+  gap: 22px;
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 24px;
+  padding: 32px 28px;
+  overflow: hidden;
+  box-shadow: none;
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.awea-icon-box:hover {
-  transform: none;
+.awea-icb-card:hover {
+  background-color: #f8fafc;
+  border-color: var(--e-global-color-primary, #4f46e5);
+  box-shadow: none;
 }
 
-/* 1. Ambient Corner Spotlight Glow (Controlled by Switcher) */
-.awea-has-glow-yes .awea-icon-box::after {
-  content: "";
+.awea-icb-motion-yes .awea-icb-card:hover {
+  transform: translateY(-4px);
+}
+
+/* Whole-Card Overlay Link */
+.awea-icb-card-clickable {
+  cursor: pointer;
+}
+
+.awea-icb-cover-link {
   position: absolute;
-  bottom: -60px;
-  right: -60px;
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
-  background: radial-gradient(circle at center, rgba(79, 70, 229, 0.2) 0%, transparent 70%);
-  pointer-events: none;
-  opacity: 0.25;
-  transform: none;
-  transition: opacity 0.4s ease;
-  z-index: 1;
+  inset: 0;
+  z-index: 4;
+  text-decoration: none;
 }
 
-.awea-has-glow-yes .awea-icon-box:hover::after {
-  transform: none;
-  opacity: 0.45;
+/* Horizontal Icon Side Layouts (Left / Right) */
+.awea-icb-pos-left .awea-icb-card {
+  flex-direction: row;
+  align-items: flex-start;
 }
 
-/* 2. Leading Icon Badge */
-.awea-icon-wrapper {
+.awea-icb-pos-right .awea-icb-card {
+  flex-direction: row-reverse;
+  align-items: flex-start;
+}
+
+/* Corner Badge Pill */
+.awea-icb-badge {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 2;
+  padding: 4px 10px;
+  border-radius: 100px;
+  background-color: rgba(79, 70, 229, 0.08);
+  border: 1px solid rgba(79, 70, 229, 0.14);
+  color: var(--e-global-color-primary, #4f46e5);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  line-height: 1.2;
+  user-select: none;
+  box-shadow: none;
+}
+
+.awea-icb-pos-right .awea-icb-badge {
+  right: auto;
+  left: 20px;
+}
+
+/* ==========================================================================
+   Icon Base, Views (Default / Stacked / Framed) & Shapes
+   ========================================================================== */
+.awea-icb-icon {
   position: relative;
   z-index: 2;
-  width: 64px;
-  height: 64px;
-  border-radius: 18px;
-  background-color: rgba(79, 70, 229, 0.08);
+  width: 60px;
+  height: 60px;
+  border-radius: 16px;
   color: var(--e-global-color-primary, #4f46e5);
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 24px;
   flex-shrink: 0;
-  border-style: solid;
-  border-width: 0;
-  border-color: transparent;
   box-sizing: border-box;
-  transform: none;
-  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  box-shadow: none;
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    color 0.3s ease,
+    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.awea-icon-wrapper i {
+.awea-icb-icon i {
   font-size: 24px;
   line-height: 1;
 }
 
-.awea-icon-wrapper svg {
+.awea-icb-icon svg {
   width: 24px;
   height: 24px;
   display: block;
   fill: currentColor;
 }
 
-.awea-icon-box:hover .awea-icon-wrapper {
-  transform: none;
+/* VIEW 1: Default (No Box, No Background, No Border) */
+.awea-icb-view-default .awea-icb-icon {
+  width: auto;
+  height: auto;
+  padding: 0;
+  background-color: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  clip-path: none !important;
+}
+
+.awea-icb-view-default .awea-icb-card:hover .awea-icb-icon {
+  color: var(--e-global-color-primary, #4f46e5);
+}
+
+/* VIEW 2: Stacked (Solid / Tinted Background Box) */
+.awea-icb-view-stacked .awea-icb-icon {
+  background-color: rgba(79, 70, 229, 0.08);
+  border: none;
+}
+
+.awea-icb-view-stacked .awea-icb-card:hover .awea-icb-icon {
   background-color: var(--e-global-color-primary, #4f46e5);
   color: #ffffff;
 }
 
-.awea-icon-box:hover .awea-icon-wrapper svg {
+.awea-icb-view-stacked .awea-icb-card:hover .awea-icb-icon svg {
   fill: #ffffff;
 }
 
-/* 3. Typography Content */
-.awea-icon-box-title {
+/* VIEW 3: Framed (Hairline Border Box) */
+.awea-icb-view-framed .awea-icb-icon {
+  background-color: transparent;
+  border-style: solid;
+  border-width: 1.5px;
+  border-color: var(--e-global-color-primary, #4f46e5);
+}
+
+.awea-icb-view-framed .awea-icb-card:hover .awea-icb-icon {
+  background-color: var(--e-global-color-primary, #4f46e5);
+  border-color: var(--e-global-color-primary, #4f46e5);
+  color: #ffffff;
+}
+
+.awea-icb-view-framed .awea-icb-card:hover .awea-icb-icon svg {
+  fill: #ffffff;
+}
+
+/* SHAPES (Applied when View is Stacked or Framed) */
+.awea-icb-shape-circle .awea-icb-icon {
+  border-radius: 50% !important;
+}
+
+.awea-icb-shape-square .awea-icb-icon {
+  border-radius: 0px !important;
+}
+
+.awea-icb-shape-rounded .awea-icb-icon {
+  border-radius: 16px;
+}
+
+.awea-icb-shape-hexagon .awea-icb-icon {
+  border-radius: 0 !important;
+  border: none !important;
+  clip-path: polygon(50% 0%, 93% 25%, 93% 75%, 50% 100%, 7% 75%, 7% 25%);
+}
+
+/* Framed Hexagon: Outer Border Polygon + Inner Cutout Surface */
+.awea-icb-view-framed.awea-icb-shape-hexagon .awea-icb-icon {
+  background-color: var(--e-global-color-primary, #4f46e5);
+}
+
+.awea-icb-view-framed.awea-icb-shape-hexagon .awea-icb-icon::before {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  background-color: #ffffff;
+  clip-path: polygon(50% 0%, 93% 25%, 93% 75%, 50% 100%, 7% 75%, 7% 25%);
+  z-index: -1;
+  transition: background-color 0.3s ease;
+}
+
+.awea-icb-view-framed.awea-icb-shape-hexagon .awea-icb-card:hover .awea-icb-icon::before {
+  background-color: var(--e-global-color-primary, #4f46e5);
+}
+
+.awea-icb-motion-yes .awea-icb-card:hover .awea-icb-icon {
+  transform: scale(1.05);
+}
+
+/* ==========================================================================
+   Content Spine & Action Button
+   ========================================================================== */
+.awea-icb-body {
   position: relative;
   z-index: 2;
-  font-size: 1.35rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 100%;
+  width: 100%;
+}
+
+.awea-icb-title {
+  font-size: 1.28rem;
   font-weight: 800;
-  line-height: 1.25;
+  line-height: 1.3;
   letter-spacing: -0.02em;
-  color: var(--e-global-color-primary, #0f172a);
-  margin-top: 0;
-  margin-bottom: 12px;
+  color: #0f172a;
+  margin: 0 0 10px 0;
   word-break: break-word;
-  transition: color 0.3s ease;
+  transition: color 0.25s ease;
 }
 
-.awea-icon-box-desc {
-  position: relative;
-  z-index: 2;
-  font-size: 1rem;
-  line-height: 1.65;
-  color: var(--e-global-color-text, #64748b);
-  margin-top: 0;
-  margin-bottom: 24px;
+.awea-icb-title a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.25s ease;
+}
+
+.awea-icb-card:hover .awea-icb-title,
+.awea-icb-card:hover .awea-icb-title a {
+  color: var(--e-global-color-primary, #4f46e5);
+}
+
+.awea-icb-desc {
+  font-size: 0.95rem;
+  line-height: 1.62;
+  color: #475569;
+  margin: 0 0 22px 0;
   word-break: break-word;
 }
 
-/* 4. Action Button */
-.awea-btn-link {
-  position: relative;
-  z-index: 2;
+/* Bottom-Anchored Action Button */
+.awea-icb-btn-wrap {
+  width: 100%;
+  margin-top: auto;
+}
+
+.awea-icb-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  text-decoration: none;
-  padding: 12px 24px;
-  border-radius: 12px;
-  font-weight: 700;
-  font-size: 0.95rem;
-  background-color: var(--e-global-color-primary, #4f46e5);
+  padding: 11px 20px;
+  border-radius: 10px;
+  background-color: #0f172a;
   color: #ffffff;
-  border-style: solid;
-  border-width: 1.5px;
-  border-color: transparent;
+  border: 1px solid transparent;
+  font-size: 0.88rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-decoration: none;
   width: fit-content;
   box-sizing: border-box;
-  box-shadow: 0 4px 14px rgba(79, 70, 229, 0.2);
-  transform: none;
-  transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
-  line-height: 1.2;
+  box-shadow: none;
+  transition:
+    background-color 0.25s ease,
+    border-color 0.25s ease,
+    color 0.25s ease;
 }
 
-.awea-btn-link:hover {
-  gap: 8px;
-  transform: none;
+.awea-icb-btn:hover,
+.awea-icb-card:hover .awea-icb-btn {
+  background-color: var(--e-global-color-primary, #4f46e5);
+  box-shadow: none;
 }
 
-.awea-btn-icon {
+.awea-icb-ico {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   line-height: 1;
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.awea-btn-icon svg,
-.awea-btn-icon i {
-  font-size: 13px;
-  width: 13px;
-  height: 13px;
+.awea-icb-btn:hover .awea-icb-ico-right,
+.awea-icb-card:hover .awea-icb-ico-right {
+  transform: translateX(4px);
 }
 
-/* ==========================================================================
-   Super Mobile Friendly System (<= 768px)
-   ========================================================================== */
+.awea-icb-btn:hover .awea-icb-ico-left,
+.awea-icb-card:hover .awea-icb-ico-left {
+  transform: translateX(-4px);
+}
+
+.awea-icb-ico svg,
+.awea-icb-ico i {
+  width: 12px;
+  height: 12px;
+  font-size: 12px;
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .awea-icb-card,
+  .awea-icb-icon,
+  .awea-icb-ico {
+    transition: none !important;
+    transform: none !important;
+  }
+}
+
+/* Mobile Stacking & Sizing (<= 768px) */
 @media (max-width: 768px) {
-  .awea-icon-box {
-    padding: 30px 20px;
-    border-radius: 20px;
+  .awea-icb-pos-left .awea-icb-card,
+  .awea-icb-pos-right .awea-icb-card {
+    flex-direction: column;
   }
 
-  .awea-icon-wrapper {
-    width: 52px;
-    height: 52px;
-    margin-bottom: 18px;
+  .awea-icb-card {
+    padding: 24px 20px;
+    border-radius: 18px;
+    gap: 18px;
   }
 
-  .awea-icon-wrapper i {
+  .awea-icb-view-stacked .awea-icb-icon,
+  .awea-icb-view-framed .awea-icb-icon {
+    width: 50px;
+    height: 50px;
+  }
+
+  .awea-icb-icon i {
     font-size: 20px;
   }
 
-  .awea-icon-wrapper svg {
+  .awea-icb-icon svg {
     width: 20px;
     height: 20px;
   }
 
-  .awea-icon-box-title {
-    font-size: 1.2rem;
+  .awea-icb-title {
+    font-size: 1.15rem;
   }
 
-  .awea-icon-box-desc {
-    font-size: 0.94rem;
-    line-height: 1.55;
-    margin-bottom: 20px;
+  .awea-icb-desc {
+    font-size: 0.9rem;
+    margin-bottom: 18px;
   }
 
-  .awea-btn-link {
+  .awea-icb-btn {
     width: 100%;
-    box-sizing: border-box;
-    padding: 12px 20px;
   }
 }

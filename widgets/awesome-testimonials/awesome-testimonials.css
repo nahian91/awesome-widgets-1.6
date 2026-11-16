@@ -1,179 +1,220 @@
 /* ==========================================================================
-   AWEA Kinetic Testimonials Architecture (Zero Hover Zoom / No Scale)
+   AWEA Testimonials — Zero-Shadow Architectural Repeater Grid
    ========================================================================== */
-@property --awea-testimonial-angle {
+
+@property --awea-tm-angle {
   syntax: "<angle>";
   initial-value: 0deg;
   inherits: false;
 }
 
-.awea-testimonial-card {
-  --awea-beam-color: #4f46e5;
-  --awea-beam-speed: 3.5s;
+.awea-tm-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  width: 100%;
+  box-sizing: border-box;
+  align-items: stretch;
+}
+
+.awea-tm-card {
+  --awea-tm-beam: var(--e-global-color-primary, #4f46e5);
   position: relative;
   display: flex;
   flex-direction: column;
+  height: 100%;
+  width: 100%;
+  padding: 32px 30px;
+  border-radius: 24px;
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
   overflow: hidden;
   box-sizing: border-box;
-  width: 100%;
-  border-style: solid;
-  border-width: 1px;
-  border-color: rgba(15, 23, 42, 0.08);
-  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.05);
-  transition: box-shadow 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
-  transform: none; /* No hover lift */
+  box-shadow: none;
+  transition:
+    background-color 0.25s ease,
+    border-color 0.25s ease;
 }
 
-/* Card remains completely locked in place on hover */
-.awea-testimonial-card:hover {
-  transform: none;
+.awea-tm-card:hover {
+  background-color: #f8fafc;
+  border-color: var(--awea-tm-beam);
+  box-shadow: none;
 }
 
-/* Kinetic Border Beam Masking */
-.awea-testimonial-card.awea-has-beam::after {
+/* Kinetic Border Beam (Zero Shadow) */
+.awea-tm-beam-yes .awea-tm-card::after {
   content: "";
   position: absolute;
   inset: 0;
   border-radius: inherit;
   padding: 1.5px;
-  background: conic-gradient(from var(--awea-testimonial-angle), transparent 70%, var(--awea-beam-color), transparent);
+  background: conic-gradient(from var(--awea-tm-angle), transparent 70%, var(--awea-tm-beam), transparent);
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
   opacity: 0;
-  transition: opacity 0.35s ease;
+  transition: opacity 0.3s ease;
   pointer-events: none;
 }
 
-@keyframes awea-testimonial-spin {
+@keyframes aweaTmSpin {
   to {
-    --awea-testimonial-angle: 360deg;
+    --awea-tm-angle: 360deg;
   }
 }
 
-.awea-testimonial-card.awea-has-beam:hover::after {
+.awea-tm-beam-yes .awea-tm-card:hover::after {
   opacity: 1;
-  animation: awea-testimonial-spin var(--awea-beam-speed, 3.5s) linear infinite;
+  animation: aweaTmSpin 3.5s linear infinite;
 }
 
-/* Watermark Brand Quote (Static on hover - no scale/rotation) */
-.awea-testimonial-quote-brand {
+/* Quote Watermark */
+.awea-tm-quote-mark {
   position: absolute;
   top: 24px;
   right: 24px;
-  width: 44px;
-  height: 44px;
+  width: 40px;
+  height: 40px;
   opacity: 0.08;
-  color: var(--awea-beam-color, #4f46e5);
+  color: var(--awea-tm-beam);
   z-index: 1;
   pointer-events: none;
-  transform: none;
   transition: opacity 0.3s ease;
 }
 
-.awea-testimonial-card:hover .awea-testimonial-quote-brand {
-  transform: none;
+.awea-tm-card:hover .awea-tm-quote-mark {
+  opacity: 0.16;
 }
 
 /* Rating Stars */
-.awea-testimonial-stars {
+.awea-tm-stars {
   display: flex;
   align-items: center;
+  gap: 5px;
   position: relative;
   z-index: 2;
-  margin-bottom: 20px;
+  margin-bottom: 18px;
 }
 
-/* Review Speech Text */
-.awea-testimonial-text {
-  margin: 0;
+.awea-tm-stars i {
+  font-size: 14px;
+  line-height: 1;
+}
+
+.awea-star-on {
+  color: #f59e0b;
+}
+
+.awea-star-off {
+  color: #e2e8f0;
+}
+
+/* Review Speech */
+.awea-tm-text {
+  margin: 0 0 24px 0;
   position: relative;
   z-index: 2;
+  font-size: 1rem;
+  line-height: 1.68;
+  color: #334155;
   font-style: italic;
   word-break: break-word;
 }
 
-/* Author Footer Lockup */
-.awea-testimonial-footer {
+/* Author Footer (Bottom-Anchored Across Equal-Height Cards) */
+.awea-tm-footer {
   display: flex;
   align-items: center;
-  gap: 16px;
-  padding-top: 20px;
-  border-top: 1px solid rgba(15, 23, 42, 0.06);
+  gap: 14px;
+  margin-top: auto;
+  padding-top: 18px;
+  border-top: 1px solid #f1f5f9;
   position: relative;
   z-index: 2;
 }
 
-/* Avatar Photo (Static on hover - no scale) */
-.awea-testimonial-avatar {
-  width: 52px;
-  height: 52px;
+.awea-tm-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 100%;
   object-fit: cover;
   flex-shrink: 0;
-  transform: none;
+  border: 1px solid rgba(15, 23, 42, 0.08);
 }
 
-.awea-testimonial-card:hover .awea-testimonial-avatar {
-  transform: none;
-}
-
-.awea-testimonial-meta {
+.awea-tm-meta {
   display: flex;
   flex-direction: column;
   gap: 2px;
-  min-width: 0; /* Prevents text overflow on small viewports */
+  min-width: 0;
 }
 
-.awea-testimonial-name {
+.awea-tm-name {
   margin: 0;
+  font-size: 1rem;
+  font-weight: 800;
   line-height: 1.25;
+  color: #0f172a;
   word-break: break-word;
 }
 
-.awea-testimonial-desg {
+.awea-tm-role {
   font-style: normal;
+  font-size: 0.84rem;
+  line-height: 1.3;
+  color: #64748b;
   display: block;
   word-break: break-word;
 }
 
-/* Verified Customer Badge (Static on hover - no scale/rotation) */
-.awea-testimonial-verify {
+/* Verified Badge */
+.awea-tm-verify {
   margin-left: auto;
-  width: 26px;
-  height: 26px;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
-  background: #dcfce7;
-  display: flex;
+  background-color: #dcfce7;
+  color: #15803d;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  transform: none;
 }
 
-.awea-testimonial-verify svg {
-  width: 13px;
-  height: 13px;
-  color: #15803d;
+.awea-tm-verify svg {
+  width: 12px;
+  height: 12px;
 }
 
-.awea-testimonial-card:hover .awea-testimonial-verify {
-  transform: none;
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .awea-tm-beam-yes .awea-tm-card:hover::after {
+    animation: none !important;
+  }
+
+  .awea-tm-card,
+  .awea-tm-quote-mark {
+    transition: none !important;
+  }
 }
 
-/* ==========================================================================
-   Mobile-Friendly Optimizations (<= 767px)
-   ========================================================================== */
+/* Mobile (<= 767px) */
 @media (max-width: 767px) {
-  .awea-testimonial-quote-brand {
-    top: 16px;
-    right: 16px;
+  .awea-tm-card {
+    padding: 24px 20px;
+    border-radius: 18px;
+  }
+
+  .awea-tm-quote-mark {
+    top: 18px;
+    right: 18px;
     width: 32px;
     height: 32px;
   }
 
-  .awea-testimonial-footer {
+  .awea-tm-footer {
     gap: 12px;
-    flex-wrap: nowrap;
   }
 }

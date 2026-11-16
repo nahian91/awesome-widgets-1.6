@@ -1,10 +1,9 @@
 <?php
 /**
- * Awesome Contact Info Studio Widget.
- * Modern Architectural Contact Directory with Interactive Slide & Copy Triggers.
+ * Awesome Contact Info Studio Widget (Zero-Shadow Architectural Edition).
  *
  * @package AwesomeWidgetsElementor
- * @since 1.0.0
+ * @since 2.0.0
  */
 
 namespace Elementor;
@@ -15,7 +14,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 use \Elementor\Controls_Manager;
 use \Elementor\Group_Control_Border;
-use \Elementor\Group_Control_Box_Shadow;
 use \Elementor\Group_Control_Typography;
 use \Elementor\Core\Kits\Documents\Tabs\Global_Typography;
 use \Elementor\Core\Kits\Documents\Tabs\Global_Colors;
@@ -42,16 +40,16 @@ class Widget_Awesome_Contact_Info extends Widget_Base {
 	}
 
 	public function get_keywords() {
-		return [ 'awea', 'contact', 'info', 'directory', 'phone', 'email', 'address', 'vcard' ];
+		return [ 'awea', 'contact', 'info', 'directory', 'phone', 'email', 'address' ];
 	}
 
 	protected function register_controls() {
 
 		/* ==========================================================================
-		   CONTENT TAB: 1. HEADER
+		   CONTENT: 1. HEADER
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_section_contact_header',
+			'awea_section_header',
 			[
 				'label' => esc_html__( 'Header', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
@@ -59,11 +57,22 @@ class Widget_Awesome_Contact_Info extends Widget_Base {
 		);
 
 		$this->add_control(
-			'awea_contact_title',
+			'awea_title',
 			[
 				'label'       => esc_html__( 'Title', 'awesome-widgets-elementor' ),
 				'type'        => Controls_Manager::TEXT,
 				'default'     => esc_html__( 'Get In Touch', 'awesome-widgets-elementor' ),
+				'dynamic'     => [ 'active' => true ],
+				'label_block' => true,
+			]
+		);
+
+		$this->add_control(
+			'awea_subtitle',
+			[
+				'label'       => esc_html__( 'Subtitle', 'awesome-widgets-elementor' ),
+				'type'        => Controls_Manager::TEXT,
+				'default'     => esc_html__( 'Reach our team directly via email, phone, or studio visit.', 'awesome-widgets-elementor' ),
 				'dynamic'     => [ 'active' => true ],
 				'label_block' => true,
 			]
@@ -86,12 +95,12 @@ class Widget_Awesome_Contact_Info extends Widget_Base {
 					'span' => 'span',
 					'p'    => 'p',
 				],
-				'condition' => [ 'awea_contact_title!' => '' ],
+				'condition' => [ 'awea_title!' => '' ],
 			]
 		);
 
 		$this->add_control(
-			'awea_show_header_indicator',
+			'awea_accent_bar',
 			[
 				'label'        => esc_html__( 'Accent Bar', 'awesome-widgets-elementor' ),
 				'type'         => Controls_Manager::SWITCHER,
@@ -99,17 +108,17 @@ class Widget_Awesome_Contact_Info extends Widget_Base {
 				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
 				'return_value' => 'yes',
 				'default'      => 'yes',
-				'condition'    => [ 'awea_contact_title!' => '' ],
+				'condition'    => [ 'awea_title!' => '' ],
 			]
 		);
 
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   CONTENT TAB: 2. ITEMS
+		   CONTENT: 2. ITEMS
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_section_contact_content',
+			'awea_section_items',
 			[
 				'label' => esc_html__( 'Items', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
@@ -119,7 +128,7 @@ class Widget_Awesome_Contact_Info extends Widget_Base {
 		$repeater = new Repeater();
 
 		$repeater->add_control(
-			'awea_item_icon',
+			'awea_icon',
 			[
 				'label'   => esc_html__( 'Icon', 'awesome-widgets-elementor' ),
 				'type'    => Controls_Manager::ICONS,
@@ -131,7 +140,7 @@ class Widget_Awesome_Contact_Info extends Widget_Base {
 		);
 
 		$repeater->add_control(
-			'awea_item_label',
+			'awea_label',
 			[
 				'label'       => esc_html__( 'Label', 'awesome-widgets-elementor' ),
 				'type'        => Controls_Manager::TEXT,
@@ -142,7 +151,7 @@ class Widget_Awesome_Contact_Info extends Widget_Base {
 		);
 
 		$repeater->add_control(
-			'awea_item_value',
+			'awea_value',
 			[
 				'label'       => esc_html__( 'Value', 'awesome-widgets-elementor' ),
 				'type'        => Controls_Manager::TEXT,
@@ -153,7 +162,19 @@ class Widget_Awesome_Contact_Info extends Widget_Base {
 		);
 
 		$repeater->add_control(
-			'awea_item_link',
+			'awea_subtext',
+			[
+				'label'       => esc_html__( 'Subtext', 'awesome-widgets-elementor' ),
+				'type'        => Controls_Manager::TEXT,
+				'default'     => '',
+				'placeholder' => esc_html__( 'Replies within 2 hours', 'awesome-widgets-elementor' ),
+				'dynamic'     => [ 'active' => true ],
+				'label_block' => true,
+			]
+		);
+
+		$repeater->add_control(
+			'awea_link',
 			[
 				'label'       => esc_html__( 'Link', 'awesome-widgets-elementor' ),
 				'type'        => Controls_Manager::URL,
@@ -163,48 +184,101 @@ class Widget_Awesome_Contact_Info extends Widget_Base {
 		);
 
 		$repeater->add_control(
-			'awea_item_enable_copy',
+			'awea_copy',
 			[
-				'label'        => esc_html__( 'Copy on Click', 'awesome-widgets-elementor' ),
+				'label'        => esc_html__( 'Copy Button', 'awesome-widgets-elementor' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'label_on'     => esc_html__( 'Yes', 'awesome-widgets-elementor' ),
 				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
 				'return_value' => 'yes',
-				'default'      => '',
+				'default'      => 'yes',
 			]
 		);
 
 		$this->add_control(
-			'awea_contact_items',
+			'awea_items',
 			[
 				'label'       => esc_html__( 'List', 'awesome-widgets-elementor' ),
 				'type'        => Controls_Manager::REPEATER,
 				'fields'      => $repeater->get_controls(),
+				'title_field' => '{{{ awea_label }}}: {{{ awea_value }}}',
 				'default'     => [
 					[
-						'awea_item_label' => esc_html__( 'Direct Inquiries', 'awesome-widgets-elementor' ),
-						'awea_item_value' => 'support@devnahian.com',
-						'awea_item_icon'  => [ 'value' => 'fas fa-envelope', 'library' => 'fa-solid' ],
-						'awea_item_link'  => [ 'url' => 'mailto:support@devnahian.com' ],
+						'awea_label'   => esc_html__( 'Direct Inquiries', 'awesome-widgets-elementor' ),
+						'awea_value'   => 'support@devnahian.com',
+						'awea_subtext' => esc_html__( 'Average response under 2 hrs', 'awesome-widgets-elementor' ),
+						'awea_icon'    => [ 'value' => 'fas fa-envelope', 'library' => 'fa-solid' ],
+						'awea_link'    => [ 'url' => 'mailto:support@devnahian.com' ],
+						'awea_copy'    => 'yes',
 					],
 					[
-						'awea_item_label' => esc_html__( 'Telephone Support', 'awesome-widgets-elementor' ),
-						'awea_item_value' => '+1 (800) 456-7890',
-						'awea_item_icon'  => [ 'value' => 'fas fa-phone-alt', 'library' => 'fa-solid' ],
-						'awea_item_link'  => [ 'url' => 'tel:+18004567890' ],
+						'awea_label'   => esc_html__( 'Telephone Support', 'awesome-widgets-elementor' ),
+						'awea_value'   => '+1 (800) 456-7890',
+						'awea_subtext' => esc_html__( 'Mon–Fri • 9:00 AM – 6:00 PM', 'awesome-widgets-elementor' ),
+						'awea_icon'    => [ 'value' => 'fas fa-phone-alt', 'library' => 'fa-solid' ],
+						'awea_link'    => [ 'url' => 'tel:+18004567890' ],
+						'awea_copy'    => 'yes',
 					],
 					[
-						'awea_item_label' => esc_html__( 'Main Headquarters', 'awesome-widgets-elementor' ),
-						'awea_item_value' => '100 Montgomery St, San Francisco, CA',
-						'awea_item_icon'  => [ 'value' => 'fas fa-map-marker-alt', 'library' => 'fa-solid' ],
+						'awea_label'   => esc_html__( 'Main Headquarters', 'awesome-widgets-elementor' ),
+						'awea_value'   => '100 Montgomery St, San Francisco, CA',
+						'awea_subtext' => esc_html__( 'Suite 400 • Financial District', 'awesome-widgets-elementor' ),
+						'awea_icon'    => [ 'value' => 'fas fa-map-marker-alt', 'library' => 'fa-solid' ],
+						'awea_copy'    => 'yes',
 					],
 				],
-				'title_field' => '{{{ awea_item_label }}}: {{{ awea_item_value }}}',
+			]
+		);
+
+		$this->end_controls_section();
+
+		/* ==========================================================================
+		   CONTENT: 3. LAYOUT
+		   ========================================================================== */
+		$this->start_controls_section(
+			'awea_section_layout',
+			[
+				'label' => esc_html__( 'Layout', 'awesome-widgets-elementor' ),
+				'tab'   => Controls_Manager::TAB_CONTENT,
+			]
+		);
+
+		$this->add_responsive_control(
+			'awea_columns',
+			[
+				'label'          => esc_html__( 'Columns', 'awesome-widgets-elementor' ),
+				'type'           => Controls_Manager::SELECT,
+				'default'        => '1',
+				'tablet_default' => '1',
+				'mobile_default' => '1',
+				'options'        => [
+					'1' => '1',
+					'2' => '2',
+					'3' => '3',
+					'4' => '4',
+				],
+				'selectors'      => [
+					'{{WRAPPER}} .awea-ci-grid' => 'grid-template-columns: repeat({{VALUE}}, minmax(0, 1fr));',
+				],
+			]
+		);
+
+		$this->add_responsive_control(
+			'awea_gap',
+			[
+				'label'      => esc_html__( 'Gap', 'awesome-widgets-elementor' ),
+				'type'       => Controls_Manager::SLIDER,
+				'size_units' => [ 'px', 'rem' ],
+				'range'      => [ 'px' => [ 'min' => 0, 'max' => 60 ] ],
+				'default'    => [ 'unit' => 'px', 'size' => 14 ],
+				'selectors'  => [
+					'{{WRAPPER}} .awea-ci-grid' => 'gap: {{SIZE}}{{UNIT}};',
+				],
 			]
 		);
 
 		$this->add_control(
-			'awea_show_action_arrow',
+			'awea_show_arrow',
 			[
 				'label'        => esc_html__( 'Show Arrow', 'awesome-widgets-elementor' ),
 				'type'         => Controls_Manager::SWITCHER,
@@ -212,34 +286,30 @@ class Widget_Awesome_Contact_Info extends Widget_Base {
 				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
 				'return_value' => 'yes',
 				'default'      => 'yes',
-				'separator'    => 'before',
 			]
 		);
 
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   STYLE TAB: 1. HEADER (CONDITIONAL)
+		   STYLE: 1. HEADER
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_section_style_header',
+			'awea_style_header',
 			[
-				'label'     => esc_html__( 'Header', 'awesome-widgets-elementor' ),
-				'tab'       => Controls_Manager::TAB_STYLE,
-				'condition' => [ 'awea_contact_title!' => '' ],
+				'label' => esc_html__( 'Header', 'awesome-widgets-elementor' ),
+				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
 
 		$this->add_control(
 			'awea_title_color',
 			[
-				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Title Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
-				'global'    => [
-					'default' => Global_Colors::COLOR_PRIMARY,
-				],
+				'default'   => '#0f172a',
 				'selectors' => [
-					'{{WRAPPER}} .awea-contact-header .awea-contact-title' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-ci-title' => 'color: {{VALUE}};',
 				],
 			]
 		);
@@ -247,39 +317,47 @@ class Widget_Awesome_Contact_Info extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Typography::get_type(),
 			[
-				'name'     => 'awea_title_typography',
-				'selector' => '{{WRAPPER}} .awea-contact-header .awea-contact-title',
-				'global'   => [
-					'default' => Global_Typography::TYPOGRAPHY_PRIMARY,
+				'name'     => 'awea_title_typo',
+				'selector' => '{{WRAPPER}} .awea-ci-title',
+				'global'   => [ 'default' => Global_Typography::TYPOGRAPHY_PRIMARY ],
+			]
+		);
+
+		$this->add_control(
+			'awea_subtitle_color',
+			[
+				'label'     => esc_html__( 'Subtitle Color', 'awesome-widgets-elementor' ),
+				'type'      => Controls_Manager::COLOR,
+				'default'   => '#64748b',
+				'selectors' => [
+					'{{WRAPPER}} .awea-ci-subtitle' => 'color: {{VALUE}};',
 				],
 			]
 		);
 
 		$this->add_control(
-			'awea_indicator_line_color',
+			'awea_bar_color',
 			[
 				'label'     => esc_html__( 'Bar Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
-				'global'    => [
-					'default' => Global_Colors::COLOR_PRIMARY,
-				],
+				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
+				'condition' => [ 'awea_accent_bar' => 'yes' ],
 				'selectors' => [
-					'{{WRAPPER}} .awea-contact-header' => 'border-left-color: {{VALUE}};',
+					'{{WRAPPER}} .awea-ci-header' => 'border-left-color: {{VALUE}};',
 				],
-				'condition' => [ 'awea_show_header_indicator' => 'yes' ],
 			]
 		);
 
 		$this->add_responsive_control(
-			'awea_header_margin_bottom',
+			'awea_header_space',
 			[
-				'label'      => esc_html__( 'Spacing', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Space Below', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
-				'size_units' => [ 'px', 'em' ],
-				'range'      => [ 'px' => [ 'min' => 10, 'max' => 60 ] ],
-				'default'    => [ 'unit' => 'px', 'size' => 32 ],
+				'size_units' => [ 'px' ],
+				'range'      => [ 'px' => [ 'min' => 8, 'max' => 64 ] ],
+				'default'    => [ 'unit' => 'px', 'size' => 28 ],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-contact-header' => 'margin-bottom: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .awea-ci-header' => 'margin-bottom: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
@@ -287,10 +365,10 @@ class Widget_Awesome_Contact_Info extends Widget_Base {
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   STYLE TAB: 2. CARDS
+		   STYLE: 2. CARDS
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_section_style_cards',
+			'awea_style_cards',
 			[
 				'label' => esc_html__( 'Cards', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
@@ -298,61 +376,46 @@ class Widget_Awesome_Contact_Info extends Widget_Base {
 		);
 
 		$this->add_responsive_control(
-			'awea_row_spacing',
-			[
-				'label'      => esc_html__( 'Spacing', 'awesome-widgets-elementor' ),
-				'type'       => Controls_Manager::SLIDER,
-				'size_units' => [ 'px' ],
-				'range'      => [ 'px' => [ 'min' => 0, 'max' => 40 ] ],
-				'default'    => [ 'unit' => 'px', 'size' => 14 ],
-				'selectors'  => [
-					'{{WRAPPER}} .awea-contact-cards-wrap' => 'gap: {{SIZE}}{{UNIT}};',
-				],
-			]
-		);
-
-		$this->add_responsive_control(
-			'awea_row_padding',
+			'awea_card_padding',
 			[
 				'label'      => esc_html__( 'Padding', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
-				'size_units' => [ 'px', 'em', 'rem' ],
-				'default'    => [ 'top' => '20', 'right' => '24', 'bottom' => '20', 'left' => '24', 'unit' => 'px', 'isLinked' => false ],
+				'size_units' => [ 'px', 'rem' ],
+				'default'    => [ 'top' => '20', 'right' => '22', 'bottom' => '20', 'left' => '22', 'unit' => 'px', 'isLinked' => false ],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-contact-list-row' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .awea-ci-row' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
 		);
 
 		$this->add_responsive_control(
-			'awea_row_radius',
+			'awea_card_radius',
 			[
 				'label'      => esc_html__( 'Radius', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
-				'size_units' => [ 'px', '%', 'rem' ],
-				'default'    => [ 'top' => '20', 'right' => '20', 'bottom' => '20', 'left' => '20', 'unit' => 'px', 'isLinked' => true ],
+				'size_units' => [ 'px', '%' ],
+				'default'    => [ 'top' => '18', 'right' => '18', 'bottom' => '18', 'left' => '18', 'unit' => 'px', 'isLinked' => true ],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-contact-list-row' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .awea-ci-row' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
 		);
 
-		$this->start_controls_tabs( 'awea_card_state_tabs' );
+		$this->start_controls_tabs( 'awea_card_tabs' );
 
-		// Normal
 		$this->start_controls_tab(
-			'awea_card_tab_normal',
+			'awea_card_normal',
 			[ 'label' => esc_html__( 'Normal', 'awesome-widgets-elementor' ) ]
 		);
 
 		$this->add_control(
-			'awea_row_bg',
+			'awea_card_bg',
 			[
 				'label'     => esc_html__( 'Background', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#ffffff',
 				'selectors' => [
-					'{{WRAPPER}} .awea-contact-list-row' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .awea-ci-row' => 'background-color: {{VALUE}};',
 				],
 			]
 		);
@@ -360,58 +423,46 @@ class Widget_Awesome_Contact_Info extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Border::get_type(),
 			[
-				'name'     => 'awea_row_border',
-				'selector' => '{{WRAPPER}} .awea-contact-list-row',
-			]
-		);
-
-		$this->add_group_control(
-			Group_Control_Box_Shadow::get_type(),
-			[
-				'name'     => 'awea_row_shadow',
-				'selector' => '{{WRAPPER}} .awea-contact-list-row',
+				'name'           => 'awea_card_border',
+				'selector'       => '{{WRAPPER}} .awea-ci-row',
+				'fields_options' => [
+					'border' => [ 'default' => 'solid' ],
+					'width'  => [
+						'default' => [ 'top' => '1', 'right' => '1', 'bottom' => '1', 'left' => '1', 'isLinked' => true ],
+					],
+					'color'  => [ 'default' => '#e2e8f0' ],
+				],
 			]
 		);
 
 		$this->end_controls_tab();
 
-		// Hover
 		$this->start_controls_tab(
-			'awea_card_tab_hover',
+			'awea_card_hover',
 			[ 'label' => esc_html__( 'Hover', 'awesome-widgets-elementor' ) ]
 		);
 
 		$this->add_control(
-			'awea_row_bg_hover',
+			'awea_card_bg_hover',
 			[
 				'label'     => esc_html__( 'Background', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
-				'default'   => '#ffffff',
+				'default'   => '#f8fafc',
 				'selectors' => [
-					'{{WRAPPER}} .awea-contact-list-row:hover' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .awea-ci-row:hover' => 'background-color: {{VALUE}};',
 				],
 			]
 		);
 
 		$this->add_control(
-			'awea_row_border_hover',
+			'awea_card_border_hover',
 			[
 				'label'     => esc_html__( 'Border Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
-				'global'    => [
-					'default' => Global_Colors::COLOR_PRIMARY,
-				],
+				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
 				'selectors' => [
-					'{{WRAPPER}} .awea-contact-list-row:hover' => 'border-color: {{VALUE}};',
+					'{{WRAPPER}} .awea-ci-row:hover' => 'border-color: {{VALUE}};',
 				],
-			]
-		);
-
-		$this->add_group_control(
-			Group_Control_Box_Shadow::get_type(),
-			[
-				'name'     => 'awea_row_shadow_hover',
-				'selector' => '{{WRAPPER}} .awea-contact-list-row:hover',
 			]
 		);
 
@@ -421,10 +472,10 @@ class Widget_Awesome_Contact_Info extends Widget_Base {
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   STYLE TAB: 3. ICON
+		   STYLE: 3. ICON
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_section_style_icon',
+			'awea_style_icon',
 			[
 				'label' => esc_html__( 'Icon', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
@@ -437,10 +488,10 @@ class Widget_Awesome_Contact_Info extends Widget_Base {
 				'label'      => esc_html__( 'Box Size', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
-				'range'      => [ 'px' => [ 'min' => 36, 'max' => 80 ] ],
-				'default'    => [ 'unit' => 'px', 'size' => 52 ],
+				'range'      => [ 'px' => [ 'min' => 36, 'max' => 84 ] ],
+				'default'    => [ 'unit' => 'px', 'size' => 50 ],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-contact-list-icon' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .awea-ci-icon' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
@@ -454,44 +505,43 @@ class Widget_Awesome_Contact_Info extends Widget_Base {
 				'range'      => [ 'px' => [ 'min' => 12, 'max' => 36 ] ],
 				'default'    => [ 'unit' => 'px', 'size' => 18 ],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-contact-list-icon i'   => 'font-size: {{SIZE}}{{UNIT}};',
-					'{{WRAPPER}} .awea-contact-list-icon svg' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .awea-ci-icon i'   => 'font-size: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .awea-ci-icon svg' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
 
 		$this->add_responsive_control(
-			'awea_icon_spacing',
+			'awea_icon_gap',
 			[
-				'label'      => esc_html__( 'Spacing', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Gap', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [ 'px' => [ 'min' => 8, 'max' => 40 ] ],
-				'default'    => [ 'unit' => 'px', 'size' => 18 ],
+				'default'    => [ 'unit' => 'px', 'size' => 16 ],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-contact-list-icon' => 'margin-right: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .awea-ci-row' => 'gap: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
 
 		$this->add_responsive_control(
-			'awea_icon_box_radius',
+			'awea_icon_radius',
 			[
 				'label'      => esc_html__( 'Radius', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
-				'default'    => [ 'top' => '16', 'right' => '16', 'bottom' => '16', 'left' => '16', 'unit' => 'px', 'isLinked' => true ],
+				'default'    => [ 'top' => '14', 'right' => '14', 'bottom' => '14', 'left' => '14', 'unit' => 'px', 'isLinked' => true ],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-contact-list-icon' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .awea-ci-icon' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
 		);
 
-		$this->start_controls_tabs( 'awea_icon_state_tabs' );
+		$this->start_controls_tabs( 'awea_icon_tabs' );
 
-		// Normal
 		$this->start_controls_tab(
-			'awea_icon_tab_normal',
+			'awea_icon_normal',
 			[ 'label' => esc_html__( 'Normal', 'awesome-widgets-elementor' ) ]
 		);
 
@@ -500,12 +550,10 @@ class Widget_Awesome_Contact_Info extends Widget_Base {
 			[
 				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
-				'global'    => [
-					'default' => Global_Colors::COLOR_PRIMARY,
-				],
+				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
 				'selectors' => [
-					'{{WRAPPER}} .awea-contact-list-icon'     => 'color: {{VALUE}};',
-					'{{WRAPPER}} .awea-contact-list-icon svg' => 'fill: {{VALUE}}; stroke: {{VALUE}};',
+					'{{WRAPPER}} .awea-ci-icon'     => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-ci-icon svg' => 'fill: {{VALUE}};',
 				],
 			]
 		);
@@ -517,16 +565,15 @@ class Widget_Awesome_Contact_Info extends Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'default'   => 'rgba(79, 70, 229, 0.08)',
 				'selectors' => [
-					'{{WRAPPER}} .awea-contact-list-icon' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .awea-ci-icon' => 'background-color: {{VALUE}};',
 				],
 			]
 		);
 
 		$this->end_controls_tab();
 
-		// Hover
 		$this->start_controls_tab(
-			'awea_icon_tab_hover',
+			'awea_icon_hover',
 			[ 'label' => esc_html__( 'Hover', 'awesome-widgets-elementor' ) ]
 		);
 
@@ -537,8 +584,8 @@ class Widget_Awesome_Contact_Info extends Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#ffffff',
 				'selectors' => [
-					'{{WRAPPER}} .awea-contact-list-row:hover .awea-contact-list-icon'     => 'color: {{VALUE}};',
-					'{{WRAPPER}} .awea-contact-list-row:hover .awea-contact-list-icon svg' => 'fill: {{VALUE}}; stroke: {{VALUE}};',
+					'{{WRAPPER}} .awea-ci-row:hover .awea-ci-icon'     => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-ci-row:hover .awea-ci-icon svg' => 'fill: {{VALUE}};',
 				],
 			]
 		);
@@ -548,11 +595,9 @@ class Widget_Awesome_Contact_Info extends Widget_Base {
 			[
 				'label'     => esc_html__( 'Background', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
-				'global'    => [
-					'default' => Global_Colors::COLOR_PRIMARY,
-				],
+				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
 				'selectors' => [
-					'{{WRAPPER}} .awea-contact-list-row:hover .awea-contact-list-icon' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .awea-ci-row:hover .awea-ci-icon' => 'background-color: {{VALUE}};',
 				],
 			]
 		);
@@ -563,19 +608,18 @@ class Widget_Awesome_Contact_Info extends Widget_Base {
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   STYLE TAB: 4. TEXT
+		   STYLE: 4. TEXT
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_section_style_text',
+			'awea_style_text',
 			[
 				'label' => esc_html__( 'Text', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
 
-		// Label
 		$this->add_control(
-			'awea_heading_label_typo',
+			'awea_label_heading',
 			[
 				'label' => esc_html__( 'Label', 'awesome-widgets-elementor' ),
 				'type'  => Controls_Manager::HEADING,
@@ -585,11 +629,9 @@ class Widget_Awesome_Contact_Info extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Typography::get_type(),
 			[
-				'name'     => 'awea_label_typography',
-				'selector' => '{{WRAPPER}} .awea-contact-list-label',
-				'global'   => [
-					'default' => Global_Typography::TYPOGRAPHY_SECONDARY,
-				],
+				'name'     => 'awea_label_typo',
+				'selector' => '{{WRAPPER}} .awea-ci-label',
+				'global'   => [ 'default' => Global_Typography::TYPOGRAPHY_SECONDARY ],
 			]
 		);
 
@@ -598,18 +640,15 @@ class Widget_Awesome_Contact_Info extends Widget_Base {
 			[
 				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
-				'global'    => [
-					'default' => Global_Colors::COLOR_TEXT,
-				],
+				'default'   => '#64748b',
 				'selectors' => [
-					'{{WRAPPER}} .awea-contact-list-label' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-ci-label' => 'color: {{VALUE}};',
 				],
 			]
 		);
 
-		// Value
 		$this->add_control(
-			'awea_heading_value_typo',
+			'awea_value_heading',
 			[
 				'label'     => esc_html__( 'Value', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::HEADING,
@@ -620,11 +659,9 @@ class Widget_Awesome_Contact_Info extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Typography::get_type(),
 			[
-				'name'     => 'awea_value_typography',
-				'selector' => '{{WRAPPER}} .awea-contact-list-value',
-				'global'   => [
-					'default' => Global_Typography::TYPOGRAPHY_PRIMARY,
-				],
+				'name'     => 'awea_value_typo',
+				'selector' => '{{WRAPPER}} .awea-ci-value',
+				'global'   => [ 'default' => Global_Typography::TYPOGRAPHY_PRIMARY ],
 			]
 		);
 
@@ -633,221 +670,208 @@ class Widget_Awesome_Contact_Info extends Widget_Base {
 			[
 				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
-				'global'    => [
-					'default' => Global_Colors::COLOR_PRIMARY,
-				],
+				'default'   => '#0f172a',
 				'selectors' => [
-					'{{WRAPPER}} .awea-contact-list-value' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-ci-value' => 'color: {{VALUE}};',
 				],
 			]
 		);
 
 		$this->add_control(
-			'awea_value_hover_color',
+			'awea_value_color_hover',
 			[
 				'label'     => esc_html__( 'Hover Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
-				'global'    => [
-					'default' => Global_Colors::COLOR_ACCENT,
-				],
+				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
 				'selectors' => [
-					'{{WRAPPER}} .awea-contact-list-row:hover .awea-contact-list-value' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-ci-row:hover .awea-ci-value' => 'color: {{VALUE}};',
 				],
 			]
-		);
-
-		$this->end_controls_section();
-
-		/* ==========================================================================
-		   STYLE TAB: 5. ARROW (CONDITIONAL)
-		   ========================================================================== */
-		$this->start_controls_section(
-			'awea_section_style_arrow',
-			[
-				'label'     => esc_html__( 'Arrow', 'awesome-widgets-elementor' ),
-				'tab'       => Controls_Manager::TAB_STYLE,
-				'condition' => [ 'awea_show_action_arrow' => 'yes' ],
-			]
-		);
-
-		$this->add_responsive_control(
-			'awea_arrow_size',
-			[
-				'label'      => esc_html__( 'Size', 'awesome-widgets-elementor' ),
-				'type'       => Controls_Manager::SLIDER,
-				'size_units' => [ 'px' ],
-				'range'      => [ 'px' => [ 'min' => 12, 'max' => 32 ] ],
-				'default'    => [ 'unit' => 'px', 'size' => 20 ],
-				'selectors'  => [
-					'{{WRAPPER}} .awea-contact-list-arrow svg' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}};',
-				],
-			]
-		);
-
-		$this->start_controls_tabs( 'awea_arrow_state_tabs' );
-
-		$this->start_controls_tab(
-			'awea_arrow_tab_normal',
-			[ 'label' => esc_html__( 'Normal', 'awesome-widgets-elementor' ) ]
 		);
 
 		$this->add_control(
-			'awea_arrow_color',
+			'awea_subtext_heading',
+			[
+				'label'     => esc_html__( 'Subtext', 'awesome-widgets-elementor' ),
+				'type'      => Controls_Manager::HEADING,
+				'separator' => 'before',
+			]
+		);
+
+		$this->add_control(
+			'awea_subtext_color',
 			[
 				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#94a3b8',
 				'selectors' => [
-					'{{WRAPPER}} .awea-contact-list-arrow' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-ci-subtext' => 'color: {{VALUE}};',
 				],
 			]
 		);
-
-		$this->end_controls_tab();
-
-		$this->start_controls_tab(
-			'awea_arrow_tab_hover',
-			[ 'label' => esc_html__( 'Hover', 'awesome-widgets-elementor' ) ]
-		);
-
-		$this->add_control(
-			'awea_arrow_color_hover',
-			[
-				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
-				'type'      => Controls_Manager::COLOR,
-				'global'    => [
-					'default' => Global_Colors::COLOR_PRIMARY,
-				],
-				'selectors' => [
-					'{{WRAPPER}} .awea-contact-list-row:hover .awea-contact-list-arrow' => 'color: {{VALUE}};',
-				],
-			]
-		);
-
-		$this->end_controls_tab();
-		$this->end_controls_tabs();
 
 		$this->end_controls_section();
 	}
 
 	protected function render() {
-		$settings       = $this->get_settings_for_display();
-		$title          = $settings['awea_contact_title'] ?? '';
-		$title_tag      = Utils::validate_html_tag( $settings['awea_title_tag'] ?? 'h2' );
-		$show_indicator = 'yes' === ( $settings['awea_show_header_indicator'] ?? 'no' );
-		$items          = $settings['awea_contact_items'] ?? [];
-		$show_arrow     = 'yes' === ( $settings['awea_show_action_arrow'] ?? 'no' );
-		$widget_id      = $this->get_id();
+		$settings   = $this->get_settings_for_display();
+		$title      = $settings['awea_title'] ?? '';
+		$subtitle   = $settings['awea_subtitle'] ?? '';
+		$title_tag  = Utils::validate_html_tag( $settings['awea_title_tag'] ?? 'h2' );
+		$accent_bar = 'yes' === ( $settings['awea_accent_bar'] ?? 'no' );
+		$items      = $settings['awea_items'] ?? [];
+		$show_arrow = 'yes' === ( $settings['awea_show_arrow'] ?? 'no' );
+		$widget_id  = $this->get_id();
 
-		$header_classes = [ 'awea-contact-header' ];
-		if ( ! $show_indicator ) {
-			$header_classes[] = 'awea-no-indicator';
+		$header_classes = [ 'awea-ci-header' ];
+		if ( ! $accent_bar ) {
+			$header_classes[] = 'awea-ci-no-bar';
 		}
 		?>
-		<div class="awea-list-container" id="awea-contact-<?php echo esc_attr( $widget_id ); ?>">
-			
-			<?php if ( ! empty( $title ) ) : ?>
-				<div class="<?php echo esc_attr( implode( ' ', $header_classes ) ); ?>">
-					<<?php Utils::print_validated_html_tag( $title_tag ); ?> class="awea-contact-title"><?php echo esc_html( $title ); ?></<?php Utils::print_validated_html_tag( $title_tag ); ?>>
-				</div>
+		<div class="awea-ci-wrap" id="awea-ci-<?php echo esc_attr( $widget_id ); ?>">
+
+			<?php if ( ! empty( $title ) || ! empty( $subtitle ) ) : ?>
+				<header class="<?php echo esc_attr( implode( ' ', $header_classes ) ); ?>">
+					<?php if ( ! empty( $title ) ) : ?>
+						<<?php Utils::print_validated_html_tag( $title_tag ); ?> class="awea-ci-title">
+							<?php echo esc_html( $title ); ?>
+						</<?php Utils::print_validated_html_tag( $title_tag ); ?>>
+					<?php endif; ?>
+
+					<?php if ( ! empty( $subtitle ) ) : ?>
+						<p class="awea-ci-subtitle"><?php echo esc_html( $subtitle ); ?></p>
+					<?php endif; ?>
+				</header>
 			<?php endif; ?>
 
 			<?php if ( ! empty( $items ) ) : ?>
-				<div class="awea-contact-cards-wrap">
-					<?php
-					foreach ( $items as $index => $item ) :
-						$label       = $item['awea_item_label'] ?? '';
-						$val         = $item['awea_item_value'] ?? '';
-						$enable_copy = 'yes' === ( $item['awea_item_enable_copy'] ?? '' );
-						$link_key    = 'awea_contact_link_' . $index;
-						$has_url     = ! empty( $item['awea_item_link']['url'] );
+				<div class="awea-ci-grid">
+					<?php foreach ( $items as $index => $item ) :
+						$id       = $item['_id'] ?? $index;
+						$row_key  = 'row_' . $id;
+						$link_key = 'link_' . $id;
 
-						$tag = $has_url ? 'a' : 'div';
+						$label    = $item['awea_label'] ?? '';
+						$val      = $item['awea_value'] ?? '';
+						$subtext  = $item['awea_subtext'] ?? '';
+						$can_copy = 'yes' === ( $item['awea_copy'] ?? '' );
+						$has_url  = ! empty( $item['awea_link']['url'] );
+
+						$row_classes = [
+							'awea-ci-row',
+							'elementor-repeater-item-' . esc_attr( $id ),
+						];
+						if ( $has_url ) {
+							$row_classes[] = 'awea-ci-has-link';
+						}
+						if ( $can_copy && ! $has_url ) {
+							$row_classes[] = 'awea-ci-row-copy';
+						}
+
+						$this->add_render_attribute( $row_key, 'class', $row_classes );
+
+						if ( $can_copy && ! empty( $val ) ) {
+							$this->add_render_attribute( $row_key, 'data-copy-text', esc_attr( $val ) );
+						}
 
 						if ( $has_url ) {
-							$this->add_link_attributes( $link_key, $item['awea_item_link'] );
-						}
-
-						$this->add_render_attribute( $link_key, 'class', 'awea-contact-list-row elementor-repeater-item-' . esc_attr( $item['_id'] ) );
-
-						if ( $enable_copy ) {
-							$this->add_render_attribute( $link_key, 'data-copy-text', esc_attr( $val ) );
-							$this->add_render_attribute( $link_key, 'class', 'awea-copy-enabled' );
-							$this->add_render_attribute( $link_key, 'title', esc_attr__( 'Click to copy to clipboard', 'awesome-widgets-elementor' ) );
+							$this->add_link_attributes( $link_key, $item['awea_link'] );
+							$this->add_render_attribute( $link_key, 'class', 'awea-ci-cover-link' );
+							$this->add_render_attribute( $link_key, 'aria-label', esc_attr( $label . ': ' . $val ) );
 						}
 						?>
-						<<?php echo tag_escape( $tag ); ?> <?php $this->print_render_attribute_string( $link_key ); ?>>
-							<!-- Leading Badge -->
-							<div class="awea-contact-list-icon" aria-hidden="true">
-								<?php Icons_Manager::render_icon( $item['awea_item_icon'], [ 'aria-hidden' => 'true' ] ); ?>
-							</div>
+						<div <?php $this->print_render_attribute_string( $row_key ); ?>>
 
-							<!-- Body Content -->
-							<div class="awea-contact-list-content">
-								<?php if ( ! empty( $label ) ) : ?>
-									<span class="awea-contact-list-label"><?php echo esc_html( $label ); ?></span>
-								<?php endif; ?>
-								
-								<?php if ( ! empty( $val ) ) : ?>
-									<span class="awea-contact-list-value"><?php echo esc_html( $val ); ?></span>
-								<?php endif; ?>
-							</div>
-
-							<!-- Trailing Indicator -->
-							<?php if ( $enable_copy ) : ?>
-								<div class="awea-contact-copy-badge" aria-label="<?php esc_attr_e( 'Copy to Clipboard', 'awesome-widgets-elementor' ); ?>">
-									<svg class="awea-copy-ready" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-									<svg class="awea-copy-done" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
-								</div>
-							<?php elseif ( $show_arrow && $has_url ) : ?>
-								<div class="awea-contact-list-arrow" aria-hidden="true">
-									<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-										<line x1="5" y1="12" x2="19" y2="12"></line>
-										<polyline points="12 5 19 12 12 19"></polyline>
-									</svg>
-								</div>
+							<?php if ( $has_url ) : ?>
+								<a <?php $this->print_render_attribute_string( $link_key ); ?>></a>
 							<?php endif; ?>
-						</<?php echo tag_escape( $tag ); ?>>
+
+							<div class="awea-ci-icon" aria-hidden="true">
+								<?php Icons_Manager::render_icon( $item['awea_icon'], [ 'aria-hidden' => 'true' ] ); ?>
+							</div>
+
+							<div class="awea-ci-body">
+								<?php if ( ! empty( $label ) ) : ?>
+									<span class="awea-ci-label"><?php echo esc_html( $label ); ?></span>
+								<?php endif; ?>
+
+								<?php if ( ! empty( $val ) ) : ?>
+									<span class="awea-ci-value"><?php echo esc_html( $val ); ?></span>
+								<?php endif; ?>
+
+								<?php if ( ! empty( $subtext ) ) : ?>
+									<span class="awea-ci-subtext"><?php echo esc_html( $subtext ); ?></span>
+								<?php endif; ?>
+							</div>
+
+							<div class="awea-ci-actions">
+								<?php if ( $can_copy && ! empty( $val ) ) : ?>
+									<button type="button" class="awea-ci-copy-btn" aria-label="<?php esc_attr_e( 'Copy to clipboard', 'awesome-widgets-elementor' ); ?>">
+										<svg class="awea-ci-ico-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+										<svg class="awea-ci-ico-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
+										<span class="awea-ci-copy-label"><?php esc_html_e( 'Copied', 'awesome-widgets-elementor' ); ?></span>
+									</button>
+								<?php endif; ?>
+
+								<?php if ( $show_arrow && $has_url ) : ?>
+									<span class="awea-ci-arrow" aria-hidden="true">
+										<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+											<line x1="7" y1="17" x2="17" y2="7"></line>
+											<polyline points="7 7 17 7 17 17"></polyline>
+										</svg>
+									</span>
+								<?php endif; ?>
+							</div>
+
+						</div>
 					<?php endforeach; ?>
 				</div>
 			<?php endif; ?>
 
 		</div>
 
-		<!-- Scoped Copy Notification Logic -->
 		<script>
 		(function() {
-			function initContactCopy() {
-				var scope = document.getElementById('awea-contact-<?php echo esc_js( $widget_id ); ?>');
+			function initContactInfo() {
+				var scope = document.getElementById('awea-ci-<?php echo esc_js( $widget_id ); ?>');
 				if (!scope || scope.__aweaBound) return;
 				scope.__aweaBound = true;
 
-				var copyItems = scope.querySelectorAll('.awea-copy-enabled');
-				copyItems.forEach(function(item) {
-					item.addEventListener('click', function(e) {
-						e.preventDefault();
-						var textToCopy = this.getAttribute('data-copy-text');
-						if (!textToCopy) return;
+				function triggerCopy(row) {
+					var text = row.getAttribute('data-copy-text');
+					if (!text || !navigator.clipboard) return;
+					navigator.clipboard.writeText(text);
+					row.classList.add('is-copied');
+					clearTimeout(row.__copyTimer);
+					row.__copyTimer = setTimeout(function() {
+						row.classList.remove('is-copied');
+					}, 1800);
+				}
 
-						if (navigator.clipboard) {
-							navigator.clipboard.writeText(textToCopy);
-							item.classList.add('is-copied');
-							setTimeout(function() {
-								item.classList.remove('is-copied');
-							}, 1800);
-						}
+				scope.querySelectorAll('.awea-ci-copy-btn').forEach(function(btn) {
+					btn.addEventListener('click', function(e) {
+						e.preventDefault();
+						e.stopPropagation();
+						var row = this.closest('.awea-ci-row');
+						if (row) triggerCopy(row);
+					});
+				});
+
+				scope.querySelectorAll('.awea-ci-row-copy').forEach(function(row) {
+					row.addEventListener('click', function() {
+						triggerCopy(this);
 					});
 				});
 			}
 
 			if (document.readyState === 'loading') {
-				document.addEventListener('DOMContentLoaded', initContactCopy);
+				document.addEventListener('DOMContentLoaded', initContactInfo);
 			} else {
-				initContactCopy();
+				initContactInfo();
 			}
 
 			if (window.elementorFrontend && window.elementorFrontend.hooks) {
-				window.elementorFrontend.hooks.addAction('frontend/element_ready/awea-contact-info.default', initContactCopy);
+				window.elementorFrontend.hooks.addAction('frontend/element_ready/awea-contact-info.default', initContactInfo);
 			}
 		})();
 		</script>

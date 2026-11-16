@@ -6,6 +6,11 @@
   width: 100%;
   position: relative;
   box-sizing: border-box;
+  --awea-drawer-offset: 12px;
+  --awea-drawer-bg: #ffffff;
+  --awea-drawer-padding: 12px;
+  --awea-drawer-radius: 16px;
+  --awea-drawer-border: rgba(15, 23, 42, 0.08);
 }
 
 .awea-nav-menu-container {
@@ -38,6 +43,7 @@
 .awea-nav-menu-container ul.menu > li > a {
   display: inline-flex;
   align-items: center;
+  justify-content: space-between;
   gap: 6px;
   text-decoration: none;
   box-sizing: border-box;
@@ -48,6 +54,10 @@
   transition: color 0.28s cubic-bezier(0.25, 1, 0.5, 1),
               background-color 0.28s cubic-bezier(0.25, 1, 0.5, 1),
               box-shadow 0.28s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.awea-nav-layout-column .awea-nav-menu-container ul.menu > li > a {
+  width: 100%;
 }
 
 .awea-nav-menu-container ul.menu > li > a:hover {
@@ -79,7 +89,6 @@
   transition: stroke 0.25s ease;
 }
 
-/* Smooth Icon Inversion on Item Hover */
 .awea-nav-menu-container ul.menu li:hover > a .awea-sub-indicator {
   transform: rotate(180deg);
 }
@@ -109,6 +118,18 @@
   transition: opacity 0.28s cubic-bezier(0.16, 1, 0.3, 1),
               transform 0.28s cubic-bezier(0.16, 1, 0.3, 1),
               visibility 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Vertical Layout Top-Level Dropdown Flyout */
+.awea-nav-layout-column .awea-nav-menu-container ul.menu > li > ul.sub-menu {
+  top: 0;
+  left: 100%;
+  margin-top: 0;
+  transform: translateX(-10px);
+}
+
+.awea-nav-layout-column .awea-nav-menu-container ul.menu > li:hover > ul.sub-menu {
+  transform: translateX(0);
 }
 
 .awea-nav-menu-container ul.menu li:hover > ul.sub-menu {
@@ -221,15 +242,26 @@
 
   .awea-nav-breakpoint-mobile .awea-nav-menu-container {
     width: 100%;
-    margin-top: 14px;
+    margin-top: 0;
+    padding: 0;
+    background-color: var(--awea-drawer-bg, #ffffff);
+    border: 0 solid var(--awea-drawer-border, rgba(15, 23, 42, 0.08));
+    border-radius: var(--awea-drawer-radius, 16px);
     overflow: hidden;
     max-height: 0;
     opacity: 0;
     transition: max-height 0.38s cubic-bezier(0.4, 0, 0.2, 1),
-                opacity 0.28s ease;
+                opacity 0.28s ease,
+                padding 0.28s ease,
+                margin-top 0.28s ease;
   }
 
   .awea-nav-breakpoint-mobile .awea-nav-menu-container.awea-menu-open {
+    margin-top: var(--awea-drawer-offset, 12px);
+    padding: var(--awea-drawer-padding, 12px);
+    border-width: 1px;
+    box-shadow: 0 16px 36px -8px rgba(15, 23, 42, 0.08),
+                0 2px 8px -2px rgba(15, 23, 42, 0.04);
     max-height: 1200px;
     opacity: 1;
   }
@@ -237,7 +269,7 @@
   .awea-nav-breakpoint-mobile .awea-nav-menu-container ul.menu {
     flex-direction: column !important;
     align-items: stretch !important;
-    gap: 6px !important;
+    gap: 4px !important;
     width: 100%;
   }
 
@@ -254,7 +286,8 @@
     pointer-events: auto;
     box-shadow: none;
     border: none;
-    padding-left: 14px;
+    padding: 4px 0 4px 14px;
+    margin: 0 !important;
     background: transparent;
     transform: none;
   }
@@ -267,15 +300,26 @@
 
   .awea-nav-breakpoint-tablet .awea-nav-menu-container {
     width: 100%;
-    margin-top: 14px;
+    margin-top: 0;
+    padding: 0;
+    background-color: var(--awea-drawer-bg, #ffffff);
+    border: 0 solid var(--awea-drawer-border, rgba(15, 23, 42, 0.08));
+    border-radius: var(--awea-drawer-radius, 16px);
     overflow: hidden;
     max-height: 0;
     opacity: 0;
     transition: max-height 0.38s cubic-bezier(0.4, 0, 0.2, 1),
-                opacity 0.28s ease;
+                opacity 0.28s ease,
+                padding 0.28s ease,
+                margin-top 0.28s ease;
   }
 
   .awea-nav-breakpoint-tablet .awea-nav-menu-container.awea-menu-open {
+    margin-top: var(--awea-drawer-offset, 12px);
+    padding: var(--awea-drawer-padding, 12px);
+    border-width: 1px;
+    box-shadow: 0 16px 36px -8px rgba(15, 23, 42, 0.08),
+                0 2px 8px -2px rgba(15, 23, 42, 0.04);
     max-height: 1200px;
     opacity: 1;
   }
@@ -283,7 +327,7 @@
   .awea-nav-breakpoint-tablet .awea-nav-menu-container ul.menu {
     flex-direction: column !important;
     align-items: stretch !important;
-    gap: 6px !important;
+    gap: 4px !important;
     width: 100%;
   }
 
@@ -300,7 +344,8 @@
     pointer-events: auto;
     box-shadow: none;
     border: none;
-    padding-left: 14px;
+    padding: 4px 0 4px 14px;
+    margin: 0 !important;
     background: transparent;
     transform: none;
   }

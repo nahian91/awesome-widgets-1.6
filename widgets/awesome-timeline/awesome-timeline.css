@@ -1,66 +1,110 @@
 /* ==========================================================================
-   AWEA Timeline Studio Master Architecture (No Hover Zoom)
+   AWEA Timeline — Zero-Shadow Architectural Roadmap
    ========================================================================== */
 
-.awea-timeline-container {
+.awea-tl-wrap {
   width: 100%;
+  max-width: 1060px;
   margin: 0 auto;
   position: relative;
   box-sizing: border-box;
-  padding: 10px 0;
+  padding: 8px 0;
 }
 
-/* 1. Central Connecting Spine */
-.awea-timeline-container::before {
+/* 1. Connecting Spine Line */
+.awea-tl-wrap::before {
   content: "";
   position: absolute;
   left: 50%;
   top: 0;
   width: 2px;
   height: 100%;
+  background-color: #cbd5e1;
   transform: translateX(-50%);
   pointer-events: none;
   z-index: 1;
 }
 
-/* 2. Timeline Item Positioning */
-.awea-timeline-item {
+/* 2. Alternating Item Positioning (Default) */
+.awea-tl-item {
   display: flex;
   justify-content: flex-end;
   padding-right: 50%;
+  margin-bottom: 32px;
   position: relative;
   width: 100%;
   box-sizing: border-box;
-  opacity: 1;
-  transform: none;
-  transition: opacity 0.4s ease;
 }
 
-.awea-timeline-item:last-child {
+.awea-tl-item:last-child {
   margin-bottom: 0 !important;
 }
 
-.awea-timeline-item:nth-child(even) {
+.awea-tl-mode-alternating .awea-tl-item:nth-child(even) {
   justify-content: flex-start;
   padding-right: 0;
   padding-left: 50%;
 }
 
-/* Scroll-Driven Animations on Initial View Only */
+.awea-tl-mode-alternating .awea-tl-item:nth-child(odd) .awea-tl-card {
+  margin-right: 38px;
+}
+
+.awea-tl-mode-alternating .awea-tl-item:nth-child(even) .awea-tl-card {
+  margin-left: 38px;
+}
+
+/* Left Spine Layout Mode */
+.awea-tl-mode-left .awea-tl-wrap::before {
+  left: 18px;
+  transform: none;
+}
+
+.awea-tl-mode-left .awea-tl-item {
+  justify-content: flex-start;
+  padding-left: 56px;
+  padding-right: 0;
+}
+
+.awea-tl-mode-left .awea-tl-dot {
+  left: 18px;
+}
+
+/* Right Spine Layout Mode */
+.awea-tl-mode-right .awea-tl-wrap::before {
+  left: auto;
+  right: 18px;
+  transform: none;
+}
+
+.awea-tl-mode-right .awea-tl-item {
+  justify-content: flex-end;
+  padding-right: 56px;
+  padding-left: 0;
+  text-align: right;
+}
+
+.awea-tl-mode-right .awea-tl-dot {
+  left: auto;
+  right: 18px;
+  transform: translateX(50%);
+}
+
+/* Progressive Scroll Reveal */
 @supports (animation-timeline: view()) {
-  .awea-timeline-item {
-    view-timeline-name: --awea-timeline-scroll;
+  .awea-tl-anim-yes .awea-tl-item {
+    view-timeline-name: --awea-tl-scroll;
     view-timeline-axis: block;
-    animation-timeline: --awea-timeline-scroll;
-    animation-name: aweaTimelineFadeUp;
-    animation-range: entry 10% cover 35%;
+    animation-timeline: --awea-tl-scroll;
+    animation-name: aweaTlReveal;
+    animation-range: entry 10% cover 32%;
     animation-fill-mode: both;
   }
 
-  @keyframes aweaTimelineFadeUp {
+  @keyframes aweaTlReveal {
     from {
       opacity: 0;
-      transform: translateY(30px);
+      transform: translateY(24px);
     }
     to {
       opacity: 1;
@@ -69,106 +113,201 @@
   }
 }
 
-/* 3. Central Node Indicator (Stationary on Hover - No Scale/Zoom) */
-.awea-timeline-dot {
+/* 3. Node Circles (Double-Ring Architectural Framing, Zero Shadow) */
+.awea-tl-dot {
   position: absolute;
   left: 50%;
+  top: 28px;
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
-  border-style: solid;
-  border-width: 3px;
+  background-color: #ffffff;
+  border: 2px solid var(--e-global-color-primary, #4f46e5);
+  outline: 5px solid #ffffff;
+  color: var(--e-global-color-primary, #4f46e5);
   transform: translateX(-50%);
   z-index: 3;
   display: flex;
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
-  transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.35s ease;
+  box-shadow: none;
+  transition:
+    background-color 0.25s ease,
+    border-color 0.25s ease,
+    color 0.25s ease;
 }
 
-/* Node maintains static scale on hover */
-.awea-timeline-item:hover .awea-timeline-dot {
-  transform: translateX(-50%);
-}
-
-.awea-dot-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+.awea-tl-dot i {
+  font-size: 13px;
   line-height: 1;
-  transition: color 0.3s ease;
 }
 
-.awea-dot-icon svg {
+.awea-tl-dot svg {
+  width: 13px;
+  height: 13px;
   display: block;
   fill: currentColor;
 }
 
-/* 4. Milestone Card Box (Stationary on Hover - No Scale/Zoom) */
-.awea-timeline-content {
+.awea-tl-dot-core {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: currentColor;
+}
+
+.awea-tl-item:hover .awea-tl-dot {
+  background-color: var(--e-global-color-primary, #4f46e5);
+  border-color: var(--e-global-color-primary, #4f46e5);
+  color: #ffffff;
+  box-shadow: none;
+}
+
+/* 4. Milestone Card Box */
+.awea-tl-card {
   width: 100%;
-  border-style: solid;
-  border-width: 1px;
-  border-color: rgba(15, 23, 42, 0.08);
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  padding: 28px;
   box-sizing: border-box;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
   position: relative;
   word-break: break-word;
-  transform: none;
+  box-shadow: none;
+  transition:
+    background-color 0.25s ease,
+    border-color 0.25s ease;
 }
 
-/* Card remains locked in place on hover */
-.awea-timeline-item:hover .awea-timeline-content {
-  transform: none;
+.awea-tl-item:hover .awea-tl-card {
+  background-color: #f8fafc;
+  border-color: var(--e-global-color-primary, #4f46e5);
+  box-shadow: none;
 }
 
-/* 5. Typography & Badges */
-.awea-step-tag {
+/* 5. Tag Badge, Typography, Optional Media & Action Link */
+.awea-tl-tag {
   display: inline-flex;
   align-items: center;
+  padding: 4px 12px;
+  border-radius: 100px;
+  background-color: rgba(79, 70, 229, 0.08);
+  color: var(--e-global-color-primary, #4f46e5);
+  font-size: 0.72rem;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  line-height: 1.2;
+  margin-bottom: 12px;
 }
 
-.awea-timeline-title {
-  margin-top: 0;
-  line-height: 1.25;
+.awea-tl-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 10px 0;
+  line-height: 1.28;
+  letter-spacing: -0.02em;
 }
 
-.awea-timeline-desc {
+.awea-tl-desc {
+  font-size: 0.94rem;
+  line-height: 1.62;
+  color: #475569;
   margin: 0;
-  line-height: 1.65;
 }
 
-/* ==========================================================================
-   Mobile & Tablet Responsive System (Super Mobile Friendly)
-   ========================================================================== */
+.awea-tl-media {
+  margin-top: 16px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(15, 23, 42, 0.06);
+}
+
+.awea-tl-media img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+.awea-tl-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 16px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--e-global-color-primary, #4f46e5);
+  text-decoration: none;
+  line-height: 1.2;
+  transition: color 0.25s ease;
+}
+
+.awea-tl-link svg {
+  width: 14px;
+  height: 14px;
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.awea-tl-link:hover {
+  color: #0f172a;
+}
+
+.awea-tl-link:hover svg {
+  transform: translateX(4px);
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .awea-tl-anim-yes .awea-tl-item {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .awea-tl-dot,
+  .awea-tl-card,
+  .awea-tl-link svg {
+    transition: none !important;
+    transform: none !important;
+  }
+}
+
+/* Mobile Responsive Stacking (<= 767px) */
 @media (max-width: 767px) {
-  /* Move spine line to the left edge */
-  .awea-timeline-container::before {
+  .awea-tl-wrap::before,
+  .awea-tl-mode-right .awea-tl-wrap::before {
     left: 18px;
+    right: auto;
     transform: none;
   }
 
-  /* Single-column alignment for all milestones */
-  .awea-timeline-item,
-  .awea-timeline-item:nth-child(even) {
+  .awea-tl-item,
+  .awea-tl-mode-alternating .awea-tl-item:nth-child(even),
+  .awea-tl-mode-right .awea-tl-item {
     justify-content: flex-start !important;
-    padding-left: 48px !important;
+    padding-left: 52px !important;
     padding-right: 0 !important;
+    text-align: left;
   }
 
-  /* Fixed node alignment without hover scaling */
-  .awea-timeline-dot,
-  .awea-timeline-item:hover .awea-timeline-dot {
+  .awea-tl-dot,
+  .awea-tl-mode-right .awea-tl-dot {
     left: 18px !important;
+    right: auto !important;
     transform: translateX(-50%) !important;
   }
 
-  /* Reset odd/even card offsets on mobile */
-  .awea-timeline-item:nth-child(odd) .awea-timeline-content,
-  .awea-timeline-item:nth-child(even) .awea-timeline-content {
+  .awea-tl-mode-alternating .awea-tl-item:nth-child(odd) .awea-tl-card,
+  .awea-tl-mode-alternating .awea-tl-item:nth-child(even) .awea-tl-card {
     margin-left: 0 !important;
     margin-right: 0 !important;
+  }
+
+  .awea-tl-card {
+    padding: 22px 20px;
+    border-radius: 16px;
   }
 }

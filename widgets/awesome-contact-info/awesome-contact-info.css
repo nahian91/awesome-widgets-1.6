@@ -1,243 +1,303 @@
 /* ==========================================================================
-   AWEA Contact Info Studio Master Architecture (Zero Hover Zoom / No Scale)
+   AWEA Contact Info — Zero-Shadow Architectural Directory
    ========================================================================== */
 
-.awea-list-container {
+.awea-ci-wrap {
   width: 100%;
   position: relative;
   box-sizing: border-box;
 }
 
 /* 1. Directory Header */
-.awea-contact-header {
-  margin-bottom: 32px;
-  border-left: 4px solid var(--e-global-color-primary, #4f46e5);
-  padding-left: 18px;
+.awea-ci-header {
+  margin-bottom: 28px;
+  border-left: 3px solid var(--e-global-color-primary, #4f46e5);
+  padding-left: 16px;
   box-sizing: border-box;
 }
 
-.awea-contact-header.awea-no-indicator {
+.awea-ci-header.awea-ci-no-bar {
   border-left: none;
   padding-left: 0;
 }
 
-.awea-contact-header .awea-contact-title {
-  font-size: clamp(1.75rem, 4vw, 2.25rem);
+.awea-ci-title {
+  font-size: clamp(1.6rem, 3.5vw, 2.15rem);
   font-weight: 800;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.025em;
   margin: 0;
-  line-height: 1.15;
-  color: var(--e-global-color-primary, #0f172a);
+  line-height: 1.18;
+  color: #0f172a;
   word-break: break-word;
 }
 
-/* 2. Contact Card Rows */
-.awea-contact-cards-wrap {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
+.awea-ci-subtitle {
+  font-size: 0.96rem;
+  line-height: 1.55;
+  color: #64748b;
+  margin: 6px 0 0 0;
+  word-break: break-word;
 }
 
-.awea-contact-list-row {
+/* 2. Responsive Contact Grid */
+.awea-ci-grid {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 14px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.awea-ci-row {
+  position: relative;
   display: flex;
   align-items: center;
-  padding: 20px 24px;
+  gap: 16px;
+  padding: 20px 22px;
   background-color: #ffffff;
-  border-style: solid;
-  border-width: 1px;
-  border-color: rgba(15, 23, 42, 0.08);
-  border-radius: 20px;
-  margin-bottom: 0;
-  text-decoration: none;
-  color: inherit;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
   box-sizing: border-box;
-  box-shadow: 0 4px 15px -3px rgba(0, 0, 0, 0.03);
-  transform: none;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+  box-shadow: none;
+  transition:
+    background-color 0.25s ease,
+    border-color 0.25s ease;
 }
 
-.awea-contact-list-row.awea-copy-enabled {
+.awea-ci-row:hover {
+  background-color: #f8fafc;
+  border-color: var(--e-global-color-primary, #4f46e5);
+  box-shadow: none;
+}
+
+.awea-ci-has-link,
+.awea-ci-row-copy {
   cursor: pointer;
 }
 
-.awea-contact-list-row:hover {
-  transform: none;
+/* Full-Row Link Overlay (keeps Copy button independently clickable) */
+.awea-ci-cover-link {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  text-decoration: none;
 }
 
-/* 3. Leading Icon Badge */
-.awea-contact-list-icon {
-  width: 52px;
-  height: 52px;
-  border-radius: 16px;
+/* 3. Leading Icon Box */
+.awea-ci-icon {
+  position: relative;
+  z-index: 1;
+  width: 50px;
+  height: 50px;
+  border-radius: 14px;
   background-color: rgba(79, 70, 229, 0.08);
+  border: 1px solid rgba(79, 70, 229, 0.14);
   color: var(--e-global-color-primary, #4f46e5);
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  margin-right: 18px;
   box-sizing: border-box;
-  transform: none;
-  transition: background-color 0.25s ease, color 0.25s ease;
+  box-shadow: none;
+  transition:
+    background-color 0.25s ease,
+    border-color 0.25s ease,
+    color 0.25s ease;
 }
 
-.awea-contact-list-icon i {
+.awea-ci-icon i {
   font-size: 18px;
   line-height: 1;
 }
 
-.awea-contact-list-icon svg {
+.awea-ci-icon svg {
   width: 18px;
   height: 18px;
   display: block;
   fill: currentColor;
 }
 
-.awea-contact-list-row:hover .awea-contact-list-icon {
-  transform: none;
+.awea-ci-row:hover .awea-ci-icon {
   background-color: var(--e-global-color-primary, #4f46e5);
+  border-color: var(--e-global-color-primary, #4f46e5);
   color: #ffffff;
 }
 
-.awea-contact-list-row:hover .awea-contact-list-icon svg {
+.awea-ci-row:hover .awea-ci-icon svg {
   fill: #ffffff;
-  stroke: #ffffff;
 }
 
-/* 4. Text Meta Lockup */
-.awea-contact-list-content {
-  flex-grow: 1;
+/* 4. Text Spine */
+.awea-ci-body {
+  position: relative;
+  z-index: 1;
+  flex: 1 1 auto;
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 3px;
   min-width: 0;
 }
 
-.awea-contact-list-label {
+.awea-ci-label {
   display: block;
-  font-size: 0.75rem;
-  font-weight: 800;
+  font-size: 0.72rem;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: var(--e-global-color-text, #64748b);
+  letter-spacing: 0.09em;
+  color: #64748b;
   line-height: 1.2;
 }
 
-.awea-contact-list-value {
+.awea-ci-value {
   display: block;
-  font-size: 1.15rem;
+  font-size: 1.08rem;
   font-weight: 800;
-  color: var(--e-global-color-primary, #0f172a);
-  letter-spacing: -0.01em;
+  color: #0f172a;
+  letter-spacing: -0.015em;
   word-break: break-word;
   line-height: 1.35;
   transition: color 0.25s ease;
 }
 
-/* 5. Trailing Action Arrow */
-.awea-contact-list-arrow {
-  opacity: 0.6;
-  color: #94a3b8;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-left: 16px;
-  flex-shrink: 0;
-  transform: none;
-  transition: opacity 0.25s ease, color 0.25s ease;
-}
-
-.awea-contact-list-arrow svg {
-  width: 20px;
-  height: 20px;
-}
-
-.awea-contact-list-row:hover .awea-contact-list-arrow {
-  opacity: 1;
-  transform: none;
+.awea-ci-row:hover .awea-ci-value {
   color: var(--e-global-color-primary, #4f46e5);
 }
 
-/* 6. Copy-to-Clipboard Micro-Badge */
-.awea-contact-copy-badge {
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
-  background-color: rgba(15, 23, 42, 0.04);
-  display: flex;
+.awea-ci-subtext {
+  display: block;
+  font-size: 0.84rem;
+  color: #94a3b8;
+  line-height: 1.4;
+}
+
+/* 5. Trailing Actions (Copy Pill + Diagonal External Arrow) */
+.awea-ci-actions {
+  position: relative;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.awea-ci-copy-btn {
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  margin-left: 16px;
-  flex-shrink: 0;
-  color: #64748b;
+  gap: 6px;
+  height: 34px;
+  min-width: 34px;
+  padding: 0 10px;
+  border-radius: 10px;
+  background-color: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  color: #475569;
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1;
   cursor: pointer;
-  transform: none;
-  transition: background-color 0.2s ease, color 0.2s ease;
-  box-sizing: border-box;
+  box-shadow: none;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
 }
 
-.awea-contact-copy-badge svg {
-  width: 16px;
-  height: 16px;
+.awea-ci-copy-btn:hover {
+  background-color: #ffffff;
+  border-color: #0f172a;
+  color: #0f172a;
 }
 
-.awea-copy-done {
+.awea-ci-copy-btn svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+.awea-ci-ico-check,
+.awea-ci-copy-label {
   display: none;
-  stroke: #16a34a;
 }
 
-.awea-contact-list-row.is-copied .awea-copy-ready {
+.awea-ci-row.is-copied .awea-ci-ico-copy {
   display: none;
 }
 
-.awea-contact-list-row.is-copied .awea-copy-done {
-  display: block;
+.awea-ci-row.is-copied .awea-ci-ico-check,
+.awea-ci-row.is-copied .awea-ci-copy-label {
+  display: inline-block;
 }
 
-.awea-contact-list-row.is-copied .awea-contact-copy-badge {
-  background-color: #dcfce7;
-  color: #16a34a;
-  transform: none;
+.awea-ci-row.is-copied .awea-ci-copy-btn {
+  background-color: #ecfdf5;
+  border-color: #10b981;
+  color: #059669;
 }
 
-/* ==========================================================================
-   Super Mobile Friendly System (<= 640px)
-   ========================================================================== */
+.awea-ci-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  color: #94a3b8;
+  transition:
+    color 0.25s ease,
+    transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.awea-ci-arrow svg {
+  width: 18px;
+  height: 18px;
+}
+
+.awea-ci-row:hover .awea-ci-arrow {
+  color: var(--e-global-color-primary, #4f46e5);
+  transform: translate(2px, -2px);
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .awea-ci-row,
+  .awea-ci-icon,
+  .awea-ci-arrow,
+  .awea-ci-copy-btn {
+    transition: none !important;
+    transform: none !important;
+  }
+}
+
+/* Mobile (<= 640px) */
 @media (max-width: 640px) {
-  .awea-contact-header {
-    margin-bottom: 24px;
+  .awea-ci-header {
+    margin-bottom: 22px;
     padding-left: 14px;
   }
 
-  .awea-contact-list-row {
-    padding: 16px 18px;
-    border-radius: 16px;
+  .awea-ci-row {
+    padding: 16px;
+    border-radius: 14px;
     gap: 12px;
   }
 
-  .awea-contact-list-icon {
-    width: 44px;
-    height: 44px;
-    margin-right: 0;
+  .awea-ci-icon {
+    width: 42px;
+    height: 42px;
     border-radius: 12px;
   }
 
-  .awea-contact-list-icon i {
+  .awea-ci-icon i {
     font-size: 16px;
   }
 
-  .awea-contact-list-icon svg {
+  .awea-ci-icon svg {
     width: 16px;
     height: 16px;
   }
 
-  .awea-contact-list-value {
-    font-size: 1rem;
-  }
-
-  .awea-contact-list-arrow,
-  .awea-contact-copy-badge {
-    opacity: 1;
-    margin-left: 8px;
+  .awea-ci-value {
+    font-size: 0.98rem;
   }
 }

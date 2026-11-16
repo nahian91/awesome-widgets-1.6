@@ -1,211 +1,238 @@
 /* ==========================================================================
-   AWEA List Group Studio Master Architecture (Zero Hover Zoom / No Scale)
+   AWEA List Group — Zero-Shadow Architectural Directory
    ========================================================================== */
 
-.awea-icon-list-card {
+.awea-lg-wrap {
   width: 100%;
-  position: relative;
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
   box-sizing: border-box;
 }
 
-/* 1. Connected Feed Mode */
-.awea-icon-list-card.awea-mode-connected {
+/* 1. Connected Container Mode */
+.awea-lg-mode-connected .awea-lg-wrap {
   background-color: #ffffff;
-  border-style: solid;
-  border-width: 1px;
-  border-color: rgba(15, 23, 42, 0.08);
-  border-radius: 28px;
-  padding: 40px;
-  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.04);
-}
-
-.awea-icon-list-card.awea-mode-connected .awea-icon-list-item {
-  border-bottom: 1px solid rgba(15, 23, 42, 0.06);
-}
-
-.awea-icon-list-card.awea-mode-connected .awea-icon-list-item:first-child {
-  padding-top: 0;
-}
-
-.awea-icon-list-card.awea-mode-connected .awea-icon-list-item:last-child {
-  padding-bottom: 0;
-  border-bottom: none !important;
-  margin-bottom: 0 !important;
-}
-
-/* 2. Independent Separated Tiles Mode */
-.awea-icon-list-card.awea-mode-separated {
-  background: transparent;
-  padding: 0;
-  border: none;
+  border: 1px solid #e2e8f0;
+  border-radius: 24px;
+  padding: 12px;
+  gap: 0;
   box-shadow: none;
 }
 
-.awea-icon-list-card.awea-mode-separated .awea-icon-list-item {
-  background-color: #ffffff;
-  border-style: solid;
-  border-width: 1px;
-  border-color: rgba(15, 23, 42, 0.08);
-  border-radius: 20px;
-  padding: 24px 28px;
-  box-shadow: 0 4px 15px -3px rgba(0, 0, 0, 0.03);
+.awea-lg-mode-connected .awea-lg-item {
+  border-bottom: 1px solid #f1f5f9;
 }
 
-/* 3. List Item Row Structure (Strictly Stationary on Hover - No Lift/Slide) */
-.awea-icon-list-item {
+.awea-lg-mode-connected .awea-lg-item:last-child {
+  border-bottom: none;
+}
+
+/* 2. Separated Cards Mode */
+.awea-lg-mode-separated .awea-lg-wrap {
+  gap: 14px;
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+
+.awea-lg-mode-separated .awea-lg-item {
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  box-shadow: none;
+}
+
+.awea-lg-mode-separated .awea-lg-item:hover {
+  border-color: var(--e-global-color-primary, #4f46e5);
+}
+
+/* 3. List Row Structure */
+.awea-lg-item {
   display: flex;
-  align-items: flex-start;
-  gap: 20px;
+  align-items: center;
+  gap: 18px;
+  padding: 20px 22px;
+  border-radius: 18px;
   text-decoration: none;
   color: inherit;
   box-sizing: border-box;
-  transform: none; /* Strictly no translateX(8px) */
-  transition: background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+  box-shadow: none;
+  transition:
+    background-color 0.25s ease,
+    border-color 0.25s ease;
 }
 
-/* Stays strictly stationary on hover */
-.awea-icon-list-item:hover {
-  transform: none;
+.awea-lg-item:hover {
+  background-color: #f8fafc;
 }
 
-/* 4. Precision Squircle Icon Badge (Zero Rotation / No Scale on Hover) */
-.awea-icon-list-icon-wrap {
-  width: 56px;
-  height: 56px;
-  border-radius: 16px;
+/* 4. Icon Box (Stacked & Framed Views) */
+.awea-lg-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 14px;
   background-color: rgba(79, 70, 229, 0.08);
+  border: 1px solid transparent;
   color: var(--e-global-color-primary, #4f46e5);
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  border-style: solid;
-  border-width: 0;
-  border-color: transparent;
   box-sizing: border-box;
-  transform: none; /* Strictly no rotation/zoom */
-  transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+  box-shadow: none;
+  transition:
+    background-color 0.25s ease,
+    border-color 0.25s ease,
+    color 0.25s ease;
 }
 
-.awea-icon-list-icon-wrap i {
-  font-size: 20px;
+.awea-lg-icon-framed .awea-lg-icon {
+  background-color: transparent !important;
+  border-width: 1.5px;
+  border-color: var(--e-global-color-primary, #4f46e5);
+}
+
+.awea-lg-icon i {
+  font-size: 18px;
   line-height: 1;
 }
 
-.awea-icon-list-icon-wrap svg {
-  width: 20px;
-  height: 20px;
+.awea-lg-icon svg {
+  width: 18px;
+  height: 18px;
   display: block;
   fill: currentColor;
 }
 
-.awea-icon-list-item:hover .awea-icon-list-icon-wrap {
-  transform: none; /* Stays locked in place */
-  background-color: var(--e-global-color-primary, #4f46e5);
+.awea-lg-item:hover .awea-lg-icon {
+  background-color: var(--e-global-color-primary, #4f46e5) !important;
+  border-color: var(--e-global-color-primary, #4f46e5);
   color: #ffffff;
 }
 
-.awea-icon-list-item:hover .awea-icon-list-icon-wrap svg {
+.awea-lg-item:hover .awea-lg-icon svg {
   fill: #ffffff;
 }
 
-/* 5. Typography */
-.awea-icon-list-text {
-  flex-grow: 1;
+/* 5. Typography Spine */
+.awea-lg-body {
+  flex: 1 1 auto;
   display: flex;
   flex-direction: column;
   min-width: 0;
 }
 
-.awea-icon-list-title {
-  font-size: 1.25rem;
+.awea-lg-title {
+  font-size: 1.15rem;
   font-weight: 800;
-  line-height: 1.25;
+  line-height: 1.3;
   letter-spacing: -0.02em;
-  color: var(--e-global-color-primary, #0f172a);
-  margin-top: 0;
-  margin-bottom: 6px;
+  color: #0f172a;
+  margin: 0 0 4px 0;
   word-break: break-word;
   transition: color 0.25s ease;
 }
 
-.awea-icon-list-desc {
-  font-size: 0.96rem;
-  line-height: 1.65;
-  color: var(--e-global-color-text, #64748b);
+.awea-lg-item:hover .awea-lg-title {
+  color: var(--e-global-color-primary, #4f46e5);
+}
+
+.awea-lg-desc {
+  font-size: 0.94rem;
+  line-height: 1.6;
+  color: #475569;
   margin: 0;
   word-break: break-word;
 }
 
-/* 6. Link Arrow Micro-Indicator (Fade/Color Transition Only - No Translation) */
-.awea-icon-list-arrow {
-  display: flex;
+/* 6. Trailing Badge & Chevron Arrow */
+.awea-lg-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  margin-left: 8px;
+}
+
+.awea-lg-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 100px;
+  background-color: rgba(79, 70, 229, 0.08);
+  color: var(--e-global-color-primary, #4f46e5);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  line-height: 1.2;
+  user-select: none;
+}
+
+.awea-lg-arrow {
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  align-self: center;
-  margin-left: 8px;
   color: #94a3b8;
-  opacity: 0.6;
-  flex-shrink: 0;
-  transform: none; /* Strictly no translateX */
-  transition: opacity 0.25s ease, color 0.25s ease;
+  transition:
+    color 0.25s ease,
+    transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.awea-icon-list-arrow svg {
-  width: 18px;
-  height: 18px;
+.awea-lg-arrow svg {
+  width: 17px;
+  height: 17px;
 }
 
-.awea-icon-list-item:hover .awea-icon-list-arrow {
-  opacity: 1;
-  transform: none; /* Arrow stays stationary */
+.awea-lg-item:hover .awea-lg-arrow {
   color: var(--e-global-color-primary, #4f46e5);
+  transform: translateX(3px);
 }
 
-/* ==========================================================================
-   Super Mobile Friendly System (<= 640px)
-   ========================================================================== */
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .awea-lg-item,
+  .awea-lg-icon,
+  .awea-lg-arrow {
+    transition: none !important;
+    transform: none !important;
+  }
+}
+
+/* Mobile (<= 640px) */
 @media (max-width: 640px) {
-  .awea-icon-list-card.awea-mode-connected {
-    padding: 24px 18px;
-    border-radius: 20px;
+  .awea-lg-mode-connected .awea-lg-wrap {
+    padding: 8px;
+    border-radius: 18px;
   }
 
-  .awea-icon-list-card.awea-mode-separated .awea-icon-list-item {
-    padding: 18px 20px;
-    border-radius: 16px;
-  }
-
-  .awea-icon-list-item {
+  .awea-lg-item {
+    padding: 16px;
     gap: 14px;
-    padding: 16px 0;
-  }
-
-  .awea-icon-list-icon-wrap {
-    width: 46px;
-    height: 46px;
     border-radius: 14px;
   }
 
-  .awea-icon-list-icon-wrap i {
+  .awea-lg-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+  }
+
+  .awea-lg-icon i {
     font-size: 16px;
   }
 
-  .awea-icon-list-icon-wrap svg {
+  .awea-lg-icon svg {
     width: 16px;
     height: 16px;
   }
 
-  .awea-icon-list-title {
-    font-size: 1.1rem;
+  .awea-lg-title {
+    font-size: 1.05rem;
   }
 
-  .awea-icon-list-desc {
-    font-size: 0.9rem;
+  .awea-lg-desc {
+    font-size: 0.88rem;
     line-height: 1.55;
-  }
-
-  .awea-icon-list-arrow {
-    opacity: 1; /* Always visible and tap-ready on touch devices */
   }
 }

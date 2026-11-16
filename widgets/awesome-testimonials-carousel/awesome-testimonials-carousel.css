@@ -28,10 +28,9 @@
   border-color: rgba(15, 23, 42, 0.08);
   box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.05);
   transition: box-shadow 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
-  transform: none; /* No hover lift */
+  transform: none;
 }
 
-/* Strictly locked in place on hover - no scale */
 .awea-testimonial-card:hover {
   transform: none;
 }
@@ -64,7 +63,7 @@
   animation: awea-testimonial-spin var(--awea-beam-speed, 3.5s) linear infinite;
 }
 
-/* Watermark Brand Quote (Static on hover - no scale/rotation) */
+/* Watermark Brand Quote */
 .awea-testimonial-quote-brand {
   position: absolute;
   top: 24px;
@@ -115,7 +114,7 @@
   z-index: 2;
 }
 
-/* Avatar Photo (Static on hover - no scale) */
+/* Avatar Photo */
 .awea-testimonial-avatar {
   width: 50px;
   height: 50px;
@@ -132,7 +131,7 @@
   display: flex;
   flex-direction: column;
   gap: 2px;
-  min-width: 0; /* Prevents overflow */
+  min-width: 0;
 }
 
 .awea-testimonial-name {
@@ -147,7 +146,7 @@
   word-break: break-word;
 }
 
-/* Verified Customer Badge (Static on hover - no scale) */
+/* Verified Customer Badge */
 .awea-testimonial-verify {
   margin-left: auto;
   width: 26px;
@@ -175,7 +174,7 @@
    Owl Carousel Navigation Controls
    ========================================================================== */
 .awea-testimonials.owl-carousel .owl-stage-outer {
-  padding: 10px 0; /* Prevents box-shadow cutoffs */
+  padding: 10px 0;
 }
 
 .awea-testimonials .owl-nav {
@@ -219,10 +218,9 @@
 }
 
 .awea-carousel-arrow-border:hover {
-  transform: none; /* No arrow zoom */
+  transform: none;
 }
 
-/* Dots */
 .awea-testimonials .owl-dots {
   display: flex;
   justify-content: center;
@@ -243,7 +241,7 @@
 }
 
 .awea-testimonials .owl-dots button.owl-dot.active {
-  transform: none; /* No dot scale */
+  transform: none;
 }
 
 /* ==========================================================================

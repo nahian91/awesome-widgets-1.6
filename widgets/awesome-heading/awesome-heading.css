@@ -1,110 +1,140 @@
 /* ==========================================================================
-   AWEA Heading Studio Master Architecture (Zero Hover Zoom / No Scale)
+   AWEA Heading — Zero-Shadow Architectural Typography System
    ========================================================================== */
 
-.awea-section-signature {
+.awea-hd-wrap {
   width: 100%;
-  position: relative;
-  box-sizing: border-box;
-  transform: none;
+  max-width: 820px;
+  margin-left: var(--awea-hd-ml, auto);
+  margin-right: var(--awea-hd-mr, auto);
   text-align: center;
-  --awea-head-justify: center;
-  --awea-head-ml: auto;
-  --awea-head-mr: auto;
+  box-sizing: border-box;
+  --awea-hd-justify: center;
+  --awea-hd-ml: auto;
+  --awea-hd-mr: auto;
 }
 
-/* 1. Responsive Alignment Handling */
-.awea-section-signature-tag-wrap,
-.awea-section-signature-divider-wrap,
-.awea-section-signature-btn-wrap {
+.awea-hd-badge-wrap,
+.awea-hd-div-wrap,
+.awea-hd-actions {
   display: flex;
-  justify-content: var(--awea-head-justify, center);
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: var(--awea-hd-justify, center);
 }
 
-.awea-section-signature-desc {
-  margin-left: var(--awea-head-ml, auto);
-  margin-right: var(--awea-head-mr, auto);
+/* 1. Architectural Pill Badge */
+.awea-hd-badge-wrap {
+  margin-bottom: 20px;
 }
 
-/* 2. Subheading Pill Badge */
-.awea-section-signature-tag {
+.awea-hd-badge {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 22px;
+  padding: 7px 16px;
   border-radius: 100px;
-  font-size: 0.78rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  background-color: rgba(79, 70, 229, 0.08);
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
   color: var(--e-global-color-primary, #4f46e5);
-  border: 1px solid rgba(79, 70, 229, 0.16);
-  user-select: none;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
-  transform: none;
-  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
   line-height: 1.2;
+  user-select: none;
+  box-shadow: none;
 }
 
-.awea-section-signature-tag:hover {
-  transform: none;
+/* Subtle Status Pulse Dot */
+.awea-hd-pulse {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: currentColor;
+  flex-shrink: 0;
 }
 
-.awea-tag-icon {
+.awea-hd-badge-ico {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   line-height: 1;
 }
 
-.awea-tag-icon svg,
-.awea-tag-icon i {
-  width: 13px;
-  height: 13px;
-  font-size: 13px;
+.awea-hd-badge-ico svg,
+.awea-hd-badge-ico i {
+  width: 12px;
+  height: 12px;
+  font-size: 12px;
 }
 
-/* 3. Main Heading Typography */
-.awea-section-signature-title {
-  font-size: clamp(2rem, 5.5vw, 4.25rem);
+/* 2. Editorial Display Heading & Highlight Modes */
+.awea-hd-title {
+  font-size: clamp(2.1rem, 4.8vw, 3.85rem);
   font-weight: 800;
-  line-height: 1.1;
-  letter-spacing: -0.025em;
-  color: var(--e-global-color-primary, #0f172a);
-  margin-top: 0;
-  margin-bottom: 28px;
+  line-height: 1.12;
+  letter-spacing: -0.03em;
+  color: #0f172a;
+  margin: 0 0 22px 0;
   word-break: break-word;
 }
 
-/* 4. Kinetic Flowing Beam Divider */
-.awea-section-signature-divider-wrap {
-  width: 100%;
-  margin-bottom: 32px;
+.awea-hd-hl {
+  color: var(--e-global-color-primary, #4f46e5);
+  --awea-hl-accent: var(--e-global-color-primary, #4f46e5);
 }
 
-.awea-section-signature-divider {
+/* Highlight Mode: Clean Architectural Underline */
+.awea-hd-hl-underline .awea-hd-hl {
   position: relative;
-  width: 140px;
+  display: inline-block;
+  text-decoration: underline;
+  text-decoration-color: var(--awea-hl-accent);
+  text-decoration-thickness: 0.09em;
+  text-underline-offset: 0.14em;
+}
+
+/* Highlight Mode: Soft Marker Pill */
+.awea-hd-hl-marker .awea-hd-hl {
+  display: inline-block;
+  padding: 0 0.22em;
+  border-radius: 0.18em;
+  background-color: rgba(79, 70, 229, 0.1);
+}
+
+/* 3. Dividers (Flowing Beam / Solid Line / Accent Dots) */
+.awea-hd-div-wrap {
+  width: 100%;
+  margin-bottom: 24px;
+}
+
+.awea-hd-div {
+  position: relative;
+  width: 96px;
   height: 2px;
   background-color: #e2e8f0;
-  border-radius: 4px;
+  border-radius: 100px;
   overflow: hidden;
+  box-shadow: none;
 }
 
-.awea-section-signature-divider::after {
+.awea-hd-div-solid .awea-hd-div {
+  background-color: var(--e-global-color-primary, #4f46e5);
+}
+
+.awea-hd-div-beam .awea-hd-div::after {
   content: "";
   position: absolute;
   top: 0;
   left: -100%;
   width: 100%;
   height: 100%;
-  background: var(--e-global-color-primary, #4f46e5);
-  box-shadow: 0 0 10px var(--e-global-color-primary, #4f46e5);
-  animation: aweaHeadingFlow 3s infinite cubic-bezier(0.19, 1, 0.22, 1);
+  background-color: var(--e-global-color-primary, #4f46e5);
+  animation: aweaHdBeam 3s infinite cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-@keyframes aweaHeadingFlow {
+@keyframes aweaHdBeam {
   0% {
     left: -100%;
   }
@@ -116,87 +146,151 @@
   }
 }
 
-/* 5. Editorial Description */
-.awea-section-signature-desc {
-  font-size: 1.12rem;
-  line-height: 1.7;
-  color: var(--e-global-color-text, #64748b);
+.awea-hd-dots {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.awea-hd-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--e-global-color-primary, #4f46e5);
+}
+
+.awea-hd-dot:nth-child(2) {
+  opacity: 0.55;
+}
+
+.awea-hd-dot:nth-child(3) {
+  opacity: 0.25;
+}
+
+/* 4. Balanced Description */
+.awea-hd-desc {
+  font-size: 1.1rem;
+  line-height: 1.68;
+  color: #475569;
+  max-width: 660px;
   margin-top: 0;
-  margin-bottom: 38px;
+  margin-bottom: 32px;
+  margin-left: var(--awea-hd-ml, auto);
+  margin-right: var(--awea-hd-mr, auto);
   word-break: break-word;
 }
 
-/* 6. Signature Action Button */
-.awea-section-signature-btn {
+/* 5. Action Buttons (Primary + Secondary) */
+.awea-hd-actions {
+  gap: 12px;
+}
+
+.awea-hd-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  padding: 16px 36px;
-  border-radius: 100px;
-  font-size: 0.98rem;
+  gap: 8px;
+  padding: 14px 28px;
+  border-radius: 12px;
+  font-size: 0.94rem;
   font-weight: 700;
+  line-height: 1.2;
   letter-spacing: -0.01em;
   text-decoration: none;
+  border: 1px solid transparent;
+  box-sizing: border-box;
+  box-shadow: none;
+  transition:
+    background-color 0.25s ease,
+    border-color 0.25s ease,
+    color 0.25s ease;
+}
+
+.awea-hd-btn-primary {
+  background-color: #0f172a;
+  color: #ffffff;
+}
+
+.awea-hd-btn-primary:hover {
   background-color: var(--e-global-color-primary, #4f46e5);
   color: #ffffff;
-  border: 1.5px solid transparent;
-  box-shadow: 0 10px 25px -6px rgba(79, 70, 229, 0.35);
-  transform: none;
-  transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease, box-shadow 0.3s ease;
-  line-height: 1.2;
-  box-sizing: border-box;
+  box-shadow: none;
 }
 
-.awea-section-signature-btn:hover {
-  transform: none;
+.awea-hd-btn-secondary {
+  background-color: #ffffff;
+  color: #0f172a;
+  border-color: #cbd5e1;
 }
 
-.awea-btn-icon {
+.awea-hd-btn-secondary:hover {
+  background-color: #f8fafc;
+  border-color: #0f172a;
+  color: #0f172a;
+  box-shadow: none;
+}
+
+.awea-hd-btn-ico {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   line-height: 1;
-  transform: none;
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.awea-btn-icon svg,
-.awea-btn-icon i {
-  font-size: 14px;
-  width: 14px;
-  height: 14px;
+.awea-hd-btn:hover .awea-hd-ico-right {
+  transform: translateX(4px);
 }
 
-.awea-section-signature-btn:hover .awea-icon-right,
-.awea-section-signature-btn:hover .awea-icon-left {
-  transform: none;
+.awea-hd-btn:hover .awea-hd-ico-left {
+  transform: translateX(-4px);
 }
 
-/* ==========================================================================
-   Super Mobile Friendly System (<= 768px)
-   ========================================================================== */
+.awea-hd-btn-ico svg,
+.awea-hd-btn-ico i {
+  width: 13px;
+  height: 13px;
+  font-size: 13px;
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .awea-hd-div-beam .awea-hd-div::after {
+    animation: none !important;
+    left: 0 !important;
+  }
+
+  .awea-hd-btn,
+  .awea-hd-btn-ico {
+    transition: none !important;
+    transform: none !important;
+  }
+}
+
+/* Mobile (<= 768px) */
 @media (max-width: 768px) {
-  .awea-section-signature-title {
-    font-size: 2.15rem;
+  .awea-hd-title {
+    font-size: 2rem;
+    margin-bottom: 18px;
+  }
+
+  .awea-hd-div-wrap {
     margin-bottom: 20px;
   }
 
-  .awea-section-signature-divider-wrap {
-    margin-bottom: 22px;
-  }
-
-  .awea-section-signature-desc {
-    font-size: 1rem;
+  .awea-hd-desc {
+    font-size: 0.98rem;
     line-height: 1.6;
     margin-bottom: 26px;
   }
 
-  .awea-section-signature-btn-wrap {
+  .awea-hd-actions {
     width: 100%;
+    flex-direction: column;
   }
 
-  .awea-section-signature-btn {
+  .awea-hd-btn {
     width: 100%;
-    padding: 14px 24px;
+    padding: 13px 22px;
   }
 }

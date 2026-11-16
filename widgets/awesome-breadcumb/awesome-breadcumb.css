@@ -1,8 +1,8 @@
 /* ==========================================================================
-   AWEA Breadcrumb Studio Master Architecture (Zero Hover Zoom / No Scale)
+   AWEA Breadcrumb — Zero-Shadow Architectural Hero & Navigation Trail
    ========================================================================== */
 
-.awea-breadcrumb-hero {
+.awea-bc-hero {
   position: relative;
   width: 100%;
   box-sizing: border-box;
@@ -11,22 +11,24 @@
   background-size: cover;
   background-position: center;
   z-index: 1;
-  transform: none;
-  --awea-crumb-justify: center;
+  box-shadow: none;
+  --awea-bc-justify: center;
+  --awea-bc-ml: auto;
+  --awea-bc-mr: auto;
 }
 
 /* 1. Backdrop Overlay */
-.awea-breadcrumb-hero::before {
+.awea-bc-hero::before {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(15, 23, 42, 0.4) 0%, rgba(15, 23, 42, 0.85) 100%);
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.45) 0%, rgba(15, 23, 42, 0.88) 100%);
   pointer-events: none;
   z-index: -1;
   transition: opacity 0.3s ease;
 }
 
-.awea-breadcrumb-inner {
+.awea-bc-inner {
   position: relative;
   z-index: 2;
   max-width: 1240px;
@@ -34,85 +36,139 @@
   box-sizing: border-box;
 }
 
-/* 2. Page Title Header */
-.awea-breadcrumb-title {
-  font-size: clamp(2rem, 5vw, 2.75rem);
+/* 2. Page Title & Optional Subtitle */
+.awea-bc-header {
+  margin-bottom: 16px;
+}
+
+.awea-bc-title {
+  font-size: clamp(2rem, 4.5vw, 3rem);
   font-weight: 800;
   line-height: 1.15;
   color: #ffffff;
   letter-spacing: -0.03em;
-  margin-top: 0;
-  margin-bottom: 14px;
+  margin: 0;
   word-break: break-word;
 }
 
-/* 3. Navigation Trail */
-.awea-breadcrumb-nav {
+.awea-bc-subtitle {
+  font-size: 1.02rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.72);
+  max-width: 640px;
+  margin: 10px var(--awea-bc-mr, auto) 0 var(--awea-bc-ml, auto);
+  word-break: break-word;
+}
+
+/* 3. Breadcrumb Trail & Optional Pill Container */
+.awea-bc-nav {
   display: flex;
   align-items: center;
-  justify-content: var(--awea-crumb-justify, center);
+  justify-content: var(--awea-bc-justify, center);
   box-sizing: border-box;
 }
 
-.awea-breadcrumb-list {
+.awea-bc-nav-top {
+  margin-bottom: 16px;
+}
+
+.awea-bc-list {
   display: inline-flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: var(--awea-crumb-justify, center);
+  justify-content: var(--awea-bc-justify, center);
   list-style: none;
   padding: 0;
   margin: 0;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
+  box-shadow: none;
 }
 
-.awea-breadcrumb-item {
+.awea-bc-pill-yes .awea-bc-list {
+  padding: 8px 18px;
+  border-radius: 100px;
+  background-color: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.awea-bc-item {
   display: inline-flex;
   align-items: center;
-  line-height: 1.2;
+  line-height: 1.25;
 }
 
-.awea-breadcrumb-item a {
+.awea-bc-item a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: rgba(255, 255, 255, 0.74);
   text-decoration: none;
-  transform: none;
   transition: color 0.25s ease;
 }
 
-.awea-breadcrumb-item a:hover {
-  transform: none;
+.awea-bc-item a:hover {
+  color: #ffffff;
 }
 
-.awea-breadcrumb-item.is-current {
-  font-weight: 600;
+.awea-bc-home-ico {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.awea-bc-home-ico svg,
+.awea-bc-home-ico i {
+  width: 13px;
+  height: 13px;
+  font-size: 13px;
+}
+
+.awea-bc-item.is-current {
+  color: #ffffff;
+  font-weight: 700;
   pointer-events: none;
 }
 
 /* 4. Separator Micro-Indicators */
-.awea-breadcrumb-sep {
+.awea-bc-sep {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  margin: 0 10px;
+  color: rgba(255, 255, 255, 0.38);
   user-select: none;
   line-height: 1;
 }
 
-.awea-breadcrumb-sep svg {
+.awea-bc-sep svg {
   width: 13px;
   height: 13px;
   display: block;
 }
 
-.awea-breadcrumb-sep i {
+.awea-bc-sep i {
   font-size: 11px;
 }
 
-/* 5. Responsive Adjustments */
+/* 5. Mobile (<= 768px) */
 @media (max-width: 768px) {
-  .awea-breadcrumb-title {
+  .awea-bc-title {
     font-size: 1.85rem;
-    margin-bottom: 10px;
   }
 
-  .awea-breadcrumb-list {
-    font-size: 0.85rem;
+  .awea-bc-subtitle {
+    font-size: 0.94rem;
+  }
+
+  .awea-bc-list {
+    font-size: 0.84rem;
+  }
+
+  .awea-bc-pill-yes .awea-bc-list {
+    padding: 7px 14px;
+    border-radius: 16px;
   }
 }

@@ -161,6 +161,7 @@ class Widget_Awesome_Nav_Menu extends Widget_Base {
 					],
 				],
 				'default'              => 'row',
+				'prefix_class'         => 'awea-nav-layout-',
 				'selectors_dictionary' => [
 					'row'    => 'flex-direction: row; align-items: center;',
 					'column' => 'flex-direction: column; align-items: stretch;',
@@ -542,7 +543,8 @@ class Widget_Awesome_Nav_Menu extends Widget_Base {
 					'size' => 8,
 				],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-nav-menu-list > li > ul.sub-menu' => 'margin-top: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}}.awea-nav-layout-row .awea-nav-menu-list > li > ul.sub-menu'    => 'margin-top: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}}.awea-nav-layout-column .awea-nav-menu-list > li > ul.sub-menu' => 'margin-left: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
@@ -743,10 +745,30 @@ class Widget_Awesome_Nav_Menu extends Widget_Base {
 			]
 		);
 
+		$this->add_responsive_control(
+			'awea_toggle_radius',
+			[
+				'label'      => esc_html__( 'Radius', 'awesome-widgets-elementor' ),
+				'type'       => Controls_Manager::DIMENSIONS,
+				'size_units' => [ 'px', '%' ],
+				'default'    => [ 'top' => '8', 'right' => '8', 'bottom' => '8', 'left' => '8', 'unit' => 'px', 'isLinked' => true ],
+				'selectors'  => [
+					'{{WRAPPER}} .awea-mobile-toggle-btn' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				],
+			]
+		);
+
+		$this->start_controls_tabs( 'awea_toggle_state_tabs' );
+
+		$this->start_controls_tab(
+			'awea_toggle_tab_normal',
+			[ 'label' => esc_html__( 'Normal', 'awesome-widgets-elementor' ) ]
+		);
+
 		$this->add_control(
 			'awea_toggle_color',
 			[
-				'label'     => esc_html__( 'Icon Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#0f172a',
 				'selectors' => [
@@ -767,15 +789,118 @@ class Widget_Awesome_Nav_Menu extends Widget_Base {
 			]
 		);
 
+		$this->end_controls_tab();
+
+		$this->start_controls_tab(
+			'awea_toggle_tab_active',
+			[ 'label' => esc_html__( 'Active', 'awesome-widgets-elementor' ) ]
+		);
+
+		$this->add_control(
+			'awea_toggle_active_color',
+			[
+				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
+				'type'      => Controls_Manager::COLOR,
+				'default'   => '#ffffff',
+				'selectors' => [
+					'{{WRAPPER}} .awea-mobile-toggle-btn[aria-expanded="true"] svg' => 'stroke: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->add_control(
+			'awea_toggle_active_bg',
+			[
+				'label'     => esc_html__( 'Background', 'awesome-widgets-elementor' ),
+				'type'      => Controls_Manager::COLOR,
+				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
+				'selectors' => [
+					'{{WRAPPER}} .awea-mobile-toggle-btn[aria-expanded="true"]' => 'background-color: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->end_controls_tab();
+		$this->end_controls_tabs();
+
+		$this->end_controls_section();
+
+		/* ==========================================================================
+		   STYLE TAB: 5. MOBILE DRAWER (CONDITIONAL)
+		   ========================================================================== */
+		$this->start_controls_section(
+			'awea_section_style_mobile_drawer',
+			[
+				'label'     => esc_html__( 'Mobile Drawer', 'awesome-widgets-elementor' ),
+				'tab'       => Controls_Manager::TAB_STYLE,
+				'condition' => [
+					'awea_enable_mobile_breakpoint!' => 'none',
+				],
+			]
+		);
+
 		$this->add_responsive_control(
-			'awea_toggle_radius',
+			'awea_drawer_offset',
+			[
+				'label'      => esc_html__( 'Offset', 'awesome-widgets-elementor' ),
+				'type'       => Controls_Manager::SLIDER,
+				'size_units' => [ 'px' ],
+				'range'      => [
+					'px' => [ 'min' => 0, 'max' => 40 ],
+				],
+				'default'    => [ 'unit' => 'px', 'size' => 12 ],
+				'selectors'  => [
+					'{{WRAPPER}} .awea-nav-menu-wrapper' => '--awea-drawer-offset: {{SIZE}}{{UNIT}};',
+				],
+			]
+		);
+
+		$this->add_control(
+			'awea_drawer_bg',
+			[
+				'label'     => esc_html__( 'Background', 'awesome-widgets-elementor' ),
+				'type'      => Controls_Manager::COLOR,
+				'default'   => '#ffffff',
+				'selectors' => [
+					'{{WRAPPER}} .awea-nav-menu-wrapper' => '--awea-drawer-bg: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->add_responsive_control(
+			'awea_drawer_padding',
+			[
+				'label'      => esc_html__( 'Padding', 'awesome-widgets-elementor' ),
+				'type'       => Controls_Manager::DIMENSIONS,
+				'size_units' => [ 'px', 'em' ],
+				'default'    => [ 'top' => '12', 'right' => '12', 'bottom' => '12', 'left' => '12', 'unit' => 'px', 'isLinked' => true ],
+				'selectors'  => [
+					'{{WRAPPER}} .awea-nav-menu-wrapper' => '--awea-drawer-padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				],
+			]
+		);
+
+		$this->add_responsive_control(
+			'awea_drawer_radius',
 			[
 				'label'      => esc_html__( 'Radius', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
-				'size_units' => [ 'px', '%' ],
-				'default'    => [ 'top' => '8', 'right' => '8', 'bottom' => '8', 'left' => '8', 'unit' => 'px', 'isLinked' => true ],
+				'size_units' => [ 'px', 'rem' ],
+				'default'    => [ 'top' => '16', 'right' => '16', 'bottom' => '16', 'left' => '16', 'unit' => 'px', 'isLinked' => true ],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-mobile-toggle-btn' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .awea-nav-menu-wrapper' => '--awea-drawer-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				],
+			]
+		);
+
+		$this->add_control(
+			'awea_drawer_border_color',
+			[
+				'label'     => esc_html__( 'Border Color', 'awesome-widgets-elementor' ),
+				'type'      => Controls_Manager::COLOR,
+				'default'   => 'rgba(15, 23, 42, 0.08)',
+				'selectors' => [
+					'{{WRAPPER}} .awea-nav-menu-wrapper' => '--awea-drawer-border: {{VALUE}};',
 				],
 			]
 		);
@@ -836,7 +961,7 @@ class Widget_Awesome_Nav_Menu extends Widget_Base {
 				var wrapper = document.querySelector('[data-nav-id="<?php echo esc_js( $unique_id ); ?>"]');
 				if (!wrapper) return;
 
-				var toggleBtn = wrapper.querySelector('.awea-mobile-toggle-btn');
+				var toggleBtn     = wrapper.querySelector('.awea-mobile-toggle-btn');
 				var menuContainer = wrapper.querySelector('.awea-nav-menu-container');
 
 				if (toggleBtn && menuContainer && !toggleBtn.__aweaBound) {

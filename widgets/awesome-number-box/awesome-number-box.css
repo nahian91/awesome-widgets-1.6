@@ -1,185 +1,232 @@
 /* ==========================================================================
-   AWEA Number Box Studio Master Architecture (Zero Hover Zoom / No Scale)
+   AWEA Number Box — Zero-Shadow Architectural Grid
    ========================================================================== */
 
-.awea-single-number-box {
+.awea-nb-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
   width: 100%;
-  position: relative;
   box-sizing: border-box;
-  background-color: #ffffff;
-  border-style: solid;
-  border-width: 1px;
-  border-color: rgba(15, 23, 42, 0.08);
-  border-radius: 24px;
-  padding: 40px 32px;
+  align-items: stretch;
+}
+
+.awea-nb-card {
+  position: relative;
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  gap: 22px;
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 24px;
+  padding: 32px 28px;
   overflow: hidden;
-  box-shadow: 0 4px 15px -3px rgba(0, 0, 0, 0.03);
-  transform: none; /* Strictly no hover lift */
-  transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+  box-shadow: none;
+  transition:
+    background-color 0.25s ease,
+    border-color 0.25s ease;
+  --awea-nb-wm-left: auto;
+  --awea-nb-wm-right: 16px;
 }
 
-/* Card remains completely locked in place on hover */
-.awea-single-number-box:hover {
-  transform: none;
+.awea-nb-card:hover {
+  background-color: #f8fafc;
+  border-color: var(--e-global-color-primary, #4f46e5);
+  box-shadow: none;
 }
 
-/* 1. Alignment Support */
-.awea-align-left .awea-number-badge-wrap,
-.awea-align-left .awea-number-box-btn-wrap {
-  display: flex;
-  justify-content: flex-start;
+/* Split Side Layout Mode */
+.awea-nb-mode-split .awea-nb-card {
+  flex-direction: row;
+  align-items: flex-start;
 }
 
-.awea-align-center .awea-number-badge-wrap,
-.awea-align-center .awea-number-box-btn-wrap {
-  display: flex;
-  justify-content: center;
+/* 1. Solid & Outlined Number Badges */
+.awea-nb-badge-wrap {
+  position: relative;
+  z-index: 2;
+  flex-shrink: 0;
 }
 
-.awea-align-right .awea-number-badge-wrap,
-.awea-align-right .awea-number-box-btn-wrap {
-  display: flex;
-  justify-content: flex-end;
-}
-
-/* 2. Floating Squircle Badge (Zero Rotation / No Scale on Hover) */
-.awea-number-badge {
-  width: 64px;
-  height: 64px;
-  border-radius: 18px;
+.awea-nb-badge {
+  width: 54px;
+  height: 54px;
+  border-radius: 16px;
   background-color: var(--e-global-color-primary, #4f46e5);
+  border: 1.5px solid var(--e-global-color-primary, #4f46e5);
   color: #ffffff;
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-style: solid;
-  border-width: 0;
-  border-color: transparent;
-  box-shadow: 0 10px 25px -5px rgba(79, 70, 229, 0.3);
   box-sizing: border-box;
+  box-shadow: none;
   user-select: none;
-  transform: none; /* Strictly no rotation/zoom */
-  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  transition:
+    background-color 0.25s ease,
+    border-color 0.25s ease,
+    color 0.25s ease;
 }
 
-.awea-single-number-box:hover .awea-number-badge {
-  transform: none; /* Stays locked in place */
+/* Outlined Mode Variant */
+.awea-nb-mode-outlined .awea-nb-badge {
+  background-color: transparent !important;
+  color: var(--e-global-color-primary, #4f46e5);
 }
 
-/* 3. Ghost Watermark Mode (Stationary on Hover - No Scale/Lift) */
-.awea-number-watermark {
+.awea-nb-mode-outlined .awea-nb-card:hover .awea-nb-badge {
+  background-color: var(--e-global-color-primary, #4f46e5) !important;
+  color: #ffffff;
+}
+
+/* 2. Ghost Watermark Mode */
+.awea-nb-watermark {
   position: absolute;
-  top: -15px;
-  right: 15px;
-  font-size: 9rem;
+  top: -10px;
+  left: var(--awea-nb-wm-left, auto);
+  right: var(--awea-nb-wm-right, 16px);
+  font-size: 7.5rem;
   font-weight: 900;
   line-height: 1;
   color: var(--e-global-color-primary, #0f172a);
-  opacity: 0.07;
+  opacity: 0.08;
   pointer-events: none;
   user-select: none;
   font-variant-numeric: tabular-nums;
   letter-spacing: -0.05em;
   z-index: 1;
-  transform: none; /* Strictly no translateY / scale */
-  transition: opacity 0.35s ease, color 0.35s ease;
+  transition: opacity 0.3s ease;
 }
 
-.awea-align-right .awea-number-watermark {
-  right: auto;
-  left: 15px;
+.awea-nb-card:hover .awea-nb-watermark {
+  opacity: 0.13;
 }
 
-.awea-single-number-box:hover .awea-number-watermark {
-  transform: none; /* Stays stationary */
-}
-
-/* 4. Body Content */
-.awea-number-box-body {
+/* 3. Content Spine */
+.awea-nb-body {
   position: relative;
   z-index: 2;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
   width: 100%;
+  min-width: 0;
 }
 
-.awea-number-box-title {
-  font-size: 1.35rem;
+.awea-nb-tag {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--e-global-color-primary, #4f46e5);
+  margin-bottom: 6px;
+  line-height: 1.2;
+}
+
+.awea-nb-title {
+  font-size: 1.28rem;
   font-weight: 800;
-  line-height: 1.25;
+  line-height: 1.3;
   letter-spacing: -0.02em;
-  color: var(--e-global-color-primary, #0f172a);
-  margin-top: 0;
-  margin-bottom: 14px;
+  color: #0f172a;
+  margin: 0 0 10px 0;
   word-break: break-word;
-  transition: color 0.3s ease;
+  transition: color 0.25s ease;
 }
 
-.awea-number-box-desc {
-  font-size: 0.98rem;
-  line-height: 1.65;
-  color: var(--e-global-color-text, #64748b);
-  margin-top: 0;
-  margin-bottom: 20px;
+.awea-nb-card:hover .awea-nb-title {
+  color: var(--e-global-color-primary, #4f46e5);
+}
+
+.awea-nb-desc {
+  font-size: 0.95rem;
+  line-height: 1.62;
+  color: #475569;
+  margin: 0 0 20px 0;
   word-break: break-word;
 }
 
-/* 5. Action Button (No SVG Shift / No Translation) */
-.awea-number-box-btn {
+/* 4. Bottom-Anchored Text Link */
+.awea-nb-btn-wrap {
+  width: 100%;
+  margin-top: auto;
+}
+
+.awea-nb-btn {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 7px;
   text-decoration: none;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   font-weight: 700;
   color: var(--e-global-color-primary, #4f46e5);
+  line-height: 1.2;
   transition: color 0.25s ease;
-  line-height: 1;
 }
 
-.awea-number-box-btn svg {
-  width: 15px;
-  height: 15px;
-  transform: none; /* Strictly no translateX */
-  transition: stroke 0.25s ease;
+.awea-nb-btn svg {
+  width: 14px;
+  height: 14px;
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.awea-number-box-btn:hover {
-  gap: 8px; /* Gap stays static */
+.awea-nb-btn:hover {
+  color: #0f172a;
 }
 
-.awea-number-box-btn:hover svg {
-  transform: none; /* Arrow stays stationary */
+.awea-nb-btn:hover svg {
+  transform: translateX(4px);
 }
 
-/* ==========================================================================
-   Super Mobile Friendly System (<= 768px)
-   ========================================================================== */
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .awea-nb-card,
+  .awea-nb-badge,
+  .awea-nb-watermark,
+  .awea-nb-btn svg {
+    transition: none !important;
+    transform: none !important;
+  }
+}
+
+/* Mobile (<= 768px) */
 @media (max-width: 768px) {
-  .awea-single-number-box {
-    padding: 30px 20px;
-    border-radius: 20px;
+  .awea-nb-mode-split .awea-nb-card {
+    flex-direction: column;
   }
 
-  .awea-number-badge {
-    width: 52px;
-    height: 52px;
-    font-size: 1.25rem;
+  .awea-nb-card {
+    padding: 24px 20px;
+    border-radius: 18px;
+    gap: 18px;
   }
 
-  .awea-number-watermark {
-    font-size: 6rem !important;
-    top: -10px;
+  .awea-nb-badge {
+    width: 48px;
+    height: 48px;
+    font-size: 1.1rem;
   }
 
-  .awea-number-box-title {
-    font-size: 1.2rem;
+  .awea-nb-watermark {
+    font-size: 5.5rem;
+    top: -6px;
   }
 
-  .awea-number-box-desc {
-    font-size: 0.92rem;
+  .awea-nb-title {
+    font-size: 1.16rem;
+  }
+
+  .awea-nb-desc {
+    font-size: 0.9rem;
     line-height: 1.55;
   }
 }

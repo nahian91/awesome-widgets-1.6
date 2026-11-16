@@ -14,7 +14,7 @@
   box-sizing: border-box;
 }
 
-/* 1. Blog Card Shell (Strictly Stationary on Hover - No Lift) */
+/* 1. Blog Card Shell */
 .awea-blog-card {
   background-color: #ffffff;
   border-style: solid;
@@ -28,15 +28,15 @@
   justify-content: space-between;
   height: 100%;
   box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.04);
-  transform: none; /* Strictly no hover lift */
+  transform: none;
   transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
 }
 
 .awea-blog-card:hover {
-  transform: none; /* Stays locked in place */
+  transform: none;
 }
 
-/* 2. Featured Image Frame (Zero Hover Zoom / No Scale) */
+/* 2. Featured Image Frame */
 .awea-blog-img-wrap {
   position: relative;
   width: 100%;
@@ -60,12 +60,12 @@
   height: 100%;
   object-fit: cover;
   display: block;
-  transform: none; /* Strictly no scale(1.08) */
+  transform: none;
   transition: opacity 0.3s ease;
 }
 
 .awea-blog-card:hover .awea-blog-img {
-  transform: none; /* Stays stationary at 1:1 */
+  transform: none;
 }
 
 .awea-blog-badge {
@@ -136,7 +136,7 @@
   word-break: break-word;
 }
 
-/* 4. Card Footer Lockup (No SVG translation / No gap expansion) */
+/* 4. Card Footer Lockup */
 .awea-blog-footer {
   display: flex;
   align-items: center;
@@ -161,7 +161,7 @@
   border-style: solid;
   border-width: 1px;
   border-color: rgba(15, 23, 42, 0.06);
-  transform: none; /* Strictly no lift */
+  transform: none;
   transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
   line-height: 1;
 }
@@ -169,7 +169,7 @@
 .awea-blog-link svg {
   width: 14px;
   height: 14px;
-  transform: none; /* Strictly no translateX */
+  transform: none;
   transition: stroke 0.25s ease;
 }
 
@@ -177,11 +177,11 @@
   background-color: #0f172a;
   color: #ffffff;
   border-color: transparent;
-  gap: 8px; /* Gap stays static */
+  gap: 8px;
 }
 
 .awea-blog-card:hover .awea-blog-link svg {
-  transform: none; /* Arrow stays stationary */
+  transform: none;
 }
 
 .awea-blog-num {
@@ -193,9 +193,9 @@
   line-height: 1;
 }
 
-/* 5. Owl Carousel Custom Navigation & Dots */
+/* 5. Owl Carousel Navigation & Dots */
 .awea-post-carousel.owl-carousel .owl-stage-outer {
-  padding: 10px 0; /* Prevents box-shadow clipping */
+  padding: 10px 0;
 }
 
 .awea-post-carousel .owl-nav {
@@ -235,7 +235,7 @@
   border: 1px solid rgba(15, 23, 42, 0.08);
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
   cursor: pointer;
-  transform: none; /* No arrow scale */
+  transform: none;
   transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
 }
 
@@ -243,7 +243,6 @@
   transform: none;
 }
 
-/* Dots */
 .awea-post-carousel .owl-dots {
   display: flex;
   justify-content: center;
@@ -267,7 +266,7 @@
 
 .awea-post-carousel .owl-dots button.owl-dot.active {
   background-color: var(--e-global-color-primary, #4f46e5);
-  transform: none; /* No scale */
+  transform: none;
 }
 
 /* ==========================================================================

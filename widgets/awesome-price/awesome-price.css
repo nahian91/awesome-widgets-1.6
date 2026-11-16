@@ -16,11 +16,10 @@
   flex-direction: column;
   overflow: hidden;
   box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.04);
-  transform: none; /* Strictly no hover lift */
+  transform: none;
   transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
 }
 
-/* Card remains completely locked in place on hover */
 .awea-pricing-card:hover {
   transform: none;
 }
@@ -147,7 +146,7 @@
   fill: currentColor;
 }
 
-/* 4. Action Button (Stationary on Hover - No Lift) */
+/* 4. Action Button */
 .awea-pricing-btn-wrap {
   margin-top: auto;
   width: 100%;
@@ -171,13 +170,13 @@
   border-width: 1.5px;
   border-color: transparent;
   box-shadow: 0 8px 20px -4px rgba(79, 70, 229, 0.35);
-  transform: none; /* Strictly no hover lift */
+  transform: none;
   transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
   line-height: 1.2;
 }
 
 .awea-pricing-btn-cta:hover {
-  transform: none; /* Stays locked in place */
+  transform: none;
 }
 
 /* ==========================================================================

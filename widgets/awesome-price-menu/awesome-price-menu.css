@@ -14,16 +14,15 @@
   border-color: rgba(15, 23, 42, 0.08);
   border-radius: 28px;
   box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.04);
-  transform: none; /* No hover lift */
+  transform: none;
   transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
 }
 
-/* Stays stationary on hover */
 .awea-price-menu-list:hover {
   transform: none;
 }
 
-/* 1. Menu Row Item (Strictly No Translation/Shift on Hover) */
+/* 1. Menu Row Item */
 .awea-price-menu {
   display: flex;
   gap: 20px;
@@ -32,7 +31,7 @@
   padding-bottom: 24px;
   border-bottom: 1px solid rgba(15, 23, 42, 0.06);
   box-sizing: border-box;
-  transform: none; /* Strictly no translateX(4px) */
+  transform: none;
   transition: border-color 0.25s ease;
 }
 
@@ -43,10 +42,10 @@
 }
 
 .awea-price-menu:hover {
-  transform: none; /* Stays locked in place */
+  transform: none;
 }
 
-/* 2. Thumbnail Image (Strictly No Scale/Zoom on Hover) */
+/* 2. Thumbnail Image */
 .awea-price-menu-thumb {
   width: 76px;
   height: 76px;
@@ -64,12 +63,12 @@
   height: 100%;
   object-fit: cover;
   display: block;
-  transform: none; /* Strictly no scale(1.08) */
+  transform: none;
   transition: opacity 0.3s ease;
 }
 
 .awea-price-menu:hover .awea-price-menu-thumb img {
-  transform: none; /* Stays stationary */
+  transform: none;
 }
 
 /* 3. Details & Fluid Dotted Leader Header */
@@ -147,7 +146,6 @@
     border-radius: 12px;
   }
 
-  /* Wrap nicely on tight screens with flexible dot line */
   .awea-price-menu-header {
     gap: 8px;
   }
