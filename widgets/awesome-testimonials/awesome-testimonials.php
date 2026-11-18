@@ -19,6 +19,7 @@ use Elementor\Core\Kits\Documents\Tabs\Global_Typography;
 use Elementor\Core\Kits\Documents\Tabs\Global_Colors;
 use Elementor\Widget_Base;
 use Elementor\Repeater;
+use Elementor\Utils;
 
 class Widget_Awesome_Testimonials extends Widget_Base {
 
@@ -648,10 +649,11 @@ class Widget_Awesome_Testimonials extends Widget_Base {
 		?>
 		<div class="awea-tm-grid">
 			<?php foreach ( $items as $index => $item ) :
-				$id         = $item['_id'] ?? $index;
+				$id         = ! empty( $item['_id'] ) ? sanitize_html_class( $item['_id'] ) : $index;
 				$rating     = absint( $item['awea_rating'] ?? 5 );
 				$quote      = $item['awea_quote'] ?? '';
-				$avatar_url = $item['awea_photo']['url'] ?? '';
+				$photo_item = $item['awea_photo'] ?? [];
+				$avatar_url = ! empty( $photo_item['url'] ) ? $photo_item['url'] : Utils::get_placeholder_image_src();
 				$name       = $item['awea_name'] ?? '';
 				$role       = $item['awea_role'] ?? '';
 				$verified   = 'yes' === ( $item['awea_verified'] ?? 'no' );
@@ -688,7 +690,21 @@ class Widget_Awesome_Testimonials extends Widget_Base {
 
 					<footer class="awea-tm-footer">
 						<?php if ( ! empty( $avatar_url ) ) : ?>
-							<img src="<?php echo esc_url( $avatar_url ); ?>" alt="<?php echo esc_attr( $name ); ?>" class="awea-tm-avatar" loading="lazy" />
+							<?php
+							if ( ! empty( $photo_item['id'] ) ) {
+								echo Group_Control_Image_Size::get_attachment_image_html(
+									[
+										'awea_photo'                     => $photo_item,
+										'awea_img_size_size'             => 'thumbnail',
+										'awea_img_size_custom_dimension' => [],
+									],
+									'awea_img_size',
+									'awea_photo'
+								);
+							} else {
+								printf( '<img src="%s" alt="%s" class="awea-tm-avatar" loading="lazy" />', esc_url( $avatar_url ), esc_attr( $name ) );
+							}
+							?>
 						<?php endif; ?>
 
 						<div class="awea-tm-meta">

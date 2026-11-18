@@ -21,6 +21,7 @@ use Elementor\Core\Kits\Documents\Tabs\Global_Colors;
 use Elementor\Widget_Base;
 use Elementor\Repeater;
 use Elementor\Icons_Manager;
+use Elementor\Utils;
 
 class Widget_Awesome_Number_Box extends Widget_Base {
 
@@ -600,6 +601,7 @@ class Widget_Awesome_Number_Box extends Widget_Base {
 			[
 				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
+				'default'   => '#ffffff',
 				'selectors' => [
 					'{{WRAPPER}} .awea-nb-badge' => 'color: {{VALUE}};',
 				],
@@ -616,6 +618,19 @@ class Widget_Awesome_Number_Box extends Widget_Base {
 				'selectors' => [
 					'{{WRAPPER}}.awea-nb-mode-badge .awea-nb-badge' => 'background-color: {{VALUE}}; border-color: {{VALUE}};',
 					'{{WRAPPER}}.awea-nb-mode-split .awea-nb-badge' => 'background-color: {{VALUE}}; border-color: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->add_control(
+			'awea_badge_outline_color',
+			[
+				'label'     => esc_html__( 'Border Color', 'awesome-widgets-elementor' ),
+				'type'      => Controls_Manager::COLOR,
+				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
+				'condition' => [ 'awea_num_style' => 'outlined' ],
+				'selectors' => [
+					'{{WRAPPER}}.awea-nb-mode-outlined .awea-nb-badge' => 'border-color: {{VALUE}};',
 				],
 			]
 		);
@@ -872,6 +887,21 @@ class Widget_Awesome_Number_Box extends Widget_Base {
 			]
 		);
 
+		$this->add_responsive_control(
+			'awea_link_icon_size',
+			[
+				'label'      => esc_html__( 'Icon Size', 'awesome-widgets-elementor' ),
+				'type'       => Controls_Manager::SLIDER,
+				'size_units' => [ 'px' ],
+				'range'      => [ 'px' => [ 'min' => 10, 'max' => 28 ] ],
+				'default'    => [ 'unit' => 'px', 'size' => 13 ],
+				'selectors'  => [
+					'{{WRAPPER}} .awea-nb-btn-ico i'   => 'font-size: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .awea-nb-btn-ico svg' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}};',
+				],
+			]
+		);
+
 		$this->add_control(
 			'awea_link_color',
 			[
@@ -879,7 +909,8 @@ class Widget_Awesome_Number_Box extends Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
 				'selectors' => [
-					'{{WRAPPER}} .awea-nb-btn' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-nb-btn'     => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-nb-btn svg' => 'fill: {{VALUE}};',
 				],
 			]
 		);
@@ -891,7 +922,8 @@ class Widget_Awesome_Number_Box extends Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#0f172a',
 				'selectors' => [
-					'{{WRAPPER}} .awea-nb-btn:hover, {{WRAPPER}} .awea-nb-btn:focus-visible' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-nb-btn:hover, {{WRAPPER}} .awea-nb-btn:focus-visible'         => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-nb-btn:hover svg, {{WRAPPER}} .awea-nb-btn:focus-visible svg' => 'fill: {{VALUE}};',
 				],
 			]
 		);
@@ -911,7 +943,7 @@ class Widget_Awesome_Number_Box extends Widget_Base {
 		?>
 		<div class="awea-nb-grid">
 			<?php foreach ( $items as $index => $item ) :
-				$id       = $item['_id'] ?? $index;
+				$id       = ! empty( $item['_id'] ) ? sanitize_html_class( $item['_id'] ) : $index;
 				$link_key = 'link_' . $id;
 
 				$number   = $item['awea_number'] ?? '01';
@@ -924,6 +956,7 @@ class Widget_Awesome_Number_Box extends Widget_Base {
 				$has_btn  = $show_btn && ! empty( $btn_text );
 				$has_ico  = ! empty( $item['awea_link_icon']['value'] );
 
+				$this->remove_render_attribute( $link_key );
 				if ( $has_btn ) {
 					$btn_url = ! empty( $item['awea_link_url']['url'] ) ? $item['awea_link_url'] : [ 'url' => '#' ];
 					$this->add_link_attributes( $link_key, $btn_url );
@@ -973,6 +1006,72 @@ class Widget_Awesome_Number_Box extends Widget_Base {
 
 				</article>
 			<?php endforeach; ?>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Instant Live Editor Preview (Backbone.js Template).
+	 */
+	protected function content_template() {
+		?>
+		<#
+		if ( ! settings.awea_items || ! settings.awea_items.length ) {
+			return;
+		}
+		var numStyle = settings.awea_num_style || 'badge';
+		var titleTag = elementor.helpers.validateHTMLTag( settings.awea_title_tag || 'h3' );
+		#>
+		<div class="awea-nb-grid">
+			<# _.each( settings.awea_items, function( item, index ) {
+				var id       = item._id || index;
+				var number   = item.awea_number || '01';
+				var tag      = item.awea_tag || '';
+				var title    = item.awea_title || '';
+				var desc     = item.awea_desc || '';
+				var showBtn  = 'yes' === item.awea_link_show;
+				var btnText  = item.awea_link_text || '';
+				var hasBtn   = showBtn && !! btnText;
+				var btnUrl   = ( item.awea_link_url && item.awea_link_url.url ) ? item.awea_link_url.url : '#';
+				var iconHTML = elementor.helpers.renderIcon( view, item.awea_link_icon, { 'aria-hidden': true }, 'i', 'object' );
+			#>
+				<article class="awea-nb-card elementor-repeater-item-{{ id }}">
+					<# if ( 'watermark' === numStyle && number ) { #>
+						<div class="awea-nb-watermark" aria-hidden="true">{{{ number }}}</div>
+					<# } #>
+
+					<# if ( 'watermark' !== numStyle && number ) { #>
+						<div class="awea-nb-badge-wrap">
+							<span class="awea-nb-badge">{{{ number }}}</span>
+						</div>
+					<# } #>
+
+					<div class="awea-nb-body">
+						<# if ( tag ) { #>
+							<span class="awea-nb-tag">{{{ tag }}}</span>
+						<# } #>
+
+						<# if ( title ) { #>
+							<{{{ titleTag }}} class="awea-nb-title">{{{ title }}}</{{{ titleTag }}}>
+						<# } #>
+
+						<# if ( desc ) { #>
+							<p class="awea-nb-desc">{{{ desc }}}</p>
+						<# } #>
+
+						<# if ( hasBtn ) { #>
+							<div class="awea-nb-btn-wrap">
+								<a href="{{ btnUrl }}" class="awea-nb-btn">
+									<span>{{{ btnText }}}</span>
+									<# if ( iconHTML && iconHTML.rendered ) { #>
+										<span class="awea-nb-btn-ico" aria-hidden="true">{{{ iconHTML.value }}}</span>
+									<# } #>
+								</a>
+							</div>
+						<# } #>
+					</div>
+				</article>
+			<# } ); #>
 		</div>
 		<?php
 	}

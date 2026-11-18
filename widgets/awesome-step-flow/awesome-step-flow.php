@@ -21,6 +21,7 @@ use Elementor\Core\Kits\Documents\Tabs\Global_Colors;
 use Elementor\Widget_Base;
 use Elementor\Repeater;
 use Elementor\Icons_Manager;
+use Elementor\Utils;
 
 class Widget_Awesome_Step_Flow extends Widget_Base {
 
@@ -505,8 +506,9 @@ class Widget_Awesome_Step_Flow extends Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
 				'selectors' => [
-					'{{WRAPPER}} .awea-sf-box i'   => 'color: {{VALUE}};',
-					'{{WRAPPER}} .awea-sf-box svg' => 'fill: {{VALUE}};',
+					'{{WRAPPER}} .awea-sf-box i'     => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-sf-box svg'   => 'fill: {{VALUE}};',
+					'{{WRAPPER}} .awea-sf-box'       => 'border-color: {{VALUE}};',
 				],
 			]
 		);
@@ -558,8 +560,8 @@ class Widget_Awesome_Step_Flow extends Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#ffffff',
 				'selectors' => [
-					'{{WRAPPER}} .awea-sf-item:hover .awea-sf-box i'   => 'color: {{VALUE}};',
-					'{{WRAPPER}} .awea-sf-item:hover .awea-sf-box svg' => 'fill: {{VALUE}};',
+					'{{WRAPPER}} .awea-sf-item:hover .awea-sf-box i, {{WRAPPER}} a.awea-sf-item:focus-visible .awea-sf-box i'     => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-sf-item:hover .awea-sf-box svg, {{WRAPPER}} a.awea-sf-item:focus-visible .awea-sf-box svg' => 'fill: {{VALUE}};',
 				],
 			]
 		);
@@ -571,7 +573,7 @@ class Widget_Awesome_Step_Flow extends Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
 				'selectors' => [
-					'{{WRAPPER}} .awea-sf-item:hover .awea-sf-box' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .awea-sf-item:hover .awea-sf-box, {{WRAPPER}} a.awea-sf-item:focus-visible .awea-sf-box' => 'background-color: {{VALUE}};',
 				],
 			]
 		);
@@ -583,7 +585,7 @@ class Widget_Awesome_Step_Flow extends Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
 				'selectors' => [
-					'{{WRAPPER}} .awea-sf-item:hover .awea-sf-box' => 'border-color: {{VALUE}};',
+					'{{WRAPPER}} .awea-sf-item:hover .awea-sf-box, {{WRAPPER}} a.awea-sf-item:focus-visible .awea-sf-box' => 'border-color: {{VALUE}};',
 				],
 			]
 		);
@@ -645,7 +647,7 @@ class Widget_Awesome_Step_Flow extends Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
 				'selectors' => [
-					'{{WRAPPER}} .awea-sf-item:hover .awea-sf-num' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .awea-sf-item:hover .awea-sf-num, {{WRAPPER}} a.awea-sf-item:focus-visible .awea-sf-num' => 'background-color: {{VALUE}};',
 				],
 			]
 		);
@@ -734,7 +736,7 @@ class Widget_Awesome_Step_Flow extends Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
 				'selectors' => [
-					'{{WRAPPER}} .awea-sf-item:hover .awea-sf-title, {{WRAPPER}} .awea-sf-item:hover .awea-sf-title a' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-sf-item:hover .awea-sf-title, {{WRAPPER}} .awea-sf-item:hover .awea-sf-title a, {{WRAPPER}} a.awea-sf-item:focus-visible .awea-sf-title' => 'color: {{VALUE}};',
 				],
 			]
 		);
@@ -809,19 +811,22 @@ class Widget_Awesome_Step_Flow extends Widget_Base {
 		?>
 		<div class="awea-sf-wrap">
 			<?php foreach ( $steps as $index => $item ) :
-				$id       = $item['_id'] ?? $index;
+				$id       = ! empty( $item['_id'] ) ? sanitize_html_class( $item['_id'] ) : $index;
 				$title    = $item['awea_title'] ?? '';
 				$badge    = $item['awea_badge'] ?? '';
 				$desc     = $item['awea_desc'] ?? '';
 				$has_url  = ! empty( $item['awea_link']['url'] );
 				$link_key = 'link_' . $id;
+				$tag      = $has_url ? 'a' : 'div';
 
+				$this->remove_render_attribute( $link_key );
 				if ( $has_url ) {
 					$this->add_link_attributes( $link_key, $item['awea_link'] );
 				}
+				$this->add_render_attribute( $link_key, 'class', [ 'awea-sf-item', 'elementor-repeater-item-' . $id ] );
 				?>
-				<div class="awea-sf-item elementor-repeater-item-<?php echo esc_attr( $id ); ?>">
-					<div class="awea-sf-box">
+				<<?php Utils::print_validated_html_tag( $tag ); ?> <?php $this->print_render_attribute_string( $link_key ); ?>>
+					<div class="awea-sf-box" aria-hidden="true">
 						<?php
 						if ( ! empty( $item['awea_icon']['value'] ) ) {
 							Icons_Manager::render_icon( $item['awea_icon'], [ 'aria-hidden' => 'true' ] );
@@ -835,13 +840,7 @@ class Widget_Awesome_Step_Flow extends Widget_Base {
 					<div class="awea-sf-body">
 						<?php if ( ! empty( $title ) ) : ?>
 							<<?php Utils::print_validated_html_tag( $title_tag ); ?> class="awea-sf-title">
-								<?php if ( $has_url ) : ?>
-									<a <?php $this->print_render_attribute_string( $link_key ); ?>>
-										<?php echo esc_html( $title ); ?>
-									</a>
-								<?php else : ?>
-									<?php echo esc_html( $title ); ?>
-								<?php endif; ?>
+								<?php echo esc_html( $title ); ?>
 							</<?php Utils::print_validated_html_tag( $title_tag ); ?>>
 						<?php endif; ?>
 
@@ -849,7 +848,7 @@ class Widget_Awesome_Step_Flow extends Widget_Base {
 							<p class="awea-sf-desc"><?php echo wp_kses_post( $desc ); ?></p>
 						<?php endif; ?>
 					</div>
-				</div>
+				</<?php Utils::print_validated_html_tag( $tag ); ?>>
 
 				<?php if ( 'none' !== $line_style && $index !== $total_steps - 1 ) : ?>
 					<div class="awea-sf-line" aria-hidden="true">
@@ -879,11 +878,15 @@ class Widget_Awesome_Step_Flow extends Widget_Base {
 		#>
 		<div class="awea-sf-wrap">
 			<# _.each( steps, function( item, index ) {
+				var id       = item._id || index;
 				var iconHTML = elementor.helpers.renderIcon( view, item.awea_icon, { 'aria-hidden': true }, 'i' , 'object' );
-				var hasUrl   = item.awea_link && item.awea_link.url;
+				var url      = ( item.awea_link && item.awea_link.url ) ? item.awea_link.url : '';
+				var hasUrl   = !! url;
+				var tag      = hasUrl ? 'a' : 'div';
+				var hrefAttr = hasUrl ? ' href="' + _.escape( url ) + '"' : '';
 			#>
-				<div class="awea-sf-item elementor-repeater-item-{{ item._id }}">
-					<div class="awea-sf-box">
+				<{{{ tag }}}{{ hrefAttr }} class="awea-sf-item elementor-repeater-item-{{ id }}">
+					<div class="awea-sf-box" aria-hidden="true">
 						<# if ( iconHTML && iconHTML.rendered ) { #>
 							{{{ iconHTML.value }}}
 						<# } #>
@@ -894,20 +897,14 @@ class Widget_Awesome_Step_Flow extends Widget_Base {
 
 					<div class="awea-sf-body">
 						<# if ( item.awea_title ) { #>
-							<{{{ tag }}} class="awea-sf-title">
-								<# if ( hasUrl ) { #>
-									<a href="{{ item.awea_link.url }}">{{{ item.awea_title }}}</a>
-								<# } else { #>
-									{{{ item.awea_title }}}
-								<# } #>
-							</{{{ tag }}}>
+							<{{{ tag }}} class="awea-sf-title">{{{ item.awea_title }}}</{{{ tag }}}>
 						<# } #>
 
 						<# if ( item.awea_desc ) { #>
 							<p class="awea-sf-desc">{{{ item.awea_desc }}}</p>
 						<# } #>
 					</div>
-				</div>
+				</{{{ tag }}}>
 
 				<# if ( 'none' !== lineStyle && index !== steps.length - 1 ) { #>
 					<div class="awea-sf-line" aria-hidden="true">

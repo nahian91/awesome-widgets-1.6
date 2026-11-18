@@ -21,6 +21,7 @@ use Elementor\Core\Kits\Documents\Tabs\Global_Colors;
 use Elementor\Widget_Base;
 use Elementor\Repeater;
 use Elementor\Icons_Manager;
+use Elementor\Utils;
 
 class Widget_Awesome_Team extends Widget_Base {
 
@@ -623,6 +624,18 @@ class Widget_Awesome_Team extends Widget_Base {
 			]
 		);
 
+		$this->add_control(
+			'awea_name_hover_color',
+			[
+				'label'     => esc_html__( 'Hover Color', 'awesome-widgets-elementor' ),
+				'type'      => Controls_Manager::COLOR,
+				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
+				'selectors' => [
+					'{{WRAPPER}} .awea-tm-card:hover .awea-tm-name, {{WRAPPER}} .awea-tm-name:focus-visible' => 'color: {{VALUE}};',
+				],
+			]
+		);
+
 		$this->add_group_control(
 			Group_Control_Typography::get_type(),
 			[
@@ -772,7 +785,8 @@ class Widget_Awesome_Team extends Widget_Base {
 				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}} .awea-tm-soc-btn' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-tm-soc-btn'     => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-tm-soc-btn svg' => 'fill: {{VALUE}};',
 				],
 			]
 		);
@@ -802,7 +816,8 @@ class Widget_Awesome_Team extends Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#ffffff',
 				'selectors' => [
-					'{{WRAPPER}} .awea-tm-soc-btn:hover, {{WRAPPER}} .awea-tm-soc-btn:focus-visible' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-tm-soc-btn:hover, {{WRAPPER}} .awea-tm-soc-btn:focus-visible'         => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-tm-soc-btn:hover svg, {{WRAPPER}} .awea-tm-soc-btn:focus-visible svg' => 'fill: {{VALUE}};',
 				],
 			]
 		);
@@ -856,7 +871,7 @@ class Widget_Awesome_Team extends Widget_Base {
 		?>
 		<div class="awea-tm-grid">
 			<?php foreach ( $members as $index => $member ) :
-				$id    = $member['_id'] ?? $index;
+				$id    = ! empty( $member['_id'] ) ? sanitize_html_class( $member['_id'] ) : $index;
 				$badge = $member['awea_badge'] ?? '';
 				$name  = $member['awea_name'] ?? '';
 				$role  = $member['awea_role'] ?? '';

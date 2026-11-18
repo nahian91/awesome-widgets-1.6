@@ -475,7 +475,8 @@ class Widget_Awesome_Nav_Menu extends Widget_Base {
 				],
 				'default'    => [ 'unit' => 'px', 'size' => 14 ],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-sub-indicator' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .awea-sub-indicator'     => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .awea-sub-indicator svg' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
@@ -491,7 +492,7 @@ class Widget_Awesome_Nav_Menu extends Widget_Base {
 				],
 				'default'    => [ 'unit' => 'px', 'size' => 6 ],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-nav-menu-list > li > a' => 'gap: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .awea-nav-menu-list li > a' => 'gap: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
@@ -513,7 +514,7 @@ class Widget_Awesome_Nav_Menu extends Widget_Base {
 				'label'     => esc_html__( 'Hover / Active Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}} .awea-nav-menu-list li:hover > a .awea-sub-indicator, {{WRAPPER}} .awea-nav-menu-list li.current-menu-item > a .awea-sub-indicator, {{WRAPPER}} .awea-nav-menu-list li.current-menu-ancestor > a .awea-sub-indicator' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-nav-menu-list li:hover > a .awea-sub-indicator, {{WRAPPER}} .awea-nav-menu-list li > a:focus-visible .awea-sub-indicator, {{WRAPPER}} .awea-nav-menu-list li.current-menu-item > a .awea-sub-indicator, {{WRAPPER}} .awea-nav-menu-list li.current-menu-ancestor > a .awea-sub-indicator' => 'color: {{VALUE}};',
 				],
 			]
 		);
@@ -650,6 +651,7 @@ class Widget_Awesome_Nav_Menu extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'awea_submenu_typography',
+				'global'   => [ 'default' => Global_Typography::TYPOGRAPHY_TEXT ],
 				'selector' => '{{WRAPPER}} .awea-nav-menu-list ul.sub-menu li a',
 			]
 		);
@@ -670,6 +672,26 @@ class Widget_Awesome_Nav_Menu extends Widget_Base {
 				],
 				'selectors'  => [
 					'{{WRAPPER}} .awea-nav-menu-list ul.sub-menu li a' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				],
+			]
+		);
+
+		$this->add_responsive_control(
+			'awea_subitem_radius',
+			[
+				'label'      => esc_html__( 'Border Radius', 'awesome-widgets-elementor' ),
+				'type'       => Controls_Manager::DIMENSIONS,
+				'size_units' => [ 'px', 'rem' ],
+				'default'    => [
+					'top'      => '8',
+					'right'    => '8',
+					'bottom'   => '8',
+					'left'     => '8',
+					'unit'     => 'px',
+					'isLinked' => true,
+				],
+				'selectors'  => [
+					'{{WRAPPER}} .awea-nav-menu-list ul.sub-menu li a' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
 		);
@@ -1013,12 +1035,14 @@ class Widget_Awesome_Nav_Menu extends Widget_Base {
 
 		$unique_id      = $this->get_id();
 		$show_indicator = ( 'yes' === ( $settings['awea_show_submenu_indicator'] ?? 'yes' ) );
+		$has_breakpoint = ( 'none' !== ( $settings['awea_enable_mobile_breakpoint'] ?? 'mobile' ) );
+		$nav_id         = 'awea-nav-container-' . $unique_id;
 		?>
 		<div class="awea-nav-menu-wrapper" data-nav-id="<?php echo esc_attr( $unique_id ); ?>">
 
-			<?php if ( 'none' !== ( $settings['awea_enable_mobile_breakpoint'] ?? 'mobile' ) ) : ?>
+			<?php if ( $has_breakpoint ) : ?>
 				<div class="awea-mobile-toggle-wrapper">
-					<button type="button" class="awea-mobile-toggle-btn" aria-expanded="false" aria-label="<?php esc_attr_e( 'Toggle Navigation', 'awesome-widgets-elementor' ); ?>">
+					<button type="button" class="awea-mobile-toggle-btn" aria-expanded="false" aria-controls="<?php echo esc_attr( $nav_id ); ?>" aria-label="<?php esc_attr_e( 'Toggle Navigation', 'awesome-widgets-elementor' ); ?>">
 						<svg class="awea-icon-open" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
 							<line x1="3" y1="12" x2="21" y2="12"></line>
 							<line x1="3" y1="6" x2="21" y2="6"></line>
@@ -1032,7 +1056,7 @@ class Widget_Awesome_Nav_Menu extends Widget_Base {
 				</div>
 			<?php endif; ?>
 
-			<nav class="awea-nav-menu-container" role="navigation" aria-label="<?php esc_attr_e( 'Main Menu', 'awesome-widgets-elementor' ); ?>">
+			<nav id="<?php echo esc_attr( $nav_id ); ?>" class="awea-nav-menu-container" aria-label="<?php esc_attr_e( 'Main Menu', 'awesome-widgets-elementor' ); ?>">
 				<?php
 				wp_nav_menu(
 					[
@@ -1115,6 +1139,17 @@ class Widget_Awesome_Nav_Menu extends Widget_Base {
 							this.setAttribute('aria-expanded', String(!isOpen));
 						}
 					});
+				});
+
+				// Desktop keyboard Escape support to close focused submenus
+				wrapper.addEventListener('keydown', function(e) {
+					if (e.key === 'Escape') {
+						var focusedItem = wrapper.querySelector('.menu-item-has-children:focus-within');
+						if (focusedItem) {
+							var parentAnchor = focusedItem.querySelector(':scope > a');
+							if (parentAnchor) parentAnchor.focus();
+						}
+					}
 				});
 			}
 

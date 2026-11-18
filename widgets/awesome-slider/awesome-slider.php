@@ -3,7 +3,7 @@
  * Awesome Slider Studio Widget (Zero-Shadow Architectural Edition).
  *
  * @package AwesomeWidgetsElementor
- * @since 2.0.0
+ * @since   2.0.0
  */
 
 namespace Elementor;
@@ -12,15 +12,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use \Elementor\Controls_Manager;
-use \Elementor\Group_Control_Border;
-use \Elementor\Group_Control_Box_Shadow;
-use \Elementor\Group_Control_Typography;
-use \Elementor\Group_Control_Background;
-use \Elementor\Core\Kits\Documents\Tabs\Global_Typography;
-use \Elementor\Core\Kits\Documents\Tabs\Global_Colors;
-use \Elementor\Widget_Base;
-use \Elementor\Repeater;
+use Elementor\Controls_Manager;
+use Elementor\Group_Control_Border;
+use Elementor\Group_Control_Box_Shadow;
+use Elementor\Group_Control_Typography;
+use Elementor\Group_Control_Background;
+use Elementor\Core\Kits\Documents\Tabs\Global_Typography;
+use Elementor\Core\Kits\Documents\Tabs\Global_Colors;
+use Elementor\Widget_Base;
+use Elementor\Repeater;
+use Elementor\Utils;
 
 class Widget_Awesome_Slider extends Widget_Base {
 
@@ -178,16 +179,16 @@ class Widget_Awesome_Slider extends Widget_Base {
 				'title_field' => '{{{ awea_title }}}',
 				'default'     => [
 					[
-						'awea_subtitle' => esc_html__( 'Creative Branding', 'awesome-widgets-elementor' ),
-						'awea_title'    => esc_html__( 'We Build Memorable Brands', 'awesome-widgets-elementor' ),
-						'awea_desc'     => esc_html__( 'Helping businesses stand out with strategic branding, design, and messaging.', 'awesome-widgets-elementor' ),
+						'awea_subtitle'  => esc_html__( 'Creative Branding', 'awesome-widgets-elementor' ),
+						'awea_title'     => esc_html__( 'We Build Memorable Brands', 'awesome-widgets-elementor' ),
+						'awea_desc'      => esc_html__( 'Helping businesses stand out with strategic branding, design, and messaging.', 'awesome-widgets-elementor' ),
 						'awea_btn1_text' => esc_html__( 'Our Work', 'awesome-widgets-elementor' ),
 						'awea_btn2_text' => esc_html__( 'Get Started', 'awesome-widgets-elementor' ),
 					],
 					[
-						'awea_subtitle' => esc_html__( 'Digital Marketing', 'awesome-widgets-elementor' ),
-						'awea_title'    => esc_html__( 'Grow Your Business Online', 'awesome-widgets-elementor' ),
-						'awea_desc'     => esc_html__( 'From SEO to targeted marketing campaigns, we drive qualified traffic.', 'awesome-widgets-elementor' ),
+						'awea_subtitle'  => esc_html__( 'Digital Marketing', 'awesome-widgets-elementor' ),
+						'awea_title'     => esc_html__( 'Grow Your Business Online', 'awesome-widgets-elementor' ),
+						'awea_desc'      => esc_html__( 'From SEO to targeted marketing campaigns, we drive qualified traffic.', 'awesome-widgets-elementor' ),
 						'awea_btn1_text' => esc_html__( 'Learn More', 'awesome-widgets-elementor' ),
 						'awea_btn2_text' => esc_html__( 'Consultation', 'awesome-widgets-elementor' ),
 					],
@@ -607,7 +608,7 @@ class Widget_Awesome_Slider extends Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#ffffff',
 				'selectors' => [
-					'{{WRAPPER}} .awea-slide-btn-bg:hover' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-slide-btn-bg:hover, {{WRAPPER}} .awea-slide-btn-bg:focus-visible' => 'color: {{VALUE}};',
 				],
 			]
 		);
@@ -621,7 +622,7 @@ class Widget_Awesome_Slider extends Widget_Base {
 					'default' => Global_Colors::COLOR_ACCENT,
 				],
 				'selectors' => [
-					'{{WRAPPER}} .awea-slide-btn-bg:hover' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .awea-slide-btn-bg:hover, {{WRAPPER}} .awea-slide-btn-bg:focus-visible' => 'background-color: {{VALUE}};',
 				],
 			]
 		);
@@ -710,7 +711,7 @@ class Widget_Awesome_Slider extends Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#0f172a',
 				'selectors' => [
-					'{{WRAPPER}} .awea-slide-btn-border:hover' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-slide-btn-border:hover, {{WRAPPER}} .awea-slide-btn-border:focus-visible' => 'color: {{VALUE}};',
 				],
 			]
 		);
@@ -722,7 +723,7 @@ class Widget_Awesome_Slider extends Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#ffffff',
 				'selectors' => [
-					'{{WRAPPER}} .awea-slide-btn-border:hover' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .awea-slide-btn-border:hover, {{WRAPPER}} .awea-slide-btn-border:focus-visible' => 'background-color: {{VALUE}};',
 				],
 			]
 		);
@@ -734,7 +735,7 @@ class Widget_Awesome_Slider extends Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#ffffff',
 				'selectors' => [
-					'{{WRAPPER}} .awea-slide-btn-border:hover' => 'border-color: {{VALUE}};',
+					'{{WRAPPER}} .awea-slide-btn-border:hover, {{WRAPPER}} .awea-slide-btn-border:focus-visible' => 'border-color: {{VALUE}};',
 				],
 			]
 		);
@@ -775,6 +776,7 @@ class Widget_Awesome_Slider extends Widget_Base {
 				 data-speed="<?php echo esc_attr( (string) $anim_speed ); ?>">
 
 				<?php foreach ( $slides as $index => $slide ) :
+					$id        = ! empty( $slide['_id'] ) ? sanitize_html_class( $slide['_id'] ) : $index;
 					$img_url   = ! empty( $slide['awea_image']['url'] ) ? esc_url( $slide['awea_image']['url'] ) : '';
 					$subtitle  = $slide['awea_subtitle'] ?? '';
 					$title     = $slide['awea_title'] ?? '';
@@ -783,30 +785,33 @@ class Widget_Awesome_Slider extends Widget_Base {
 					$btn1_text = $slide['awea_btn1_text'] ?? '';
 					$btn2_text = $slide['awea_btn2_text'] ?? '';
 
-					$btn1_key = 'awea_btn1_' . $index;
-					$btn2_key = 'awea_btn2_' . $index;
+					$btn1_key = 'awea_btn1_' . $id;
+					$btn2_key = 'awea_btn2_' . $id;
+
+					$this->remove_render_attribute( $btn1_key );
+					$this->remove_render_attribute( $btn2_key );
 
 					if ( ! empty( $slide['awea_btn1_url']['url'] ) ) {
 						$this->add_link_attributes( $btn1_key, $slide['awea_btn1_url'] );
 					}
 					if ( ! empty( $slide['awea_btn2_url']['url'] ) ) {
-						$this->add_link_attributes( $btn2_key, $slide['awea_btn2_url'] );
+						$this->add_link_attributes( $btn2_key, $slide['awea_btn2_url'] )	;
 					}
 
 					$this->add_render_attribute( $btn1_key, 'class', 'awea-slide-btn-bg' );
 					$this->add_render_attribute( $btn2_key, 'class', 'awea-slide-btn-border' );
 					?>
-					<div class="awea-slide-box" style="background-image: url('<?php echo esc_url( $img_url ); ?>');">
+					<div class="awea-slide-box elementor-repeater-item-<?php echo esc_attr( $id ); ?>" style="background-image: url('<?php echo esc_url( $img_url ); ?>');">
 						<div class="awea-slide-content">
-							
+
 							<?php if ( ! empty( $subtitle ) ) : ?>
 								<span class="awea-slide-subtitle"><?php echo esc_html( $subtitle ); ?></span>
 							<?php endif; ?>
 
 							<?php if ( ! empty( $title ) ) : ?>
-								<<?php echo esc_attr( $title_tag ); ?> class="awea-slide-title">
+								<<?php Utils::print_validated_html_tag( $title_tag ); ?> class="awea-slide-title">
 									<?php echo wp_kses_post( $title ); ?>
-								</<?php echo esc_attr( $title_tag ); ?>>
+								</<?php Utils::print_validated_html_tag( $title_tag ); ?>>
 							<?php endif; ?>
 
 							<?php if ( ! empty( $desc ) ) : ?>
@@ -818,13 +823,13 @@ class Widget_Awesome_Slider extends Widget_Base {
 							<?php if ( ( ! empty( $btn1_text ) && ! empty( $slide['awea_btn1_url']['url'] ) ) || ( ! empty( $btn2_text ) && ! empty( $slide['awea_btn2_url']['url'] ) ) ) : ?>
 								<div class="awea-slide-btn-row">
 									<?php if ( ! empty( $btn1_text ) && ! empty( $slide['awea_btn1_url']['url'] ) ) : ?>
-										<a <?php echo $this->get_render_attribute_string( $btn1_key ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
+										<a <?php $this->print_render_attribute_string( $btn1_key ); ?>>
 											<span><?php echo esc_html( $btn1_text ); ?></span>
 										</a>
 									<?php endif; ?>
 
 									<?php if ( ! empty( $btn2_text ) && ! empty( $slide['awea_btn2_url']['url'] ) ) : ?>
-										<a <?php echo $this->get_render_attribute_string( $btn2_key ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
+										<a <?php $this->print_render_attribute_string( $btn2_key ); ?>>
 											<span><?php echo esc_html( $btn2_text ); ?></span>
 										</a>
 									<?php endif; ?>
@@ -839,40 +844,58 @@ class Widget_Awesome_Slider extends Widget_Base {
 		</div>
 
 		<script>
-		jQuery(window).on('elementor/frontend/init', function () {
-			elementorFrontend.hooks.addAction('frontend/element_ready/awesome-slider.default', function ($scope, $) {
-				var $slider = $scope.find('.awea-slider');
-				if (!$slider.length || typeof $slider.owlCarousel !== 'function') return;
+		(function($) {
+			function initHeroSlider($scope) {
+				var $slider = $scope ? $scope.find('.awea-slider') : $('#awea-hero-slider-<?php echo esc_js( $widget_id ); ?>');
+				if (!$slider.length || $slider.data('aweaBound') === 1 || typeof $slider.owlCarousel !== 'function') return;
+				$slider.data('aweaBound', 1);
 
-				var showArrows = $slider.data('arrows') === true || $slider.data('arrows') === 'true';
-				var showDots   = $slider.data('dots') === true || $slider.data('dots') === 'true';
-				var loop       = $slider.data('loop') === true || $slider.data('loop') === 'true';
-				var pauseHover = $slider.data('pause') === true || $slider.data('pause') === 'true';
-				var autoplay   = $slider.data('autoplay') === true || $slider.data('autoplay') === 'true';
-				var autoDelay  = parseInt($slider.data('delay'), 10) || 8000;
-				var animSpeed  = parseInt($slider.data('speed'), 10) || 1000;
+				var showArrows = $slider.attr('data-arrows') === 'true';
+				var showDots   = $slider.attr('data-dots') === 'true';
+				var loop       = $slider.attr('data-loop') === 'true';
+				var pauseHover = $slider.attr('data-pause') === 'true';
+				var autoplay   = $slider.attr('data-autoplay') === 'true';
+				var autoDelay  = parseInt($slider.attr('data-delay'), 10) || 8000;
+				var animSpeed  = parseInt($slider.attr('data-speed'), 10) || 1000;
+				var slideCount = $slider.children('.awea-slide-box').length;
+				var allowLoop  = loop && (slideCount > 1);
 
 				$slider.owlCarousel({
 					items: 1,
 					nav: showArrows,
 					dots: showDots,
-					loop: loop,
+					loop: allowLoop,
 					autoplay: autoplay,
 					autoplayTimeout: autoDelay,
 					smartSpeed: animSpeed,
 					autoplayHoverPause: pauseHover,
 					margin: 0,
 					navText: [
-						'<div class="awea-carousel-arrow-border" aria-label="Previous"><i class="fas fa-chevron-left"></i></div>',
-						'<div class="awea-carousel-arrow-border" aria-label="Next"><i class="fas fa-chevron-right"></i></div>'
+						'<button type="button" class="awea-carousel-arrow-border" aria-label="<?php echo esc_js( __( 'Previous', 'awesome-widgets-elementor' ) ); ?>"><i class="fas fa-chevron-left" aria-hidden="true"></i></button>',
+						'<button type="button" class="awea-carousel-arrow-border" aria-label="<?php echo esc_js( __( 'Next', 'awesome-widgets-elementor' ) ); ?>"><i class="fas fa-chevron-right" aria-hidden="true"></i></button>'
 					],
 					responsive: {
 						0: { items: 1, nav: false },
 						769: { items: 1, nav: showArrows }
 					}
 				});
+			}
+
+			$(function() {
+				initHeroSlider(null);
 			});
-		});
+
+			if (!window.aweaHeroSliderHooked) {
+				window.aweaHeroSliderHooked = true;
+				$(window).on('elementor/frontend/init', function() {
+					if (window.elementorFrontend && window.elementorFrontend.hooks) {
+						window.elementorFrontend.hooks.addAction('frontend/element_ready/awesome-slider.default', function($scope) {
+							initHeroSlider($scope);
+						});
+					}
+				});
+			}
+		})(jQuery);
 		</script>
 		<?php
 	}

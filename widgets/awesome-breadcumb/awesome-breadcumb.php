@@ -20,6 +20,7 @@ use Elementor\Core\Kits\Documents\Tabs\Global_Typography;
 use Elementor\Widget_Base;
 use Elementor\Icons_Manager;
 use Elementor\Repeater;
+use Elementor\Utils;
 
 class Widget_Awesome_Breadcumb extends Widget_Base {
 
@@ -302,12 +303,14 @@ class Widget_Awesome_Breadcumb extends Widget_Base {
 				],
 				'default'              => 'center',
 				'selectors_dictionary' => [
-					'left'   => 'left; --awea-bc-justify: flex-start; --awea-bc-ml: 0; --awea-bc-mr: auto',
-					'center' => 'center; --awea-bc-justify: center; --awea-bc-ml: auto; --awea-bc-mr: auto',
-					'right'  => 'right; --awea-bc-justify: flex-end; --awea-bc-ml: auto; --awea-bc-mr: 0',
+					'left'   => 'flex-start',
+					'center' => 'center',
+					'right'  => 'flex-end',
 				],
 				'selectors'            => [
-					'{{WRAPPER}} .awea-bc-hero' => 'text-align: {{VALUE}};',
+					'{{WRAPPER}} .awea-bc-hero'  => 'text-align: {{VALUE}};',
+					'{{WRAPPER}} .awea-bc-inner' => 'align-items: {{VALUE}};',
+					'{{WRAPPER}} .awea-bc-list'  => 'justify-content: {{VALUE}};',
 				],
 			]
 		);
@@ -648,7 +651,8 @@ class Widget_Awesome_Breadcumb extends Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'default'   => 'rgba(255, 255, 255, 0.74)',
 				'selectors' => [
-					'{{WRAPPER}} .awea-bc-item a' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-bc-item a'     => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-bc-item a svg' => 'fill: {{VALUE}};',
 				],
 			]
 		);
@@ -667,7 +671,8 @@ class Widget_Awesome_Breadcumb extends Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#ffffff',
 				'selectors' => [
-					'{{WRAPPER}} .awea-bc-item a:hover, {{WRAPPER}} .awea-bc-item a:focus-visible' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-bc-item a:hover, {{WRAPPER}} .awea-bc-item a:focus-visible'         => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-bc-item a:hover svg, {{WRAPPER}} .awea-bc-item a:focus-visible svg' => 'fill: {{VALUE}};',
 				],
 			]
 		);
@@ -686,7 +691,8 @@ class Widget_Awesome_Breadcumb extends Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#ffffff',
 				'selectors' => [
-					'{{WRAPPER}} .awea-bc-item.is-current' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-bc-item.is-current'     => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-bc-item.is-current svg' => 'fill: {{VALUE}};',
 				],
 			]
 		);
@@ -761,7 +767,7 @@ class Widget_Awesome_Breadcumb extends Widget_Base {
 				'default'   => 'rgba(255, 255, 255, 0.38)',
 				'selectors' => [
 					'{{WRAPPER}} .awea-bc-sep'     => 'color: {{VALUE}};',
-					'{{WRAPPER}} .awea-bc-sep svg' => 'stroke: {{VALUE}};',
+					'{{WRAPPER}} .awea-bc-sep svg' => 'fill: {{VALUE}}; stroke: {{VALUE}};',
 					'{{WRAPPER}} .awea-bc-sep i'   => 'color: {{VALUE}};',
 				],
 			]
@@ -847,7 +853,28 @@ class Widget_Awesome_Breadcumb extends Widget_Base {
 						];
 					}
 				}
-			} elseif ( 'product' !== $post_type ) {
+			} elseif ( 'product' === $post_type ) {
+				$product_cats = get_the_terms( $post->ID, 'product_cat' );
+				if ( ! empty( $product_cats ) && ! is_wp_error( $product_cats ) ) {
+					$primary_cat = $product_cats[0];
+					if ( $primary_cat->parent ) {
+						$cat_ancestors = array_reverse( get_ancestors( $primary_cat->term_id, 'product_cat' ) );
+						foreach ( $cat_ancestors as $cat_id ) {
+							$ancestor_term = get_term( $cat_id, 'product_cat' );
+							if ( $ancestor_term && ! is_wp_error( $ancestor_term ) ) {
+								$crumbs[] = [
+									'label' => $ancestor_term->name,
+									'url'   => get_term_link( $ancestor_term ),
+								];
+							}
+						}
+					}
+					$crumbs[] = [
+						'label' => $primary_cat->name,
+						'url'   => get_term_link( $primary_cat ),
+					];
+				}
+			} else {
 				$pto = get_post_type_object( $post_type );
 				if ( $pto && ! empty( $pto->has_archive ) ) {
 					$crumbs[] = [
@@ -966,15 +993,17 @@ class Widget_Awesome_Breadcumb extends Widget_Base {
 								<span itemprop="name"><?php echo esc_html( $crumb['label'] ); ?></span>
 							</a>
 						<?php else : ?>
-							<span class="awea-bc-text" <?php echo $is_last ? 'aria-current="page"' : ''; ?> itemprop="name">
+							<span class="awea-bc-text" <?php echo $is_last ? 'aria-current="page"' : ''; ?>>
 								<?php if ( $is_home && $has_home_icon ) : ?>
 									<span class="awea-bc-home-ico" aria-hidden="true">
 										<?php Icons_Manager::render_icon( $settings['awea_home_icon'], [ 'aria-hidden' => 'true' ] ); ?>
 									</span>
 								<?php endif; ?>
-								<?php echo esc_html( $crumb['label'] ); ?>
+								<span itemprop="name"><?php echo esc_html( $crumb['label'] ); ?></span>
 							</span>
-							<link itemprop="item" href="<?php echo esc_url( $current_url ); ?>" />
+							<?php if ( $is_last ) : ?>
+								<link itemprop="item" href="<?php echo esc_url( $current_url ); ?>" />
+							<?php endif; ?>
 						<?php endif; ?>
 
 						<meta itemprop="position" content="<?php echo esc_attr( (string) $position ); ?>" />
@@ -1013,17 +1042,23 @@ class Widget_Awesome_Breadcumb extends Widget_Base {
 
 		if ( 'custom' === $source ) {
 			$page_title   = $settings['awea_custom_title'] ?? '';
-			$custom_items = $settings['awea_custom_crumbs'] ?? [];
+			$custom_items = array_values(
+				array_filter(
+					$settings['awea_custom_crumbs'] ?? [],
+					static function ( $item ) {
+						return ! empty( $item['awea_crumb_label'] );
+					}
+				)
+			);
 			$crumbs       = [];
+			$last_idx     = count( $custom_items ) - 1;
 
 			foreach ( $custom_items as $idx => $item ) {
-				if ( empty( $item['awea_crumb_label'] ) ) {
-					continue;
-				}
-				$crumbs[] = [
+				$is_last_item = ( $idx === $last_idx );
+				$crumbs[]     = [
 					'label'     => $item['awea_crumb_label'],
-					'url'       => $item['awea_crumb_url']['url'] ?? '',
-					'link_data' => $item['awea_crumb_url'] ?? [],
+					'url'       => $is_last_item ? '' : ( $item['awea_crumb_url']['url'] ?? '' ),
+					'link_data' => $is_last_item ? [] : ( $item['awea_crumb_url'] ?? [] ),
 					'is_home'   => ( 0 === $idx ),
 				];
 			}
@@ -1046,7 +1081,7 @@ class Widget_Awesome_Breadcumb extends Widget_Base {
 			$crumbs = $this->get_dynamic_breadcrumbs( $home_label, $include_current );
 		}
 		?>
-		<header class="awea-bc-hero">
+		<section class="awea-bc-hero" aria-label="<?php esc_attr_e( 'Page Header', 'awesome-widgets-elementor' ); ?>">
 			<div class="awea-bc-inner">
 
 				<?php
@@ -1074,7 +1109,7 @@ class Widget_Awesome_Breadcumb extends Widget_Base {
 				?>
 
 			</div>
-		</header>
+		</section>
 		<?php
 	}
 }

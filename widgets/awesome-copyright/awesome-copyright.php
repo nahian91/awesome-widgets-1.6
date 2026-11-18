@@ -18,6 +18,7 @@ use Elementor\Group_Control_Typography;
 use Elementor\Core\Kits\Documents\Tabs\Global_Typography;
 use Elementor\Core\Kits\Documents\Tabs\Global_Colors;
 use Elementor\Widget_Base;
+use Elementor\Utils;
 
 class Widget_Awesome_Copyright extends Widget_Base {
 
@@ -79,11 +80,11 @@ class Widget_Awesome_Copyright extends Widget_Base {
 		$this->add_control(
 			'awea_author_name',
 			[
-				'label'       => esc_html__( 'Author / Credit Name', 'awesome-widgets-elementor' ),
-				'type'        => Controls_Manager::TEXT,
-				'default'     => esc_html__( 'Studio Nahian', 'awesome-widgets-elementor' ),
-				'dynamic'     => [ 'active' => true ],
-				'separator'   => 'before',
+				'label'     => esc_html__( 'Author / Credit Name', 'awesome-widgets-elementor' ),
+				'type'      => Controls_Manager::TEXT,
+				'default'   => esc_html__( 'Studio Nahian', 'awesome-widgets-elementor' ),
+				'dynamic'   => [ 'active' => true ],
+				'separator' => 'before',
 			]
 		);
 
@@ -385,6 +386,7 @@ class Widget_Awesome_Copyright extends Widget_Base {
 			[
 				'name'     => 'awea_secondary_typo',
 				'selector' => '{{WRAPPER}} .awea-cp-secondary',
+				'global'   => [ 'default' => Global_Typography::TYPOGRAPHY_TEXT ],
 			]
 		);
 
@@ -522,7 +524,7 @@ class Widget_Awesome_Copyright extends Widget_Base {
 	protected function render() {
 		$settings    = $this->get_settings_for_display();
 		$raw_text    = $settings['awea_text'] ?? '';
-		$start_year  = trim( $settings['awea_start_year'] ?? '' );
+		$start_year  = preg_replace( '/[^0-9]/', '', (string) ( $settings['awea_start_year'] ?? '' ) );
 		$tag         = Utils::validate_html_tag( $settings['awea_html_tag'] ?? 'div' );
 		$show_extra  = 'yes' === ( $settings['awea_enable_secondary'] ?? '' );
 		$extra_text  = $settings['awea_secondary_text'] ?? '';
@@ -531,8 +533,8 @@ class Widget_Awesome_Copyright extends Widget_Base {
 		$author_name = $settings['awea_author_name'] ?? '';
 		$author_data = $settings['awea_author_url'] ?? [];
 
-		$current_year = date_i18n( 'Y' );
-		$year_range   = ( ! empty( $start_year ) && $start_year !== $current_year )
+		$current_year = wp_date( 'Y' );
+		$year_range   = ( '' !== $start_year && (int) $start_year < (int) $current_year )
 			? $start_year . '–' . $current_year
 			: $current_year;
 
@@ -545,6 +547,7 @@ class Widget_Awesome_Copyright extends Widget_Base {
 			esc_html( $site_title )
 		);
 
+		$this->remove_render_attribute( 'author_url' );
 		$author_link = '';
 		if ( ! empty( $author_name ) ) {
 			if ( ! empty( $author_data['url'] ) ) {
@@ -571,20 +574,21 @@ class Widget_Awesome_Copyright extends Widget_Base {
 			'{tm}'           => '&trade;',
 		];
 
-		$output = str_replace( array_keys( $tokens ), array_values( $tokens ), $raw_text );
+		$output = strtr( wp_kses_post( $raw_text ), $tokens );
 
+		$this->remove_render_attribute( 'secondary_url' );
 		$has_extra_link = ! empty( $extra_link['url'] );
 		if ( $has_extra_link ) {
 			$this->add_link_attributes( 'secondary_url', $extra_link );
 		}
 		?>
 		<<?php Utils::print_validated_html_tag( $tag ); ?> class="awea-cp-wrap">
-			<?php if ( ! empty( $output ) ) : ?>
-				<span class="awea-cp-primary"><?php echo wp_kses_post( $output ); ?></span>
+			<?php if ( '' !== trim( $output ) ) : ?>
+				<span class="awea-cp-primary"><?php echo $output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Sanitized via wp_kses_post() before token substitution with escaped values. ?></span>
 			<?php endif; ?>
 
-			<?php if ( $show_extra && ! empty( $extra_text ) ) : ?>
-				<?php if ( ! empty( $output ) && '' !== $separator ) : ?>
+			<?php if ( $show_extra && '' !== trim( $extra_text ) ) : ?>
+				<?php if ( '' !== trim( $output ) && '' !== $separator ) : ?>
 					<span class="awea-cp-sep" aria-hidden="true"><?php echo esc_html( $separator ); ?></span>
 				<?php endif; ?>
 

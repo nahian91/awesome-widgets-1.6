@@ -21,6 +21,7 @@ use Elementor\Core\Kits\Documents\Tabs\Global_Colors;
 use Elementor\Widget_Base;
 use Elementor\Icons_Manager;
 use Elementor\Repeater;
+use Elementor\Utils;
 
 class Widget_Awesome_Icon_Box extends Widget_Base {
 
@@ -452,12 +453,14 @@ class Widget_Awesome_Icon_Box extends Widget_Base {
 				],
 				'default'              => 'left',
 				'selectors_dictionary' => [
-					'left'   => 'left; --awea-icb-align: flex-start; --awea-icb-btn-align: flex-start',
-					'center' => 'center; --awea-icb-align: center; --awea-icb-btn-align: center',
-					'right'  => 'right; --awea-icb-align: flex-end; --awea-icb-btn-align: flex-end',
+					'left'   => 'flex-start',
+					'center' => 'center',
+					'right'  => 'flex-end',
 				],
 				'selectors'            => [
-					'{{WRAPPER}} .awea-icb-card' => 'text-align: {{VALUE}};',
+					'{{WRAPPER}} .awea-icb-card'     => 'align-items: {{VALUE}}; text-align: {{VALUE}};',
+					'{{WRAPPER}} .awea-icb-body'     => 'align-items: {{VALUE}};',
+					'{{WRAPPER}} .awea-icb-btn-wrap' => 'justify-content: {{VALUE}};',
 				],
 			]
 		);
@@ -1029,6 +1032,21 @@ class Widget_Awesome_Icon_Box extends Widget_Base {
 		);
 
 		$this->add_responsive_control(
+			'awea_btn_icon_size',
+			[
+				'label'      => esc_html__( 'Icon Size', 'awesome-widgets-elementor' ),
+				'type'       => Controls_Manager::SLIDER,
+				'size_units' => [ 'px' ],
+				'range'      => [ 'px' => [ 'min' => 10, 'max' => 28 ] ],
+				'default'    => [ 'unit' => 'px', 'size' => 14 ],
+				'selectors'  => [
+					'{{WRAPPER}} .awea-icb-ico i'   => 'font-size: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .awea-icb-ico svg' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}};',
+				],
+			]
+		);
+
+		$this->add_responsive_control(
 			'awea_btn_padding',
 			[
 				'label'      => esc_html__( 'Padding', 'awesome-widgets-elementor' ),
@@ -1082,7 +1100,8 @@ class Widget_Awesome_Icon_Box extends Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#ffffff',
 				'selectors' => [
-					'{{WRAPPER}} .awea-icb-btn' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-icb-btn'     => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-icb-btn svg' => 'fill: {{VALUE}};',
 				],
 			]
 		);
@@ -1134,7 +1153,8 @@ class Widget_Awesome_Icon_Box extends Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#ffffff',
 				'selectors' => [
-					'{{WRAPPER}} .awea-icb-btn:hover, {{WRAPPER}} .awea-icb-card:hover .awea-icb-btn' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-icb-btn:hover, {{WRAPPER}} .awea-icb-btn:focus-visible, {{WRAPPER}} .awea-icb-card:hover .awea-icb-btn'         => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-icb-btn:hover svg, {{WRAPPER}} .awea-icb-btn:focus-visible svg, {{WRAPPER}} .awea-icb-card:hover .awea-icb-btn svg' => 'fill: {{VALUE}};',
 				],
 			]
 		);
@@ -1146,7 +1166,7 @@ class Widget_Awesome_Icon_Box extends Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
 				'selectors' => [
-					'{{WRAPPER}} .awea-icb-btn:hover, {{WRAPPER}} .awea-icb-card:hover .awea-icb-btn' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .awea-icb-btn:hover, {{WRAPPER}} .awea-icb-btn:focus-visible, {{WRAPPER}} .awea-icb-card:hover .awea-icb-btn' => 'background-color: {{VALUE}};',
 				],
 			]
 		);
@@ -1157,7 +1177,7 @@ class Widget_Awesome_Icon_Box extends Widget_Base {
 				'label'     => esc_html__( 'Border Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}} .awea-icb-btn:hover, {{WRAPPER}} .awea-icb-card:hover .awea-icb-btn' => 'border-color: {{VALUE}};',
+					'{{WRAPPER}} .awea-icb-btn:hover, {{WRAPPER}} .awea-icb-btn:focus-visible, {{WRAPPER}} .awea-icb-card:hover .awea-icb-btn' => 'border-color: {{VALUE}};',
 				],
 			]
 		);
@@ -1180,9 +1200,12 @@ class Widget_Awesome_Icon_Box extends Widget_Base {
 		?>
 		<div class="awea-icb-grid">
 			<?php foreach ( $items as $index => $item ) :
-				$id       = $item['_id'] ?? $index;
+				$id       = ! empty( $item['_id'] ) ? sanitize_html_class( $item['_id'] ) : $index;
 				$card_key = 'card_' . $id;
 				$link_key = 'link_' . $id;
+
+				$this->remove_render_attribute( $card_key );
+				$this->remove_render_attribute( $link_key );
 
 				$title    = $item['awea_title'] ?? '';
 				$desc     = $item['awea_desc'] ?? '';
@@ -1202,7 +1225,7 @@ class Widget_Awesome_Icon_Box extends Widget_Base {
 
 				$card_classes = [
 					'awea-icb-card',
-					'elementor-repeater-item-' . esc_attr( $id ),
+					'elementor-repeater-item-' . $id,
 				];
 				if ( $is_card_link ) {
 					$card_classes[] = 'awea-icb-card-clickable';

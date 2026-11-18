@@ -22,6 +22,7 @@ use Elementor\Core\Kits\Documents\Tabs\Global_Colors;
 use Elementor\Widget_Base;
 use Elementor\Repeater;
 use Elementor\Icons_Manager;
+use Elementor\Utils;
 
 class Widget_Awesome_Timeline extends Widget_Base {
 
@@ -509,7 +510,7 @@ class Widget_Awesome_Timeline extends Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#ffffff',
 				'selectors' => [
-					'{{WRAPPER}} .awea-tl-item:hover .awea-tl-dot' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-tl-item:hover .awea-tl-dot, {{WRAPPER}} a.awea-tl-link:focus-visible .awea-tl-dot' => 'color: {{VALUE}};',
 				],
 			]
 		);
@@ -812,7 +813,8 @@ class Widget_Awesome_Timeline extends Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
 				'selectors' => [
-					'{{WRAPPER}} .awea-tl-link' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-tl-link'     => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-tl-link svg' => 'fill: {{VALUE}}; stroke: {{VALUE}};',
 				],
 			]
 		);
@@ -824,7 +826,8 @@ class Widget_Awesome_Timeline extends Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#0f172a',
 				'selectors' => [
-					'{{WRAPPER}} .awea-tl-link:hover, {{WRAPPER}} .awea-tl-link:focus-visible' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-tl-link:hover, {{WRAPPER}} .awea-tl-link:focus-visible'         => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-tl-link:hover svg, {{WRAPPER}} .awea-tl-link:focus-visible svg' => 'fill: {{VALUE}}; stroke: {{VALUE}};',
 				],
 			]
 		);
@@ -840,11 +843,11 @@ class Widget_Awesome_Timeline extends Widget_Base {
 			return;
 		}
 
-		$tag = Utils::validate_html_tag( $settings['awea_title_tag'] ?? 'h3' );
+		$title_tag = Utils::validate_html_tag( $settings['awea_title_tag'] ?? 'h3' );
 		?>
 		<div class="awea-tl-wrap">
 			<?php foreach ( $items as $index => $item ) :
-				$id        = $item['_id'] ?? $index;
+				$id        = ! empty( $item['_id'] ) ? sanitize_html_class( $item['_id'] ) : $index;
 				$badge     = $item['awea_tag'] ?? '';
 				$title     = $item['awea_title'] ?? '';
 				$desc      = $item['awea_desc'] ?? '';
@@ -892,9 +895,9 @@ class Widget_Awesome_Timeline extends Widget_Base {
 						<?php endif; ?>
 
 						<?php if ( ! empty( $title ) ) : ?>
-							<<?php Utils::print_validated_html_tag( $tag ); ?> class="awea-tl-title">
+							<<?php Utils::print_validated_html_tag( $title_tag ); ?> class="awea-tl-title">
 								<?php echo esc_html( $title ); ?>
-							</<?php Utils::print_validated_html_tag( $tag ); ?>>
+							</<?php Utils::print_validated_html_tag( $title_tag ); ?>>
 						<?php endif; ?>
 
 						<?php if ( ! empty( $desc ) ) : ?>
@@ -920,6 +923,82 @@ class Widget_Awesome_Timeline extends Widget_Base {
 
 				</div>
 			<?php endforeach; ?>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Instant Live Editor Preview (Backbone.js Template).
+	 */
+	protected function content_template() {
+		?>
+		<#
+		var items = settings.awea_items || [];
+		if ( ! items.length ) {
+			return;
+		}
+		var tag = elementor.helpers.validateHTMLTag( settings.awea_title_tag || 'h3' );
+		#>
+		<div class="awea-tl-wrap">
+			<# _.each( items, function( item, index ) {
+				var id       = item._id || index;
+				var badge    = item.awea_tag || '';
+				var title    = item.awea_title || '';
+				var desc     = item.awea_desc || '';
+				var linkText = item.awea_link_text || '';
+				var linkUrl  = ( item.awea_link_url && item.awea_link_url.url ) ? item.awea_link_url.url : '';
+				var hasLink  = !! linkText && !! linkUrl;
+				var iconHTML = elementor.helpers.renderIcon( view, item.awea_icon, { 'aria-hidden': true }, 'i', 'object' );
+
+				var imageObj = {
+					id: item.awea_image ? item.awea_image.id : '',
+					url: item.awea_image ? item.awea_image.url : '',
+					size: settings.awea_img_size_size,
+					dimension: settings.awea_img_size_custom_dimension,
+					model: view.getEditModel()
+				};
+				var imageUrl = elementor.imagesManager.getImageUrl( imageObj );
+			#>
+				<div class="awea-tl-item elementor-repeater-item-{{ id }}">
+					<div class="awea-tl-dot" aria-hidden="true">
+						<# if ( iconHTML && iconHTML.rendered ) { #>
+							{{{ iconHTML.value }}}
+						<# } else { #>
+							<span class="awea-tl-dot-core"></span>
+						<# } #>
+					</div>
+
+					<article class="awea-tl-card">
+						<# if ( badge ) { #>
+							<span class="awea-tl-tag">{{{ badge }}}</span>
+						<# } #>
+
+						<# if ( title ) { #>
+							<{{{ tag }}} class="awea-tl-title">{{{ title }}}</{{{ tag }}}>
+						<# } #>
+
+						<# if ( desc ) { #>
+							<p class="awea-tl-desc">{{{ desc }}}</p>
+						<# } #>
+
+						<# if ( imageUrl ) { #>
+							<div class="awea-tl-media">
+								<img src="{{ imageUrl }}" alt="{{ title }}" loading="lazy" />
+							</div>
+						<# } #>
+
+						<# if ( hasLink ) { #>
+							<a href="{{ linkUrl }}" class="awea-tl-link">
+								<span>{{{ linkText }}}</span>
+								<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+									<line x1="5" y1="12" x2="19" y2="12"></line>
+									<polyline points="12 5 19 12 12 19"></polyline>
+								</svg>
+							</a>
+						<# } #>
+					</article>
+				</div>
+			<# } ); #>
 		</div>
 		<?php
 	}

@@ -21,6 +21,7 @@ use Elementor\Core\Kits\Documents\Tabs\Global_Colors;
 use Elementor\Widget_Base;
 use Elementor\Repeater;
 use Elementor\Icons_Manager;
+use Elementor\Utils;
 
 class Widget_Awesome_List_Group extends Widget_Base {
 
@@ -551,7 +552,7 @@ class Widget_Awesome_List_Group extends Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#f8fafc',
 				'selectors' => [
-					'{{WRAPPER}} .awea-lg-item:hover' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .awea-lg-item:hover, {{WRAPPER}} a.awea-lg-item:focus-visible' => 'background-color: {{VALUE}};',
 				],
 			]
 		);
@@ -564,7 +565,7 @@ class Widget_Awesome_List_Group extends Widget_Base {
 				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
 				'condition' => [ 'awea_mode' => 'separated' ],
 				'selectors' => [
-					'{{WRAPPER}}.awea-lg-mode-separated .awea-lg-item:hover' => 'border-color: {{VALUE}};',
+					'{{WRAPPER}}.awea-lg-mode-separated .awea-lg-item:hover, {{WRAPPER}}.awea-lg-mode-separated a.awea-lg-item:focus-visible' => 'border-color: {{VALUE}};',
 				],
 			]
 		);
@@ -573,7 +574,7 @@ class Widget_Awesome_List_Group extends Widget_Base {
 			Group_Control_Box_Shadow::get_type(),
 			[
 				'name'      => 'awea_item_shadow_hover',
-				'selector'  => '{{WRAPPER}}.awea-lg-mode-separated .awea-lg-item:hover',
+				'selector'  => '{{WRAPPER}}.awea-lg-mode-separated .awea-lg-item:hover, {{WRAPPER}}.awea-lg-mode-separated a.awea-lg-item:focus-visible',
 				'condition' => [ 'awea_mode' => 'separated' ],
 			]
 		);
@@ -704,8 +705,8 @@ class Widget_Awesome_List_Group extends Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#ffffff',
 				'selectors' => [
-					'{{WRAPPER}} .awea-lg-item:hover .awea-lg-icon'     => 'color: {{VALUE}};',
-					'{{WRAPPER}} .awea-lg-item:hover .awea-lg-icon svg' => 'fill: {{VALUE}};',
+					'{{WRAPPER}} .awea-lg-item:hover .awea-lg-icon, {{WRAPPER}} a.awea-lg-item:focus-visible .awea-lg-icon'         => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-lg-item:hover .awea-lg-icon svg, {{WRAPPER}} a.awea-lg-item:focus-visible .awea-lg-icon svg' => 'fill: {{VALUE}};',
 				],
 			]
 		);
@@ -717,7 +718,7 @@ class Widget_Awesome_List_Group extends Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
 				'selectors' => [
-					'{{WRAPPER}} .awea-lg-item:hover .awea-lg-icon' => 'background-color: {{VALUE}}; border-color: {{VALUE}};',
+					'{{WRAPPER}} .awea-lg-item:hover .awea-lg-icon, {{WRAPPER}} a.awea-lg-item:focus-visible .awea-lg-icon' => 'background-color: {{VALUE}}; border-color: {{VALUE}};',
 				],
 			]
 		);
@@ -774,7 +775,7 @@ class Widget_Awesome_List_Group extends Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
 				'selectors' => [
-					'{{WRAPPER}} .awea-lg-item:hover .awea-lg-title' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-lg-item:hover .awea-lg-title, {{WRAPPER}} a.awea-lg-item:focus-visible .awea-lg-title' => 'color: {{VALUE}};',
 				],
 			]
 		);
@@ -889,6 +890,38 @@ class Widget_Awesome_List_Group extends Widget_Base {
 			]
 		);
 
+		$this->add_control(
+			'awea_arrow_heading',
+			[
+				'label'     => esc_html__( 'Link Arrow', 'awesome-widgets-elementor' ),
+				'type'      => Controls_Manager::HEADING,
+				'separator' => 'before',
+			]
+		);
+
+		$this->add_control(
+			'awea_arrow_color',
+			[
+				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => [
+					'{{WRAPPER}} .awea-lg-arrow' => 'color: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->add_control(
+			'awea_arrow_hover_color',
+			[
+				'label'     => esc_html__( 'Hover Color', 'awesome-widgets-elementor' ),
+				'type'      => Controls_Manager::COLOR,
+				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
+				'selectors' => [
+					'{{WRAPPER}} .awea-lg-item:hover .awea-lg-arrow, {{WRAPPER}} a.awea-lg-item:focus-visible .awea-lg-arrow' => 'color: {{VALUE}};',
+				],
+			]
+		);
+
 		$this->end_controls_section();
 	}
 
@@ -903,7 +936,7 @@ class Widget_Awesome_List_Group extends Widget_Base {
 		?>
 		<div class="awea-lg-wrap">
 			<?php foreach ( $items as $index => $item ) :
-				$id       = $item['_id'] ?? $index;
+				$id       = ! empty( $item['_id'] ) ? sanitize_html_class( $item['_id'] ) : $index;
 				$title    = $item['awea_title'] ?? '';
 				$desc     = $item['awea_desc'] ?? '';
 				$badge    = $item['awea_badge'] ?? '';
@@ -911,10 +944,11 @@ class Widget_Awesome_List_Group extends Widget_Base {
 				$link_key = 'link_' . $id;
 				$tag      = $has_url ? 'a' : 'article';
 
+				$this->remove_render_attribute( $link_key );
 				if ( $has_url ) {
 					$this->add_link_attributes( $link_key, $item['awea_link'] );
 				}
-				$this->add_render_attribute( $link_key, 'class', 'awea-lg-item elementor-repeater-item-' . esc_attr( $id ) );
+				$this->add_render_attribute( $link_key, 'class', 'awea-lg-item elementor-repeater-item-' . $id );
 				?>
 				<<?php Utils::print_validated_html_tag( $tag ); ?> <?php $this->print_render_attribute_string( $link_key ); ?>>
 
@@ -954,6 +988,65 @@ class Widget_Awesome_List_Group extends Widget_Base {
 
 				</<?php Utils::print_validated_html_tag( $tag ); ?>>
 			<?php endforeach; ?>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Instant Live Editor Preview (Backbone.js Template).
+	 */
+	protected function content_template() {
+		?>
+		<#
+		if ( ! settings.awea_items || ! settings.awea_items.length ) {
+			return;
+		}
+		var titleTag = elementor.helpers.validateHTMLTag( settings.awea_title_tag || 'h3' );
+		#>
+		<div class="awea-lg-wrap">
+			<# _.each( settings.awea_items, function( item, index ) {
+				var id       = item._id || index;
+				var title    = item.awea_title || '';
+				var desc     = item.awea_desc || '';
+				var badge    = item.awea_badge || '';
+				var url      = ( item.awea_link && item.awea_link.url ) ? item.awea_link.url : '';
+				var hasUrl   = !! url;
+				var tag      = hasUrl ? 'a' : 'article';
+				var hrefAttr = hasUrl ? ' href="' + _.escape( url ) + '"' : '';
+				var iconHTML = elementor.helpers.renderIcon( view, item.awea_icon, { 'aria-hidden': true }, 'i', 'object' );
+			#>
+				<{{{ tag }}}{{ hrefAttr }} class="awea-lg-item elementor-repeater-item-{{ id }}">
+					<# if ( iconHTML && iconHTML.rendered ) { #>
+						<div class="awea-lg-icon" aria-hidden="true">{{{ iconHTML.value }}}</div>
+					<# } #>
+
+					<div class="awea-lg-body">
+						<# if ( title ) { #>
+							<{{{ titleTag }}} class="awea-lg-title">{{{ title }}}</{{{ titleTag }}}>
+						<# } #>
+
+						<# if ( desc ) { #>
+							<p class="awea-lg-desc">{{{ desc }}}</p>
+						<# } #>
+					</div>
+
+					<# if ( badge || hasUrl ) { #>
+						<div class="awea-lg-meta">
+							<# if ( badge ) { #>
+								<span class="awea-lg-badge">{{{ badge }}}</span>
+							<# } #>
+
+							<# if ( hasUrl ) { #>
+								<span class="awea-lg-arrow" aria-hidden="true">
+									<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+										<polyline points="9 18 15 12 9 6"></polyline>
+									</svg>
+								</span>
+							<# } #>
+						</div>
+					<# } #>
+				</{{{ tag }}}>
+			<# } ); #>
 		</div>
 		<?php
 	}

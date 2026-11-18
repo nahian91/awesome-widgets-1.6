@@ -23,7 +23,7 @@
 }
 
 /* --------------------------------------------------------------------------
-1. Item Card Shell
+1. Item Box Shell
    -------------------------------------------------------------------------- */
 .awea-accordion-item {
 	background-color: #ffffff;
@@ -42,7 +42,7 @@
 }
 
 /* --------------------------------------------------------------------------
-2. Semantic Heading & Button Reset
+2. Question / Title Bar
    -------------------------------------------------------------------------- */
 .awea-accordion-heading-wrap {
 	margin: 0;
@@ -75,7 +75,7 @@
 	outline-offset: -2px;
 }
 
-/* Left Icon Alignment */
+/* Left Icon Placement */
 .awea-icon-pos-left .awea-accordion-header {
 	flex-direction: row-reverse;
 	justify-content: flex-end;
@@ -115,7 +115,7 @@
 }
 
 /* --------------------------------------------------------------------------
-3. Toggle Icons
+3. Expand / Collapse Icons
    -------------------------------------------------------------------------- */
 .awea-icon-box {
 	width: 32px;
@@ -130,7 +130,7 @@
 	transition: background-color 0.25s ease, transform 0.25s ease;
 }
 
-/* Plus / Minus Morph */
+/* Plus / Minus Animation */
 .awea-icon-line {
 	position: absolute;
 	background-color: #64748b;
@@ -161,7 +161,7 @@
 	background-color: var(--awea-acc-primary);
 }
 
-/* Chevron Rotate */
+/* Chevron Rotate Animation */
 .awea-icon-chevron {
 	width: 15px;
 	height: 15px;
@@ -178,7 +178,7 @@
 }
 
 /* --------------------------------------------------------------------------
-4. Fluid Collapse Panel
+4. Answer / Content Area
    -------------------------------------------------------------------------- */
 .awea-accordion-collapse {
 	display: grid;
@@ -213,7 +213,7 @@
 }
 
 /* --------------------------------------------------------------------------
-5. Accessibility & Responsive
+5. Accessibility & Mobile Adjustments
    -------------------------------------------------------------------------- */
 @media (prefers-reduced-motion: reduce) {
 	.awea-accordion-item,

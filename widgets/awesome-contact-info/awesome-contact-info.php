@@ -21,6 +21,7 @@ use Elementor\Core\Kits\Documents\Tabs\Global_Colors;
 use Elementor\Widget_Base;
 use Elementor\Repeater;
 use Elementor\Icons_Manager;
+use Elementor\Utils;
 
 class Widget_Awesome_Contact_Info extends Widget_Base {
 
@@ -860,7 +861,7 @@ class Widget_Awesome_Contact_Info extends Widget_Base {
 				'label'     => esc_html__( 'Copy Button Hover Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}} .awea-ci-copy-btn:hover' => 'color: {{VALUE}}; border-color: {{VALUE}};',
+					'{{WRAPPER}} .awea-ci-copy-btn:hover, {{WRAPPER}} .awea-ci-copy-btn:focus-visible' => 'color: {{VALUE}}; border-color: {{VALUE}};',
 				],
 			]
 		);
@@ -871,7 +872,7 @@ class Widget_Awesome_Contact_Info extends Widget_Base {
 				'label'     => esc_html__( 'Copy Button Hover Background', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}} .awea-ci-copy-btn:hover' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .awea-ci-copy-btn:hover, {{WRAPPER}} .awea-ci-copy-btn:focus-visible' => 'background-color: {{VALUE}};',
 				],
 			]
 		);
@@ -917,7 +918,7 @@ class Widget_Awesome_Contact_Info extends Widget_Base {
 			$header_classes[] = 'awea-ci-no-bar';
 		}
 		?>
-		<div class="awea-ci-wrap" id="awea-ci-<?php echo esc_attr( $widget_id ); ?>">
+		<div class="awea-ci-wrap" id="awea-ci-<?php echo esc_attr( $widget_id ); ?>" data-copied-label="<?php echo esc_attr( $copied_text ); ?>">
 
 			<?php if ( ! empty( $title ) || ! empty( $subtitle ) ) : ?>
 				<header class="<?php echo esc_attr( implode( ' ', $header_classes ) ); ?>">
@@ -936,9 +937,12 @@ class Widget_Awesome_Contact_Info extends Widget_Base {
 			<?php if ( ! empty( $items ) ) : ?>
 				<div class="awea-ci-grid">
 					<?php foreach ( $items as $index => $item ) :
-						$id       = $item['_id'] ?? $index;
+						$id       = ! empty( $item['_id'] ) ? sanitize_html_class( $item['_id'] ) : $index;
 						$row_key  = 'row_' . $id;
 						$link_key = 'link_' . $id;
+
+						$this->remove_render_attribute( $row_key );
+						$this->remove_render_attribute( $link_key );
 
 						$label    = $item['awea_label'] ?? '';
 						$val      = $item['awea_value'] ?? '';
@@ -948,7 +952,7 @@ class Widget_Awesome_Contact_Info extends Widget_Base {
 
 						$row_classes = [
 							'awea-ci-row',
-							'elementor-repeater-item-' . esc_attr( $id ),
+							'elementor-repeater-item-' . $id,
 						];
 						if ( $has_url ) {
 							$row_classes[] = 'awea-ci-has-link';
@@ -960,17 +964,18 @@ class Widget_Awesome_Contact_Info extends Widget_Base {
 						$this->add_render_attribute( $row_key, 'class', $row_classes );
 
 						if ( $can_copy && ! empty( $val ) ) {
-							$this->add_render_attribute( $row_key, 'data-copy-text', esc_attr( $val ) );
+							$this->add_render_attribute( $row_key, 'data-copy-text', $val );
 							if ( ! $has_url ) {
 								$this->add_render_attribute( $row_key, 'role', 'button' );
 								$this->add_render_attribute( $row_key, 'tabindex', '0' );
+								$this->add_render_attribute( $row_key, 'aria-label', sprintf( esc_attr__( 'Copy %s', 'awesome-widgets-elementor' ), trim( $label . ': ' . $val, ': ' ) ) );
 							}
 						}
 
 						if ( $has_url ) {
 							$this->add_link_attributes( $link_key, $item['awea_link'] );
 							$this->add_render_attribute( $link_key, 'class', 'awea-ci-cover-link' );
-							$this->add_render_attribute( $link_key, 'aria-label', esc_attr( trim( $label . ': ' . $val, ': ' ) ) );
+							$this->add_render_attribute( $link_key, 'aria-label', trim( $label . ': ' . $val, ': ' ) );
 						}
 						?>
 						<div <?php $this->print_render_attribute_string( $row_key ); ?>>
@@ -1005,7 +1010,7 @@ class Widget_Awesome_Contact_Info extends Widget_Base {
 										<button type="button" class="awea-ci-copy-btn" aria-label="<?php esc_attr_e( 'Copy to clipboard', 'awesome-widgets-elementor' ); ?>">
 											<svg class="awea-ci-ico-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
 											<svg class="awea-ci-ico-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
-											<span class="awea-ci-copy-label" aria-live="polite"><?php echo esc_html( $copied_text ); ?></span>
+											<span class="awea-ci-copy-label" aria-live="polite"></span>
 										</button>
 									<?php endif; ?>
 
@@ -1058,14 +1063,23 @@ class Widget_Awesome_Contact_Info extends Widget_Base {
 				if (!scope || scope.dataset.aweaBound === '1') return;
 				scope.dataset.aweaBound = '1';
 
+				var copiedLabel = scope.getAttribute('data-copied-label') || 'Copied';
+
 				function triggerCopy(row) {
 					var text = row.getAttribute('data-copy-text');
 					if (!text) return;
 					window.aweaCopyText(text, function() {
+						var liveLabel = row.querySelector('.awea-ci-copy-label');
+						if (liveLabel) {
+							liveLabel.textContent = copiedLabel;
+						}
 						row.classList.add('is-copied');
 						clearTimeout(row.__copyTimer);
 						row.__copyTimer = setTimeout(function() {
 							row.classList.remove('is-copied');
+							if (liveLabel) {
+								liveLabel.textContent = '';
+							}
 						}, 1800);
 					});
 				}

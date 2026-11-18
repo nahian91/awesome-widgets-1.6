@@ -20,6 +20,7 @@ use Elementor\Core\Kits\Documents\Tabs\Global_Typography;
 use Elementor\Core\Kits\Documents\Tabs\Global_Colors;
 use Elementor\Widget_Base;
 use Elementor\Repeater;
+use Elementor\Utils;
 
 class Widget_Awesome_Business_Hours extends Widget_Base {
 
@@ -192,11 +193,12 @@ class Widget_Awesome_Business_Hours extends Widget_Base {
 		$this->add_control(
 			'awea_phone_url',
 			[
-				'label'     => esc_html__( 'Link', 'awesome-widgets-elementor' ),
-				'type'      => Controls_Manager::URL,
-				'dynamic'   => [ 'active' => true ],
-				'default'   => [ 'url' => 'tel:+18004567890' ],
-				'condition' => [ 'awea_phone_show' => 'yes' ],
+				'label'       => esc_html__( 'Link', 'awesome-widgets-elementor' ),
+				'type'        => Controls_Manager::URL,
+				'dynamic'     => [ 'active' => true ],
+				'placeholder' => 'tel:+18004567890',
+				'default'     => [ 'url' => 'tel:+18004567890' ],
+				'condition'   => [ 'awea_phone_show' => 'yes' ],
 			]
 		);
 
@@ -780,35 +782,58 @@ class Widget_Awesome_Business_Hours extends Widget_Base {
 	}
 
 	/**
-	 * Evaluate whether the business is currently open (supports overnight ranges like 18:00 - 02:00).
+	 * Normalize 24h time string (e.g. "9:00" -> "09:00") for reliable comparison.
 	 */
-	private function is_time_in_range( $now, $open, $close ) {
-		if ( empty( $open ) || empty( $close ) ) {
-			return true;
+	private function normalize_24h( $time_str ) {
+		$time_str = trim( (string) $time_str );
+		if ( preg_match( '/^(\d{1,2}):(\d{2})$/', $time_str, $matches ) ) {
+			return sprintf( '%02d:%02d', (int) $matches[1], (int) $matches[2] );
 		}
-		if ( $close < $open ) {
-			return ( $now >= $open || $now <= $close );
-		}
-		return ( $now >= $open && $now <= $close );
+		return '';
 	}
 
+	/**
+	 * Evaluate whether the business is currently open (supports overnight ranges & post-midnight rollover).
+	 */
 	private function calculate_is_open_now( $schedule_list ) {
 		if ( empty( $schedule_list ) ) {
 			return false;
 		}
 
-		$current_day  = wp_date( 'l' );
-		$current_time = wp_date( 'H:i' );
+		$days_order    = [ 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday' ];
+		$today_index   = (int) wp_date( 'w' );
+		$current_day   = $days_order[ $today_index ];
+		$yesterday_day = $days_order[ ( $today_index + 6 ) % 7 ];
+		$current_time  = wp_date( 'H:i' );
 
+		// 1. Check if yesterday's overnight hours carry into early morning today.
+		foreach ( $schedule_list as $item ) {
+			$day_name = trim( $item['awea_day'] ?? '' );
+			if ( 0 === strcasecmp( $day_name, $yesterday_day ) && 'yes' !== ( $item['awea_closed'] ?? '' ) ) {
+				$open_time  = $this->normalize_24h( $item['awea_open_24'] ?? '' );
+				$close_time = $this->normalize_24h( $item['awea_close_24'] ?? '' );
+				if ( '' !== $open_time && '' !== $close_time && $close_time < $open_time && $current_time <= $close_time ) {
+					return true;
+				}
+			}
+		}
+
+		// 2. Check today's operational window.
 		foreach ( $schedule_list as $item ) {
 			$day_name = trim( $item['awea_day'] ?? '' );
 			if ( 0 === strcasecmp( $day_name, $current_day ) ) {
 				if ( 'yes' === ( $item['awea_closed'] ?? '' ) ) {
 					return false;
 				}
-				$open_time  = trim( $item['awea_open_24'] ?? '' );
-				$close_time = trim( $item['awea_close_24'] ?? '' );
-				return $this->is_time_in_range( $current_time, $open_time, $close_time );
+				$open_time  = $this->normalize_24h( $item['awea_open_24'] ?? '' );
+				$close_time = $this->normalize_24h( $item['awea_close_24'] ?? '' );
+				if ( '' === $open_time || '' === $close_time ) {
+					return true;
+				}
+				if ( $close_time < $open_time ) {
+					return ( $current_time >= $open_time );
+				}
+				return ( $current_time >= $open_time && $current_time <= $close_time );
 			}
 		}
 
@@ -830,8 +855,10 @@ class Widget_Awesome_Business_Hours extends Widget_Base {
 		$title_tag    = Utils::validate_html_tag( $settings['awea_title_tag'] ?? 'h2' );
 		$widget_id    = $this->get_id();
 		$wp_timezone  = wp_timezone_string();
+		$gmt_offset   = (float) get_option( 'gmt_offset', 0 );
 
 		if ( $show_phone && ! empty( $phone_num ) ) {
+			$this->remove_render_attribute( 'awea_phone_call' );
 			if ( empty( $phone_link['url'] ) ) {
 				$clean_tel         = preg_replace( '/[^0-9+]/', '', $phone_num );
 				$phone_link['url'] = $clean_tel ? 'tel:' . $clean_tel : '#';
@@ -842,7 +869,8 @@ class Widget_Awesome_Business_Hours extends Widget_Base {
 		<div class="awea-bh-root" id="awea-bh-<?php echo esc_attr( $widget_id ); ?>"
 			 data-open-label="<?php echo esc_attr( $open_label ); ?>"
 			 data-closed-label="<?php echo esc_attr( $closed_label ); ?>"
-			 data-timezone="<?php echo esc_attr( $wp_timezone ); ?>">
+			 data-timezone="<?php echo esc_attr( $wp_timezone ); ?>"
+			 data-gmt-offset="<?php echo esc_attr( (string) $gmt_offset ); ?>">
 			<div class="awea-bh-card">
 
 				<!-- Left Status Panel -->
@@ -905,8 +933,8 @@ class Widget_Awesome_Business_Hours extends Widget_Base {
 								<div class="<?php echo esc_attr( implode( ' ', $row_classes ) ); ?>"
 									 data-day="<?php echo esc_attr( $day_name ); ?>"
 									 data-closed="<?php echo $is_closed ? '1' : '0'; ?>"
-									 data-open="<?php echo esc_attr( trim( $item['awea_open_24'] ?? '' ) ); ?>"
-									 data-close="<?php echo esc_attr( trim( $item['awea_close_24'] ?? '' ) ); ?>">
+									 data-open="<?php echo esc_attr( $this->normalize_24h( $item['awea_open_24'] ?? '' ) ); ?>"
+									 data-close="<?php echo esc_attr( $this->normalize_24h( $item['awea_close_24'] ?? '' ) ); ?>">
 									<div class="awea-bh-day-wrap">
 										<span class="awea-bh-dot" aria-hidden="true"></span>
 										<span class="awea-bh-day"><?php echo esc_html( $day_name ); ?></span>
@@ -927,49 +955,77 @@ class Widget_Awesome_Business_Hours extends Widget_Base {
 
 		<script>
 		(function() {
-			function getSiteDateParts(tz) {
+			var DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+			function getSiteDateParts(tz, gmtOffset) {
 				var now = new Date();
 				try {
 					if (tz && tz.indexOf('/') !== -1) {
 						var dayFmt = new Intl.DateTimeFormat('en-US', { timeZone: tz, weekday: 'long' });
-						var timeFmt = new Intl.DateTimeFormat('en-GB', { timeZone: tz, hour: '2-digit', minute: '2-digit', hour12: false });
+						var timeFmt = new Intl.DateTimeFormat('en-GB', {
+							timeZone: tz,
+							hour: '2-digit',
+							minute: '2-digit',
+							hour12: false,
+							hourCycle: 'h23'
+						});
+						var dayName = dayFmt.format(now);
 						return {
-							dayName: dayFmt.format(now),
+							dayName: dayName,
+							dayIndex: DAYS.indexOf(dayName),
 							timeStr: timeFmt.format(now)
 						};
 					}
 				} catch (e) {}
-				var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-				var hh = String(now.getHours()).padStart(2, '0');
-				var mm = String(now.getMinutes()).padStart(2, '0');
-				return { dayName: days[now.getDay()], timeStr: hh + ':' + mm };
+
+				// Fallback to WordPress numeric GMT offset (handles manual UTC±X settings)
+				var offsetMs = (parseFloat(gmtOffset) || 0) * 3600000;
+				var shifted = new Date(now.getTime() + offsetMs);
+				var dayIdx = shifted.getUTCDay();
+				var hh = String(shifted.getUTCHours()).padStart(2, '0');
+				var mm = String(shifted.getUTCMinutes()).padStart(2, '0');
+				return {
+					dayName: DAYS[dayIdx],
+					dayIndex: dayIdx,
+					timeStr: hh + ':' + mm
+				};
 			}
 
-			function syncBusinessHours() {
-				var root = document.getElementById('awea-bh-<?php echo esc_js( $widget_id ); ?>');
+			function syncBusinessHours(root) {
 				if (!root) return;
 
 				var tz = root.getAttribute('data-timezone') || '';
-				var parts = getSiteDateParts(tz);
+				var gmtOffset = root.getAttribute('data-gmt-offset') || '0';
+				var parts = getSiteDateParts(tz, gmtOffset);
 				var todayName = parts.dayName;
+				var yesterdayName = parts.dayIndex >= 0 ? DAYS[(parts.dayIndex + 6) % 7] : '';
 				var nowStr = parts.timeStr;
 
 				var isOpen = false;
 				var rows = root.querySelectorAll('.awea-bh-row');
+
 				rows.forEach(function(row) {
-					var day = row.getAttribute('data-day');
-					if (day && day.toLowerCase() === todayName.toLowerCase()) {
+					var day = (row.getAttribute('data-day') || '').trim();
+					var closed = row.getAttribute('data-closed') === '1';
+					var open24 = row.getAttribute('data-open') || '';
+					var close24 = row.getAttribute('data-close') || '';
+
+					// Check yesterday's overnight spillover into early morning today
+					if (yesterdayName && day.toLowerCase() === yesterdayName.toLowerCase() && !closed) {
+						if (open24 && close24 && close24 < open24 && nowStr <= close24) {
+							isOpen = true;
+						}
+					}
+
+					if (day.toLowerCase() === todayName.toLowerCase()) {
 						row.classList.add('is-today');
-						var closed = row.getAttribute('data-closed') === '1';
-						var open24 = row.getAttribute('data-open');
-						var close24 = row.getAttribute('data-close');
 						if (!closed) {
 							if (!open24 || !close24) {
 								isOpen = true;
 							} else if (close24 < open24) {
-								isOpen = (nowStr >= open24 || nowStr <= close24);
-							} else {
-								isOpen = (nowStr >= open24 && nowStr <= close24);
+								if (nowStr >= open24) isOpen = true;
+							} else if (nowStr >= open24 && nowStr <= close24) {
+								isOpen = true;
 							}
 						}
 					} else {
@@ -988,14 +1044,23 @@ class Widget_Awesome_Business_Hours extends Widget_Base {
 				}
 			}
 
-			if (document.readyState === 'loading') {
-				document.addEventListener('DOMContentLoaded', syncBusinessHours);
-			} else {
-				syncBusinessHours();
+			function initInstance() {
+				var el = document.getElementById('awea-bh-<?php echo esc_js( $widget_id ); ?>');
+				syncBusinessHours(el);
 			}
 
-			if (window.elementorFrontend && window.elementorFrontend.hooks) {
-				window.elementorFrontend.hooks.addAction('frontend/element_ready/awesome-business-hours.default', syncBusinessHours);
+			if (document.readyState === 'loading') {
+				document.addEventListener('DOMContentLoaded', initInstance);
+			} else {
+				initInstance();
+			}
+
+			if (!window.aweaBhHookRegistered && window.elementorFrontend && window.elementorFrontend.hooks) {
+				window.aweaBhHookRegistered = true;
+				window.elementorFrontend.hooks.addAction('frontend/element_ready/awesome-business-hours.default', function($scope) {
+					var el = $scope && $scope[0] ? $scope[0].querySelector('.awea-bh-root') : null;
+					syncBusinessHours(el);
+				});
 			}
 		})();
 		</script>

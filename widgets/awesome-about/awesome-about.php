@@ -43,7 +43,7 @@ class Widget_Awesome_About extends Widget_Base {
 	}
 
 	public function get_keywords() {
-		return [ 'about', 'company', 'agency', 'story', 'profile', 'overview' ];
+		return [ 'awea', 'about', 'company', 'agency', 'story', 'profile', 'overview' ];
 	}
 
 	public function get_style_depends() {
@@ -573,7 +573,7 @@ class Widget_Awesome_About extends Widget_Base {
 				],
 				'default'    => [ 'unit' => 'px', 'size' => 8 ],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-about-float-img' => 'border-width: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .awea-about-float-img' => 'border-style: solid; border-width: {{SIZE}}{{UNIT}};',
 				],
 				'condition'  => [ 'float_image[url]!' => '' ],
 			]
@@ -722,7 +722,8 @@ class Widget_Awesome_About extends Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [ 'default' => Global_Colors::COLOR_ACCENT ],
 				'selectors' => [
-					'{{WRAPPER}} .awea-about-sub' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-about-sub'  => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-about-line' => 'background-color: {{VALUE}};',
 				],
 			]
 		);
@@ -987,6 +988,22 @@ class Widget_Awesome_About extends Widget_Base {
 			]
 		);
 
+		$this->add_responsive_control(
+			'btn_icon_size',
+			[
+				'label'      => esc_html__( 'Icon Size', 'awesome-widgets-elementor' ),
+				'type'       => Controls_Manager::SLIDER,
+				'size_units' => [ 'px' ],
+				'range'      => [ 'px' => [ 'min' => 10, 'max' => 28 ] ],
+				'default'    => [ 'unit' => 'px', 'size' => 14 ],
+				'selectors'  => [
+					'{{WRAPPER}} .awea-about-btn-icon'     => 'font-size: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .awea-about-btn-icon svg' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}};',
+				],
+				'condition'  => [ 'show_btn' => 'yes' ],
+			]
+		);
+
 		$this->start_controls_tabs(
 			'tabs_btn_style',
 			[
@@ -1008,7 +1025,8 @@ class Widget_Awesome_About extends Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#ffffff',
 				'selectors' => [
-					'{{WRAPPER}} .awea-about-btn' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-about-btn'     => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-about-btn svg' => 'fill: {{VALUE}};',
 				],
 			]
 		);
@@ -1041,7 +1059,8 @@ class Widget_Awesome_About extends Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#ffffff',
 				'selectors' => [
-					'{{WRAPPER}} .awea-about-btn:hover, {{WRAPPER}} .awea-about-btn:focus-visible' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-about-btn:hover, {{WRAPPER}} .awea-about-btn:focus-visible'         => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-about-btn:hover svg, {{WRAPPER}} .awea-about-btn:focus-visible svg' => 'fill: {{VALUE}};',
 				],
 			]
 		);
@@ -1133,6 +1152,22 @@ class Widget_Awesome_About extends Widget_Base {
 			]
 		);
 
+		$this->add_responsive_control(
+			'phone_icon_size',
+			[
+				'label'      => esc_html__( 'Icon Size', 'awesome-widgets-elementor' ),
+				'type'       => Controls_Manager::SLIDER,
+				'size_units' => [ 'px' ],
+				'range'      => [ 'px' => [ 'min' => 12, 'max' => 32 ] ],
+				'default'    => [ 'unit' => 'px', 'size' => 16 ],
+				'selectors'  => [
+					'{{WRAPPER}} .awea-about-phone-ico'     => 'font-size: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .awea-about-phone-ico svg' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}};',
+				],
+				'condition'  => [ 'show_phone' => 'yes' ],
+			]
+		);
+
 		$this->add_control(
 			'phone_icon_color',
 			[
@@ -1140,7 +1175,8 @@ class Widget_Awesome_About extends Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
 				'selectors' => [
-					'{{WRAPPER}} .awea-about-grid' => '--awea-phone-ico-color: {{VALUE}};',
+					'{{WRAPPER}} .awea-about-phone-ico'     => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-about-phone-ico svg' => 'fill: {{VALUE}};',
 				],
 				'condition' => [ 'show_phone' => 'yes' ],
 			]
@@ -1152,7 +1188,7 @@ class Widget_Awesome_About extends Widget_Base {
 				'label'     => esc_html__( 'Icon Box Background', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}} .awea-about-grid' => '--awea-phone-ico-bg: {{VALUE}};',
+					'{{WRAPPER}} .awea-about-phone-ico' => 'background-color: {{VALUE}};',
 				],
 				'condition' => [ 'show_phone' => 'yes' ],
 			]
@@ -1165,7 +1201,8 @@ class Widget_Awesome_About extends Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#ffffff',
 				'selectors' => [
-					'{{WRAPPER}} .awea-about-phone-link:hover .awea-about-phone-ico' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-about-phone-link:hover .awea-about-phone-ico, {{WRAPPER}} .awea-about-phone-link:focus-visible .awea-about-phone-ico'         => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-about-phone-link:hover .awea-about-phone-ico svg, {{WRAPPER}} .awea-about-phone-link:focus-visible .awea-about-phone-ico svg' => 'fill: {{VALUE}};',
 				],
 				'condition' => [ 'show_phone' => 'yes' ],
 			]
@@ -1178,7 +1215,7 @@ class Widget_Awesome_About extends Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
 				'selectors' => [
-					'{{WRAPPER}} .awea-about-phone-link:hover .awea-about-phone-ico' => 'background-color: {{VALUE}}; border-color: {{VALUE}};',
+					'{{WRAPPER}} .awea-about-phone-link:hover .awea-about-phone-ico, {{WRAPPER}} .awea-about-phone-link:focus-visible .awea-about-phone-ico' => 'background-color: {{VALUE}}; border-color: {{VALUE}};',
 				],
 				'condition' => [ 'show_phone' => 'yes' ],
 			]
@@ -1239,12 +1276,14 @@ class Widget_Awesome_About extends Widget_Base {
 		$has_float_img = ! empty( $settings['float_image']['url'] );
 
 		if ( $show_btn ) {
+			$this->remove_render_attribute( 'btn' );
 			$btn_link = ! empty( $settings['btn_link']['url'] ) ? $settings['btn_link'] : [ 'url' => '#' ];
 			$this->add_link_attributes( 'btn', $btn_link );
 			$this->add_render_attribute( 'btn', 'class', 'awea-about-btn' );
 		}
 
 		if ( $show_phone && ! empty( $phone_num ) ) {
+			$this->remove_render_attribute( 'phone' );
 			$phone_url = $settings['phone_url'] ?? [];
 			if ( empty( $phone_url['url'] ) ) {
 				$clean_tel        = preg_replace( '/[^0-9+]/', '', $phone_num );

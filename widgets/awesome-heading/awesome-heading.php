@@ -19,6 +19,7 @@ use Elementor\Core\Kits\Documents\Tabs\Global_Typography;
 use Elementor\Core\Kits\Documents\Tabs\Global_Colors;
 use Elementor\Widget_Base;
 use Elementor\Icons_Manager;
+use Elementor\Utils;
 
 class Widget_Awesome_Heading extends Widget_Base {
 
@@ -395,12 +396,15 @@ class Widget_Awesome_Heading extends Widget_Base {
 				],
 				'default'              => 'center',
 				'selectors_dictionary' => [
-					'left'   => 'left; --awea-hd-justify: flex-start; --awea-hd-ml: 0; --awea-hd-mr: auto',
-					'center' => 'center; --awea-hd-justify: center; --awea-hd-ml: auto; --awea-hd-mr: auto',
-					'right'  => 'right; --awea-hd-justify: flex-end; --awea-hd-ml: auto; --awea-hd-mr: 0',
+					'left'   => 'flex-start',
+					'center' => 'center',
+					'right'  => 'flex-end',
 				],
 				'selectors'            => [
-					'{{WRAPPER}} .awea-hd-wrap' => 'text-align: {{VALUE}};',
+					'{{WRAPPER}} .awea-hd-wrap'       => 'align-items: {{VALUE}}; text-align: {{VALUE}};',
+					'{{WRAPPER}} .awea-hd-badge-wrap' => 'justify-content: {{VALUE}};',
+					'{{WRAPPER}} .awea-hd-div-wrap'   => 'justify-content: {{VALUE}};',
+					'{{WRAPPER}} .awea-hd-actions'    => 'justify-content: {{VALUE}};',
 				],
 			]
 		);
@@ -443,7 +447,9 @@ class Widget_Awesome_Heading extends Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
 				'selectors' => [
-					'{{WRAPPER}} .awea-hd-badge' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-hd-badge'     => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-hd-badge svg' => 'fill: {{VALUE}};',
+					'{{WRAPPER}} .awea-hd-pulse'     => 'background-color: {{VALUE}};',
 				],
 			]
 		);
@@ -456,6 +462,21 @@ class Widget_Awesome_Heading extends Widget_Base {
 				'default'   => '#f8fafc',
 				'selectors' => [
 					'{{WRAPPER}} .awea-hd-badge' => 'background-color: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->add_responsive_control(
+			'awea_badge_icon_size',
+			[
+				'label'      => esc_html__( 'Icon Size', 'awesome-widgets-elementor' ),
+				'type'       => Controls_Manager::SLIDER,
+				'size_units' => [ 'px' ],
+				'range'      => [ 'px' => [ 'min' => 10, 'max' => 28 ] ],
+				'default'    => [ 'unit' => 'px', 'size' => 13 ],
+				'selectors'  => [
+					'{{WRAPPER}} .awea-hd-badge-ico i'   => 'font-size: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .awea-hd-badge-ico svg' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
@@ -783,6 +804,21 @@ class Widget_Awesome_Heading extends Widget_Base {
 		);
 
 		$this->add_responsive_control(
+			'awea_btn_icon_size',
+			[
+				'label'      => esc_html__( 'Icon Size', 'awesome-widgets-elementor' ),
+				'type'       => Controls_Manager::SLIDER,
+				'size_units' => [ 'px' ],
+				'range'      => [ 'px' => [ 'min' => 10, 'max' => 28 ] ],
+				'default'    => [ 'unit' => 'px', 'size' => 14 ],
+				'selectors'  => [
+					'{{WRAPPER}} .awea-hd-btn-ico i'   => 'font-size: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .awea-hd-btn-ico svg' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}};',
+				],
+			]
+		);
+
+		$this->add_responsive_control(
 			'awea_btn_gap',
 			[
 				'label'      => esc_html__( 'Button Spacing', 'awesome-widgets-elementor' ),
@@ -864,7 +900,8 @@ class Widget_Awesome_Heading extends Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#ffffff',
 				'selectors' => [
-					'{{WRAPPER}} .awea-hd-btn-primary' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-hd-btn-primary'     => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-hd-btn-primary svg' => 'fill: {{VALUE}};',
 				],
 			]
 		);
@@ -916,7 +953,8 @@ class Widget_Awesome_Heading extends Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#ffffff',
 				'selectors' => [
-					'{{WRAPPER}} .awea-hd-btn-primary:hover, {{WRAPPER}} .awea-hd-btn-primary:focus-visible' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-hd-btn-primary:hover, {{WRAPPER}} .awea-hd-btn-primary:focus-visible'         => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-hd-btn-primary:hover svg, {{WRAPPER}} .awea-hd-btn-primary:focus-visible svg' => 'fill: {{VALUE}};',
 				],
 			]
 		);
@@ -975,7 +1013,8 @@ class Widget_Awesome_Heading extends Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#0f172a',
 				'selectors' => [
-					'{{WRAPPER}} .awea-hd-btn-secondary' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-hd-btn-secondary'     => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-hd-btn-secondary svg' => 'fill: {{VALUE}};',
 				],
 			]
 		);
@@ -1027,7 +1066,8 @@ class Widget_Awesome_Heading extends Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#0f172a',
 				'selectors' => [
-					'{{WRAPPER}} .awea-hd-btn-secondary:hover, {{WRAPPER}} .awea-hd-btn-secondary:focus-visible' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-hd-btn-secondary:hover, {{WRAPPER}} .awea-hd-btn-secondary:focus-visible'         => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-hd-btn-secondary:hover svg, {{WRAPPER}} .awea-hd-btn-secondary:focus-visible svg' => 'fill: {{VALUE}};',
 				],
 			]
 		);
@@ -1129,12 +1169,14 @@ class Widget_Awesome_Heading extends Widget_Base {
 		$btn2_pos   = $settings['awea_btn2_icon_pos'] ?? 'right';
 		$has_b2_ico = ! empty( $settings['awea_btn2_icon']['value'] );
 
+		$this->remove_render_attribute( 'btn1' );
 		if ( $btn1_show ) {
 			$btn1_link = ! empty( $settings['awea_btn1_link']['url'] ) ? $settings['awea_btn1_link'] : [ 'url' => '#' ];
 			$this->add_link_attributes( 'btn1', $btn1_link );
 			$this->add_render_attribute( 'btn1', 'class', [ 'awea-hd-btn', 'awea-hd-btn-primary' ] );
 		}
 
+		$this->remove_render_attribute( 'btn2' );
 		if ( $btn2_show ) {
 			$btn2_link = ! empty( $settings['awea_btn2_link']['url'] ) ? $settings['awea_btn2_link'] : [ 'url' => '#' ];
 			$this->add_link_attributes( 'btn2', $btn2_link );
@@ -1143,7 +1185,7 @@ class Widget_Awesome_Heading extends Widget_Base {
 
 		$formatted_title = $this->format_highlighted_title( $title, $hl_text );
 		?>
-		<header class="awea-hd-wrap">
+		<div class="awea-hd-wrap">
 
 			<?php if ( $badge_show && ! empty( $badge_text ) ) : ?>
 				<div class="awea-hd-badge-wrap">
@@ -1225,7 +1267,7 @@ class Widget_Awesome_Heading extends Widget_Base {
 				</div>
 			<?php endif; ?>
 
-		</header>
+		</div>
 		<?php
 	}
 
@@ -1252,7 +1294,7 @@ class Widget_Awesome_Heading extends Widget_Base {
 			title            = title.replace( hlRegex, '<span class="awea-hd-hl">$1</span>' );
 		}
 		#>
-		<header class="awea-hd-wrap">
+		<div class="awea-hd-wrap">
 			<# if ( 'yes' === settings.awea_badge_show && settings.awea_badge_text ) { #>
 				<div class="awea-hd-badge-wrap">
 					<span class="awea-hd-badge">
@@ -1322,7 +1364,7 @@ class Widget_Awesome_Heading extends Widget_Base {
 					<# } #>
 				</div>
 			<# } #>
-		</header>
+		</div>
 		<?php
 	}
 }

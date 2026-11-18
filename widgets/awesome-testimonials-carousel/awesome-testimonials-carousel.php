@@ -3,7 +3,7 @@
  * Awesome Testimonials Carousel Studio Widget (Zero-Shadow Architectural Edition).
  *
  * @package AwesomeWidgetsElementor
- * @since 2.0.0
+ * @since   2.0.0
  */
 
 namespace Elementor;
@@ -12,13 +12,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use \Elementor\Repeater;
-use \Elementor\Controls_Manager;
-use \Elementor\Group_Control_Border;
-use \Elementor\Group_Control_Typography;
-use \Elementor\Core\Kits\Documents\Tabs\Global_Typography;
-use \Elementor\Core\Kits\Documents\Tabs\Global_Colors;
-use \Elementor\Widget_Base;
+use Elementor\Repeater;
+use Elementor\Controls_Manager;
+use Elementor\Group_Control_Border;
+use Elementor\Group_Control_Typography;
+use Elementor\Core\Kits\Documents\Tabs\Global_Typography;
+use Elementor\Core\Kits\Documents\Tabs\Global_Colors;
+use Elementor\Widget_Base;
+use Elementor\Utils;
 
 class Widget_Awesome_Testimonials_Carousel extends Widget_Base {
 
@@ -31,7 +32,7 @@ class Widget_Awesome_Testimonials_Carousel extends Widget_Base {
 	}
 
 	public function get_icon() {
-		return 'eicon-testimonial-carousel';
+		return 'awea-icon eicon-testimonial-carousel';
 	}
 
 	public function get_categories() {
@@ -190,25 +191,22 @@ class Widget_Awesome_Testimonials_Carousel extends Widget_Base {
 				'title_field' => '{{{ awea_name }}} — {{{ awea_desg }}}',
 				'default'     => [
 					[
-						'awea_name_key'    => '1',
-						'awea_item_name'   => esc_html__( 'Julian Vance', 'awesome-widgets-elementor' ),
-						'awea_item_desg'   => esc_html__( 'Design Director at Linear', 'awesome-widgets-elementor' ),
-						'awea_item_speech' => esc_html__( 'The architectural depth and kinetic physics transformed our client delivery pipeline within 48 hours.', 'awesome-widgets-elementor' ),
-						'awea_item_rating' => '5',
+						'awea_name'   => esc_html__( 'Julian Vance', 'awesome-widgets-elementor' ),
+						'awea_desg'   => esc_html__( 'Design Director at Linear', 'awesome-widgets-elementor' ),
+						'awea_speech' => esc_html__( 'The architectural depth and kinetic physics transformed our client delivery pipeline within 48 hours.', 'awesome-widgets-elementor' ),
+						'awea_rating' => '5',
 					],
 					[
-						'awea_name_key'    => '2',
-						'awea_item_name'   => esc_html__( 'Maria Sauks', 'awesome-widgets-elementor' ),
-						'awea_item_desg'   => esc_html__( 'Senior Engineer', 'awesome-widgets-elementor' ),
-						'awea_item_speech' => esc_html__( 'Its impressed me on multiple levels. Painless, pleasant, and most of all hassle free! Id be lost without it.', 'awesome-widgets-elementor' ),
-						'awea_item_rating' => '5',
+						'awea_name'   => esc_html__( 'Maria Sauks', 'awesome-widgets-elementor' ),
+						'awea_desg'   => esc_html__( 'Senior Engineer', 'awesome-widgets-elementor' ),
+						'awea_speech' => esc_html__( 'Its impressed me on multiple levels. Painless, pleasant, and most of all hassle free! Id be lost without it.', 'awesome-widgets-elementor' ),
+						'awea_rating' => '5',
 					],
 					[
-						'awea_name_key'    => '3',
-						'awea_item_name'   => esc_html__( 'Sarah Heinsed', 'awesome-widgets-elementor' ),
-						'awea_item_desg'   => esc_html__( 'Product Strategist', 'awesome-widgets-elementor' ),
-						'awea_item_speech' => esc_html__( 'Incredible craftsmanship and attention to detail. Our conversion rates jumped 32% since rollout.', 'awesome-widgets-elementor' ),
-						'awea_item_rating' => '5',
+						'awea_name'   => esc_html__( 'Sarah Heinsed', 'awesome-widgets-elementor' ),
+						'awea_desg'   => esc_html__( 'Product Strategist', 'awesome-widgets-elementor' ),
+						'awea_speech' => esc_html__( 'Incredible craftsmanship and attention to detail. Our conversion rates jumped 32% since rollout.', 'awesome-widgets-elementor' ),
+						'awea_rating' => '5',
 					],
 				],
 			]
@@ -293,11 +291,13 @@ class Widget_Awesome_Testimonials_Carousel extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_slide_gap',
 			[
-				'label'      => esc_html__( 'Gap', 'awesome-widgets-elementor' ),
-				'type'       => Controls_Manager::SLIDER,
-				'size_units' => [ 'px' ],
-				'range'      => [ 'px' => [ 'min' => 0, 'max' => 60 ] ],
-				'default'    => [ 'unit' => 'px', 'size' => 24 ],
+				'label'          => esc_html__( 'Gap', 'awesome-widgets-elementor' ),
+				'type'           => Controls_Manager::SLIDER,
+				'size_units'     => [ 'px' ],
+				'range'          => [ 'px' => [ 'min' => 0, 'max' => 60 ] ],
+				'default'        => [ 'unit' => 'px', 'size' => 24 ],
+				'tablet_default' => [ 'unit' => 'px', 'size' => 20 ],
+				'mobile_default' => [ 'unit' => 'px', 'size' => 16 ],
 			]
 		);
 
@@ -826,47 +826,50 @@ class Widget_Awesome_Testimonials_Carousel extends Widget_Base {
 		$items_tablet  = ! empty( $settings['awea_slides_to_show_tablet'] ) ? (int) $settings['awea_slides_to_show_tablet'] : 2;
 		$items_mobile  = ! empty( $settings['awea_slides_to_show_mobile'] ) ? (int) $settings['awea_slides_to_show_mobile'] : 1;
 
-		$gap_desktop   = isset( $settings['awea_slide_gap']['size'] ) ? (int) $settings['awea_slide_gap']['size'] : 24;
-		$gap_tablet    = isset( $settings['awea_slide_gap_tablet']['size'] ) ? (int) $settings['awea_slide_gap_tablet']['size'] : 20;
-		$gap_mobile    = isset( $settings['awea_slide_gap_mobile']['size'] ) ? (int) $settings['awea_slide_gap_mobile']['size'] : 16;
+		$gap_desktop = isset( $settings['awea_slide_gap']['size'] ) && '' !== $settings['awea_slide_gap']['size'] ? (int) $settings['awea_slide_gap']['size'] : 24;
+		$gap_tablet  = isset( $settings['awea_slide_gap_tablet']['size'] ) && '' !== $settings['awea_slide_gap_tablet']['size'] ? (int) $settings['awea_slide_gap_tablet']['size'] : 20;
+		$gap_mobile  = isset( $settings['awea_slide_gap_mobile']['size'] ) && '' !== $settings['awea_slide_gap_mobile']['size'] ? (int) $settings['awea_slide_gap_mobile']['size'] : 16;
 
-		$show_arrows   = ( 'yes' === ( $settings['awea_show_arrows'] ?? 'no' ) ) ? 'yes' : 'no';
-		$show_dots     = ( 'yes' === ( $settings['awea_show_dots'] ?? 'no' ) ) ? 'yes' : 'no';
-		$loop          = ( 'yes' === ( $settings['awea_loop'] ?? 'no' ) ) ? 'yes' : 'no';
-		$autoplay      = ( 'yes' === ( $settings['awea_autoplay'] ?? 'no' ) ) ? 'yes' : 'no';
-		$pause         = ( 'yes' === ( $settings['awea_pause_on_hover'] ?? 'no' ) ) ? 'yes' : 'no';
-		$auto_speed    = ! empty( $settings['awea_autoplay_speed'] ) ? (int) $settings['awea_autoplay_speed'] : 5000;
-		$anim_speed    = ! empty( $settings['awea_animation_speed'] ) ? (int) $settings['awea_animation_speed'] : 450;
+		$show_arrows = ( 'yes' === ( $settings['awea_show_arrows'] ?? 'no' ) ) ? 'yes' : 'no';
+		$show_dots   = ( 'yes' === ( $settings['awea_show_dots'] ?? 'no' ) ) ? 'yes' : 'no';
+		$loop        = ( 'yes' === ( $settings['awea_loop'] ?? 'no' ) ) ? 'yes' : 'no';
+		$autoplay    = ( 'yes' === ( $settings['awea_autoplay'] ?? 'no' ) ) ? 'yes' : 'no';
+		$pause       = ( 'yes' === ( $settings['awea_pause_on_hover'] ?? 'no' ) ) ? 'yes' : 'no';
+		$auto_speed  = ! empty( $settings['awea_autoplay_speed'] ) ? (int) $settings['awea_autoplay_speed'] : 5000;
+		$anim_speed  = ! empty( $settings['awea_animation_speed'] ) ? (int) $settings['awea_animation_speed'] : 450;
 
-		$has_beam      = 'yes' === ( $settings['awea_enable_beam'] ?? 'no' );
-		$has_quote     = 'yes' === ( $settings['awea_show_quote_icon'] ?? 'no' );
-		$name_tag      = Utils::validate_html_tag( $settings['awea_name_tag'] ?? 'h4' );
+		$has_beam  = 'yes' === ( $settings['awea_enable_beam'] ?? 'no' );
+		$has_quote = 'yes' === ( $settings['awea_show_quote_icon'] ?? 'no' );
+		$name_tag  = Utils::validate_html_tag( $settings['awea_name_tag'] ?? 'h4' );
+		$widget_id = $this->get_id();
 		?>
 		<div class="awea-testimonials-carousel-wrapper">
-			<div class="awea-testimonials owl-carousel" 
-				 data-items-desktop="<?php echo esc_attr( $items_desktop ); ?>"
-				 data-items-tablet="<?php echo esc_attr( $items_tablet ); ?>"
-				 data-items-mobile="<?php echo esc_attr( $items_mobile ); ?>"
-				 data-gap-desktop="<?php echo esc_attr( $gap_desktop ); ?>"
-				 data-gap-tablet="<?php echo esc_attr( $gap_tablet ); ?>"
-				 data-gap-mobile="<?php echo esc_attr( $gap_mobile ); ?>"
-				 data-arrows="<?php echo esc_attr( $show_arrows ); ?>" 
-				 data-dots="<?php echo esc_attr( $show_dots ); ?>" 
-				 data-loop="<?php echo esc_attr( $loop ); ?>" 
-				 data-autoplay="<?php echo esc_attr( $autoplay ); ?>" 
-				 data-pause="<?php echo esc_attr( $pause ); ?>" 
-				 data-speed="<?php echo esc_attr( $anim_speed ); ?>" 
-				 data-timeout="<?php echo esc_attr( $auto_speed ); ?>">
+			<div class="awea-testimonials owl-carousel"
+				 id="awea-testimonial-carousel-<?php echo esc_attr( $widget_id ); ?>"
+				 data-items-desktop="<?php echo esc_attr( (string) $items_desktop ); ?>"
+				 data-items-tablet="<?php echo esc_attr( (string) $items_tablet ); ?>"
+				 data-items-mobile="<?php echo esc_attr( (string) $items_mobile ); ?>"
+				 data-gap-desktop="<?php echo esc_attr( (string) $gap_desktop ); ?>"
+				 data-gap-tablet="<?php echo esc_attr( (string) $gap_tablet ); ?>"
+				 data-gap-mobile="<?php echo esc_attr( (string) $gap_mobile ); ?>"
+				 data-arrows="<?php echo esc_attr( $show_arrows ); ?>"
+				 data-dots="<?php echo esc_attr( $show_dots ); ?>"
+				 data-loop="<?php echo esc_attr( $loop ); ?>"
+				 data-autoplay="<?php echo esc_attr( $autoplay ); ?>"
+				 data-pause="<?php echo esc_attr( $pause ); ?>"
+				 data-speed="<?php echo esc_attr( (string) $anim_speed ); ?>"
+				 data-timeout="<?php echo esc_attr( (string) $auto_speed ); ?>">
 
 				<?php
 				foreach ( $items as $index => $item ) :
-					$id          = $item['_id'] ?? $index;
-					$avatar_url  = ! empty( $item['awea_item_image']['url'] ) ? esc_url( $item['awea_item_image']['url'] ) : Utils::get_placeholder_image_src();
-					$name        = ! empty( $item['awea_item_name'] ) ? esc_html( $item['awea_item_name'] ) : esc_html__( 'Anonymous', 'awesome-widgets-elementor' );
-					$desg        = ! empty( $item['awea_item_desg'] ) ? esc_html( $item['awea_item_desg'] ) : '';
-					$speech      = ! empty( $item['awea_item_speech'] ) ? wp_kses_post( $item['awea_item_speech'] ) : '';
-					$rating      = isset( $item['awea_item_rating'] ) ? absint( $item['awea_item_rating'] ) : 5;
-					$is_verified = 'yes' === ( $item['awea_item_verified'] ?? 'no' );
+					$id          = ! empty( $item['_id'] ) ? sanitize_html_class( $item['_id'] ) : $index;
+					$avatar_item = $item['awea_image'] ?? [];
+					$avatar_url  = ! empty( $avatar_item['url'] ) ? $avatar_item['url'] : Utils::get_placeholder_image_src();
+					$name        = ! empty( $item['awea_name'] ) ? $item['awea_name'] : esc_html__( 'Anonymous', 'awesome-widgets-elementor' );
+					$desg        = $item['awea_desg'] ?? '';
+					$speech      = $item['awea_speech'] ?? '';
+					$rating      = isset( $item['awea_rating'] ) ? absint( $item['awea_rating'] ) : 5;
+					$is_verified = 'yes' === ( $item['awea_verified'] ?? 'no' );
 
 					$card_classes = [ 'awea-testimonial-card', 'elementor-repeater-item-' . esc_attr( $id ) ];
 					if ( $has_beam ) {
@@ -882,10 +885,11 @@ class Widget_Awesome_Testimonials_Carousel extends Widget_Base {
 						<?php endif; ?>
 
 						<?php if ( $rating > 0 ) : ?>
-							<div class="awea-testimonial-stars" aria-label="<?php 
-    /* translators: %s: star rating value (e.g. 5) */
-    echo esc_attr( sprintf( __( 'Rated %s out of 5 stars', 'awesome-widgets-elementor' ), $rating ) ); 
-?>">
+							<?php
+							/* translators: %s: star rating value (e.g. 5) */
+							$rating_label = sprintf( __( 'Rated %s out of 5 stars', 'awesome-widgets-elementor' ), $rating );
+							?>
+							<div class="awea-testimonial-stars" aria-label="<?php echo esc_attr( $rating_label ); ?>">
 								<?php
 								for ( $i = 1; $i <= 5; $i++ ) {
 									$star_class = ( $i <= $rating ) ? 'fas fa-star awea-star-filled' : 'far fa-star awea-star-empty';
@@ -907,14 +911,14 @@ class Widget_Awesome_Testimonials_Carousel extends Widget_Base {
 							<?php endif; ?>
 							
 							<div class="awea-testimonial-meta">
-								<<?php echo esc_attr( $name_tag ); ?> class="awea-testimonial-name"><?php echo esc_html( $name ); ?></<?php echo esc_attr( $name_tag ); ?>>
+								<<?php Utils::print_validated_html_tag( $name_tag ); ?> class="awea-testimonial-name"><?php echo esc_html( $name ); ?></<?php Utils::print_validated_html_tag( $name_tag ); ?>>
 								<?php if ( ! empty( $desg ) ) : ?>
 									<cite class="awea-testimonial-desg"><?php echo esc_html( $desg ); ?></cite>
 								<?php endif; ?>
 							</div>
 
 							<?php if ( $is_verified ) : ?>
-								<div class="awea-testimonial-verify" title="<?php esc_attr_e( 'Verified Customer', 'awesome-widgets-elementor' ); ?>">
+								<div class="awea-testimonial-verify" title="<?php esc_attr_e( 'Verified Customer', 'awesome-widgets-elementor' ); ?>" aria-label="<?php esc_attr_e( 'Verified Customer', 'awesome-widgets-elementor' ); ?>">
 									<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
 										<polyline points="20 6 9 17 4 12"></polyline>
 									</svg>
@@ -928,29 +932,57 @@ class Widget_Awesome_Testimonials_Carousel extends Widget_Base {
 		</div>
 
 		<script>
-		jQuery(window).on('elementor/frontend/init', function () {
-			elementorFrontend.hooks.addAction('frontend/element_ready/awesome-testimonials-carousel.default', function ($scope, $) {
-				var $carousel = $scope.find('.awea-testimonials');
+		(function($) {
+			function initTestimonialsCarousel(wrapper) {
+				if (!wrapper || !$) return;
+				var $carousel = $(wrapper).find('.awea-testimonials');
 				if (!$carousel.length || typeof $carousel.owlCarousel !== 'function') return;
 
-				var itemsDesktop = parseInt($carousel.data('items-desktop'), 10) || 3;
-				var itemsTablet  = parseInt($carousel.data('items-tablet'), 10) || 2;
-				var itemsMobile  = parseInt($carousel.data('items-mobile'), 10) || 1;
-				var gapDesktop   = parseInt($carousel.data('gap-desktop'), 10) || 24;
-				var gapTablet    = parseInt($carousel.data('gap-tablet'), 10) || 20;
-				var gapMobile    = parseInt($carousel.data('gap-mobile'), 10) || 16;
+				if ($carousel.hasClass('owl-loaded')) {
+					$carousel.trigger('destroy.owl.carousel').removeClass('owl-loaded');
+					$carousel.find('.owl-stage-outer').children().unwrap();
+					$carousel.find('.owl-item').children().unwrap();
+				}
+
+				var itemsDesktop = parseInt($carousel.attr('data-items-desktop'), 10) || 3;
+				var itemsTablet  = parseInt($carousel.attr('data-items-tablet'), 10) || 2;
+				var itemsMobile  = parseInt($carousel.attr('data-items-mobile'), 10) || 1;
+				var gapDesktop   = parseInt($carousel.attr('data-gap-desktop'), 10);
+				var gapTablet    = parseInt($carousel.attr('data-gap-tablet'), 10);
+				var gapMobile    = parseInt($carousel.attr('data-gap-mobile'), 10);
+
+				if (isNaN(gapDesktop)) gapDesktop = 24;
+				if (isNaN(gapTablet)) gapTablet = 20;
+				if (isNaN(gapMobile)) gapMobile = 16;
+
+				var slideCount = $carousel.children('div').length;
+				var loop       = $carousel.attr('data-loop') === 'yes';
+				var allowLoop  = loop && (slideCount > itemsDesktop);
+
+				function equalizeHeights() {
+					requestAnimationFrame(function() {
+						var maxHeight = 0;
+						var $items = $carousel.find('.awea-testimonial-card');
+						$items.css('height', 'auto');
+						$items.each(function () {
+							var h = $(this).outerHeight();
+							if (h > maxHeight) maxHeight = h;
+						});
+						if (maxHeight > 0) $items.css('height', maxHeight + 'px');
+					});
+				}
 
 				$carousel.owlCarousel({
-					nav: $carousel.data('arrows') === 'yes',
-					dots: $carousel.data('dots') === 'yes',
-					loop: $carousel.data('loop') === 'yes',
-					autoplay: $carousel.data('autoplay') === 'yes',
-					autoplayTimeout: parseInt($carousel.data('timeout'), 10) || 5000,
-					smartSpeed: parseInt($carousel.data('speed'), 10) || 450,
-					autoplayHoverPause: $carousel.data('pause') === 'yes',
+					nav: $carousel.attr('data-arrows') === 'yes',
+					dots: $carousel.attr('data-dots') === 'yes',
+					loop: allowLoop,
+					autoplay: $carousel.attr('data-autoplay') === 'yes',
+					autoplayTimeout: parseInt($carousel.attr('data-timeout'), 10) || 5000,
+					smartSpeed: parseInt($carousel.attr('data-speed'), 10) || 450,
+					autoplayHoverPause: $carousel.attr('data-pause') === 'yes',
 					navText: [
-						'<div class="awea-carousel-arrow-border" aria-label="Previous"><i class="fas fa-chevron-left"></i></div>',
-						'<div class="awea-carousel-arrow-border" aria-label="Next"><i class="fas fa-chevron-right"></i></div>'
+						'<button type="button" class="awea-carousel-arrow-border" aria-label="<?php echo esc_js( __( 'Previous', 'awesome-widgets-elementor' ) ); ?>"><i class="fas fa-chevron-left" aria-hidden="true"></i></button>',
+						'<button type="button" class="awea-carousel-arrow-border" aria-label="<?php echo esc_js( __( 'Next', 'awesome-widgets-elementor' ) ); ?>"><i class="fas fa-chevron-right" aria-hidden="true"></i></button>'
 					],
 					responsive: {
 						0: { items: itemsMobile, margin: gapMobile },
@@ -961,21 +993,25 @@ class Widget_Awesome_Testimonials_Carousel extends Widget_Base {
 					onResized: equalizeHeights,
 					onRefreshed: equalizeHeights
 				});
+			}
 
-				function equalizeHeights() {
-					setTimeout(function() {
-						var maxHeight = 0;
-						var items = $carousel.find('.awea-testimonial-card');
-						items.css('height', 'auto');
-						items.each(function () {
-							var h = $(this).outerHeight();
-							if (h > maxHeight) maxHeight = h;
-						});
-						if (maxHeight > 0) items.css('height', maxHeight + 'px');
-					}, 100);
-				}
+			$(function() {
+				var el = document.getElementById('awea-testimonial-carousel-<?php echo esc_js( $widget_id ); ?>');
+				initTestimonialsCarousel(el.parentElement);
 			});
-		});
+
+			if (!window.aweaTestimonialsCarouselHooked) {
+				window.aweaTestimonialsCarouselHooked = true;
+				$(window).on('elementor/frontend/init', function() {
+					if (window.elementorFrontend && window.elementorFrontend.hooks) {
+						window.elementorFrontend.hooks.addAction('frontend/element_ready/awesome-testimonials-carousel.default', function($scope) {
+							var el = $scope && $scope[0] ? $scope[0].querySelector('.awea-testimonials-carousel-wrapper') : null;
+							initTestimonialsCarousel(el);
+						});
+					}
+				});
+			}
+		})(jQuery);
 		</script>
 		<?php
 	}

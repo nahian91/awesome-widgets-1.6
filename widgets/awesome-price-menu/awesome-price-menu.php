@@ -21,6 +21,7 @@ use Elementor\Core\Kits\Documents\Tabs\Global_Typography;
 use Elementor\Core\Kits\Documents\Tabs\Global_Colors;
 use Elementor\Widget_Base;
 use Elementor\Repeater;
+use Elementor\Utils;
 
 class Widget_Awesome_Price_Menu extends Widget_Base {
 
@@ -481,7 +482,7 @@ class Widget_Awesome_Price_Menu extends Widget_Base {
 					'default' => Global_Colors::COLOR_PRIMARY,
 				],
 				'selectors' => [
-					'{{WRAPPER}} .awea-price-menu:hover .awea-price-menu-title, {{WRAPPER}} .awea-price-menu:hover .awea-price-menu-title a' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-price-menu:hover .awea-price-menu-title, {{WRAPPER}} .awea-price-menu:hover .awea-price-menu-title a, {{WRAPPER}} .awea-price-menu-title a:focus-visible' => 'color: {{VALUE}};',
 				],
 			]
 		);
@@ -496,6 +497,17 @@ class Widget_Awesome_Price_Menu extends Widget_Base {
 				'label'     => esc_html__( 'Tag Badge', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::HEADING,
 				'separator' => 'before',
+			]
+		);
+
+		$this->add_group_control(
+			Group_Control_Typography::get_type(),
+			[
+				'name'     => 'awea_badge_typography',
+				'selector' => '{{WRAPPER}} .awea-price-menu-badge',
+				'global'   => [
+					'default' => Global_Typography::TYPOGRAPHY_SECONDARY,
+				],
 			]
 		);
 
@@ -711,9 +723,9 @@ class Widget_Awesome_Price_Menu extends Widget_Base {
 			return;
 		}
 		?>
-		<ul class="awea-price-menu-list" role="list">
+		<ul class="awea-price-menu-list">
 			<?php foreach ( $items as $index => $item ) :
-				$id       = $item['_id'] ?? $index;
+				$id       = ! empty( $item['_id'] ) ? sanitize_html_class( $item['_id'] ) : $index;
 				$title    = $item['awea_item_title'] ?? '';
 				$badge    = $item['awea_item_badge'] ?? '';
 				$price    = $item['awea_item_price'] ?? '';
@@ -721,19 +733,27 @@ class Widget_Awesome_Price_Menu extends Widget_Base {
 				$has_link = ! empty( $item['awea_item_link']['url'] );
 				$link_key = 'link_' . $id;
 
+				$this->remove_render_attribute( $link_key );
 				if ( $has_link ) {
 					$this->add_link_attributes( $link_key, $item['awea_item_link'] );
 				}
-				?>
-				<li class="awea-price-menu elementor-repeater-item-<?php echo esc_attr( $id ); ?>" role="listitem">
 
-					<?php if ( ! empty( $item['awea_item_image']['url'] ) ) : ?>
+				$img_item = $item['awea_item_image'] ?? [];
+				$img_data = [
+					'awea_item_image'                     => $img_item,
+					'awea_thumbnail_size_size'            => $settings['awea_thumbnail_size_size'] ?? 'thumbnail',
+					'awea_thumbnail_size_custom_dimension' => $settings['awea_thumbnail_size_custom_dimension'] ?? [],
+				];
+				?>
+				<li class="awea-price-menu elementor-repeater-item-<?php echo esc_attr( $id ); ?>">
+
+					<?php if ( ! empty( $img_item['url'] ) ) : ?>
 						<div class="awea-price-menu-thumb">
 							<?php
-							if ( ! empty( $item['awea_item_image']['id'] ) ) {
-								echo wp_get_attachment_image( $item['awea_item_image']['id'], $settings['awea_thumbnail_size_size'], false, [ 'loading' => 'lazy' ] );
+							if ( ! empty( $img_item['id'] ) ) {
+								echo Group_Control_Image_Size::get_attachment_image_html( $img_data, 'awea_thumbnail_size', 'awea_item_image' );
 							} else {
-								echo '<img src="' . esc_url( $item['awea_item_image']['url'] ) . '" alt="' . esc_attr( $title ) . '" loading="lazy" />';
+								echo '<img src="' . esc_url( $img_item['url'] ) . '" alt="' . esc_attr( $title ) . '" loading="lazy" />';
 							}
 							?>
 						</div>
@@ -754,7 +774,7 @@ class Widget_Awesome_Price_Menu extends Widget_Base {
 								</<?php Utils::print_validated_html_tag( $title_tag ); ?>>
 							<?php endif; ?>
 
-							<?php if ( ! empty( $price ) ) : ?>
+							<?php if ( '' !== $price ) : ?>
 								<span class="awea-price"><?php echo esc_html( $price ); ?></span>
 							<?php endif; ?>
 						</div>
@@ -784,11 +804,19 @@ class Widget_Awesome_Price_Menu extends Widget_Base {
 		}
 		var tag = elementor.helpers.validateHTMLTag( settings.awea_title_tag || 'h4' );
 		#>
-		<ul class="awea-price-menu-list" role="list">
-			<# _.each( items, function( item ) {
-				var imgUrl = item.awea_item_image && item.awea_item_image.url ? item.awea_item_image.url : '';
+		<ul class="awea-price-menu-list">
+			<# _.each( items, function( item, index ) {
+				var id       = item._id || index;
+				var imageObj = {
+					id: item.awea_item_image ? item.awea_item_image.id : '',
+					url: item.awea_item_image ? item.awea_item_image.url : '',
+					size: settings.awea_thumbnail_size_size,
+					dimension: settings.awea_thumbnail_size_custom_dimension,
+					model: view.getEditModel()
+				};
+				var imgUrl = elementor.imagesManager.getImageUrl( imageObj );
 			#>
-				<li class="awea-price-menu elementor-repeater-item-{{ item._id }}" role="listitem">
+				<li class="awea-price-menu elementor-repeater-item-{{ id }}">
 					<# if ( imgUrl ) { #>
 						<div class="awea-price-menu-thumb">
 							<img src="{{ imgUrl }}" alt="{{ item.awea_item_title }}" loading="lazy" />
@@ -810,7 +838,7 @@ class Widget_Awesome_Price_Menu extends Widget_Base {
 								</{{{ tag }}}>
 							<# } #>
 
-							<# if ( item.awea_item_price ) { #>
+							<# if ( '' !== ( item.awea_item_price || '' ) ) { #>
 								<span class="awea-price">{{{ item.awea_item_price }}}</span>
 							<# } #>
 						</div>

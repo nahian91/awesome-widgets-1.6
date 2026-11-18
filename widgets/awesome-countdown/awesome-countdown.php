@@ -706,20 +706,32 @@ class Widget_Awesome_Countdown extends Widget_Base {
 		$widget_id    = $this->get_id();
 
 		$site_timezone = wp_timezone();
-		$datetime      = date_create( $due_date_raw, $site_timezone );
-		$target_time   = $datetime ? $datetime->getTimestamp() : strtotime( '+1 month' );
-		$current_time  = (int) wp_date( 'U' );
+		$datetime      = date_create_immutable( $due_date_raw, $site_timezone );
+		$target_time   = $datetime ? $datetime->getTimestamp() : time() + MONTH_IN_SECONDS;
+		$current_time  = time();
 		$diff          = max( 0, $target_time - $current_time );
 
-		$days    = (int) floor( $diff / 86400 );
-		$hours   = (int) floor( ( $diff % 86400 ) / 3600 );
-		$minutes = (int) floor( ( $diff % 3600 ) / 60 );
-		$seconds = (int) floor( $diff % 60 );
+		$show_days  = 'yes' === ( $settings['awea_show_days'] ?? 'no' );
+		$show_hours = 'yes' === ( $settings['awea_show_hours'] ?? 'no' );
+		$show_mins  = 'yes' === ( $settings['awea_show_minutes'] ?? 'no' );
+		$show_secs  = 'yes' === ( $settings['awea_show_seconds'] ?? 'no' );
 
-		$show_days    = 'yes' === ( $settings['awea_show_days'] ?? 'no' );
-		$show_hours   = 'yes' === ( $settings['awea_show_hours'] ?? 'no' );
-		$show_mins    = 'yes' === ( $settings['awea_show_minutes'] ?? 'no' );
-		$show_secs    = 'yes' === ( $settings['awea_show_seconds'] ?? 'no' );
+		// Roll hidden higher units down into the largest visible unit.
+		$remaining = $diff;
+		$days      = $show_days ? (int) floor( $remaining / DAY_IN_SECONDS ) : 0;
+		if ( $show_days ) {
+			$remaining %= DAY_IN_SECONDS;
+		}
+		$hours = $show_hours ? (int) floor( $remaining / HOUR_IN_SECONDS ) : 0;
+		if ( $show_hours ) {
+			$remaining %= HOUR_IN_SECONDS;
+		}
+		$minutes = $show_mins ? (int) floor( $remaining / MINUTE_IN_SECONDS ) : 0;
+		if ( $show_mins ) {
+			$remaining %= MINUTE_IN_SECONDS;
+		}
+		$seconds = $show_secs ? $remaining : 0;
+
 		$show_seps    = 'yes' === ( $settings['awea_show_separators'] ?? 'no' );
 		$sep_char     = ! empty( $settings['awea_sep_char'] ) ? $settings['awea_sep_char'] : ':';
 		$expire_type  = $settings['awea_expire_type'] ?? 'message';
@@ -748,7 +760,7 @@ class Widget_Awesome_Countdown extends Widget_Base {
 			 data-expire="<?php echo esc_attr( $expire_type ); ?>"
 			 data-redirect="<?php echo esc_url( $redirect_url ); ?>">
 
-			<div class="awea-timer-row <?php echo ( $diff <= 0 && 'message' === $expire_type ) ? 'awea-is-hidden' : ''; ?>">
+			<div class="awea-timer-row <?php echo ( $diff <= 0 && 'message' === $expire_type ) ? 'awea-is-hidden' : ''; ?>" role="timer">
 
 				<?php if ( $show_days ) : ?>
 					<div class="awea-time-cell awea-unit-days">
@@ -799,8 +811,7 @@ class Widget_Awesome_Countdown extends Widget_Base {
 
 		<script>
 		(function() {
-			function initCountdown() {
-				var el = document.getElementById('awea-countdown-<?php echo esc_js( $widget_id ); ?>');
+			function bindCountdown(el) {
 				if (!el || el.dataset.aweaBound === '1') return;
 				el.dataset.aweaBound = '1';
 
@@ -826,29 +837,28 @@ class Widget_Awesome_Countdown extends Widget_Base {
 						if (timerRow) timerRow.classList.add('awea-is-hidden');
 						if (expiredBox) expiredBox.classList.add('awea-is-visible');
 					} else if (expireType === 'redirect' && redirectUrl) {
-						var isEditor = document.body.classList.contains('elementor-editor-active');
+						var isEditor = document.body.classList.contains('elementor-editor-active') || !!(window.elementorFrontend && window.elementorFrontend.isEditMode && window.elementorFrontend.isEditMode());
 						if (!isEditor && /^https?:\/\//i.test(redirectUrl)) {
 							window.location.assign(redirectUrl);
 						}
 					}
 				}
 
-				var interval = setInterval(function() {
-					if (!document.body.contains(el)) {
-						clearInterval(interval);
-						return;
-					}
-					update();
-				}, 1000);
-
 				function update() {
-					var nowTs = Math.floor(Date.now() / 1000) + clockOffset;
-					var diff  = Math.max(0, targetTs - nowTs);
+					var nowTs     = Math.floor(Date.now() / 1000) + clockOffset;
+					var remaining = Math.max(0, targetTs - nowTs);
+					var diff      = remaining;
 
-					var d = Math.floor(diff / 86400);
-					var h = Math.floor((diff % 86400) / 3600);
-					var m = Math.floor((diff % 3600) / 60);
-					var s = Math.floor(diff % 60);
+					var d = daysEl ? Math.floor(remaining / 86400) : 0;
+					if (daysEl) remaining %= 86400;
+
+					var h = hoursEl ? Math.floor(remaining / 3600) : 0;
+					if (hoursEl) remaining %= 3600;
+
+					var m = minsEl ? Math.floor(remaining / 60) : 0;
+					if (minsEl) remaining %= 60;
+
+					var s = secsEl ? remaining : 0;
 
 					if (daysEl)  daysEl.textContent  = pad(d);
 					if (hoursEl) hoursEl.textContent = pad(h);
@@ -861,17 +871,33 @@ class Widget_Awesome_Countdown extends Widget_Base {
 					}
 				}
 
+				var interval = setInterval(function() {
+					if (!document.body.contains(el)) {
+						clearInterval(interval);
+						return;
+					}
+					update();
+				}, 1000);
+
 				update();
 			}
 
-			if (document.readyState === 'loading') {
-				document.addEventListener('DOMContentLoaded', initCountdown);
-			} else {
-				initCountdown();
+			function initById() {
+				bindCountdown(document.getElementById('awea-countdown-<?php echo esc_js( $widget_id ); ?>'));
 			}
 
-			if (window.elementorFrontend && window.elementorFrontend.hooks) {
-				window.elementorFrontend.hooks.addAction('frontend/element_ready/awea_countdown.default', initCountdown);
+			if (document.readyState === 'loading') {
+				document.addEventListener('DOMContentLoaded', initById);
+			} else {
+				initById();
+			}
+
+			if (window.elementorFrontend && window.elementorFrontend.hooks && !window.aweaCountdownHooked) {
+				window.aweaCountdownHooked = true;
+				window.elementorFrontend.hooks.addAction('frontend/element_ready/awea_countdown.default', function($scope) {
+					var el = $scope && $scope[0] ? $scope[0].querySelector('.awea-countdown-wrap') : null;
+					bindCountdown(el);
+				});
 			}
 		})();
 		</script>

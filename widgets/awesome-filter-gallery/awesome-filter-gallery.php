@@ -21,6 +21,7 @@ use Elementor\Core\Kits\Documents\Tabs\Global_Typography;
 use Elementor\Core\Kits\Documents\Tabs\Global_Colors;
 use Elementor\Widget_Base;
 use Elementor\Repeater;
+use Elementor\Utils;
 
 class Widget_Awesome_Filter_Gallery extends Widget_Base {
 
@@ -610,7 +611,7 @@ class Widget_Awesome_Filter_Gallery extends Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#0f172a',
 				'selectors' => [
-					'{{WRAPPER}} .awea-fg-btn:hover' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-fg-btn:hover, {{WRAPPER}} .awea-fg-btn:focus-visible' => 'color: {{VALUE}};',
 				],
 			]
 		);
@@ -630,7 +631,7 @@ class Widget_Awesome_Filter_Gallery extends Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#ffffff',
 				'selectors' => [
-					'{{WRAPPER}} .awea-fg-btn.is-active' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-fg-btn.is-active, {{WRAPPER}} .awea-fg-btn.is-active:hover' => 'color: {{VALUE}};',
 				],
 			]
 		);
@@ -728,15 +729,19 @@ class Widget_Awesome_Filter_Gallery extends Widget_Base {
 			return;
 		}
 
-		// Compute category counts
+		// Compute unique category counts per item (avoids double-counting duplicate tags on one item).
 		$cat_counts = [ '*' => count( $items ) ];
 		foreach ( $items as $item ) {
-			$raw_cats = explode( ',', $item['awea_item_category'] ?? '' );
+			$raw_cats   = explode( ',', $item['awea_item_category'] ?? '' );
+			$item_slugs = [];
 			foreach ( $raw_cats as $rc ) {
 				$slug = sanitize_title( trim( $rc ) );
-				if ( ! empty( $slug ) ) {
-					$cat_counts[ $slug ] = ( $cat_counts[ $slug ] ?? 0 ) + 1;
+				if ( '' !== $slug ) {
+					$item_slugs[ $slug ] = true;
 				}
+			}
+			foreach ( array_keys( $item_slugs ) as $slug ) {
+				$cat_counts[ $slug ] = ( $cat_counts[ $slug ] ?? 0 ) + 1;
 			}
 		}
 		?>
@@ -775,7 +780,7 @@ class Widget_Awesome_Filter_Gallery extends Widget_Base {
 
 			<div class="awea-fg-grid">
 				<?php foreach ( $items as $index => $item ) :
-					$id         = $item['_id'] ?? $index;
+					$id         = ! empty( $item['_id'] ) ? sanitize_html_class( $item['_id'] ) : $index;
 					$img_data   = $item['awea_item_image'] ?? [];
 					$img_url    = ! empty( $img_data['url'] ) ? $img_data['url'] : Utils::get_placeholder_image_src();
 					$title      = $item['awea_item_title'] ?? '';
@@ -790,8 +795,9 @@ class Widget_Awesome_Filter_Gallery extends Widget_Base {
 							$cat_classes[] = 'awea-cat-' . $slug;
 						}
 					}
-					$class_string = implode( ' ', $cat_classes );
+					$class_string = implode( ' ', array_unique( $cat_classes ) );
 
+					$lightbox_url = '';
 					if ( $lightbox ) {
 						$lightbox_url = Group_Control_Image_Size::get_attachment_image_src( $img_data['id'] ?? '', 'full', $settings ) ?: $img_url;
 					}
@@ -808,29 +814,32 @@ class Widget_Awesome_Filter_Gallery extends Widget_Base {
 								}
 								?>
 
-								<div class="awea-fg-actions">
-									<?php if ( $lightbox ) : ?>
-										<a href="<?php echo esc_url( $lightbox_url ); ?>"
-										   class="awea-fg-action-btn elementor-lightbox"
-										   data-elementor-open-lightbox="yes"
-										   data-elementor-lightbox-slideshow="awea-fg-<?php echo esc_attr( $widget_id ); ?>"
-										   title="<?php echo esc_attr( $title ); ?>"
-										   aria-label="<?php esc_attr_e( 'View Full Image', 'awesome-widgets-elementor' ); ?>">
-											<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
-										</a>
-									<?php endif; ?>
+								<?php if ( $lightbox || ! empty( $custom_url ) ) : ?>
+									<div class="awea-fg-actions">
+										<?php if ( $lightbox ) : ?>
+											<a href="<?php echo esc_url( $lightbox_url ); ?>"
+											   class="awea-fg-action-btn elementor-lightbox"
+											   data-elementor-open-lightbox="yes"
+											   data-elementor-lightbox-slideshow="awea-fg-<?php echo esc_attr( $widget_id ); ?>"
+											   title="<?php echo esc_attr( $title ); ?>"
+											   aria-label="<?php esc_attr_e( 'View Full Image', 'awesome-widgets-elementor' ); ?>">
+												<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+											</a>
+										<?php endif; ?>
 
-									<?php if ( ! empty( $custom_url ) ) :
-										$link_key = 'link_' . $id;
-										$this->add_link_attributes( $link_key, $item['awea_item_link'] );
-										$this->add_render_attribute( $link_key, 'class', 'awea-fg-action-btn' );
-										$this->add_render_attribute( $link_key, 'aria-label', esc_attr( $title ) );
-										?>
-										<a <?php $this->print_render_attribute_string( $link_key ); ?>>
-											<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
-										</a>
-									<?php endif; ?>
-								</div>
+										<?php if ( ! empty( $custom_url ) ) :
+											$link_key = 'link_' . $id;
+											$this->remove_render_attribute( $link_key );
+											$this->add_link_attributes( $link_key, $item['awea_item_link'] );
+											$this->add_render_attribute( $link_key, 'class', 'awea-fg-action-btn' );
+											$this->add_render_attribute( $link_key, 'aria-label', $title );
+											?>
+											<a <?php $this->print_render_attribute_string( $link_key ); ?>>
+												<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+											</a>
+										<?php endif; ?>
+									</div>
+								<?php endif; ?>
 							</div>
 
 							<?php if ( ! empty( $title ) || ! empty( $subtitle ) ) : ?>
@@ -854,8 +863,7 @@ class Widget_Awesome_Filter_Gallery extends Widget_Base {
 
 		<script>
 		(function() {
-			function initFilterGallery() {
-				var scope = document.getElementById('awea-fg-<?php echo esc_js( $widget_id ); ?>');
+			function bindFilterGallery(scope) {
 				if (!scope || scope.dataset.aweaBound === '1') return;
 				scope.dataset.aweaBound = '1';
 
@@ -874,7 +882,7 @@ class Widget_Awesome_Filter_Gallery extends Widget_Base {
 
 				var defaultActive = scope.querySelector('.awea-fg-btn.is-active');
 				if (defaultActive) {
-					setTimeout(function() { updateIndicator(defaultActive); }, 80);
+					requestAnimationFrame(function() { updateIndicator(defaultActive); });
 				}
 
 				buttons.forEach(function(btn) {
@@ -894,13 +902,15 @@ class Widget_Awesome_Filter_Gallery extends Widget_Base {
 						items.forEach(function(item) {
 							var matches = (filterVal === '*' || item.matches(filterVal));
 							if (matches) {
+								clearTimeout(item.__hideTimer);
 								item.style.display = '';
 								item.classList.remove('is-fading-out');
 								item.classList.add('is-fading-in');
 							} else {
 								item.classList.remove('is-fading-in');
 								item.classList.add('is-fading-out');
-								setTimeout(function() {
+								clearTimeout(item.__hideTimer);
+								item.__hideTimer = setTimeout(function() {
 									if (item.classList.contains('is-fading-out')) {
 										item.style.display = 'none';
 									}
@@ -910,20 +920,40 @@ class Widget_Awesome_Filter_Gallery extends Widget_Base {
 					});
 				});
 
-				window.addEventListener('resize', function() {
-					var currentActive = scope.querySelector('.awea-fg-btn.is-active');
-					if (currentActive) updateIndicator(currentActive);
-				});
+				if ('ResizeObserver' in window) {
+					var ro = new ResizeObserver(function() {
+						if (!document.body.contains(scope)) {
+							ro.disconnect();
+							return;
+						}
+						var currentActive = scope.querySelector('.awea-fg-btn.is-active');
+						if (currentActive) updateIndicator(currentActive);
+					});
+					ro.observe(scope);
+				} else {
+					window.addEventListener('resize', function() {
+						var currentActive = scope.querySelector('.awea-fg-btn.is-active');
+						if (currentActive) updateIndicator(currentActive);
+					});
+				}
+			}
+
+			function initById() {
+				bindFilterGallery(document.getElementById('awea-fg-<?php echo esc_js( $widget_id ); ?>'));
 			}
 
 			if (document.readyState === 'loading') {
-				document.addEventListener('DOMContentLoaded', initFilterGallery);
+				document.addEventListener('DOMContentLoaded', initById);
 			} else {
-				initFilterGallery();
+				initById();
 			}
 
-			if (window.elementorFrontend && window.elementorFrontend.hooks) {
-				window.elementorFrontend.hooks.addAction('frontend/element_ready/awesome-filter-gallery.default', initFilterGallery);
+			if (window.elementorFrontend && window.elementorFrontend.hooks && !window.aweaFilterGalleryHooked) {
+				window.aweaFilterGalleryHooked = true;
+				window.elementorFrontend.hooks.addAction('frontend/element_ready/awesome-filter-gallery.default', function($scope) {
+					var el = $scope && $scope[0] ? $scope[0].querySelector('.awea-fg-root') : null;
+					bindFilterGallery(el);
+				});
 			}
 		})();
 		</script>

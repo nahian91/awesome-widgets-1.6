@@ -366,12 +366,13 @@ class Widget_Awesome_Counter extends Widget_Base {
 				'default'              => 'center',
 				'condition'            => [ 'awea_card_direction' => 'vertical' ],
 				'selectors_dictionary' => [
-					'left'   => 'left; align-items: flex-start; --awea-cnt-stats-justify: flex-start',
-					'center' => 'center; align-items: center; --awea-cnt-stats-justify: center',
-					'right'  => 'right; align-items: flex-end; --awea-cnt-stats-justify: flex-end',
+					'left'   => 'flex-start',
+					'center' => 'center',
+					'right'  => 'flex-end',
 				],
 				'selectors'            => [
-					'{{WRAPPER}} .awea-cnt-card' => 'text-align: {{VALUE}};',
+					'{{WRAPPER}}.awea-cnt-dir-vertical .awea-cnt-card'  => 'align-items: {{VALUE}}; text-align: {{VALUE}};',
+					'{{WRAPPER}}.awea-cnt-dir-vertical .awea-cnt-stats' => 'justify-content: {{VALUE}};',
 				],
 			]
 		);
@@ -800,6 +801,7 @@ class Widget_Awesome_Counter extends Widget_Base {
 			[
 				'name'     => 'awea_subtext_typo',
 				'selector' => '{{WRAPPER}} .awea-cnt-subtext',
+				'global'   => [ 'default' => Global_Typography::TYPOGRAPHY_TEXT ],
 			]
 		);
 
@@ -818,10 +820,10 @@ class Widget_Awesome_Counter extends Widget_Base {
 		?>
 		<div class="awea-cnt-grid" id="awea-cnt-<?php echo esc_attr( $widget_id ); ?>">
 			<?php foreach ( $items as $index => $item ) :
-				$id       = $item['_id'] ?? $index;
+				$id       = ! empty( $item['_id'] ) ? sanitize_html_class( $item['_id'] ) : $index;
 				$start    = '' !== ( $item['awea_start'] ?? '' ) ? floatval( $item['awea_start'] ) : 0;
 				$target   = '' !== ( $item['awea_target'] ?? '' ) ? floatval( $item['awea_target'] ) : 0;
-				$decimals = ! empty( $item['awea_decimals'] ) ? absint( $item['awea_decimals'] ) : 0;
+				$decimals = ! empty( $item['awea_decimals'] ) ? min( 4, absint( $item['awea_decimals'] ) ) : 0;
 				$duration = ! empty( $item['awea_duration'] ) ? absint( $item['awea_duration'] ) : 2200;
 				$prefix   = $item['awea_prefix'] ?? '';
 				$suffix   = $item['awea_suffix'] ?? '';
@@ -833,7 +835,7 @@ class Widget_Awesome_Counter extends Widget_Base {
 				$this->remove_render_attribute( $card_key );
 				$this->add_render_attribute( $card_key, 'class', [
 					'awea-cnt-card',
-					'elementor-repeater-item-' . esc_attr( $id ),
+					'elementor-repeater-item-' . $id,
 				] );
 
 				$this->add_render_attribute( $card_key, 'data-start', (string) $start );
@@ -845,6 +847,12 @@ class Widget_Awesome_Counter extends Widget_Base {
 				$formatted_start = $use_grouping
 					? number_format( $start, $decimals, '.', ',' )
 					: number_format( $start, $decimals, '.', '' );
+
+				$formatted_target = $use_grouping
+					? number_format( $target, $decimals, '.', ',' )
+					: number_format( $target, $decimals, '.', '' );
+
+				$final_aria_label = trim( $prefix . $formatted_target . $suffix );
 				?>
 				<article <?php $this->print_render_attribute_string( $card_key ); ?>>
 
@@ -855,15 +863,15 @@ class Widget_Awesome_Counter extends Widget_Base {
 					<?php endif; ?>
 
 					<div class="awea-cnt-content">
-						<div class="awea-cnt-stats">
+						<div class="awea-cnt-stats" aria-label="<?php echo esc_attr( $final_aria_label ); ?>">
 							<?php if ( ! empty( $prefix ) ) : ?>
-								<span class="awea-cnt-pre"><?php echo esc_html( $prefix ); ?></span>
+								<span class="awea-cnt-pre" aria-hidden="true"><?php echo esc_html( $prefix ); ?></span>
 							<?php endif; ?>
 
-							<span class="awea-cnt-val"><?php echo esc_html( $formatted_start ); ?></span>
+							<span class="awea-cnt-val" aria-hidden="true"><?php echo esc_html( $formatted_start ); ?></span>
 
 							<?php if ( ! empty( $suffix ) ) : ?>
-								<span class="awea-cnt-suf"><?php echo esc_html( $suffix ); ?></span>
+								<span class="awea-cnt-suf" aria-hidden="true"><?php echo esc_html( $suffix ); ?></span>
 							<?php endif; ?>
 						</div>
 
@@ -912,7 +920,7 @@ class Widget_Awesome_Counter extends Widget_Base {
 						if (started) return;
 						started = true;
 
-						if (reduceMotion) {
+						if (reduceMotion || start === target) {
 							valEl.textContent = formatNumber(target);
 							return;
 						}

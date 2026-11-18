@@ -20,6 +20,7 @@ use Elementor\Group_Control_Box_Shadow;
 use Elementor\Core\Kits\Documents\Tabs\Global_Typography;
 use Elementor\Core\Kits\Documents\Tabs\Global_Colors;
 use Elementor\Widget_Base;
+use Elementor\Utils;
 
 class Widget_Awesome_Post_Grid extends Widget_Base {
 
@@ -608,6 +609,16 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 			]
 		);
 
+		$this->add_group_control(
+			Group_Control_Typography::get_type(),
+			[
+				'name'     => 'awea_meta_typo',
+				'label'    => esc_html__( 'Meta Typography', 'awesome-widgets-elementor' ),
+				'selector' => '{{WRAPPER}} .awea-blog-meta',
+				'global'   => [ 'default' => Global_Typography::TYPOGRAPHY_SECONDARY ],
+			]
+		);
+
 		$this->add_control(
 			'awea_title_color',
 			[
@@ -628,7 +639,7 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
 				'selectors' => [
-					'{{WRAPPER}} .awea-blog-card:hover .awea-blog-title a' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-blog-card:hover .awea-blog-title a, {{WRAPPER}} .awea-blog-title a:focus-visible' => 'color: {{VALUE}};',
 				],
 			]
 		);
@@ -686,6 +697,7 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 			[
 				'name'      => 'awea_btn_typo',
 				'selector'  => '{{WRAPPER}} .awea-blog-link',
+				'global'    => [ 'default' => Global_Typography::TYPOGRAPHY_ACCENT ],
 				'condition' => [ 'awea_show_button' => 'yes' ],
 			]
 		);
@@ -723,7 +735,7 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#ffffff',
 				'selectors' => [
-					'{{WRAPPER}} .awea-blog-card:hover .awea-blog-link' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-blog-card:hover .awea-blog-link, {{WRAPPER}} .awea-blog-link:focus-visible' => 'color: {{VALUE}};',
 				],
 				'condition' => [ 'awea_show_button' => 'yes' ],
 			]
@@ -738,7 +750,7 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 					'default' => Global_Colors::COLOR_PRIMARY,
 				],
 				'selectors' => [
-					'{{WRAPPER}} .awea-blog-card:hover .awea-blog-link' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .awea-blog-card:hover .awea-blog-link, {{WRAPPER}} .awea-blog-link:focus-visible' => 'background-color: {{VALUE}};',
 				],
 				'condition' => [ 'awea_show_button' => 'yes' ],
 			]
@@ -764,7 +776,7 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 	protected function render() {
 		$settings     = $this->get_settings_for_display();
 		$num_posts    = ! empty( $settings['awea_post_count'] ) ? absint( $settings['awea_post_count'] ) : 6;
-		$order        = $settings['awea_order'] ?? 'DESC';
+		$order        = in_array( $settings['awea_order'] ?? 'DESC', [ 'ASC', 'DESC' ], true ) ? $settings['awea_order'] : 'DESC';
 		$orderby      = $settings['awea_orderby'] ?? 'date';
 		$categories   = $settings['awea_category_select'] ?? [];
 		$offset       = absint( $settings['awea_post_offset'] ?? 0 );
@@ -795,9 +807,12 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 		}
 
 		if ( $exclude_curr && is_singular() ) {
-    // phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_post__not_in
-    $args['post__not_in'] = [ get_queried_object_id() ];
-}
+			$current_id = get_queried_object_id();
+			if ( $current_id > 0 ) {
+				// phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_post__not_in
+				$args['post__not_in'] = [ $current_id ];
+			}
+		}
 
 		if ( ! empty( $categories ) && is_array( $categories ) ) {
 			$args['category__in'] = array_map( 'absint', $categories );
@@ -806,6 +821,7 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 		$query = new \WP_Query( $args );
 
 		if ( ! $query->have_posts() ) {
+			echo '<p class="awea-no-posts">' . esc_html__( 'No posts found matching your criteria.', 'awesome-widgets-elementor' ) . '</p>';
 			return;
 		}
 		?>
@@ -815,11 +831,13 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 				$counter = 1;
 				while ( $query->have_posts() ) :
 					$query->the_post();
-					$plain_text   = trim( wp_strip_all_tags( get_post_field( 'post_content', get_the_ID() ) ) );
+					$post_id      = get_the_ID();
+					$plain_text   = trim( wp_strip_all_tags( get_post_field( 'post_content', $post_id ) ) );
 					$words        = '' !== $plain_text ? preg_split( '/\s+/u', $plain_text, -1, PREG_SPLIT_NO_EMPTY ) : [];
 					$word_count   = is_array( $words ) ? count( $words ) : 0;
 					$reading_time = max( 1, (int) ceil( $word_count / 200 ) );
-					$post_cats    = get_the_category();
+					$post_cats    = get_the_category( $post_id );
+					$permalink    = get_the_permalink( $post_id );
 					?>
 					<div class="awea-grid-item">
 						<article class="awea-blog-card">
@@ -831,9 +849,9 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 									</a>
 								<?php endif; ?>
 
-								<a href="<?php echo esc_url( get_the_permalink() ); ?>" class="awea-blog-img-link" aria-label="<?php the_title_attribute(); ?>">
-									<?php if ( has_post_thumbnail() ) : ?>
-										<?php the_post_thumbnail( $thumb_size, [ 'class' => 'awea-blog-img', 'loading' => 'lazy' ] ); ?>
+								<a href="<?php echo esc_url( $permalink ); ?>" class="awea-blog-img-link" aria-label="<?php the_title_attribute(); ?>">
+									<?php if ( has_post_thumbnail( $post_id ) ) : ?>
+										<?php echo get_the_post_thumbnail( $post_id, $thumb_size, [ 'class' => 'awea-blog-img', 'loading' => 'lazy' ] ); ?>
 									<?php else : ?>
 										<img src="<?php echo esc_url( Utils::get_placeholder_image_src() ); ?>" class="awea-blog-img" alt="<?php the_title_attribute(); ?>" loading="lazy" />
 									<?php endif; ?>
@@ -844,7 +862,7 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 								<?php if ( $show_date || $show_read ) : ?>
 									<div class="awea-blog-meta">
 										<?php if ( $show_date ) : ?>
-											<time datetime="<?php echo esc_attr( get_the_date( 'c' ) ); ?>"><?php echo esc_html( get_the_date() ); ?></time>
+											<time datetime="<?php echo esc_attr( get_the_date( DATE_W3C, $post_id ) ); ?>"><?php echo esc_html( get_the_date( '', $post_id ) ); ?></time>
 										<?php endif; ?>
 
 										<?php if ( $show_date && $show_read ) : ?>
@@ -863,12 +881,12 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 								<?php endif; ?>
 
 								<<?php Utils::print_validated_html_tag( $title_tag ); ?> class="awea-blog-title">
-									<a href="<?php echo esc_url( get_the_permalink() ); ?>"><?php the_title(); ?></a>
+									<a href="<?php echo esc_url( $permalink ); ?>"><?php the_title(); ?></a>
 								</<?php Utils::print_validated_html_tag( $title_tag ); ?>>
 
 								<?php if ( $show_exc ) : ?>
 									<p class="awea-blog-desc">
-										<?php echo esc_html( wp_trim_words( get_the_excerpt(), $exc_len, '...' ) ); ?>
+										<?php echo esc_html( wp_trim_words( get_the_excerpt( $post_id ), $exc_len, '...' ) ); ?>
 									</p>
 								<?php endif; ?>
 							</div>
@@ -876,7 +894,7 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 							<?php if ( ( $show_btn && ! empty( $btn_text ) ) || $show_counter ) : ?>
 								<div class="awea-blog-footer">
 									<?php if ( $show_btn && ! empty( $btn_text ) ) : ?>
-										<a href="<?php echo esc_url( get_the_permalink() ); ?>" class="awea-blog-link">
+										<a href="<?php echo esc_url( $permalink ); ?>" class="awea-blog-link">
 											<span><?php echo esc_html( $btn_text ); ?></span>
 											<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
 										</a>

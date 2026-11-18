@@ -249,6 +249,17 @@ class Widget_Awesome_Price extends Widget_Base {
 			]
 		);
 
+		$repeater->add_control(
+			'awea_item_bg',
+			[
+				'label'     => esc_html__( 'Card Background', 'awesome-widgets-elementor' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => [
+					'{{WRAPPER}} {{CURRENT_ITEM}}' => 'background-color: {{VALUE}};',
+				],
+			]
+		);
+
 		$repeater->end_controls_tab();
 
 		$repeater->end_controls_tabs();
@@ -471,6 +482,17 @@ class Widget_Awesome_Price extends Widget_Base {
 		);
 
 		$this->add_control(
+			'awea_featured_bg',
+			[
+				'label'     => esc_html__( 'Background', 'awesome-widgets-elementor' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => [
+					'{{WRAPPER}} .awea-pricing-card.awea-is-featured' => 'background-color: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->add_control(
 			'awea_featured_border',
 			[
 				'label'     => esc_html__( 'Border Color', 'awesome-widgets-elementor' ),
@@ -607,6 +629,18 @@ class Widget_Awesome_Price extends Widget_Base {
 			]
 		);
 
+		$this->add_group_control(
+			Group_Control_Typography::get_type(),
+			[
+				'name'     => 'awea_currency_typo',
+				'label'    => esc_html__( 'Currency Typography', 'awesome-widgets-elementor' ),
+				'selector' => '{{WRAPPER}} .awea-pricing-currency',
+				'global'   => [
+					'default' => Global_Typography::TYPOGRAPHY_SECONDARY,
+				],
+			]
+		);
+
 		$this->add_control(
 			'awea_price_color',
 			[
@@ -648,6 +682,18 @@ class Widget_Awesome_Price extends Widget_Base {
 			]
 		);
 
+		$this->add_group_control(
+			Group_Control_Typography::get_type(),
+			[
+				'name'     => 'awea_period_typo',
+				'label'    => esc_html__( 'Period Typography', 'awesome-widgets-elementor' ),
+				'selector' => '{{WRAPPER}} .awea-pricing-cycle',
+				'global'   => [
+					'default' => Global_Typography::TYPOGRAPHY_TEXT,
+				],
+			]
+		);
+
 		$this->end_controls_section();
 
 		/* ==========================================================================
@@ -658,6 +704,21 @@ class Widget_Awesome_Price extends Widget_Base {
 			[
 				'label' => esc_html__( 'Features', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
+			]
+		);
+
+		$this->add_responsive_control(
+			'awea_feature_icon_size',
+			[
+				'label'      => esc_html__( 'Icon Size', 'awesome-widgets-elementor' ),
+				'type'       => Controls_Manager::SLIDER,
+				'size_units' => [ 'px' ],
+				'range'      => [ 'px' => [ 'min' => 10, 'max' => 28 ] ],
+				'default'    => [ 'unit' => 'px', 'size' => 14 ],
+				'selectors'  => [
+					'{{WRAPPER}} .awea-feature-icon i'   => 'font-size: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .awea-feature-icon svg' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}};',
+				],
 			]
 		);
 
@@ -686,6 +747,20 @@ class Widget_Awesome_Price extends Widget_Base {
 				],
 				'selectors' => [
 					'{{WRAPPER}} .awea-pricing-feature-item' => 'color: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->add_control(
+			'awea_feature_disabled_color',
+			[
+				'label'     => esc_html__( 'Excluded Item Color', 'awesome-widgets-elementor' ),
+				'type'      => Controls_Manager::COLOR,
+				'default'   => '#94a3b8',
+				'selectors' => [
+					'{{WRAPPER}} .awea-pricing-feature-item.is-disabled'     => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-pricing-feature-item.is-disabled i'   => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-pricing-feature-item.is-disabled svg' => 'fill: {{VALUE}}; stroke: {{VALUE}};',
 				],
 			]
 		);
@@ -849,7 +924,7 @@ class Widget_Awesome_Price extends Widget_Base {
 		?>
 		<div class="awea-pricing-grid">
 			<?php foreach ( $tiers as $index => $tier ) :
-				$id          = $tier['_id'] ?? $index;
+				$id          = ! empty( $tier['_id'] ) ? sanitize_html_class( $tier['_id'] ) : $index;
 				$title       = $tier['awea_title'] ?? '';
 				$is_featured = 'yes' === ( $tier['awea_featured'] ?? 'no' );
 				$ribbon_text = $tier['awea_ribbon'] ?? '';
@@ -860,11 +935,12 @@ class Widget_Awesome_Price extends Widget_Base {
 				$btn_text    = $tier['awea_btn_text'] ?? '';
 				$link_key    = 'link_' . $id;
 
+				$this->remove_render_attribute( $link_key );
 				$btn_url = ! empty( $tier['awea_btn_link']['url'] ) ? $tier['awea_btn_link'] : [ 'url' => '#' ];
 				$this->add_link_attributes( $link_key, $btn_url );
 				$this->add_render_attribute( $link_key, 'class', 'awea-pricing-btn-cta' );
 
-				$card_classes = [ 'awea-pricing-card', 'elementor-repeater-item-' . esc_attr( $id ) ];
+				$card_classes = [ 'awea-pricing-card', 'elementor-repeater-item-' . $id ];
 				if ( $is_featured ) {
 					$card_classes[] = 'awea-is-featured';
 				}
@@ -872,7 +948,7 @@ class Widget_Awesome_Price extends Widget_Base {
 				<article class="<?php echo esc_attr( implode( ' ', $card_classes ) ); ?>">
 
 					<?php if ( $is_featured && ! empty( $ribbon_text ) ) : ?>
-						<div class="awea-pricing-ribbon" aria-hidden="true">
+						<div class="awea-pricing-ribbon">
 							<span><?php echo esc_html( $ribbon_text ); ?></span>
 						</div>
 					<?php endif; ?>
@@ -884,15 +960,15 @@ class Widget_Awesome_Price extends Widget_Base {
 						<?php endif; ?>
 
 						<div class="awea-pricing-price-box">
-							<?php if ( ! empty( $currency ) ) : ?>
+							<?php if ( '' !== $currency ) : ?>
 								<span class="awea-pricing-currency"><?php echo esc_html( $currency ); ?></span>
 							<?php endif; ?>
 
-							<?php if ( ! empty( $price ) ) : ?>
+							<?php if ( '' !== $price ) : ?>
 								<span class="awea-pricing-amount"><?php echo esc_html( $price ); ?></span>
 							<?php endif; ?>
 
-							<?php if ( ! empty( $period ) ) : ?>
+							<?php if ( '' !== $period ) : ?>
 								<span class="awea-pricing-cycle">/<?php echo esc_html( ltrim( $period, '/' ) ); ?></span>
 							<?php endif; ?>
 						</div>
@@ -901,11 +977,11 @@ class Widget_Awesome_Price extends Widget_Base {
 					<!-- Body Features & CTA -->
 					<div class="awea-pricing-card-body">
 						<?php if ( ! empty( $features ) ) : ?>
-							<ul class="awea-pricing-feature-list" role="list">
+							<ul class="awea-pricing-feature-list">
 								<?php foreach ( $features as $feature ) :
 									$f_text   = $feature['awea_feat_text'] ?? '';
 									$f_active = 'yes' === ( $feature['awea_feat_active'] ?? 'yes' );
-									if ( empty( $f_text ) ) {
+									if ( '' === trim( $f_text ) ) {
 										continue;
 									}
 									?>
@@ -919,7 +995,12 @@ class Widget_Awesome_Price extends Widget_Base {
 											}
 											?>
 										</span>
-										<span class="awea-feature-text"><?php echo esc_html( $f_text ); ?></span>
+										<span class="awea-feature-text">
+											<?php if ( ! $f_active ) : ?>
+												<span class="elementor-screen-only"><?php esc_html_e( 'Not included:', 'awesome-widgets-elementor' ); ?> </span>
+											<?php endif; ?>
+											<?php echo esc_html( $f_text ); ?>
+										</span>
 									</li>
 								<?php endforeach; ?>
 							</ul>
@@ -936,6 +1017,101 @@ class Widget_Awesome_Price extends Widget_Base {
 
 				</article>
 			<?php endforeach; ?>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Instant Live Editor Preview (Backbone.js Template).
+	 */
+	protected function content_template() {
+		?>
+		<#
+		if ( ! settings.awea_pricing_tiers || ! settings.awea_pricing_tiers.length ) {
+			return;
+		}
+		#>
+		<div class="awea-pricing-grid">
+			<# _.each( settings.awea_pricing_tiers, function( tier, index ) {
+				var id         = tier._id || index;
+				var title      = tier.awea_title || '';
+				var isFeatured = 'yes' === tier.awea_featured;
+				var ribbon     = tier.awea_ribbon || '';
+				var currency   = undefined !== tier.awea_currency ? tier.awea_currency : '$';
+				var price      = tier.awea_price || '';
+				var period     = ( tier.awea_period || '' ).replace( /^\/+/, '' );
+				var features   = tier.awea_features_list || [];
+				var btnText    = tier.awea_btn_text || '';
+				var btnUrl     = ( tier.awea_btn_link && tier.awea_btn_link.url ) ? tier.awea_btn_link.url : '#';
+				var cardClass  = 'awea-pricing-card elementor-repeater-item-' + id + ( isFeatured ? ' awea-is-featured' : '' );
+			#>
+				<article class="{{ cardClass }}">
+					<# if ( isFeatured && ribbon ) { #>
+						<div class="awea-pricing-ribbon">
+							<span>{{{ ribbon }}}</span>
+						</div>
+					<# } #>
+
+					<div class="awea-pricing-card-header">
+						<# if ( title ) { #>
+							<span class="awea-pricing-plan-tag">{{{ title }}}</span>
+						<# } #>
+
+						<div class="awea-pricing-price-box">
+							<# if ( '' !== currency ) { #>
+								<span class="awea-pricing-currency">{{{ currency }}}</span>
+							<# } #>
+
+							<# if ( '' !== price ) { #>
+								<span class="awea-pricing-amount">{{{ price }}}</span>
+							<# } #>
+
+							<# if ( '' !== period ) { #>
+								<span class="awea-pricing-cycle">/{{{ period }}}</span>
+							<# } #>
+						</div>
+					</div>
+
+					<div class="awea-pricing-card-body">
+						<# if ( features.length ) { #>
+							<ul class="awea-pricing-feature-list">
+								<# _.each( features, function( feature ) {
+									var fText   = feature.awea_feat_text || '';
+									var fActive = 'yes' === feature.awea_feat_active;
+									if ( ! fText.trim() ) {
+										return;
+									}
+									var featIcon = elementor.helpers.renderIcon( view, feature.awea_feat_icon, { 'aria-hidden': true }, 'i', 'object' );
+								#>
+									<li class="awea-pricing-feature-item {{ fActive ? '' : 'is-disabled' }}">
+										<span class="awea-feature-icon" aria-hidden="true">
+											<# if ( featIcon && featIcon.rendered ) { #>
+												{{{ featIcon.value }}}
+											<# } else { #>
+												<i class="fas fa-check" aria-hidden="true"></i>
+											<# } #>
+										</span>
+										<span class="awea-feature-text">
+											<# if ( ! fActive ) { #>
+												<span class="elementor-screen-only"><?php esc_html_e( 'Not included:', 'awesome-widgets-elementor' ); ?> </span>
+											<# } #>
+											{{{ fText }}}
+										</span>
+									</li>
+								<# } ); #>
+							</ul>
+						<# } #>
+
+						<# if ( btnText ) { #>
+							<div class="awea-pricing-btn-wrap">
+								<a href="{{ btnUrl }}" class="awea-pricing-btn-cta">
+									<span>{{{ btnText }}}</span>
+								</a>
+							</div>
+						<# } #>
+					</div>
+				</article>
+			<# } ); #>
 		</div>
 		<?php
 	}

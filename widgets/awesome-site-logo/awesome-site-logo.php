@@ -21,6 +21,7 @@ use Elementor\Core\Kits\Documents\Tabs\Global_Typography;
 use Elementor\Core\Kits\Documents\Tabs\Global_Colors;
 use Elementor\Widget_Base;
 use Elementor\Icons_Manager;
+use Elementor\Utils;
 
 class Widget_Awesome_Site_Logo extends Widget_Base {
 
@@ -616,6 +617,7 @@ class Widget_Awesome_Site_Logo extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'awea_tagline_typo',
+				'global'   => [ 'default' => Global_Typography::TYPOGRAPHY_TEXT ],
 				'selector' => '{{WRAPPER}} .awe-logo-tagline',
 			]
 		);
@@ -680,8 +682,9 @@ class Widget_Awesome_Site_Logo extends Widget_Base {
 				<?php endif; ?>
 
 					<?php if ( 'text' === $logo_type ) :
-						$title_tag = Utils::validate_html_tag( $settings['awea_title_tag'] ?? 'span' );
-						$show_icon = 'yes' === ( $settings['awea_show_logo_icon'] ?? 'no' ) && ! empty( $settings['awea_logo_icon']['value'] );
+						$title_tag  = Utils::validate_html_tag( $settings['awea_title_tag'] ?? 'span' );
+						$show_icon  = 'yes' === ( $settings['awea_show_logo_icon'] ?? 'no' ) && ! empty( $settings['awea_logo_icon']['value'] );
+						$logo_title = ! empty( $settings['awea_text_logo_title'] ) ? $settings['awea_text_logo_title'] : $site_name;
 						?>
 						<div class="awea-brand-lockup">
 							<?php if ( $show_icon ) : ?>
@@ -692,7 +695,7 @@ class Widget_Awesome_Site_Logo extends Widget_Base {
 
 							<div class="awe-text-logo-group">
 								<<?php Utils::print_validated_html_tag( $title_tag ); ?> class="awe-logo-title">
-									<?php echo esc_html( $settings['awea_text_logo_title'] ?? $site_name ); ?>
+									<?php echo esc_html( $logo_title ); ?>
 								</<?php Utils::print_validated_html_tag( $title_tag ); ?>>
 
 								<?php if ( 'yes' === ( $settings['awea_show_tagline'] ?? 'no' ) && ! empty( $settings['awea_text_logo_tagline'] ) ) : ?>
@@ -710,6 +713,7 @@ class Widget_Awesome_Site_Logo extends Widget_Base {
 
 						if ( 'site_logo' === $source && function_exists( 'has_custom_logo' ) && has_custom_logo() ) {
 							$custom_logo_id = get_theme_mod( 'custom_logo' );
+							$logo_alt       = get_post_meta( $custom_logo_id, '_wp_attachment_image_alt', true );
 							$primary_html   = wp_get_attachment_image(
 								$custom_logo_id,
 								'full',
@@ -717,9 +721,10 @@ class Widget_Awesome_Site_Logo extends Widget_Base {
 								[
 									'class'   => 'awe-primary-logo awe-logo-image',
 									'loading' => 'eager',
+									'alt'     => ! empty( $logo_alt ) ? $logo_alt : $site_name,
 								]
 							);
-						} elseif ( ! empty( $settings['awea_custom_logo']['url'] ) ) {
+						} elseif ( 'custom' === $source && ! empty( $settings['awea_custom_logo']['url'] ) ) {
 							if ( ! empty( $retina_url ) ) {
 								$base_url     = $settings['awea_custom_logo']['url'];
 								$alt_text     = ! empty( $settings['awea_custom_logo']['alt'] ) ? $settings['awea_custom_logo']['alt'] : $site_name;
@@ -735,6 +740,9 @@ class Widget_Awesome_Site_Logo extends Widget_Base {
 									$primary_html = preg_replace( '/class="([^"]*)"/', 'class="$1 awe-primary-logo"', $image_html, 1 );
 									if ( false === strpos( $primary_html, 'awe-primary-logo' ) ) {
 										$primary_html = str_replace( '<img ', '<img class="awe-primary-logo" ', $primary_html );
+									}
+									if ( preg_match( '/alt=""/', $primary_html ) ) {
+										$primary_html = preg_replace( '/alt=""/', 'alt="' . esc_attr( $site_name ) . '"', $primary_html, 1 );
 									}
 								} else {
 									$primary_html = sprintf(
@@ -760,11 +768,11 @@ class Widget_Awesome_Site_Logo extends Widget_Base {
 							<?php echo $primary_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 
 							<?php if ( $has_hover_logo ) : ?>
-								<img src="<?php echo esc_url( $settings['awea_custom_hover_logo']['url'] ); ?>" alt="<?php echo esc_attr( $site_name ); ?>" class="awe-hover-logo" />
+								<img src="<?php echo esc_url( $settings['awea_custom_hover_logo']['url'] ); ?>" alt="" aria-hidden="true" class="awe-hover-logo" />
 							<?php endif; ?>
 
 							<?php if ( $has_sticky_logo ) : ?>
-								<img src="<?php echo esc_url( $settings['awea_sticky_logo']['url'] ); ?>" alt="<?php echo esc_attr( $site_name ); ?>" class="awe-sticky-logo" />
+								<img src="<?php echo esc_url( $settings['awea_sticky_logo']['url'] ); ?>" alt="" aria-hidden="true" class="awe-sticky-logo" />
 							<?php endif; ?>
 						</div>
 					<?php endif; ?>
@@ -816,7 +824,14 @@ class Widget_Awesome_Site_Logo extends Widget_Base {
 							</div>
 						</div>
 					<# } else {
-						var primaryUrl = ( settings.awea_custom_logo && settings.awea_custom_logo.url ) ? settings.awea_custom_logo.url : '';
+						var imageObj = {
+							id: settings.awea_custom_logo ? settings.awea_custom_logo.id : '',
+							url: settings.awea_custom_logo ? settings.awea_custom_logo.url : '',
+							size: settings.awea_logo_image_size_size,
+							dimension: settings.awea_logo_image_size_custom_dimension,
+							model: view.getEditModel()
+						};
+						var primaryUrl = elementor.imagesManager.getImageUrl( imageObj );
 						var hasHover   = 'custom' === settings.awea_logo_source && 'yes' === settings.awea_enable_hover_logo && settings.awea_custom_hover_logo && settings.awea_custom_hover_logo.url;
 						var hasSticky  = 'yes' === settings.awea_enable_sticky_logo && settings.awea_sticky_logo && settings.awea_sticky_logo.url;
 						var groupClass = 'awe-image-logo-group' + ( hasHover ? ' has-hover-logo' : '' ) + ( hasSticky ? ' has-sticky-logo' : '' );
@@ -829,11 +844,11 @@ class Widget_Awesome_Site_Logo extends Widget_Base {
 							<# } #>
 
 							<# if ( hasHover ) { #>
-								<img src="{{ settings.awea_custom_hover_logo.url }}" alt="{{ siteName }}" class="awe-hover-logo" />
+								<img src="{{ settings.awea_custom_hover_logo.url }}" alt="" aria-hidden="true" class="awe-hover-logo" />
 							<# } #>
 
 							<# if ( hasSticky ) { #>
-								<img src="{{ settings.awea_sticky_logo.url }}" alt="{{ siteName }}" class="awe-sticky-logo" />
+								<img src="{{ settings.awea_sticky_logo.url }}" alt="" aria-hidden="true" class="awe-sticky-logo" />
 							<# } #>
 						</div>
 					<# } #>

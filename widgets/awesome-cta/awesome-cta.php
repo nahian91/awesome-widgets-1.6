@@ -21,6 +21,7 @@ use Elementor\Core\Kits\Documents\Tabs\Global_Typography;
 use Elementor\Core\Kits\Documents\Tabs\Global_Colors;
 use Elementor\Widget_Base;
 use Elementor\Icons_Manager;
+use Elementor\Utils;
 
 class Widget_Awesome_CTA extends Widget_Base {
 
@@ -370,12 +371,14 @@ class Widget_Awesome_CTA extends Widget_Base {
 				'default'              => 'center',
 				'condition'            => [ 'awea_layout_mode' => 'stacked' ],
 				'selectors_dictionary' => [
-					'left'   => 'left; --awea-cta-justify: flex-start; --awea-cta-ml: 0; --awea-cta-mr: auto',
-					'center' => 'center; --awea-cta-justify: center; --awea-cta-ml: auto; --awea-cta-mr: auto',
-					'right'  => 'right; --awea-cta-justify: flex-end; --awea-cta-ml: auto; --awea-cta-mr: 0',
+					'left'   => 'flex-start',
+					'center' => 'center',
+					'right'  => 'flex-end',
 				],
 				'selectors'            => [
-					'{{WRAPPER}} .awea-cta-box' => 'text-align: {{VALUE}};',
+					'{{WRAPPER}}.awea-cta-mode-stacked .awea-cta-box'     => 'text-align: {{VALUE}};',
+					'{{WRAPPER}}.awea-cta-mode-stacked .awea-cta-copy'    => 'align-items: {{VALUE}};',
+					'{{WRAPPER}}.awea-cta-mode-stacked .awea-cta-actions' => 'justify-content: {{VALUE}};',
 				],
 			]
 		);
@@ -509,7 +512,8 @@ class Widget_Awesome_CTA extends Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
 				'selectors' => [
-					'{{WRAPPER}} .awea-cta-badge' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-cta-badge'     => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-cta-badge svg' => 'fill: {{VALUE}};',
 				],
 			]
 		);
@@ -522,6 +526,21 @@ class Widget_Awesome_CTA extends Widget_Base {
 				'default'   => 'rgba(79, 70, 229, 0.08)',
 				'selectors' => [
 					'{{WRAPPER}} .awea-cta-badge' => 'background-color: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->add_responsive_control(
+			'awea_badge_icon_size',
+			[
+				'label'      => esc_html__( 'Icon Size', 'awesome-widgets-elementor' ),
+				'type'       => Controls_Manager::SLIDER,
+				'size_units' => [ 'px' ],
+				'range'      => [ 'px' => [ 'min' => 10, 'max' => 28 ] ],
+				'default'    => [ 'unit' => 'px', 'size' => 13 ],
+				'selectors'  => [
+					'{{WRAPPER}} .awea-cta-badge-ico i'   => 'font-size: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .awea-cta-badge-ico svg' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
@@ -769,6 +788,7 @@ class Widget_Awesome_CTA extends Widget_Base {
 			[
 				'name'      => 'awea_note_typo',
 				'selector'  => '{{WRAPPER}} .awea-cta-note',
+				'global'    => [ 'default' => Global_Typography::TYPOGRAPHY_TEXT ],
 				'condition' => [ 'awea_note!' => '' ],
 			]
 		);
@@ -792,6 +812,21 @@ class Widget_Awesome_CTA extends Widget_Base {
 				'name'     => 'awea_btn_typo',
 				'selector' => '{{WRAPPER}} .awea-cta-btn',
 				'global'   => [ 'default' => Global_Typography::TYPOGRAPHY_ACCENT ],
+			]
+		);
+
+		$this->add_responsive_control(
+			'awea_btn_icon_size',
+			[
+				'label'      => esc_html__( 'Icon Size', 'awesome-widgets-elementor' ),
+				'type'       => Controls_Manager::SLIDER,
+				'size_units' => [ 'px' ],
+				'range'      => [ 'px' => [ 'min' => 10, 'max' => 28 ] ],
+				'default'    => [ 'unit' => 'px', 'size' => 15 ],
+				'selectors'  => [
+					'{{WRAPPER}} .awea-cta-ico i'   => 'font-size: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .awea-cta-ico svg' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}};',
+				],
 			]
 		);
 
@@ -877,7 +912,8 @@ class Widget_Awesome_CTA extends Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#ffffff',
 				'selectors' => [
-					'{{WRAPPER}} .awea-cta-btn-primary' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-cta-btn-primary'     => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-cta-btn-primary svg' => 'fill: {{VALUE}};',
 				],
 			]
 		);
@@ -929,7 +965,8 @@ class Widget_Awesome_CTA extends Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#ffffff',
 				'selectors' => [
-					'{{WRAPPER}} .awea-cta-btn-primary:hover, {{WRAPPER}} .awea-cta-btn-primary:focus-visible' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-cta-btn-primary:hover, {{WRAPPER}} .awea-cta-btn-primary:focus-visible'         => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-cta-btn-primary:hover svg, {{WRAPPER}} .awea-cta-btn-primary:focus-visible svg' => 'fill: {{VALUE}};',
 				],
 			]
 		);
@@ -988,7 +1025,8 @@ class Widget_Awesome_CTA extends Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#0f172a',
 				'selectors' => [
-					'{{WRAPPER}} .awea-cta-btn-secondary' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-cta-btn-secondary'     => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-cta-btn-secondary svg' => 'fill: {{VALUE}};',
 				],
 			]
 		);
@@ -1040,7 +1078,8 @@ class Widget_Awesome_CTA extends Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#0f172a',
 				'selectors' => [
-					'{{WRAPPER}} .awea-cta-btn-secondary:hover, {{WRAPPER}} .awea-cta-btn-secondary:focus-visible' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-cta-btn-secondary:hover, {{WRAPPER}} .awea-cta-btn-secondary:focus-visible'         => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-cta-btn-secondary:hover svg, {{WRAPPER}} .awea-cta-btn-secondary:focus-visible svg' => 'fill: {{VALUE}};',
 				],
 			]
 		);

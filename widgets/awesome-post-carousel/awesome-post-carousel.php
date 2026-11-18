@@ -3,7 +3,7 @@
  * Awesome Post Carousel Studio Widget (Zero-Shadow Architectural Edition).
  *
  * @package AwesomeWidgetsElementor
- * @since 2.0.0
+ * @since   2.0.0
  */
 
 namespace Elementor;
@@ -12,12 +12,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use \Elementor\Controls_Manager;
-use \Elementor\Group_Control_Border;
-use \Elementor\Group_Control_Typography;
-use \Elementor\Core\Kits\Documents\Tabs\Global_Typography;
-use \Elementor\Core\Kits\Documents\Tabs\Global_Colors;
-use \Elementor\Widget_Base;
+use Elementor\Controls_Manager;
+use Elementor\Group_Control_Border;
+use Elementor\Group_Control_Typography;
+use Elementor\Core\Kits\Documents\Tabs\Global_Typography;
+use Elementor\Core\Kits\Documents\Tabs\Global_Colors;
+use Elementor\Widget_Base;
+use Elementor\Utils;
 
 class Widget_Awesome_Post_Carousel extends Widget_Base {
 
@@ -275,11 +276,13 @@ class Widget_Awesome_Post_Carousel extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_slide_gap',
 			[
-				'label'      => esc_html__( 'Gap', 'awesome-widgets-elementor' ),
-				'type'       => Controls_Manager::SLIDER,
-				'size_units' => [ 'px' ],
-				'range'      => [ 'px' => [ 'min' => 0, 'max' => 60 ] ],
-				'default'    => [ 'unit' => 'px', 'size' => 24 ],
+				'label'          => esc_html__( 'Gap', 'awesome-widgets-elementor' ),
+				'type'           => Controls_Manager::SLIDER,
+				'size_units'     => [ 'px' ],
+				'range'          => [ 'px' => [ 'min' => 0, 'max' => 60 ] ],
+				'default'        => [ 'unit' => 'px', 'size' => 24 ],
+				'tablet_default' => [ 'unit' => 'px', 'size' => 20 ],
+				'mobile_default' => [ 'unit' => 'px', 'size' => 16 ],
 			]
 		);
 
@@ -582,6 +585,16 @@ class Widget_Awesome_Post_Carousel extends Widget_Base {
 			]
 		);
 
+		$this->add_group_control(
+			Group_Control_Typography::get_type(),
+			[
+				'name'     => 'awea_meta_typo',
+				'label'    => esc_html__( 'Meta Typography', 'awesome-widgets-elementor' ),
+				'selector' => '{{WRAPPER}} .awea-blog-meta',
+				'global'   => [ 'default' => Global_Typography::TYPOGRAPHY_SECONDARY ],
+			]
+		);
+
 		$this->add_control(
 			'awea_title_color',
 			[
@@ -602,7 +615,7 @@ class Widget_Awesome_Post_Carousel extends Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
 				'selectors' => [
-					'{{WRAPPER}} .awea-blog-title a:hover' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-blog-title a:hover, {{WRAPPER}} .awea-blog-title a:focus-visible' => 'color: {{VALUE}};',
 				],
 			]
 		);
@@ -638,6 +651,19 @@ class Widget_Awesome_Post_Carousel extends Widget_Base {
 			]
 		);
 
+		$this->add_control(
+			'awea_counter_color',
+			[
+				'label'     => esc_html__( 'Counter Color', 'awesome-widgets-elementor' ),
+				'type'      => Controls_Manager::COLOR,
+				'separator' => 'before',
+				'condition' => [ 'awea_show_counter' => 'yes' ],
+				'selectors' => [
+					'{{WRAPPER}} .awea-blog-num' => 'color: {{VALUE}};',
+				],
+			]
+		);
+
 		$this->end_controls_section();
 
 		/* ==========================================================================
@@ -649,6 +675,15 @@ class Widget_Awesome_Post_Carousel extends Widget_Base {
 				'label'     => esc_html__( 'Button', 'awesome-widgets-elementor' ),
 				'tab'       => Controls_Manager::TAB_STYLE,
 				'condition' => [ 'awea_show_button' => 'yes' ],
+			]
+		);
+
+		$this->add_group_control(
+			Group_Control_Typography::get_type(),
+			[
+				'name'     => 'awea_btn_typo',
+				'selector' => '{{WRAPPER}} .awea-blog-link',
+				'global'   => [ 'default' => Global_Typography::TYPOGRAPHY_ACCENT ],
 			]
 		);
 
@@ -683,7 +718,7 @@ class Widget_Awesome_Post_Carousel extends Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#ffffff',
 				'selectors' => [
-					'{{WRAPPER}} .awea-blog-card:hover .awea-blog-link' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-blog-card:hover .awea-blog-link, {{WRAPPER}} .awea-blog-link:focus-visible' => 'color: {{VALUE}};',
 				],
 			]
 		);
@@ -695,7 +730,7 @@ class Widget_Awesome_Post_Carousel extends Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
 				'selectors' => [
-					'{{WRAPPER}} .awea-blog-card:hover .awea-blog-link' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .awea-blog-card:hover .awea-blog-link, {{WRAPPER}} .awea-blog-link:focus-visible' => 'background-color: {{VALUE}};',
 				],
 			]
 		);
@@ -706,7 +741,7 @@ class Widget_Awesome_Post_Carousel extends Widget_Base {
 	protected function render() {
 		$settings     = $this->get_settings_for_display();
 		$num_posts    = ! empty( $settings['awea_posts_per_page'] ) ? absint( $settings['awea_posts_per_page'] ) : 6;
-		$order        = $settings['awea_post_order'] ?? 'DESC';
+		$order        = in_array( $settings['awea_post_order'] ?? 'DESC', [ 'ASC', 'DESC' ], true ) ? $settings['awea_post_order'] : 'DESC';
 		$orderby      = $settings['awea_post_orderby'] ?? 'date';
 		$categories   = $settings['awea_include_categories'] ?? [];
 		$show_cat     = 'yes' === ( $settings['awea_show_category'] ?? 'no' );
@@ -723,16 +758,16 @@ class Widget_Awesome_Post_Carousel extends Widget_Base {
 		$items_tablet  = ! empty( $settings['awea_slides_per_view_tablet'] ) ? (int) $settings['awea_slides_per_view_tablet'] : 2;
 		$items_mobile  = ! empty( $settings['awea_slides_per_view_mobile'] ) ? (int) $settings['awea_slides_per_view_mobile'] : 1;
 
-		$gap_desktop   = isset( $settings['awea_slide_gap']['size'] ) ? (int) $settings['awea_slide_gap']['size'] : 24;
-		$gap_tablet    = isset( $settings['awea_slide_gap_tablet']['size'] ) ? (int) $settings['awea_slide_gap_tablet']['size'] : 20;
-		$gap_mobile    = isset( $settings['awea_slide_gap_mobile']['size'] ) ? (int) $settings['awea_slide_gap_mobile']['size'] : 16;
+		$gap_desktop = isset( $settings['awea_slide_gap']['size'] ) && '' !== $settings['awea_slide_gap']['size'] ? (int) $settings['awea_slide_gap']['size'] : 24;
+		$gap_tablet  = isset( $settings['awea_slide_gap_tablet']['size'] ) && '' !== $settings['awea_slide_gap_tablet']['size'] ? (int) $settings['awea_slide_gap_tablet']['size'] : 20;
+		$gap_mobile  = isset( $settings['awea_slide_gap_mobile']['size'] ) && '' !== $settings['awea_slide_gap_mobile']['size'] ? (int) $settings['awea_slide_gap_mobile']['size'] : 16;
 
-		$arrows       = ( 'yes' === ( $settings['awea_carousel_arrows'] ?? 'no' ) ) ? 'yes' : 'no';
-		$dots         = ( 'yes' === ( $settings['awea_carousel_dots'] ?? 'no' ) ) ? 'yes' : 'no';
-		$loop         = ( 'yes' === ( $settings['awea_carousel_loop'] ?? 'no' ) ) ? 'yes' : 'no';
-		$autoplay     = ( 'yes' === ( $settings['awea_carousel_autoplay'] ?? 'no' ) ) ? 'yes' : 'no';
-		$auto_speed   = ! empty( $settings['awea_carousel_autoplay_speed'] ) ? absint( $settings['awea_carousel_autoplay_speed'] ) : 5000;
-		$widget_id    = $this->get_id();
+		$arrows     = ( 'yes' === ( $settings['awea_carousel_arrows'] ?? 'no' ) ) ? 'yes' : 'no';
+		$dots       = ( 'yes' === ( $settings['awea_carousel_dots'] ?? 'no' ) ) ? 'yes' : 'no';
+		$loop       = ( 'yes' === ( $settings['awea_carousel_loop'] ?? 'no' ) ) ? 'yes' : 'no';
+		$autoplay   = ( 'yes' === ( $settings['awea_carousel_autoplay'] ?? 'no' ) ) ? 'yes' : 'no';
+		$auto_speed = ! empty( $settings['awea_carousel_autoplay_speed'] ) ? absint( $settings['awea_carousel_autoplay_speed'] ) : 5000;
+		$widget_id  = $this->get_id();
 
 		$args = [
 			'posts_per_page'      => $num_posts,
@@ -748,16 +783,21 @@ class Widget_Awesome_Post_Carousel extends Widget_Base {
 		}
 
 		$query = new \WP_Query( $args );
+
+		if ( ! $query->have_posts() ) {
+			echo '<p class="awea-no-posts">' . esc_html__( 'No posts found matching your criteria.', 'awesome-widgets-elementor' ) . '</p>';
+			return;
+		}
 		?>
 		<div class="awea-post-carousel-wrap">
 			<div class="awea-post-carousel owl-carousel"
 				 id="awea-carousel-<?php echo esc_attr( $widget_id ); ?>"
-				 data-items-desktop="<?php echo esc_attr( $items_desktop ); ?>"
-				 data-items-tablet="<?php echo esc_attr( $items_tablet ); ?>"
-				 data-items-mobile="<?php echo esc_attr( $items_mobile ); ?>"
-				 data-gap-desktop="<?php echo esc_attr( $gap_desktop ); ?>"
-				 data-gap-tablet="<?php echo esc_attr( $gap_tablet ); ?>"
-				 data-gap-mobile="<?php echo esc_attr( $gap_mobile ); ?>"
+				 data-items-desktop="<?php echo esc_attr( (string) $items_desktop ); ?>"
+				 data-items-tablet="<?php echo esc_attr( (string) $items_tablet ); ?>"
+				 data-items-mobile="<?php echo esc_attr( (string) $items_mobile ); ?>"
+				 data-gap-desktop="<?php echo esc_attr( (string) $gap_desktop ); ?>"
+				 data-gap-tablet="<?php echo esc_attr( (string) $gap_tablet ); ?>"
+				 data-gap-mobile="<?php echo esc_attr( (string) $gap_mobile ); ?>"
 				 data-arrows="<?php echo esc_attr( $arrows ); ?>"
 				 data-dots="<?php echo esc_attr( $dots ); ?>"
 				 data-loop="<?php echo esc_attr( $loop ); ?>"
@@ -765,118 +805,137 @@ class Widget_Awesome_Post_Carousel extends Widget_Base {
 				 data-timeout="<?php echo esc_attr( (string) $auto_speed ); ?>">
 
 				<?php
-				if ( $query->have_posts() ) :
-					$counter = 1;
-					while ( $query->have_posts() ) :
-						$query->the_post();
-						$content      = get_post_field( 'post_content', get_the_ID() );
-						$word_count   = str_word_count( wp_strip_all_tags( $content ) );
-						$reading_time = max( 1, ceil( $word_count / 200 ) );
-						$post_cats    = get_the_category();
-						?>
-						<div class="awea-post-slide">
-							<article class="awea-blog-card">
-								
-								<div class="awea-blog-img-wrap">
-									<?php if ( $show_cat && ! empty( $post_cats ) ) : ?>
-										<span class="awea-blog-badge"><?php echo esc_html( $post_cats[0]->name ); ?></span>
+				$counter = 1;
+				while ( $query->have_posts() ) :
+					$query->the_post();
+					$post_id      = get_the_ID();
+					$content      = get_post_field( 'post_content', $post_id );
+					$word_count   = str_word_count( wp_strip_all_tags( $content ) );
+					$reading_time = max( 1, (int) ceil( $word_count / 200 ) );
+					$post_cats    = get_the_category( $post_id );
+					$permalink    = get_the_permalink( $post_id );
+					?>
+					<div class="awea-post-slide">
+						<article class="awea-blog-card">
+
+							<div class="awea-blog-img-wrap">
+								<?php if ( $show_cat && ! empty( $post_cats ) ) : ?>
+									<span class="awea-blog-badge"><?php echo esc_html( $post_cats[0]->name ); ?></span>
+								<?php endif; ?>
+
+								<a href="<?php echo esc_url( $permalink ); ?>" class="awea-blog-img-link" aria-label="<?php the_title_attribute(); ?>">
+									<?php if ( has_post_thumbnail( $post_id ) ) : ?>
+										<?php echo get_the_post_thumbnail( $post_id, 'large', [ 'class' => 'awea-blog-img', 'loading' => 'lazy' ] ); ?>
+									<?php else : ?>
+										<img src="<?php echo esc_url( Utils::get_placeholder_image_src() ); ?>" class="awea-blog-img" alt="<?php the_title_attribute(); ?>" loading="lazy" />
 									<?php endif; ?>
+								</a>
+							</div>
 
-									<a href="<?php echo esc_url( get_the_permalink() ); ?>" class="awea-blog-img-link" aria-label="<?php the_title_attribute(); ?>">
-										<?php if ( has_post_thumbnail() ) : ?>
-											<?php the_post_thumbnail( 'large', [ 'class' => 'awea-blog-img', 'loading' => 'lazy' ] ); ?>
-										<?php else : ?>
-											<img src="<?php echo esc_url( Utils::get_placeholder_image_src() ); ?>" class="awea-blog-img" alt="<?php the_title_attribute(); ?>" loading="lazy" />
-										<?php endif; ?>
-									</a>
-								</div>
-
-								<div class="awea-blog-body">
-									<?php if ( $show_date || $show_read ) : ?>
-										<div class="awea-blog-meta">
-											<?php if ( $show_date ) : ?>
-												<span><?php echo esc_html( get_the_date( 'M d, Y' ) ); ?></span>
-											<?php endif; ?>
-
-											<?php if ( $show_date && $show_read ) : ?>
-												<span class="awea-meta-dot" aria-hidden="true">•</span>
-											<?php endif; ?>
-
-											<?php if ( $show_read ) : ?>
-    <span>
-        <?php
-        /* translators: %d: estimated reading time in minutes */
-        echo esc_html( sprintf( __( '%d MIN READ', 'awesome-widgets-elementor' ), $reading_time ) );
-        ?>
-    </span>
-<?php endif; ?>
-										</div>
-									<?php endif; ?>
-
-									<<?php Utils::print_validated_html_tag( $title_tag ); ?> class="awea-blog-title">
-										<a href="<?php echo esc_url( get_the_permalink() ); ?>"><?php the_title(); ?></a>
-									</<?php Utils::print_validated_html_tag( $title_tag ); ?>>
-
-									<?php if ( $show_exc ) : ?>
-										<p class="awea-blog-desc">
-											<?php echo esc_html( wp_trim_words( get_the_excerpt(), $exc_len, '...' ) ); ?>
-										</p>
-									<?php endif; ?>
-								</div>
-
-								<?php if ( ( $show_btn && ! empty( $btn_text ) ) || $show_counter ) : ?>
-									<div class="awea-blog-footer">
-										<?php if ( $show_btn && ! empty( $btn_text ) ) : ?>
-											<a href="<?php echo esc_url( get_the_permalink() ); ?>" class="awea-blog-link">
-												<span><?php echo esc_html( $btn_text ); ?></span>
-												<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-											</a>
+							<div class="awea-blog-body">
+								<?php if ( $show_date || $show_read ) : ?>
+									<div class="awea-blog-meta">
+										<?php if ( $show_date ) : ?>
+											<time datetime="<?php echo esc_attr( get_the_date( DATE_W3C, $post_id ) ); ?>"><?php echo esc_html( get_the_date( 'M d, Y', $post_id ) ); ?></time>
 										<?php endif; ?>
 
-										<?php if ( $show_counter ) : ?>
-											<span class="awea-blog-num" aria-hidden="true"><?php echo esc_html( sprintf( '%02d', $counter ) ); ?></span>
+										<?php if ( $show_date && $show_read ) : ?>
+											<span class="awea-meta-dot" aria-hidden="true">•</span>
+										<?php endif; ?>
+
+										<?php if ( $show_read ) : ?>
+											<span>
+												<?php
+												/* translators: %d: estimated reading time in minutes */
+												echo esc_html( sprintf( __( '%d MIN READ', 'awesome-widgets-elementor' ), $reading_time ) );
+												?>
+											</span>
 										<?php endif; ?>
 									</div>
 								<?php endif; ?>
 
-							</article>
-						</div>
-						<?php
-						$counter++;
-					endwhile;
-					wp_reset_postdata();
-				else :
-					?>
-					<p class="awea-no-posts"><?php esc_html_e( 'No posts found matching your criteria.', 'awesome-widgets-elementor' ); ?></p>
-				<?php endif; ?>
+								<<?php Utils::print_validated_html_tag( $title_tag ); ?> class="awea-blog-title">
+									<a href="<?php echo esc_url( $permalink ); ?>"><?php the_title(); ?></a>
+								</<?php Utils::print_validated_html_tag( $title_tag ); ?>>
+
+								<?php if ( $show_exc ) : ?>
+									<p class="awea-blog-desc">
+										<?php echo esc_html( wp_trim_words( get_the_excerpt( $post_id ), $exc_len, '...' ) ); ?>
+									</p>
+								<?php endif; ?>
+							</div>
+
+							<?php if ( ( $show_btn && ! empty( $btn_text ) ) || $show_counter ) : ?>
+								<div class="awea-blog-footer">
+									<?php if ( $show_btn && ! empty( $btn_text ) ) : ?>
+										<a href="<?php echo esc_url( $permalink ); ?>" class="awea-blog-link">
+											<span><?php echo esc_html( $btn_text ); ?></span>
+											<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+										</a>
+									<?php endif; ?>
+
+									<?php if ( $show_counter ) : ?>
+										<span class="awea-blog-num" aria-hidden="true"><?php echo esc_html( sprintf( '%02d', $counter ) ); ?></span>
+									<?php endif; ?>
+								</div>
+							<?php endif; ?>
+
+						</article>
+					</div>
+					<?php
+					$counter++;
+				endwhile;
+				wp_reset_postdata();
+				?>
 
 			</div>
 		</div>
 
 		<script>
-		jQuery(window).on('elementor/frontend/init', function () {
-			elementorFrontend.hooks.addAction('frontend/element_ready/awesome-post-carousel.default', function ($scope, $) {
-				var $carousel = $scope.find('.awea-post-carousel');
-				if (!$carousel.length || typeof $carousel.owlCarousel !== 'function') return;
+		(function($) {
+			function initPostCarousel($scope) {
+				var $carousel = $scope ? $scope.find('.awea-post-carousel') : $('#awea-carousel-<?php echo esc_js( $widget_id ); ?>');
+				if (!$carousel.length || $carousel.data('aweaBound') === 1 || typeof $carousel.owlCarousel !== 'function') return;
+				$carousel.data('aweaBound', 1);
 
-				var itemsDesktop = parseInt($carousel.data('items-desktop'), 10) || 3;
-				var itemsTablet  = parseInt($carousel.data('items-tablet'), 10) || 2;
-				var itemsMobile  = parseInt($carousel.data('items-mobile'), 10) || 1;
-				var gapDesktop   = parseInt($carousel.data('gap-desktop'), 10) || 24;
-				var gapTablet    = parseInt($carousel.data('gap-tablet'), 10) || 20;
-				var gapMobile    = parseInt($carousel.data('gap-mobile'), 10) || 16;
+				var itemsDesktop = parseInt($carousel.attr('data-items-desktop'), 10) || 3;
+				var itemsTablet  = parseInt($carousel.attr('data-items-tablet'), 10) || 2;
+				var itemsMobile  = parseInt($carousel.attr('data-items-mobile'), 10) || 1;
+				var gapDesktop   = parseInt($carousel.attr('data-gap-desktop'), 10);
+				var gapTablet    = parseInt($carousel.attr('data-gap-tablet'), 10);
+				var gapMobile    = parseInt($carousel.attr('data-gap-mobile'), 10);
+
+				if (isNaN(gapDesktop)) gapDesktop = 24;
+				if (isNaN(gapTablet)) gapTablet = 20;
+				if (isNaN(gapMobile)) gapMobile = 16;
+
+				var slideCount = $carousel.children('.awea-post-slide').length;
+				var allowLoop  = ($carousel.attr('data-loop') === 'yes') && (slideCount > itemsDesktop);
+
+				function equalizeHeights() {
+					requestAnimationFrame(function() {
+						var maxHeight = 0;
+						var $items = $carousel.find('.awea-blog-card');
+						$items.css('height', 'auto');
+						$items.each(function() {
+							var h = $(this).outerHeight();
+							if (h > maxHeight) maxHeight = h;
+						});
+						if (maxHeight > 0) $items.css('height', maxHeight + 'px');
+					});
+				}
 
 				$carousel.owlCarousel({
-					nav: $carousel.data('arrows') === 'yes',
-					dots: $carousel.data('dots') === 'yes',
-					loop: $carousel.data('loop') === 'yes',
-					autoplay: $carousel.data('autoplay') === 'yes',
-					autoplayTimeout: parseInt($carousel.data('timeout'), 10) || 5000,
+					nav: $carousel.attr('data-arrows') === 'yes',
+					dots: $carousel.attr('data-dots') === 'yes',
+					loop: allowLoop,
+					autoplay: $carousel.attr('data-autoplay') === 'yes',
+					autoplayTimeout: parseInt($carousel.attr('data-timeout'), 10) || 5000,
 					smartSpeed: 450,
 					autoplayHoverPause: true,
 					navText: [
-						'<div class="awea-carousel-arrow-border" aria-label="Previous"><i class="fas fa-chevron-left"></i></div>',
-						'<div class="awea-carousel-arrow-border" aria-label="Next"><i class="fas fa-chevron-right"></i></div>'
+						'<button type="button" class="awea-carousel-arrow-border" aria-label="<?php echo esc_js( __( 'Previous', 'awesome-widgets-elementor' ) ); ?>"><i class="fas fa-chevron-left" aria-hidden="true"></i></button>',
+						'<button type="button" class="awea-carousel-arrow-border" aria-label="<?php echo esc_js( __( 'Next', 'awesome-widgets-elementor' ) ); ?>"><i class="fas fa-chevron-right" aria-hidden="true"></i></button>'
 					],
 					responsive: {
 						0: { items: itemsMobile, margin: gapMobile },
@@ -887,21 +946,23 @@ class Widget_Awesome_Post_Carousel extends Widget_Base {
 					onResized: equalizeHeights,
 					onRefreshed: equalizeHeights
 				});
+			}
 
-				function equalizeHeights() {
-					setTimeout(function() {
-						var maxHeight = 0;
-						var items = $carousel.find('.awea-blog-card');
-						items.css('height', 'auto');
-						items.each(function () {
-							var h = $(this).outerHeight();
-							if (h > maxHeight) maxHeight = h;
-						});
-						if (maxHeight > 0) items.css('height', maxHeight + 'px');
-					}, 100);
-				}
+			$(function() {
+				initPostCarousel(null);
 			});
-		});
+
+			if (!window.aweaPostCarouselHooked) {
+				window.aweaPostCarouselHooked = true;
+				$(window).on('elementor/frontend/init', function() {
+					if (window.elementorFrontend && window.elementorFrontend.hooks) {
+						window.elementorFrontend.hooks.addAction('frontend/element_ready/awesome-post-carousel.default', function($scope) {
+							initPostCarousel($scope);
+						});
+					}
+				});
+			}
+		})(jQuery);
 		</script>
 		<?php
 	}
