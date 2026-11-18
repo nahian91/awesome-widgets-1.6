@@ -1,183 +1,253 @@
 /* ==========================================================================
-   AWEA Counter Studio Master Architecture (Zero Hover Zoom / No Scale)
+   Awesome Counter Widget
    ========================================================================== */
 
-@property --awea-counter-angle {
-  syntax: "<angle>";
-  initial-value: 0deg;
-  inherits: false;
+@property --awea-cnt-angle {
+	syntax: "<angle>";
+	initial-value: 0deg;
+	inherits: false;
 }
 
-.awea-counter-card {
-  --awea-beam-color: var(--e-global-color-primary, #4f46e5);
-  --awea-beam-speed: 3.5s;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  background-color: #ffffff;
-  border-style: solid;
-  border-width: 1px;
-  border-color: rgba(15, 23, 42, 0.08);
-  border-radius: 28px;
-  padding: 40px 32px;
-  box-sizing: border-box;
-  overflow: hidden;
-  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.04);
-  transform: none;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+.awea-cnt-grid {
+	--awea-cnt-primary: var(--e-global-color-primary, #4f46e5);
+	--awea-cnt-global-beam: var(--awea-cnt-primary);
+	--awea-cnt-heading: #0f172a;
+	--awea-cnt-muted: #64748b;
+	--awea-cnt-subtext: #94a3b8;
+	--awea-cnt-border: #e2e8f0;
+	--awea-cnt-stats-justify: center;
+
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 24px;
+	width: 100%;
+	box-sizing: border-box;
+	align-items: stretch;
 }
 
-.awea-counter-card:hover {
-  transform: none;
+.awea-cnt-grid *,
+.awea-cnt-grid *::before,
+.awea-cnt-grid *::after {
+	box-sizing: border-box;
 }
 
-/* 1. Kinetic Border Beam Animation */
-.awea-counter-card.awea-has-beam::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  padding: 2px;
-  background: conic-gradient(from var(--awea-counter-angle), transparent 70%, var(--awea-beam-color, #4f46e5), transparent);
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  opacity: 0;
-  transition: opacity 0.35s ease;
-  pointer-events: none;
+/* --------------------------------------------------------------------------
+1. Counter Card Shell
+   -------------------------------------------------------------------------- */
+.awea-cnt-card {
+	--awea-cnt-beam: var(--awea-cnt-item-beam, var(--awea-cnt-global-beam));
+
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+	height: 100%;
+	width: 100%;
+	padding: 36px 28px;
+	border-radius: 24px;
+	background-color: #ffffff;
+	border: 1px solid var(--awea-cnt-border);
+	overflow: hidden;
+	transition:
+		background-color 0.25s ease,
+		border-color 0.25s ease,
+		box-shadow 0.25s ease,
+		transform 0.2s ease;
 }
 
-@keyframes aweaCounterSpin {
-  to {
-    --awea-counter-angle: 360deg;
-  }
+/* Horizontal Card Layout Mode */
+.awea-cnt-dir-horizontal .awea-cnt-card {
+	flex-direction: row;
+	align-items: center;
+	justify-content: flex-start;
+	text-align: left;
+	gap: 20px;
 }
 
-.awea-counter-card.awea-has-beam:hover::after {
-  opacity: 1;
-  animation: aweaCounterSpin var(--awea-beam-speed, 3.5s) linear infinite;
+.awea-cnt-dir-horizontal .awea-cnt-icon {
+	margin-bottom: 0;
 }
 
-/* 2. Leading Icon Badge */
-.awea-counter-icon-box {
-  width: 64px;
-  height: 64px;
-  border-radius: 18px;
-  background-color: rgba(79, 70, 229, 0.08);
-  color: var(--e-global-color-primary, #4f46e5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 24px;
-  flex-shrink: 0;
-  border-style: solid;
-  border-width: 0;
-  border-color: transparent;
-  box-sizing: border-box;
-  transform: none;
-  transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+.awea-cnt-dir-horizontal .awea-cnt-stats {
+	justify-content: flex-start;
 }
 
-.awea-counter-icon-box i {
-  font-size: 24px;
-  line-height: 1;
+.awea-cnt-card:hover {
+	border-color: var(--awea-cnt-beam);
 }
 
-.awea-counter-icon-box svg {
-  width: 24px;
-  height: 24px;
-  display: block;
-  fill: currentColor;
+/* Kinetic Border Beam */
+.awea-cnt-beam-yes .awea-cnt-card::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	border-radius: inherit;
+	padding: 1.5px;
+	background: conic-gradient(from var(--awea-cnt-angle), transparent 70%, var(--awea-cnt-beam), transparent);
+	-webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+	mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+	-webkit-mask-composite: xor;
+	mask-composite: exclude;
+	opacity: 0;
+	transition: opacity 0.3s ease;
+	pointer-events: none;
 }
 
-.awea-counter-card:hover .awea-counter-icon-box {
-  transform: none;
-  background-color: var(--e-global-color-primary, #4f46e5);
-  color: #ffffff;
+@keyframes aweaCntSpin {
+	to {
+		--awea-cnt-angle: 360deg;
+	}
 }
 
-.awea-counter-card:hover .awea-counter-icon-box svg {
-  fill: #ffffff;
+.awea-cnt-beam-yes .awea-cnt-card:hover::after {
+	opacity: 1;
+	animation: aweaCntSpin 3.5s linear infinite;
 }
 
-/* 3. Number Metrics Lockup */
-.awea-counter-stat-holder {
-  display: inline-flex;
-  align-items: baseline;
-  justify-content: center;
-  line-height: 1;
-  margin-bottom: 12px;
-  flex-wrap: wrap;
+/* --------------------------------------------------------------------------
+2. Leading Icon Box
+   -------------------------------------------------------------------------- */
+.awea-cnt-icon {
+	width: 58px;
+	height: 58px;
+	border-radius: 16px;
+	background-color: rgba(79, 70, 229, 0.08);
+	color: var(--awea-cnt-primary);
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	margin-bottom: 20px;
+	flex-shrink: 0;
+	transition:
+		background-color 0.25s ease,
+		color 0.25s ease,
+		transform 0.25s ease;
 }
 
-.awea-counter-val {
-  font-size: clamp(2.5rem, 5vw, 3.5rem);
-  font-weight: 800;
-  line-height: 1;
-  letter-spacing: -0.04em;
-  color: var(--e-global-color-primary, #0f172a);
-  font-variant-numeric: tabular-nums;
-  font-feature-settings: "tnum";
+.awea-cnt-icon i {
+	font-size: 22px;
+	line-height: 1;
 }
 
-.awea-counter-prefix,
-.awea-counter-suffix {
-  font-size: clamp(1.4rem, 3vw, 2rem);
-  font-weight: 700;
-  color: var(--e-global-color-primary, #4f46e5);
-  line-height: 1;
+.awea-cnt-icon svg {
+	width: 22px;
+	height: 22px;
+	display: block;
+	fill: currentColor;
 }
 
-.awea-counter-prefix {
-  margin-right: 4px;
+.awea-cnt-card:hover .awea-cnt-icon {
+	background-color: var(--awea-cnt-primary);
+	color: #ffffff;
 }
 
-.awea-counter-suffix {
-  margin-left: 4px;
+.awea-cnt-card:hover .awea-cnt-icon svg {
+	fill: #ffffff;
 }
 
-/* 4. Title Label */
-.awea-counter-label {
-  font-size: 0.85rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: var(--e-global-color-text, #64748b);
-  margin: 0;
-  line-height: 1.4;
-  word-break: break-word;
+/* --------------------------------------------------------------------------
+3. Number Metrics & Labels
+   -------------------------------------------------------------------------- */
+.awea-cnt-content {
+	display: flex;
+	flex-direction: column;
+	min-width: 0;
 }
 
-/* ==========================================================================
-   Super Mobile Friendly System (<= 768px)
-   ========================================================================== */
+.awea-cnt-stats {
+	display: inline-flex;
+	align-items: baseline;
+	justify-content: var(--awea-cnt-stats-justify, center);
+	line-height: 1;
+	margin-bottom: 8px;
+	flex-wrap: wrap;
+}
+
+.awea-cnt-val {
+	font-size: clamp(2.25rem, 4.2vw, 3.35rem);
+	font-weight: 800;
+	line-height: 1;
+	letter-spacing: -0.04em;
+	color: var(--awea-cnt-heading);
+	font-variant-numeric: tabular-nums;
+	font-feature-settings: "tnum";
+}
+
+.awea-cnt-pre,
+.awea-cnt-suf {
+	font-size: clamp(1.25rem, 2.4vw, 1.75rem);
+	font-weight: 700;
+	color: var(--awea-cnt-primary);
+	line-height: 1;
+}
+
+.awea-cnt-pre {
+	margin-right: 3px;
+}
+
+.awea-cnt-suf {
+	margin-left: 3px;
+}
+
+.awea-cnt-lbl {
+	margin: 0;
+	font-size: 0.84rem;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.1em;
+	color: var(--awea-cnt-muted);
+	line-height: 1.4;
+	word-break: break-word;
+}
+
+.awea-cnt-subtext {
+	display: block;
+	margin-top: 4px;
+	font-size: 0.8125rem;
+	color: var(--awea-cnt-subtext);
+	line-height: 1.4;
+}
+
+/* --------------------------------------------------------------------------
+4. Accessibility & Responsive
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+	.awea-cnt-beam-yes .awea-cnt-card:hover::after {
+		animation: none !important;
+	}
+
+	.awea-cnt-card,
+	.awea-cnt-icon {
+		transition: none !important;
+	}
+}
+
 @media (max-width: 768px) {
-  .awea-counter-card {
-    padding: 32px 20px;
-    border-radius: 20px;
-  }
+	:where(.awea-cnt-card) {
+		padding: 28px 20px;
+		border-radius: 18px;
+	}
 
-  .awea-counter-icon-box {
-    width: 52px;
-    height: 52px;
-    margin-bottom: 18px;
-  }
+	:where(.awea-cnt-icon) {
+		width: 48px;
+		height: 48px;
+		margin-bottom: 16px;
+		border-radius: 14px;
+	}
 
-  .awea-counter-icon-box i {
-    font-size: 20px;
-  }
+	:where(.awea-cnt-icon) i {
+		font-size: 18px;
+	}
 
-  .awea-counter-icon-box svg {
-    width: 20px;
-    height: 20px;
-  }
+	:where(.awea-cnt-icon) svg {
+		width: 18px;
+		height: 18px;
+	}
 
-  .awea-counter-label {
-    font-size: 0.78rem;
-    letter-spacing: 0.08em;
-  }
+	.awea-cnt-lbl {
+		font-size: 0.76rem;
+		letter-spacing: 0.08em;
+	}
 }

@@ -1,96 +1,147 @@
 /* ==========================================================================
-   AWEA Site Logo Studio Architecture (Strictly Zero Hover Lift)
+   AWEA Site Logo — Zero-Shadow Architectural Branding
    ========================================================================== */
 
 .awea-site-logo-outer {
-  width: 100%;
-  position: relative;
-  box-sizing: border-box;
-  --awea-logo-align: flex-start;
+	--awea-logo-align: flex-start;
+
+	width: 100%;
+	position: relative;
+	box-sizing: border-box;
 }
 
 .awea-site-logo-wrap {
-  display: inline-flex;
-  vertical-align: middle;
-  position: relative;
-  box-sizing: border-box;
+	display: inline-flex;
+	vertical-align: middle;
+	position: relative;
+	box-sizing: border-box;
+	transition: opacity 0.25s ease;
 }
 
 .awea-site-logo-wrap .awe-logo-link {
-  display: inline-flex;
-  align-items: center;
-  text-decoration: none;
-  outline: none;
-  transform: none !important;
+	display: inline-flex;
+	align-items: center;
+	text-decoration: none;
+	transform: none !important;
 }
 
-/* Image Framing & Strict Zero Lift */
+.awea-site-logo-wrap a.awe-logo-link:focus-visible {
+	outline: 2px solid var(--e-global-color-primary, #4f46e5);
+	outline-offset: 4px;
+	border-radius: 6px;
+}
+
+/* Image Framing & Zero Lift */
 .awea-site-logo-wrap .awe-image-logo-group {
-  display: inline-flex;
-  align-items: center;
-  position: relative;
-  overflow: visible;
+	display: inline-flex;
+	align-items: center;
+	position: relative;
+	overflow: visible;
 }
 
 .awea-site-logo-wrap img,
 .awea-site-logo-wrap svg {
-  display: block;
-  height: auto;
-  max-width: 100%;
-  transform: none !important;
-  transition: opacity 0.25s ease, filter 0.25s ease, box-shadow 0.25s ease;
+	display: block;
+	height: auto;
+	max-width: 100%;
+	transform: none !important;
+	transition: opacity 0.25s ease, filter 0.25s ease;
 }
 
-.awea-site-logo-wrap:hover img,
-.awea-site-logo-wrap:hover svg {
-  transform: none !important;
+/* Dual Hover & Sticky Logo Swap Mechanism */
+.awea-site-logo-wrap .has-hover-logo .awe-hover-logo,
+.awea-site-logo-wrap .has-sticky-logo .awe-sticky-logo {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	object-fit: contain;
+	opacity: 0;
+	pointer-events: none;
+	transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Dual / Hover Logo Swap Mechanism */
-.awea-site-logo-wrap .has-hover-logo {
-  position: relative;
+.awea-site-logo-wrap .has-hover-logo:hover .awe-primary-logo,
+.awea-site-logo-wrap .awe-logo-link:focus-visible .has-hover-logo .awe-primary-logo {
+	opacity: 0;
 }
 
-.awea-site-logo-wrap .has-hover-logo .awe-hover-logo {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+.awea-site-logo-wrap .has-hover-logo:hover .awe-hover-logo,
+.awea-site-logo-wrap .awe-logo-link:focus-visible .has-hover-logo .awe-hover-logo {
+	opacity: 1;
 }
 
-.awea-site-logo-wrap .has-hover-logo:hover img:first-child,
-.awea-site-logo-wrap .has-hover-logo:hover .awe-primary-logo {
-  opacity: 0;
+/* Sticky Header Automatic Swap */
+.elementor-sticky--active .awea-site-logo-wrap .has-sticky-logo .awe-primary-logo,
+.is-sticky .awea-site-logo-wrap .has-sticky-logo .awe-primary-logo,
+.sticky-active .awea-site-logo-wrap .has-sticky-logo .awe-primary-logo,
+.header-scrolled .awea-site-logo-wrap .has-sticky-logo .awe-primary-logo {
+	opacity: 0;
 }
 
-.awea-site-logo-wrap .has-hover-logo:hover .awe-hover-logo {
-  opacity: 1;
+.elementor-sticky--active .awea-site-logo-wrap .has-sticky-logo .awe-sticky-logo,
+.is-sticky .awea-site-logo-wrap .has-sticky-logo .awe-sticky-logo,
+.sticky-active .awea-site-logo-wrap .has-sticky-logo .awe-sticky-logo,
+.header-scrolled .awea-site-logo-wrap .has-sticky-logo .awe-sticky-logo {
+	opacity: 1;
 }
 
-/* Text Logo & Tagline Styles */
+/* Text Logo, Brand Icon & Tagline Styles */
+.awea-site-logo-wrap .awea-brand-lockup {
+	display: inline-flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.awea-site-logo-wrap .awea-logo-brand-ico {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	color: var(--e-global-color-primary, #4f46e5);
+	flex-shrink: 0;
+	line-height: 1;
+}
+
+.awea-site-logo-wrap .awea-logo-brand-ico i {
+	font-size: 26px;
+	line-height: 1;
+}
+
+.awea-site-logo-wrap .awea-logo-brand-ico svg {
+	width: 26px;
+	height: 26px;
+	fill: currentColor;
+}
+
 .awea-site-logo-wrap .awe-text-logo-group {
-  display: flex;
-  flex-direction: column;
-  align-items: var(--awea-logo-align, flex-start);
+	display: flex;
+	flex-direction: column;
+	align-items: var(--awea-logo-align, flex-start);
 }
 
 .awea-site-logo-wrap .awe-logo-title {
-  font-size: 1.5rem;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  line-height: 1.1;
-  color: #0f172a;
-  transition: color 0.2s ease;
+	margin: 0;
+	font-size: 1.5rem;
+	font-weight: 800;
+	letter-spacing: -0.02em;
+	line-height: 1.1;
+	color: #0f172a;
+	transition: color 0.2s ease;
 }
 
 .awea-site-logo-wrap .awe-logo-tagline {
-  font-size: 0.85rem;
-  font-weight: 500;
-  color: #64748b;
-  margin-top: 4px;
+	font-size: 0.85rem;
+	font-weight: 500;
+	color: #64748b;
+	margin-top: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.awea-site-logo-wrap,
+	.awea-site-logo-wrap img,
+	.awea-site-logo-wrap svg,
+	.awea-site-logo-wrap .awe-logo-title {
+		transition: none !important;
+	}
 }

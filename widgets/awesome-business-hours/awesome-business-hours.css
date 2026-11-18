@@ -1,295 +1,370 @@
 /* ==========================================================================
-   AWEA Business Hours Studio Master Architecture (Zero Hover Zoom / No Scale)
+   Awesome Business Hours Widget
    ========================================================================== */
 
-.awea-business-hours-root {
-  width: 100%;
-  position: relative;
-  box-sizing: border-box;
+.awea-bh-root {
+	--awea-bh-bg: #0f172a;
+	--awea-bh-panel-bg: rgba(255, 255, 255, 0.03);
+	--awea-bh-border: rgba(255, 255, 255, 0.1);
+	--awea-bh-divider: rgba(255, 255, 255, 0.08);
+	--awea-bh-title: #ffffff;
+	--awea-bh-desc: #94a3b8;
+	--awea-bh-muted: #64748b;
+	--awea-bh-day: #f1f5f9;
+	--awea-bh-time: #94a3b8;
+	--awea-bh-today-time: #ffffff;
+	--awea-bh-accent: var(--e-global-color-accent, #38bdf8);
+	--awea-bh-ico-bg: rgba(255, 255, 255, 0.06);
+	--awea-bh-ico-border: rgba(255, 255, 255, 0.12);
+	--awea-bh-ico-color: #ffffff;
+
+	width: 100%;
+	position: relative;
+	box-sizing: border-box;
 }
 
-/* 1. Main Glass Grid Shell */
-.awea-business-hours-grid {
-  display: grid;
-  grid-template-columns: 1fr 1.15fr;
-  background-color: #090d16;
-  border-style: solid;
-  border-width: 1px;
-  border-color: rgba(255, 255, 255, 0.08);
-  border-radius: 32px;
-  overflow: hidden;
-  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.45);
-  box-sizing: border-box;
+.awea-bh-root *,
+.awea-bh-root *::before,
+.awea-bh-root *::after {
+	box-sizing: border-box;
 }
 
-/* 2. Left Status HUD */
-.awea-business-hours-status-side {
-  padding: 54px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  position: relative;
-  box-sizing: border-box;
+/* Clean Light Surface Preset */
+.awea-bh-theme-light .awea-bh-root {
+	--awea-bh-bg: #ffffff;
+	--awea-bh-panel-bg: #f8fafc;
+	--awea-bh-border: #e2e8f0;
+	--awea-bh-divider: #e2e8f0;
+	--awea-bh-title: #0f172a;
+	--awea-bh-desc: #475569;
+	--awea-bh-muted: #64748b;
+	--awea-bh-day: #0f172a;
+	--awea-bh-time: #475569;
+	--awea-bh-today-time: #0f172a;
+	--awea-bh-accent: var(--e-global-color-primary, #4f46e5);
+	--awea-bh-ico-bg: #f1f5f9;
+	--awea-bh-ico-border: #e2e8f0;
+	--awea-bh-ico-color: #0f172a;
 }
 
-/* Beacon Status Pill */
-.awea-business-hours-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  padding: 8px 18px;
-  border-radius: 100px;
-  font-weight: 800;
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  margin-bottom: 28px;
-  width: fit-content;
-  user-select: none;
-  box-sizing: border-box;
-  line-height: 1.2;
+.awea-bh-card {
+	display: grid;
+	grid-template-columns: 1fr 1.15fr;
+	background-color: var(--awea-bh-bg);
+	border: 1px solid var(--awea-bh-border);
+	border-radius: 28px;
+	overflow: hidden;
 }
 
-.awea-business-hours-badge.is-open {
-  background-color: rgba(34, 197, 94, 0.12);
-  color: #22c55e;
-  border: 1px solid rgba(34, 197, 94, 0.25);
+/* Stacked Single-Column Mode */
+.awea-bh-mode-stacked .awea-bh-card {
+	grid-template-columns: 1fr;
 }
 
-.awea-business-hours-badge.is-closed {
-  background-color: rgba(239, 68, 68, 0.12);
-  color: #f87171;
-  border: 1px solid rgba(239, 68, 68, 0.25);
+/* --------------------------------------------------------------------------
+   1. Left Status Panel
+   -------------------------------------------------------------------------- */
+.awea-bh-left {
+	padding: 48px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
 }
 
-.awea-business-hours-pulse {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background-color: currentColor;
-  position: relative;
-  flex-shrink: 0;
+.awea-bh-badge {
+	display: inline-flex;
+	align-items: center;
+	gap: 9px;
+	padding: 7px 16px;
+	border-radius: 100px;
+	font-weight: 800;
+	font-size: 0.72rem;
+	text-transform: uppercase;
+	letter-spacing: 0.1em;
+	margin-bottom: 24px;
+	width: fit-content;
+	user-select: none;
+	line-height: 1.2;
 }
 
-.awea-business-hours-pulse::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  background-color: currentColor;
-  animation: aweaBeaconPulse 2.4s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+.awea-bh-badge.is-open {
+	background-color: rgba(34, 197, 94, 0.14);
+	color: #22c55e;
+	border: 1px solid rgba(34, 197, 94, 0.28);
 }
 
-@keyframes aweaBeaconPulse {
-  0% {
-    transform: scale(1);
-    opacity: 0.85;
-  }
-  70% {
-    transform: scale(2.8);
-    opacity: 0;
-  }
-  100% {
-    transform: scale(1);
-    opacity: 0;
-  }
+.awea-bh-theme-dark .awea-bh-badge.is-open {
+	color: #4ade80;
 }
 
-.awea-business-hours-heading {
-  font-size: clamp(2rem, 4.5vw, 2.75rem);
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  line-height: 1.1;
-  margin-top: 0;
-  margin-bottom: 18px;
-  color: #ffffff;
-  word-break: break-word;
+.awea-bh-badge.is-closed {
+	background-color: rgba(239, 68, 68, 0.12);
+	color: #ef4444;
+	border: 1px solid rgba(239, 68, 68, 0.26);
 }
 
-.awea-business-hours-desc {
-  color: #94a3b8;
-  font-size: 1.05rem;
-  line-height: 1.7;
-  margin-top: 0;
-  margin-bottom: 36px;
-  max-width: 440px;
-  word-break: break-word;
+.awea-bh-theme-dark .awea-bh-badge.is-closed {
+	color: #f87171;
 }
 
-/* Phone Support Box */
-.awea-business-hours-support-box {
-  margin-top: auto;
-  padding-top: 15px;
-  box-sizing: border-box;
+.awea-bh-pulse {
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	background-color: currentColor;
+	position: relative;
+	flex-shrink: 0;
 }
 
-.awea-business-hours-support-label {
-  display: block;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  font-size: 11px;
-  margin-bottom: 8px;
-  line-height: 1.2;
+.awea-bh-pulse::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	border-radius: 50%;
+	background-color: currentColor;
+	animation: aweaBhPulse 2.4s cubic-bezier(0.16, 1, 0.3, 1) infinite;
 }
 
-.awea-business-hours-support-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 14px;
-  text-decoration: none;
-  color: inherit;
-  transform: none;
-  transition: opacity 0.25s ease;
+@keyframes aweaBhPulse {
+	0% {
+		transform: scale(1);
+		opacity: 0.85;
+	}
+	70% {
+		transform: scale(2.6);
+		opacity: 0;
+	}
+	100% {
+		transform: scale(1);
+		opacity: 0;
+	}
 }
 
-.awea-business-hours-support-link:hover {
-  transform: none;
-  opacity: 0.9;
+.awea-bh-title {
+	margin: 0 0 14px 0;
+	font-size: clamp(1.85rem, 3.6vw, 2.5rem);
+	font-weight: 800;
+	letter-spacing: -0.025em;
+	line-height: 1.15;
+	color: var(--awea-bh-title);
+	word-break: break-word;
 }
 
-.awea-support-icon {
-  width: 44px;
-  height: 44px;
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #ffffff;
-  flex-shrink: 0;
-  box-sizing: border-box;
+.awea-bh-desc {
+	margin: 0 0 32px 0;
+	max-width: 440px;
+	font-size: 1rem;
+	line-height: 1.65;
+	color: var(--awea-bh-desc);
+	word-break: break-word;
 }
 
-.awea-support-icon svg {
-  width: 18px;
-  height: 18px;
-  display: block;
+/* Direct Support Phone */
+.awea-bh-phone {
+	margin-top: auto;
+	padding-top: 8px;
 }
 
-.awea-business-hours-support-num {
-  font-weight: 800;
-  color: #ffffff;
-  font-size: 1.45rem;
-  letter-spacing: -0.02em;
-  line-height: 1.25;
-  word-break: break-word;
+.awea-bh-phone-label {
+	display: block;
+	font-size: 0.72rem;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.09em;
+	color: var(--awea-bh-muted);
+	margin-bottom: 8px;
 }
 
-/* 3. Right Weekly Schedule Side */
-.awea-business-hours-schedule-side {
-  padding: 54px;
-  background-color: rgba(0, 0, 0, 0.28);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  box-sizing: border-box;
+.awea-bh-phone-link {
+	display: inline-flex;
+	align-items: center;
+	gap: 12px;
+	text-decoration: none;
+	color: inherit;
+	transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
-.awea-schedule-list {
-  display: flex;
-  flex-direction: column;
+.awea-bh-phone-link:hover {
+	opacity: 0.88;
 }
 
-.awea-business-hours-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 18px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-  box-sizing: border-box;
-  transform: none;
-  transition: border-color 0.3s ease;
+.awea-bh-phone-link:focus-visible {
+	outline: 2px solid var(--awea-bh-accent);
+	outline-offset: 4px;
+	border-radius: 10px;
 }
 
-.awea-business-hours-row:last-child {
-  border-bottom: none !important;
+.awea-bh-phone-ico {
+	width: 42px;
+	height: 42px;
+	border-radius: 12px;
+	background-color: var(--awea-bh-ico-bg);
+	border: 1px solid var(--awea-bh-ico-border);
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	color: var(--awea-bh-ico-color);
+	flex-shrink: 0;
+	transition: transform 0.25s ease;
 }
 
-.awea-day-meta {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+.awea-bh-phone-link:hover .awea-bh-phone-ico {
+	transform: scale(1.05);
 }
 
-.awea-today-indicator {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background-color: #38bdf8;
-  box-shadow: 0 0 10px #38bdf8;
-  flex-shrink: 0;
+.awea-bh-phone-ico svg {
+	width: 17px;
+	height: 17px;
 }
 
-.awea-business-hours-day {
-  font-weight: 600;
-  font-size: 1.05rem;
-  color: #f1f5f9;
-  line-height: 1.3;
-  word-break: break-word;
+.awea-bh-phone-num {
+	font-weight: 800;
+	color: var(--awea-bh-title);
+	font-size: 1.25rem;
+	letter-spacing: -0.02em;
 }
 
-.awea-business-hours-time {
-  font-weight: 500;
-  color: #94a3b8;
-  font-variant-numeric: tabular-nums;
-  font-size: 0.95rem;
-  line-height: 1.3;
-  white-space: nowrap;
+/* --------------------------------------------------------------------------
+   2. Right Weekly Schedule
+   -------------------------------------------------------------------------- */
+.awea-bh-right {
+	padding: 48px;
+	background-color: var(--awea-bh-panel-bg);
+	border-left: 1px solid var(--awea-bh-divider);
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
 }
 
-/* Active Current Day State */
-.awea-business-hours-row.is-today {
-  border-bottom-color: var(--e-global-color-accent, #38bdf8);
-  transform: none;
+.awea-bh-mode-stacked .awea-bh-right {
+	border-left: none;
+	border-top: 1px solid var(--awea-bh-divider);
 }
 
-.awea-business-hours-row.is-today .awea-business-hours-day {
-  font-weight: 800;
-  color: var(--e-global-color-accent, #38bdf8);
+.awea-bh-list {
+	display: flex;
+	flex-direction: column;
 }
 
-.awea-business-hours-row.is-today .awea-business-hours-time {
-  color: #ffffff;
-  font-weight: 700;
+.awea-bh-row {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 16px;
+	padding: 16px 0;
+	border-bottom: 1px solid var(--awea-bh-divider);
+	transition: border-color 0.25s ease;
 }
 
-/* Closed Day Dimming */
-.awea-business-hours-row.is-closed-row .awea-business-hours-day {
-  opacity: 0.55;
+.awea-bh-row:first-child {
+	padding-top: 0;
 }
 
-.awea-business-hours-row.is-closed-row .awea-business-hours-time {
-  color: #ef4444;
-  font-weight: 700;
-  letter-spacing: 0.05em;
+.awea-bh-row:last-child {
+	border-bottom: none;
+	padding-bottom: 0;
 }
 
-/* 4. Responsive Breakpoints */
-@media (max-width: 980px) {
-  .awea-business-hours-grid {
-    grid-template-columns: 1fr;
-    border-radius: 24px;
-  }
+.awea-bh-day-wrap {
+	display: inline-flex;
+	align-items: center;
+	gap: 10px;
+}
 
-  .awea-business-hours-status-side {
-    padding: 36px 28px;
-  }
+.awea-bh-dot {
+	display: none;
+	width: 7px;
+	height: 7px;
+	border-radius: 50%;
+	background-color: var(--awea-bh-accent);
+	flex-shrink: 0;
+}
 
-  .awea-business-hours-heading {
-    font-size: 2rem;
-  }
+.awea-bh-row.is-today .awea-bh-dot {
+	display: inline-block;
+}
 
-  .awea-business-hours-schedule-side {
-    padding: 24px 28px 36px 28px;
-  }
+.awea-bh-day {
+	font-weight: 600;
+	font-size: 0.98rem;
+	color: var(--awea-bh-day);
+}
 
-  .awea-business-hours-row {
-    padding: 14px 0;
-  }
+.awea-bh-time {
+	font-weight: 500;
+	color: var(--awea-bh-time);
+	font-variant-numeric: tabular-nums;
+	font-size: 0.94rem;
+	text-align: right;
+}
 
-  .awea-business-hours-support-num {
-    font-size: 1.25rem;
-  }
+/* Active Current Day */
+.awea-bh-row.is-today {
+	border-bottom-color: var(--awea-bh-accent);
+}
+
+.awea-bh-row.is-today .awea-bh-day {
+	font-weight: 800;
+	color: var(--awea-bh-accent);
+}
+
+.awea-bh-row.is-today .awea-bh-time {
+	color: var(--awea-bh-today-time);
+	font-weight: 700;
+}
+
+/* Closed Day */
+.awea-bh-row.is-closed .awea-bh-day {
+	opacity: 0.55;
+}
+
+.awea-bh-row.is-closed .awea-bh-time {
+	color: #ef4444;
+	font-weight: 700;
+	letter-spacing: 0.05em;
+}
+
+.awea-bh-theme-dark .awea-bh-row.is-closed .awea-bh-time {
+	color: #f87171;
+}
+
+.awea-bh-tz {
+	margin-top: 20px;
+	font-size: 0.78rem;
+	color: var(--awea-bh-muted);
+	letter-spacing: 0.03em;
+}
+
+/* --------------------------------------------------------------------------
+   3. Accessibility & Responsive Breakpoints
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+	.awea-bh-pulse::after {
+		animation: none !important;
+	}
+}
+
+@media (max-width: 900px) {
+	.awea-bh-card {
+		grid-template-columns: 1fr;
+		border-radius: 22px;
+	}
+
+	.awea-bh-left {
+		padding: 32px 24px;
+	}
+
+	.awea-bh-right {
+		padding: 28px 24px 32px 24px;
+		border-left: none;
+		border-top: 1px solid var(--awea-bh-divider);
+	}
+
+	.awea-bh-title {
+		font-size: 1.85rem;
+	}
+
+	.awea-bh-phone-num {
+		font-size: 1.15rem;
+	}
 }

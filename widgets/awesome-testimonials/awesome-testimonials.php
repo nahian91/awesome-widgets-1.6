@@ -3,7 +3,7 @@
  * Awesome Testimonials Studio Widget (Zero-Shadow Repeater Grid Edition).
  *
  * @package AwesomeWidgetsElementor
- * @since 2.0.0
+ * @since   2.0.0
  */
 
 namespace Elementor;
@@ -12,13 +12,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use \Elementor\Controls_Manager;
-use \Elementor\Group_Control_Border;
-use \Elementor\Group_Control_Typography;
-use \Elementor\Core\Kits\Documents\Tabs\Global_Typography;
-use \Elementor\Core\Kits\Documents\Tabs\Global_Colors;
-use \Elementor\Widget_Base;
-use \Elementor\Repeater;
+use Elementor\Controls_Manager;
+use Elementor\Group_Control_Border;
+use Elementor\Group_Control_Typography;
+use Elementor\Core\Kits\Documents\Tabs\Global_Typography;
+use Elementor\Core\Kits\Documents\Tabs\Global_Colors;
+use Elementor\Widget_Base;
+use Elementor\Repeater;
 
 class Widget_Awesome_Testimonials extends Widget_Base {
 
@@ -173,7 +173,7 @@ class Widget_Awesome_Testimonials extends Widget_Base {
 				'label'     => esc_html__( 'Beam Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}} {{CURRENT_ITEM}}' => '--awea-tm-beam: {{VALUE}};',
+					'{{WRAPPER}} {{CURRENT_ITEM}}' => '--awea-tm-item-beam: {{VALUE}};',
 				],
 			]
 		);
@@ -353,7 +353,7 @@ class Widget_Awesome_Testimonials extends Widget_Base {
 				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
 				'condition' => [ 'awea_beam_enable' => 'yes' ],
 				'selectors' => [
-					'{{WRAPPER}} .awea-tm-card' => '--awea-tm-beam: {{VALUE}};',
+					'{{WRAPPER}} .awea-tm-grid' => '--awea-tm-global-beam: {{VALUE}};',
 				],
 			]
 		);
@@ -404,7 +404,6 @@ class Widget_Awesome_Testimonials extends Widget_Base {
 			[
 				'label'     => esc_html__( 'Background', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
-				'default'   => '#f8fafc',
 				'selectors' => [
 					'{{WRAPPER}} .awea-tm-card:hover' => 'background-color: {{VALUE}};',
 				],
@@ -448,7 +447,7 @@ class Widget_Awesome_Testimonials extends Widget_Base {
 				'range'      => [ 'px' => [ 'min' => 10, 'max' => 32 ] ],
 				'default'    => [ 'unit' => 'px', 'size' => 14 ],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-tm-stars i' => 'font-size: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .awea-tm-stars svg' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
@@ -638,10 +637,10 @@ class Widget_Awesome_Testimonials extends Widget_Base {
 	}
 
 	protected function render() {
-		$settings   = $this->get_settings_for_display();
-		$items      = $settings['awea_items'] ?? [];
-		$has_quote  = 'yes' === ( $settings['awea_quote_icon'] ?? 'no' );
-		$name_tag   = Utils::validate_html_tag( $settings['awea_name_tag'] ?? 'h4' );
+		$settings  = $this->get_settings_for_display();
+		$items     = $settings['awea_items'] ?? [];
+		$has_quote = 'yes' === ( $settings['awea_quote_icon'] ?? 'no' );
+		$name_tag  = Utils::validate_html_tag( $settings['awea_name_tag'] ?? 'h4' );
 
 		if ( empty( $items ) ) {
 			return;
@@ -666,13 +665,18 @@ class Widget_Awesome_Testimonials extends Widget_Base {
 					<?php endif; ?>
 
 					<?php if ( $rating > 0 ) : ?>
-						<div class="awea-tm-stars" aria-label="<?php echo esc_attr( sprintf( __( 'Rated %s out of 5 stars', 'awesome-widgets-elementor' ), $rating ) ); ?>">
-							<?php
-							for ( $i = 1; $i <= 5; $i++ ) {
-								$star_class = ( $i <= $rating ) ? 'fas fa-star awea-star-on' : 'far fa-star awea-star-off';
-								echo '<i class="' . esc_attr( $star_class ) . '" aria-hidden="true"></i>';
-							}
-							?>
+						<?php
+						/* translators: %s: rating value out of 5 */
+						$rating_label = sprintf( __( 'Rated %s out of 5 stars', 'awesome-widgets-elementor' ), $rating );
+						?>
+						<div class="awea-tm-stars" aria-label="<?php echo esc_attr( $rating_label ); ?>">
+							<?php for ( $i = 1; $i <= 5; $i++ ) :
+								$star_class = ( $i <= $rating ) ? 'awea-star-on' : 'awea-star-off';
+								?>
+								<svg class="<?php echo esc_attr( $star_class ); ?>" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+									<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+								</svg>
+							<?php endfor; ?>
 						</div>
 					<?php endif; ?>
 
@@ -710,6 +714,78 @@ class Widget_Awesome_Testimonials extends Widget_Base {
 
 				</article>
 			<?php endforeach; ?>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Instant Live Editor Preview (Backbone.js Template).
+	 */
+	protected function content_template() {
+		?>
+		<#
+		if ( ! settings.awea_items || ! settings.awea_items.length ) {
+			return;
+		}
+		var hasQuote = 'yes' === settings.awea_quote_icon;
+		var nameTag  = elementor.helpers.validateHTMLTag( settings.awea_name_tag || 'h4' );
+		#>
+		<div class="awea-tm-grid">
+			<# _.each( settings.awea_items, function( item, index ) {
+				var id        = item._id || index;
+				var rating    = parseInt( item.awea_rating, 10 ) || 0;
+				var quote     = item.awea_quote || '';
+				var avatarUrl = ( item.awea_photo && item.awea_photo.url ) ? item.awea_photo.url : '';
+				var name      = item.awea_name || '';
+				var role      = item.awea_role || '';
+				var verified  = 'yes' === item.awea_verified;
+			#>
+				<article class="awea-tm-card elementor-repeater-item-{{ id }}">
+					<# if ( hasQuote ) { #>
+						<svg class="awea-tm-quote-mark" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+							<path d="M14.017 21L14.017 18C14.017 16.8954 14.9124 16 16.017 16H19.017C19.5693 16 20.017 15.5523 20.017 15V9C20.017 8.44772 19.5693 8 19.017 8H16.017C15.4647 8 15.017 8.44772 15.017 9V12C15.017 12.5523 14.5693 13 14.017 13H13.017C12.4647 13 12.017 12.5523 12.017 12V9C12.017 6.79086 13.8079 5 16.017 5H19.017C21.2261 5 23.017 6.79086 23.017 9V15C23.017 18.866 19.883 22 16.017 22H14.017V21ZM2.01693 21L2.01693 18C2.01693 16.8954 2.91236 16 4.01693 16H7.01693C7.56921 16 8.01693 15.5523 8.01693 15V9C8.01693 8.44772 7.56921 8 7.01693 8H4.01693C3.46464 8 3.01693 8.44772 3.01693 9V12C3.01693 12.5523 2.56921 13 2.01693 13H1.01693C0.464645 13 -0.0169312 12.5523 -0.0169312 12V9C-0.0169312 6.79086 1.77393 5 4.01693 5H7.01693C9.22607 5 11.0169 6.79086 11.0169 9V15C11.0169 18.866 7.88297 22 4.01693 22H2.01693V21Z" />
+						</svg>
+					<# } #>
+
+					<# if ( rating > 0 ) { #>
+						<div class="awea-tm-stars">
+							<# for ( var i = 1; i <= 5; i++ ) { #>
+								<svg class="{{ i <= rating ? 'awea-star-on' : 'awea-star-off' }}" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+									<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+								</svg>
+							<# } #>
+						</div>
+					<# } #>
+
+					<# if ( quote ) { #>
+						<blockquote class="awea-tm-text">&ldquo;{{{ quote }}}&rdquo;</blockquote>
+					<# } #>
+
+					<footer class="awea-tm-footer">
+						<# if ( avatarUrl ) { #>
+							<img src="{{ avatarUrl }}" alt="{{ name }}" class="awea-tm-avatar" />
+						<# } #>
+
+						<div class="awea-tm-meta">
+							<# if ( name ) { #>
+								<{{{ nameTag }}} class="awea-tm-name">{{{ name }}}</{{{ nameTag }}}>
+							<# } #>
+
+							<# if ( role ) { #>
+								<cite class="awea-tm-role">{{{ role }}}</cite>
+							<# } #>
+						</div>
+
+						<# if ( verified ) { #>
+							<span class="awea-tm-verify" aria-hidden="true">
+								<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+									<polyline points="20 6 9 17 4 12"></polyline>
+								</svg>
+							</span>
+						<# } #>
+					</footer>
+				</article>
+			<# } ); #>
 		</div>
 		<?php
 	}

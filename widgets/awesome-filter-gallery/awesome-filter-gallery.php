@@ -1,10 +1,9 @@
 <?php
 /**
- * Awesome Filter Gallery Studio Widget.
- * Modern Architectural Portfolio Grid with Sliding Pill Navigation & Lightbox.
+ * Awesome Filter Gallery Widget.
  *
  * @package AwesomeWidgetsElementor
- * @since 1.0.0
+ * @since   2.0.0
  */
 
 namespace Elementor;
@@ -13,14 +12,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use \Elementor\Controls_Manager;
-use \Elementor\Group_Control_Border;
-use \Elementor\Group_Control_Box_Shadow;
-use \Elementor\Group_Control_Typography;
-use \Elementor\Core\Kits\Documents\Tabs\Global_Colors;
-use \Elementor\Core\Kits\Documents\Tabs\Global_Typography;
-use \Elementor\Widget_Base;
-use \Elementor\Repeater;
+use Elementor\Controls_Manager;
+use Elementor\Group_Control_Border;
+use Elementor\Group_Control_Typography;
+use Elementor\Group_Control_Box_Shadow;
+use Elementor\Group_Control_Image_Size;
+use Elementor\Core\Kits\Documents\Tabs\Global_Typography;
+use Elementor\Core\Kits\Documents\Tabs\Global_Colors;
+use Elementor\Widget_Base;
+use Elementor\Repeater;
 
 class Widget_Awesome_Filter_Gallery extends Widget_Base {
 
@@ -41,26 +41,26 @@ class Widget_Awesome_Filter_Gallery extends Widget_Base {
 	}
 
 	public function get_keywords() {
-		return [ 'awea', 'filter', 'gallery', 'portfolio', 'grid', 'lightbox', 'masonry', 'images' ];
+		return [ 'awea', 'filter', 'gallery', 'portfolio', 'grid', 'lightbox' ];
 	}
 
 	protected function register_controls() {
 
 		/* ==========================================================================
-		   CONTENT TAB: 1. FILTER
+		   CONTENT: 1. FILTER BAR
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_section_filter_bar',
+			'awea_section_filter',
 			[
-				'label' => esc_html__( 'Filter', 'awesome-widgets-elementor' ),
+				'label' => esc_html__( 'Filter Bar', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
 			]
 		);
 
 		$this->add_control(
-			'awea_show_filter_bar',
+			'awea_show_filter',
 			[
-				'label'        => esc_html__( 'Show', 'awesome-widgets-elementor' ),
+				'label'        => esc_html__( 'Show Filter Bar', 'awesome-widgets-elementor' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'label_on'     => esc_html__( 'Yes', 'awesome-widgets-elementor' ),
 				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
@@ -72,33 +72,33 @@ class Widget_Awesome_Filter_Gallery extends Widget_Base {
 		$this->add_control(
 			'awea_all_label',
 			[
-				'label'     => esc_html__( 'All Label', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( '"All" Label', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::TEXT,
 				'default'   => esc_html__( 'All Works', 'awesome-widgets-elementor' ),
 				'dynamic'   => [ 'active' => true ],
-				'condition' => [ 'awea_show_filter_bar' => 'yes' ],
+				'condition' => [ 'awea_show_filter' => 'yes' ],
 			]
 		);
 
 		$this->add_control(
 			'awea_show_counter',
 			[
-				'label'        => esc_html__( 'Counter', 'awesome-widgets-elementor' ),
+				'label'        => esc_html__( 'Show Item Counters', 'awesome-widgets-elementor' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'label_on'     => esc_html__( 'Yes', 'awesome-widgets-elementor' ),
 				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
 				'return_value' => 'yes',
 				'default'      => 'yes',
-				'condition'    => [ 'awea_show_filter_bar' => 'yes' ],
+				'condition'    => [ 'awea_show_filter' => 'yes' ],
 			]
 		);
 
-		$repeater_cats = new Repeater();
+		$cat_repeater = new Repeater();
 
-		$repeater_cats->add_control(
+		$cat_repeater->add_control(
 			'awea_cat_name',
 			[
-				'label'       => esc_html__( 'Name', 'awesome-widgets-elementor' ),
+				'label'       => esc_html__( 'Category Name', 'awesome-widgets-elementor' ),
 				'type'        => Controls_Manager::TEXT,
 				'default'     => esc_html__( 'Architecture', 'awesome-widgets-elementor' ),
 				'dynamic'     => [ 'active' => true ],
@@ -109,9 +109,9 @@ class Widget_Awesome_Filter_Gallery extends Widget_Base {
 		$this->add_control(
 			'awea_categories',
 			[
-				'label'       => esc_html__( 'Categories', 'awesome-widgets-elementor' ),
+				'label'       => esc_html__( 'Categories List', 'awesome-widgets-elementor' ),
 				'type'        => Controls_Manager::REPEATER,
-				'fields'      => $repeater_cats->get_controls(),
+				'fields'      => $cat_repeater->get_controls(),
 				'default'     => [
 					[ 'awea_cat_name' => esc_html__( 'Architecture', 'awesome-widgets-elementor' ) ],
 					[ 'awea_cat_name' => esc_html__( 'Landscape', 'awesome-widgets-elementor' ) ],
@@ -119,7 +119,7 @@ class Widget_Awesome_Filter_Gallery extends Widget_Base {
 					[ 'awea_cat_name' => esc_html__( 'Minimalism', 'awesome-widgets-elementor' ) ],
 				],
 				'title_field' => '{{{ awea_cat_name }}}',
-				'condition'   => [ 'awea_show_filter_bar' => 'yes' ],
+				'condition'   => [ 'awea_show_filter' => 'yes' ],
 			]
 		);
 
@@ -129,34 +129,43 @@ class Widget_Awesome_Filter_Gallery extends Widget_Base {
 				'label'     => esc_html__( 'Alignment', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::CHOOSE,
 				'options'   => [
-					'flex-start' => [ 'title' => esc_html__( 'Left', 'awesome-widgets-elementor' ), 'icon' => 'eicon-text-align-left' ],
-					'center'     => [ 'title' => esc_html__( 'Center', 'awesome-widgets-elementor' ), 'icon' => 'eicon-text-align-center' ],
-					'flex-end'   => [ 'title' => esc_html__( 'Right', 'awesome-widgets-elementor' ), 'icon' => 'eicon-text-align-right' ],
+					'flex-start' => [
+						'title' => esc_html__( 'Left', 'awesome-widgets-elementor' ),
+						'icon'  => 'eicon-text-align-left',
+					],
+					'center'     => [
+						'title' => esc_html__( 'Center', 'awesome-widgets-elementor' ),
+						'icon'  => 'eicon-text-align-center',
+					],
+					'flex-end'   => [
+						'title' => esc_html__( 'Right', 'awesome-widgets-elementor' ),
+						'icon'  => 'eicon-text-align-right',
+					],
 				],
 				'default'   => 'center',
 				'selectors' => [
 					'{{WRAPPER}} .awea-fg-nav-wrapper' => 'justify-content: {{VALUE}};',
 				],
-				'condition' => [ 'awea_show_filter_bar' => 'yes' ],
+				'condition' => [ 'awea_show_filter' => 'yes' ],
 			]
 		);
 
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   CONTENT TAB: 2. ITEMS
+		   CONTENT: 2. ITEMS (REPEATER)
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_section_gallery_items',
+			'awea_section_items',
 			[
-				'label' => esc_html__( 'Items', 'awesome-widgets-elementor' ),
+				'label' => esc_html__( 'Gallery Items', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
 			]
 		);
 
-		$repeater_items = new Repeater();
+		$item_repeater = new Repeater();
 
-		$repeater_items->add_control(
+		$item_repeater->add_control(
 			'awea_item_image',
 			[
 				'label'   => esc_html__( 'Image', 'awesome-widgets-elementor' ),
@@ -168,7 +177,7 @@ class Widget_Awesome_Filter_Gallery extends Widget_Base {
 			]
 		);
 
-		$repeater_items->add_control(
+		$item_repeater->add_control(
 			'awea_item_title',
 			[
 				'label'       => esc_html__( 'Title', 'awesome-widgets-elementor' ),
@@ -179,7 +188,7 @@ class Widget_Awesome_Filter_Gallery extends Widget_Base {
 			]
 		);
 
-		$repeater_items->add_control(
+		$item_repeater->add_control(
 			'awea_item_subtitle',
 			[
 				'label'       => esc_html__( 'Subtitle', 'awesome-widgets-elementor' ),
@@ -190,20 +199,21 @@ class Widget_Awesome_Filter_Gallery extends Widget_Base {
 			]
 		);
 
-		$repeater_items->add_control(
+		$item_repeater->add_control(
 			'awea_item_category',
 			[
 				'label'       => esc_html__( 'Categories', 'awesome-widgets-elementor' ),
 				'type'        => Controls_Manager::TEXT,
-				'description' => esc_html__( 'Comma-separated (e.g. Architecture, Minimalism).', 'awesome-widgets-elementor' ),
+				'description' => esc_html__( 'Comma-separated (e.g. Architecture, Minimalism)', 'awesome-widgets-elementor' ),
+				'default'     => 'Architecture',
 				'label_block' => true,
 			]
 		);
 
-		$repeater_items->add_control(
+		$item_repeater->add_control(
 			'awea_item_link',
 			[
-				'label'       => esc_html__( 'Link', 'awesome-widgets-elementor' ),
+				'label'       => esc_html__( 'Custom Link', 'awesome-widgets-elementor' ),
 				'type'        => Controls_Manager::URL,
 				'dynamic'     => [ 'active' => true ],
 				'placeholder' => 'https://example.com',
@@ -213,9 +223,10 @@ class Widget_Awesome_Filter_Gallery extends Widget_Base {
 		$this->add_control(
 			'awea_gallery_items',
 			[
-				'label'       => esc_html__( 'List', 'awesome-widgets-elementor' ),
+				'label'       => esc_html__( 'Items List', 'awesome-widgets-elementor' ),
 				'type'        => Controls_Manager::REPEATER,
-				'fields'      => $repeater_items->get_controls(),
+				'fields'      => $item_repeater->get_controls(),
+				'title_field' => '{{{ awea_item_title }}}',
 				'default'     => [
 					[
 						'awea_item_title'    => esc_html__( 'Tokyo Cyberpunk', 'awesome-widgets-elementor' ),
@@ -248,17 +259,16 @@ class Widget_Awesome_Filter_Gallery extends Widget_Base {
 						'awea_item_category' => 'Portraits, Minimalism',
 					],
 				],
-				'title_field' => '{{{ awea_item_title || "Gallery Item" }}}',
 			]
 		);
 
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   CONTENT TAB: 3. SETTINGS
+		   CONTENT: 3. SETTINGS
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_section_grid_settings',
+			'awea_section_settings',
 			[
 				'label' => esc_html__( 'Settings', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
@@ -266,7 +276,7 @@ class Widget_Awesome_Filter_Gallery extends Widget_Base {
 		);
 
 		$this->add_responsive_control(
-			'awea_grid_columns',
+			'awea_columns',
 			[
 				'label'          => esc_html__( 'Columns', 'awesome-widgets-elementor' ),
 				'type'           => Controls_Manager::SELECT,
@@ -278,8 +288,6 @@ class Widget_Awesome_Filter_Gallery extends Widget_Base {
 					'2' => '2',
 					'3' => '3',
 					'4' => '4',
-					'5' => '5',
-					'6' => '6',
 				],
 				'selectors'      => [
 					'{{WRAPPER}} .awea-fg-grid' => 'grid-template-columns: repeat({{VALUE}}, minmax(0, 1fr));',
@@ -288,11 +296,11 @@ class Widget_Awesome_Filter_Gallery extends Widget_Base {
 		);
 
 		$this->add_responsive_control(
-			'awea_grid_gap',
+			'awea_gap',
 			[
-				'label'      => esc_html__( 'Spacing', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Grid Gap', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
-				'size_units' => [ 'px', 'em', 'rem' ],
+				'size_units' => [ 'px', 'rem' ],
 				'range'      => [ 'px' => [ 'min' => 0, 'max' => 60 ] ],
 				'default'    => [ 'unit' => 'px', 'size' => 24 ],
 				'selectors'  => [
@@ -302,17 +310,17 @@ class Widget_Awesome_Filter_Gallery extends Widget_Base {
 		);
 
 		$this->add_responsive_control(
-			'awea_aspect_ratio',
+			'awea_ratio',
 			[
-				'label'     => esc_html__( 'Ratio', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Image Aspect Ratio', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::SELECT,
 				'default'   => '4/3',
 				'options'   => [
-					'1/1'  => '1:1',
-					'4/3'  => '4:3',
-					'16/9' => '16:9',
-					'3/4'  => '3:4',
-					'auto' => esc_html__( 'Auto', 'awesome-widgets-elementor' ),
+					'1/1'  => '1:1 (Square)',
+					'4/3'  => '4:3 (Standard)',
+					'16/9' => '16:9 (Widescreen)',
+					'3/4'  => '3:4 (Portrait)',
+					'auto' => esc_html__( 'Auto (Original)', 'awesome-widgets-elementor' ),
 				],
 				'selectors' => [
 					'{{WRAPPER}} .awea-fg-thumb' => 'aspect-ratio: {{VALUE}};',
@@ -320,10 +328,19 @@ class Widget_Awesome_Filter_Gallery extends Widget_Base {
 			]
 		);
 
+		$this->add_group_control(
+			Group_Control_Image_Size::get_type(),
+			[
+				'name'      => 'awea_image_size',
+				'default'   => 'large',
+				'separator' => 'before',
+			]
+		);
+
 		$this->add_control(
 			'awea_title_tag',
 			[
-				'label'   => esc_html__( 'HTML Tag', 'awesome-widgets-elementor' ),
+				'label'   => esc_html__( 'Title HTML Tag', 'awesome-widgets-elementor' ),
 				'type'    => Controls_Manager::SELECT,
 				'default' => 'h4',
 				'options' => [
@@ -341,7 +358,7 @@ class Widget_Awesome_Filter_Gallery extends Widget_Base {
 		);
 
 		$this->add_control(
-			'awea_enable_lightbox',
+			'awea_lightbox',
 			[
 				'label'        => esc_html__( 'Lightbox', 'awesome-widgets-elementor' ),
 				'type'         => Controls_Manager::SWITCHER,
@@ -349,199 +366,19 @@ class Widget_Awesome_Filter_Gallery extends Widget_Base {
 				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
 				'return_value' => 'yes',
 				'default'      => 'yes',
+				'separator'    => 'before',
 			]
 		);
 
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   STYLE TAB: 1. FILTER BAR (CONDITIONAL)
+		   STYLE: 1. CARD
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_section_style_filter_bar',
+			'awea_style_card',
 			[
-				'label'     => esc_html__( 'Filter Bar', 'awesome-widgets-elementor' ),
-				'tab'       => Controls_Manager::TAB_STYLE,
-				'condition' => [ 'awea_show_filter_bar' => 'yes' ],
-			]
-		);
-
-		$this->add_group_control(
-			Group_Control_Typography::get_type(),
-			[
-				'name'     => 'awea_nav_typography',
-				'selector' => '{{WRAPPER}} .awea-fg-btn',
-				'global'   => [
-					'default' => Global_Typography::TYPOGRAPHY_SECONDARY,
-				],
-			]
-		);
-
-		$this->add_responsive_control(
-			'awea_nav_padding',
-			[
-				'label'      => esc_html__( 'Padding', 'awesome-widgets-elementor' ),
-				'type'       => Controls_Manager::DIMENSIONS,
-				'size_units' => [ 'px', 'em', 'rem' ],
-				'default'    => [ 'top' => '9', 'right' => '20', 'bottom' => '9', 'left' => '20', 'unit' => 'px', 'isLinked' => false ],
-				'selectors'  => [
-					'{{WRAPPER}} .awea-fg-btn' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
-				],
-			]
-		);
-
-		$this->add_responsive_control(
-			'awea_nav_track_margin',
-			[
-				'label'      => esc_html__( 'Margin', 'awesome-widgets-elementor' ),
-				'type'       => Controls_Manager::DIMENSIONS,
-				'size_units' => [ 'px', 'em', 'rem' ],
-				'default'    => [ 'top' => '0', 'right' => '0', 'bottom' => '36', 'left' => '0', 'unit' => 'px', 'isLinked' => false ],
-				'selectors'  => [
-					'{{WRAPPER}} .awea-fg-nav-wrapper' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
-				],
-			]
-		);
-
-		$this->add_control(
-			'awea_nav_track_bg',
-			[
-				'label'     => esc_html__( 'Track Background', 'awesome-widgets-elementor' ),
-				'type'      => Controls_Manager::COLOR,
-				'default'   => 'rgba(15, 23, 42, 0.05)',
-				'selectors' => [
-					'{{WRAPPER}} .awea-fg-nav-track' => 'background-color: {{VALUE}};',
-				],
-			]
-		);
-
-		$this->start_controls_tabs( 'awea_nav_color_tabs' );
-
-		// Normal
-		$this->start_controls_tab(
-			'awea_nav_tab_normal',
-			[ 'label' => esc_html__( 'Normal', 'awesome-widgets-elementor' ) ]
-		);
-
-		$this->add_control(
-			'awea_nav_text_color',
-			[
-				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
-				'type'      => Controls_Manager::COLOR,
-				'global'    => [
-					'default' => Global_Colors::COLOR_TEXT,
-				],
-				'selectors' => [
-					'{{WRAPPER}} .awea-fg-btn' => 'color: {{VALUE}};',
-				],
-			]
-		);
-
-		$this->end_controls_tab();
-
-		// Hover
-		$this->start_controls_tab(
-			'awea_nav_tab_hover',
-			[ 'label' => esc_html__( 'Hover', 'awesome-widgets-elementor' ) ]
-		);
-
-		$this->add_control(
-			'awea_nav_hover_text_color',
-			[
-				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
-				'type'      => Controls_Manager::COLOR,
-				'global'    => [
-					'default' => Global_Colors::COLOR_PRIMARY,
-				],
-				'selectors' => [
-					'{{WRAPPER}} .awea-fg-btn:hover' => 'color: {{VALUE}};',
-				],
-			]
-		);
-
-		$this->end_controls_tab();
-
-		// Active
-		$this->start_controls_tab(
-			'awea_nav_tab_active',
-			[ 'label' => esc_html__( 'Active', 'awesome-widgets-elementor' ) ]
-		);
-
-		$this->add_control(
-			'awea_nav_active_text_color',
-			[
-				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
-				'type'      => Controls_Manager::COLOR,
-				'default'   => '#ffffff',
-				'selectors' => [
-					'{{WRAPPER}} .awea-fg-btn.is-active' => 'color: {{VALUE}};',
-				],
-			]
-		);
-
-		$this->add_control(
-			'awea_nav_pill_bg_color',
-			[
-				'label'     => esc_html__( 'Pill Background', 'awesome-widgets-elementor' ),
-				'type'      => Controls_Manager::COLOR,
-				'global'    => [
-					'default' => Global_Colors::COLOR_PRIMARY,
-				],
-				'selectors' => [
-					'{{WRAPPER}} .awea-fg-pill-indicator' => 'background-color: {{VALUE}}; box-shadow: 0 4px 14px {{VALUE}}55;',
-				],
-			]
-		);
-
-		$this->end_controls_tab();
-		$this->end_controls_tabs();
-
-		// Counter
-		$this->add_control(
-			'awea_heading_counter_style',
-			[
-				'label'     => esc_html__( 'Counter', 'awesome-widgets-elementor' ),
-				'type'      => Controls_Manager::HEADING,
-				'separator' => 'before',
-				'condition' => [ 'awea_show_counter' => 'yes' ],
-			]
-		);
-
-		$this->add_control(
-			'awea_counter_bg',
-			[
-				'label'     => esc_html__( 'Background', 'awesome-widgets-elementor' ),
-				'type'      => Controls_Manager::COLOR,
-				'default'   => 'rgba(15, 23, 42, 0.08)',
-				'selectors' => [
-					'{{WRAPPER}} .awea-fg-counter' => 'background-color: {{VALUE}};',
-				],
-				'condition' => [ 'awea_show_counter' => 'yes' ],
-			]
-		);
-
-		$this->add_control(
-			'awea_counter_active_bg',
-			[
-				'label'     => esc_html__( 'Active Background', 'awesome-widgets-elementor' ),
-				'type'      => Controls_Manager::COLOR,
-				'default'   => 'rgba(255, 255, 255, 0.25)',
-				'selectors' => [
-					'{{WRAPPER}} .awea-fg-btn.is-active .awea-fg-counter' => 'background-color: {{VALUE}};',
-				],
-				'condition' => [ 'awea_show_counter' => 'yes' ],
-			]
-		);
-
-		$this->end_controls_section();
-
-		/* ==========================================================================
-		   STYLE TAB: 2. CARD
-		   ========================================================================== */
-		$this->start_controls_section(
-			'awea_section_style_cards',
-			[
-				'label' => esc_html__( 'Card', 'awesome-widgets-elementor' ),
+				'label' => esc_html__( 'Card Container', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -549,21 +386,28 @@ class Widget_Awesome_Filter_Gallery extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_card_radius',
 			[
-				'label'      => esc_html__( 'Radius', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Border Radius', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
-				'size_units' => [ 'px', '%', 'rem' ],
-				'default'    => [ 'top' => '24', 'right' => '24', 'bottom' => '24', 'left' => '24', 'unit' => 'px', 'isLinked' => true ],
+				'size_units' => [ 'px', '%' ],
+				'default'    => [
+					'top'      => '24',
+					'right'    => '24',
+					'bottom'   => '24',
+					'left'     => '24',
+					'unit'     => 'px',
+					'isLinked' => true,
+				],
 				'selectors'  => [
 					'{{WRAPPER}} .awea-fg-card' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
 		);
 
-		$this->start_controls_tabs( 'awea_card_state_tabs' );
+		$this->start_controls_tabs( 'awea_card_tabs' );
 
 		// Normal
 		$this->start_controls_tab(
-			'awea_card_tab_normal',
+			'awea_card_normal',
 			[ 'label' => esc_html__( 'Normal', 'awesome-widgets-elementor' ) ]
 		);
 
@@ -572,7 +416,7 @@ class Widget_Awesome_Filter_Gallery extends Widget_Base {
 			[
 				'label'     => esc_html__( 'Background', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
-				'default'   => '#090d16',
+				'default'   => '#ffffff',
 				'selectors' => [
 					'{{WRAPPER}} .awea-fg-card' => 'background-color: {{VALUE}};',
 				],
@@ -582,8 +426,21 @@ class Widget_Awesome_Filter_Gallery extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Border::get_type(),
 			[
-				'name'     => 'awea_card_border',
-				'selector' => '{{WRAPPER}} .awea-fg-card',
+				'name'           => 'awea_card_border',
+				'selector'       => '{{WRAPPER}} .awea-fg-card',
+				'fields_options' => [
+					'border' => [ 'default' => 'solid' ],
+					'width'  => [
+						'default' => [
+							'top'      => '1',
+							'right'    => '1',
+							'bottom'   => '1',
+							'left'     => '1',
+							'isLinked' => true,
+						],
+					],
+					'color'  => [ 'default' => '#e2e8f0' ],
+				],
 			]
 		);
 
@@ -599,8 +456,19 @@ class Widget_Awesome_Filter_Gallery extends Widget_Base {
 
 		// Hover
 		$this->start_controls_tab(
-			'awea_card_tab_hover',
+			'awea_card_hover',
 			[ 'label' => esc_html__( 'Hover', 'awesome-widgets-elementor' ) ]
+		);
+
+		$this->add_control(
+			'awea_card_bg_hover',
+			[
+				'label'     => esc_html__( 'Background', 'awesome-widgets-elementor' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => [
+					'{{WRAPPER}} .awea-fg-card:hover' => 'background-color: {{VALUE}};',
+				],
+			]
 		);
 
 		$this->add_control(
@@ -608,9 +476,7 @@ class Widget_Awesome_Filter_Gallery extends Widget_Base {
 			[
 				'label'     => esc_html__( 'Border Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
-				'global'    => [
-					'default' => Global_Colors::COLOR_PRIMARY,
-				],
+				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
 				'selectors' => [
 					'{{WRAPPER}} .awea-fg-card:hover' => 'border-color: {{VALUE}};',
 				],
@@ -631,186 +497,101 @@ class Widget_Awesome_Filter_Gallery extends Widget_Base {
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   STYLE TAB: 3. OVERLAY
+		   STYLE: 2. FILTER BAR
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_section_style_overlay',
+			'awea_style_filter',
 			[
-				'label' => esc_html__( 'Overlay', 'awesome-widgets-elementor' ),
-				'tab'   => Controls_Manager::TAB_STYLE,
+				'label'     => esc_html__( 'Filter Bar', 'awesome-widgets-elementor' ),
+				'tab'       => Controls_Manager::TAB_STYLE,
+				'condition' => [ 'awea_show_filter' => 'yes' ],
 			]
 		);
 
-		$this->add_control(
-			'awea_overlay_card_bg',
+		$this->add_group_control(
+			Group_Control_Typography::get_type(),
 			[
-				'label'     => esc_html__( 'Background', 'awesome-widgets-elementor' ),
-				'type'      => Controls_Manager::COLOR,
-				'default'   => 'rgba(15, 23, 42, 0.85)',
-				'selectors' => [
-					'{{WRAPPER}} .awea-fg-overlay' => 'background-color: {{VALUE}};',
-				],
+				'name'     => 'awea_nav_typo',
+				'selector' => '{{WRAPPER}} .awea-fg-btn',
+				'global'   => [ 'default' => Global_Typography::TYPOGRAPHY_SECONDARY ],
 			]
 		);
 
 		$this->add_responsive_control(
-			'awea_dock_padding',
+			'awea_nav_padding',
 			[
 				'label'      => esc_html__( 'Padding', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
-				'size_units' => [ 'px', 'em', 'rem' ],
-				'default'    => [ 'top' => '14', 'right' => '18', 'bottom' => '14', 'left' => '18', 'unit' => 'px', 'isLinked' => false ],
+				'size_units' => [ 'px', 'rem' ],
+				'default'    => [
+					'top'      => '8',
+					'right'    => '18',
+					'bottom'   => '8',
+					'left'     => '18',
+					'unit'     => 'px',
+					'isLinked' => false,
+				],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-fg-overlay' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .awea-fg-btn' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
 		);
 
 		$this->add_responsive_control(
-			'awea_dock_radius',
+			'awea_nav_space',
 			[
-				'label'      => esc_html__( 'Radius', 'awesome-widgets-elementor' ),
-				'type'       => Controls_Manager::DIMENSIONS,
-				'size_units' => [ 'px', '%' ],
-				'default'    => [ 'top' => '16', 'right' => '16', 'bottom' => '16', 'left' => '16', 'unit' => 'px', 'isLinked' => true ],
-				'selectors'  => [
-					'{{WRAPPER}} .awea-fg-overlay' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
-				],
-			]
-		);
-
-		// Title
-		$this->add_control(
-			'awea_heading_title_style',
-			[
-				'label'     => esc_html__( 'Title', 'awesome-widgets-elementor' ),
-				'type'      => Controls_Manager::HEADING,
-				'separator' => 'before',
-			]
-		);
-
-		$this->add_control(
-			'awea_title_color',
-			[
-				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
-				'type'      => Controls_Manager::COLOR,
-				'default'   => '#ffffff',
-				'selectors' => [
-					'{{WRAPPER}} .awea-fg-title' => 'color: {{VALUE}};',
-				],
-			]
-		);
-
-		$this->add_group_control(
-			Group_Control_Typography::get_type(),
-			[
-				'name'     => 'awea_title_typography',
-				'selector' => '{{WRAPPER}} .awea-fg-title',
-				'global'   => [
-					'default' => Global_Typography::TYPOGRAPHY_PRIMARY,
-				],
-			]
-		);
-
-		// Subtitle
-		$this->add_control(
-			'awea_heading_sub_style',
-			[
-				'label'     => esc_html__( 'Subtitle', 'awesome-widgets-elementor' ),
-				'type'      => Controls_Manager::HEADING,
-				'separator' => 'before',
-			]
-		);
-
-		$this->add_control(
-			'awea_subtitle_color',
-			[
-				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
-				'type'      => Controls_Manager::COLOR,
-				'global'    => [
-					'default' => Global_Colors::COLOR_ACCENT,
-				],
-				'selectors' => [
-					'{{WRAPPER}} .awea-fg-subtitle' => 'color: {{VALUE}};',
-				],
-			]
-		);
-
-		$this->add_group_control(
-			Group_Control_Typography::get_type(),
-			[
-				'name'     => 'awea_subtitle_typography',
-				'selector' => '{{WRAPPER}} .awea-fg-subtitle',
-				'global'   => [
-					'default' => Global_Typography::TYPOGRAPHY_SECONDARY,
-				],
-			]
-		);
-
-		$this->end_controls_section();
-
-		/* ==========================================================================
-		   STYLE TAB: 4. BUTTONS
-		   ========================================================================== */
-		$this->start_controls_section(
-			'awea_section_style_action_btns',
-			[
-				'label' => esc_html__( 'Buttons', 'awesome-widgets-elementor' ),
-				'tab'   => Controls_Manager::TAB_STYLE,
-			]
-		);
-
-		$this->add_responsive_control(
-			'awea_act_btn_size',
-			[
-				'label'      => esc_html__( 'Size', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Bottom Spacing', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
-				'range'      => [ 'px' => [ 'min' => 28, 'max' => 56 ] ],
-				'default'    => [ 'unit' => 'px', 'size' => 38 ],
+				'range'      => [ 'px' => [ 'min' => 0, 'max' => 60 ] ],
+				'default'    => [ 'unit' => 'px', 'size' => 32 ],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-fg-action-btn' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .awea-fg-nav-wrapper' => 'margin-bottom: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
 
-		$this->start_controls_tabs( 'awea_action_btn_tabs' );
+		$this->add_control(
+			'awea_nav_bg',
+			[
+				'label'     => esc_html__( 'Track Background', 'awesome-widgets-elementor' ),
+				'type'      => Controls_Manager::COLOR,
+				'default'   => '#f1f5f9',
+				'selectors' => [
+					'{{WRAPPER}} .awea-fg-nav-track' => 'background-color: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->add_control(
+			'awea_pill_bg',
+			[
+				'label'     => esc_html__( 'Active Pill Background', 'awesome-widgets-elementor' ),
+				'type'      => Controls_Manager::COLOR,
+				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
+				'selectors' => [
+					'{{WRAPPER}} .awea-fg-pill-indicator' => 'background-color: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->start_controls_tabs( 'awea_nav_tabs' );
 
 		// Normal
 		$this->start_controls_tab(
-			'awea_act_btn_tab_normal',
+			'awea_nav_normal',
 			[ 'label' => esc_html__( 'Normal', 'awesome-widgets-elementor' ) ]
 		);
 
 		$this->add_control(
-			'awea_act_btn_color',
+			'awea_nav_color',
 			[
 				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
-				'default'   => '#ffffff',
+				'default'   => '#64748b',
 				'selectors' => [
-					'{{WRAPPER}} .awea-fg-action-btn' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-fg-btn' => 'color: {{VALUE}};',
 				],
-			]
-		);
-
-		$this->add_control(
-			'awea_act_btn_bg',
-			[
-				'label'     => esc_html__( 'Background', 'awesome-widgets-elementor' ),
-				'type'      => Controls_Manager::COLOR,
-				'default'   => 'rgba(255, 255, 255, 0.12)',
-				'selectors' => [
-					'{{WRAPPER}} .awea-fg-action-btn' => 'background-color: {{VALUE}};',
-				],
-			]
-		);
-
-		$this->add_group_control(
-			Group_Control_Border::get_type(),
-			[
-				'name'     => 'awea_act_btn_border',
-				'selector' => '{{WRAPPER}} .awea-fg-action-btn',
 			]
 		);
 
@@ -818,42 +599,38 @@ class Widget_Awesome_Filter_Gallery extends Widget_Base {
 
 		// Hover
 		$this->start_controls_tab(
-			'awea_act_btn_tab_hover',
+			'awea_nav_hover',
 			[ 'label' => esc_html__( 'Hover', 'awesome-widgets-elementor' ) ]
 		);
 
 		$this->add_control(
-			'awea_act_btn_hover_color',
+			'awea_nav_hover_color',
 			[
 				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#0f172a',
 				'selectors' => [
-					'{{WRAPPER}} .awea-fg-action-btn:hover' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-fg-btn:hover' => 'color: {{VALUE}};',
 				],
 			]
 		);
 
-		$this->add_control(
-			'awea_act_btn_hover_bg',
-			[
-				'label'     => esc_html__( 'Background', 'awesome-widgets-elementor' ),
-				'type'      => Controls_Manager::COLOR,
-				'default'   => '#ffffff',
-				'selectors' => [
-					'{{WRAPPER}} .awea-fg-action-btn:hover' => 'background-color: {{VALUE}};',
-				],
-			]
+		$this->end_controls_tab();
+
+		// Active
+		$this->start_controls_tab(
+			'awea_nav_active',
+			[ 'label' => esc_html__( 'Active', 'awesome-widgets-elementor' ) ]
 		);
 
 		$this->add_control(
-			'awea_act_btn_hover_border',
+			'awea_nav_active_color',
 			[
-				'label'     => esc_html__( 'Border Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#ffffff',
 				'selectors' => [
-					'{{WRAPPER}} .awea-fg-action-btn:hover' => 'border-color: {{VALUE}};',
+					'{{WRAPPER}} .awea-fg-btn.is-active' => 'color: {{VALUE}};',
 				],
 			]
 		);
@@ -862,49 +639,122 @@ class Widget_Awesome_Filter_Gallery extends Widget_Base {
 		$this->end_controls_tabs();
 
 		$this->end_controls_section();
+
+		/* ==========================================================================
+		   STYLE: 3. TEXT & TYPOGRAPHY
+		   ========================================================================== */
+		$this->start_controls_section(
+			'awea_style_title',
+			[
+				'label' => esc_html__( 'Card Typography', 'awesome-widgets-elementor' ),
+				'tab'   => Controls_Manager::TAB_STYLE,
+			]
+		);
+
+		$this->add_control(
+			'awea_title_heading',
+			[
+				'label' => esc_html__( 'Title', 'awesome-widgets-elementor' ),
+				'type'  => Controls_Manager::HEADING,
+			]
+		);
+
+		$this->add_group_control(
+			Group_Control_Typography::get_type(),
+			[
+				'name'     => 'awea_title_typo',
+				'selector' => '{{WRAPPER}} .awea-fg-title',
+				'global'   => [ 'default' => Global_Typography::TYPOGRAPHY_PRIMARY ],
+			]
+		);
+
+		$this->add_control(
+			'awea_title_color',
+			[
+				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
+				'type'      => Controls_Manager::COLOR,
+				'default'   => '#0f172a',
+				'selectors' => [
+					'{{WRAPPER}} .awea-fg-title' => 'color: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->add_control(
+			'awea_subtitle_heading',
+			[
+				'label'     => esc_html__( 'Subtitle', 'awesome-widgets-elementor' ),
+				'type'      => Controls_Manager::HEADING,
+				'separator' => 'before',
+			]
+		);
+
+		$this->add_group_control(
+			Group_Control_Typography::get_type(),
+			[
+				'name'     => 'awea_subtitle_typo',
+				'selector' => '{{WRAPPER}} .awea-fg-subtitle',
+				'global'   => [ 'default' => Global_Typography::TYPOGRAPHY_SECONDARY ],
+			]
+		);
+
+		$this->add_control(
+			'awea_subtitle_color',
+			[
+				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
+				'type'      => Controls_Manager::COLOR,
+				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
+				'selectors' => [
+					'{{WRAPPER}} .awea-fg-subtitle' => 'color: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->end_controls_section();
 	}
 
 	protected function render() {
-		$settings = $this->get_settings_for_display();
+		$settings   = $this->get_settings_for_display();
+		$items      = $settings['awea_gallery_items'] ?? [];
+		$categories = $settings['awea_categories'] ?? [];
+		$show_menu  = 'yes' === ( $settings['awea_show_filter'] ?? 'no' );
+		$show_count = 'yes' === ( $settings['awea_show_counter'] ?? 'no' );
+		$lightbox   = 'yes' === ( $settings['awea_lightbox'] ?? 'yes' );
+		$all_label  = ! empty( $settings['awea_all_label'] ) ? $settings['awea_all_label'] : esc_html__( 'All Works', 'awesome-widgets-elementor' );
+		$title_tag  = Utils::validate_html_tag( $settings['awea_title_tag'] ?? 'h4' );
+		$widget_id  = $this->get_id();
 
-		$gallery_items   = ! empty( $settings['awea_gallery_items'] ) ? $settings['awea_gallery_items'] : [];
-		$category_list   = ! empty( $settings['awea_categories'] ) ? $settings['awea_categories'] : [];
-		$show_menu       = 'yes' === ( $settings['awea_show_filter_bar'] ?? 'no' );
-		$show_counts     = 'yes' === ( $settings['awea_show_counter'] ?? 'no' );
-		$enable_lightbox = 'yes' === ( $settings['awea_enable_lightbox'] ?? 'yes' );
-		$all_label       = ! empty( $settings['awea_all_label'] ) ? $settings['awea_all_label'] : esc_html__( 'All Works', 'awesome-widgets-elementor' );
-		$title_tag       = Utils::validate_html_tag( $settings['awea_title_tag'] ?? 'h4' );
-		$widget_id       = $this->get_id();
+		if ( empty( $items ) ) {
+			return;
+		}
 
-		// Build Category Counts
-		$cat_counts = [ '*' => count( $gallery_items ) ];
-		foreach ( $gallery_items as $item ) {
+		// Compute category counts
+		$cat_counts = [ '*' => count( $items ) ];
+		foreach ( $items as $item ) {
 			$raw_cats = explode( ',', $item['awea_item_category'] ?? '' );
 			foreach ( $raw_cats as $rc ) {
-				$clean = sanitize_title( trim( $rc ) );
-				if ( ! empty( $clean ) ) {
-					$cat_counts[ $clean ] = ( $cat_counts[ $clean ] ?? 0 ) + 1;
+				$slug = sanitize_title( trim( $rc ) );
+				if ( ! empty( $slug ) ) {
+					$cat_counts[ $slug ] = ( $cat_counts[ $slug ] ?? 0 ) + 1;
 				}
 			}
 		}
 		?>
-		<div class="awea-filter-gallery-studio" id="awea-fg-<?php echo esc_attr( $widget_id ); ?>">
+		<div class="awea-fg-root" id="awea-fg-<?php echo esc_attr( $widget_id ); ?>">
 
 			<?php if ( $show_menu ) : ?>
-				<!-- Sliding Pill Navigation -->
 				<div class="awea-fg-nav-wrapper">
 					<div class="awea-fg-nav-track" role="tablist">
 						<span class="awea-fg-pill-indicator" aria-hidden="true"></span>
 
 						<button type="button" class="awea-fg-btn is-active" data-filter="*" role="tab" aria-selected="true">
-							<span class="awea-fg-btn-text"><?php echo esc_html( $all_label ); ?></span>
-							<?php if ( $show_counts ) : ?>
+							<span><?php echo esc_html( $all_label ); ?></span>
+							<?php if ( $show_count ) : ?>
 								<span class="awea-fg-counter"><?php echo esc_html( (string) $cat_counts['*'] ); ?></span>
 							<?php endif; ?>
 						</button>
 
-						<?php
-						foreach ( $category_list as $cat ) :
+						<?php foreach ( $categories as $cat ) :
 							$cat_raw  = $cat['awea_cat_name'] ?? '';
 							$cat_slug = sanitize_title( $cat_raw );
 							if ( empty( $cat_slug ) ) {
@@ -913,8 +763,8 @@ class Widget_Awesome_Filter_Gallery extends Widget_Base {
 							$count = $cat_counts[ $cat_slug ] ?? 0;
 							?>
 							<button type="button" class="awea-fg-btn" data-filter=".awea-cat-<?php echo esc_attr( $cat_slug ); ?>" role="tab" aria-selected="false">
-								<span class="awea-fg-btn-text"><?php echo esc_html( $cat_raw ); ?></span>
-								<?php if ( $show_counts ) : ?>
+								<span><?php echo esc_html( $cat_raw ); ?></span>
+								<?php if ( $show_count ) : ?>
 									<span class="awea-fg-counter"><?php echo esc_html( (string) $count ); ?></span>
 								<?php endif; ?>
 							</button>
@@ -923,73 +773,77 @@ class Widget_Awesome_Filter_Gallery extends Widget_Base {
 				</div>
 			<?php endif; ?>
 
-			<!-- Filtered Grid -->
 			<div class="awea-fg-grid">
-				<?php
-				foreach ( $gallery_items as $index => $item ) :
-					$img_url    = $item['awea_item_image']['url'] ?? Utils::get_placeholder_image_src();
+				<?php foreach ( $items as $index => $item ) :
+					$id         = $item['_id'] ?? $index;
+					$img_data   = $item['awea_item_image'] ?? [];
+					$img_url    = ! empty( $img_data['url'] ) ? $img_data['url'] : Utils::get_placeholder_image_src();
 					$title      = $item['awea_item_title'] ?? '';
 					$subtitle   = $item['awea_item_subtitle'] ?? '';
 					$custom_url = $item['awea_item_link']['url'] ?? '';
-					$target     = ! empty( $item['awea_item_link']['is_external'] ) ? '_blank' : '_self';
-					$nofollow   = ! empty( $item['awea_item_link']['nofollow'] ) ? 'rel="nofollow"' : '';
 
 					$raw_cats    = explode( ',', $item['awea_item_category'] ?? '' );
 					$cat_classes = [];
 					foreach ( $raw_cats as $rc ) {
-						$c_slug = sanitize_title( trim( $rc ) );
-						if ( ! empty( $c_slug ) ) {
-							$cat_classes[] = 'awea-cat-' . $c_slug;
+						$slug = sanitize_title( trim( $rc ) );
+						if ( ! empty( $slug ) ) {
+							$cat_classes[] = 'awea-cat-' . $slug;
 						}
 					}
 					$class_string = implode( ' ', $cat_classes );
+
+					if ( $lightbox ) {
+						$lightbox_url = Group_Control_Image_Size::get_attachment_image_src( $img_data['id'] ?? '', 'full', $settings ) ?: $img_url;
+					}
 					?>
-					<div class="awea-fg-item <?php echo esc_attr( $class_string ); ?>" data-index="<?php echo esc_attr( (string) $index ); ?>">
-						<article class="awea-fg-card">
-							
-							<!-- Thumbnail Canvas -->
-							<div class="awea-fg-thumb" style="background-image: url('<?php echo esc_url( $img_url ); ?>');">
-								<img src="<?php echo esc_url( $img_url ); ?>" alt="<?php echo esc_attr( $title ); ?>" loading="lazy" />
+					<div class="awea-fg-item <?php echo esc_attr( $class_string ); ?>">
+						<article class="awea-fg-card elementor-repeater-item-<?php echo esc_attr( $id ); ?>">
+
+							<div class="awea-fg-thumb">
+								<?php
+								if ( ! empty( $img_data['id'] ) ) {
+									echo Group_Control_Image_Size::get_attachment_image_html( $settings, 'awea_image_size', 'awea_item_image' );
+								} else {
+									printf( '<img src="%s" alt="%s" loading="lazy" />', esc_url( $img_url ), esc_attr( $title ) );
+								}
+								?>
+
+								<div class="awea-fg-actions">
+									<?php if ( $lightbox ) : ?>
+										<a href="<?php echo esc_url( $lightbox_url ); ?>"
+										   class="awea-fg-action-btn elementor-lightbox"
+										   data-elementor-open-lightbox="yes"
+										   data-elementor-lightbox-slideshow="awea-fg-<?php echo esc_attr( $widget_id ); ?>"
+										   title="<?php echo esc_attr( $title ); ?>"
+										   aria-label="<?php esc_attr_e( 'View Full Image', 'awesome-widgets-elementor' ); ?>">
+											<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+										</a>
+									<?php endif; ?>
+
+									<?php if ( ! empty( $custom_url ) ) :
+										$link_key = 'link_' . $id;
+										$this->add_link_attributes( $link_key, $item['awea_item_link'] );
+										$this->add_render_attribute( $link_key, 'class', 'awea-fg-action-btn' );
+										$this->add_render_attribute( $link_key, 'aria-label', esc_attr( $title ) );
+										?>
+										<a <?php $this->print_render_attribute_string( $link_key ); ?>>
+											<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+										</a>
+									<?php endif; ?>
+								</div>
 							</div>
 
-							<!-- Frosted Glass Caption Dock -->
-							<div class="awea-fg-overlay">
-								<div class="awea-fg-meta">
+							<?php if ( ! empty( $title ) || ! empty( $subtitle ) ) : ?>
+								<div class="awea-fg-body">
 									<?php if ( ! empty( $subtitle ) ) : ?>
 										<span class="awea-fg-subtitle"><?php echo esc_html( $subtitle ); ?></span>
 									<?php endif; ?>
-									
+
 									<?php if ( ! empty( $title ) ) : ?>
 										<<?php Utils::print_validated_html_tag( $title_tag ); ?> class="awea-fg-title"><?php echo esc_html( $title ); ?></<?php Utils::print_validated_html_tag( $title_tag ); ?>>
 									<?php endif; ?>
 								</div>
-
-								<!-- Action Button Cluster -->
-								<?php if ( $enable_lightbox || ! empty( $custom_url ) ) : ?>
-									<div class="awea-fg-actions">
-										<?php if ( $enable_lightbox ) : ?>
-											<a href="<?php echo esc_url( $img_url ); ?>"
-											   class="awea-fg-action-btn awea-fg-lightbox elementor-lightbox"
-											   data-elementor-open-lightbox="yes"
-											   data-elementor-lightbox-slideshow="awea-fg-<?php echo esc_attr( $widget_id ); ?>"
-											   title="<?php echo esc_attr( $title ); ?>"
-											   aria-label="<?php esc_attr_e( 'View Full Image', 'awesome-widgets-elementor' ); ?>">
-												<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
-											</a>
-										<?php endif; ?>
-
-										<?php if ( ! empty( $custom_url ) ) : ?>
-											<a href="<?php echo esc_url( $custom_url ); ?>"
-											   target="<?php echo esc_attr( $target ); ?>"
-											   <?php echo $nofollow; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-											   class="awea-fg-action-btn awea-fg-link"
-											   aria-label="<?php esc_attr_e( 'Open Project Case Study', 'awesome-widgets-elementor' ); ?>">
-												<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
-											</a>
-										<?php endif; ?>
-									</div>
-								<?php endif; ?>
-							</div>
+							<?php endif; ?>
 
 						</article>
 					</div>
@@ -998,13 +852,12 @@ class Widget_Awesome_Filter_Gallery extends Widget_Base {
 
 		</div>
 
-		<!-- Scoped Smooth Filter Navigation Script -->
 		<script>
 		(function() {
 			function initFilterGallery() {
 				var scope = document.getElementById('awea-fg-<?php echo esc_js( $widget_id ); ?>');
-				if (!scope || scope.__aweaBound) return;
-				scope.__aweaBound = true;
+				if (!scope || scope.dataset.aweaBound === '1') return;
+				scope.dataset.aweaBound = '1';
 
 				var indicator = scope.querySelector('.awea-fg-pill-indicator');
 				var buttons   = scope.querySelectorAll('.awea-fg-btn');
@@ -1040,7 +893,19 @@ class Widget_Awesome_Filter_Gallery extends Widget_Base {
 
 						items.forEach(function(item) {
 							var matches = (filterVal === '*' || item.matches(filterVal));
-							item.style.display = matches ? '' : 'none';
+							if (matches) {
+								item.style.display = '';
+								item.classList.remove('is-fading-out');
+								item.classList.add('is-fading-in');
+							} else {
+								item.classList.remove('is-fading-in');
+								item.classList.add('is-fading-out');
+								setTimeout(function() {
+									if (item.classList.contains('is-fading-out')) {
+										item.style.display = 'none';
+									}
+								}, 300);
+							}
 						});
 					});
 				});

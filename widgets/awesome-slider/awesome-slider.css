@@ -1,5 +1,5 @@
 /* ==========================================================================
-   AWEA Slider Studio Master Architecture (Zero Hover Zoom / No Scale)
+   AWEA Slider — Zero-Shadow Architectural Hero
    ========================================================================== */
 
 .awea-slider-wrap {
@@ -88,7 +88,7 @@
   margin-right: 0;
 }
 
-/* 3. Action Buttons Row (Locked in place - No Hover Lift/Zoom) */
+/* 3. Action Buttons Row */
 .awea-slide-btn-row {
   display: flex;
   align-items: center;
@@ -116,16 +116,14 @@
   font-size: 1rem;
   text-decoration: none;
   box-sizing: border-box;
-  transform: none; /* Strictly no hover lift */
-  transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+  box-shadow: none;
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease;
 }
 
-.awea-slide-btn-bg:hover,
-.awea-slide-btn-border:hover {
-  transform: none; /* Stays stationary on hover */
-}
-
-/* 4. Owl Carousel Navigation Arrows (Locked - No Scale on Hover) */
+/* 4. Owl Carousel Navigation Arrows */
 .awea-slider .owl-nav {
   position: absolute;
   top: 50%;
@@ -154,9 +152,11 @@
   align-items: center;
   justify-content: center;
   pointer-events: auto;
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.2);
-  transform: none; /* Strictly no zoom/scale */
-  transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+  box-shadow: none;
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease;
   outline: none;
 }
 
@@ -165,7 +165,6 @@
   background-color: #ffffff !important;
   color: #0f172a !important;
   border-color: #ffffff !important;
-  transform: none; /* No scale(1.1) */
 }
 
 /* 5. Pagination Dots */
@@ -190,7 +189,9 @@
   padding: 0;
   outline: none;
   cursor: pointer;
-  transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.25s ease;
+  transition:
+    width 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    background-color 0.25s ease;
 }
 
 .awea-slider .owl-dots button.owl-dot.active {
@@ -199,9 +200,7 @@
   background-color: #ffffff;
 }
 
-/* ==========================================================================
-   Super Mobile Friendly System (<= 768px)
-   ========================================================================== */
+/* Mobile (<= 768px) */
 @media (max-width: 768px) {
   .awea-slide-box {
     min-height: 520px;
@@ -228,7 +227,7 @@
   }
 
   .awea-slider .owl-nav {
-    display: none; /* Touch swipe takes priority on small viewports */
+    display: none;
   }
 
   .awea-slider .owl-dots {

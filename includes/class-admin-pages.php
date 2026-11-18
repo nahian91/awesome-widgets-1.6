@@ -916,11 +916,28 @@ class AWEA_Admin_Pages {
         $elementor_active = did_action( 'elementor/loaded' );
 
         $headers_count = 0;
-        $footers_count = 0;
-        if ( post_type_exists( 'awea_hf_template' ) ) {
-            $headers_count = (int) count( get_posts( array( 'post_type' => 'awea_hf_template', 'meta_key' => '_awea_hf_type', 'meta_value' => 'header', 'post_status' => 'publish', 'numberposts' => -1, 'fields' => 'ids' ) ) );
-            $footers_count = (int) count( get_posts( array( 'post_type' => 'awea_hf_template', 'meta_key' => '_awea_hf_type', 'meta_value' => 'footer', 'post_status' => 'publish', 'numberposts' => -1, 'fields' => 'ids' ) ) );
-        }
+$footers_count = 0;
+if ( post_type_exists( 'awea_hf_template' ) ) {
+    $headers_count = (int) count( get_posts( array( 
+        'post_type'   => 'awea_hf_template', 
+        // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key, WordPress.DB.SlowDBQuery.slow_db_query_meta_value
+        'meta_key'    => '_awea_hf_type', 
+        'meta_value'  => 'header', 
+        'post_status' => 'publish', 
+        'numberposts' => -1, 
+        'fields'      => 'ids' 
+    ) ) );
+    
+    $footers_count = (int) count( get_posts( array( 
+        'post_type'   => 'awea_hf_template', 
+        // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key, WordPress.DB.SlowDBQuery.slow_db_query_meta_value
+        'meta_key'    => '_awea_hf_type', 
+        'meta_value'  => 'footer', 
+        'post_status' => 'publish', 
+        'numberposts' => -1, 
+        'fields'      => 'ids' 
+    ) ) );
+}
         ?>
         <div class="wrap awea-dashboard">
             <!-- Hero Header -->

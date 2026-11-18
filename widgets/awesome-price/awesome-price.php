@@ -1,10 +1,9 @@
 <?php
 /**
  * Awesome Price Studio Widget.
- * Modern Architectural Pricing Table with Featured Ribbon & Dynamic Tags.
  *
  * @package AwesomeWidgetsElementor
- * @since 1.0.0
+ * @since   2.0.0
  */
 
 namespace Elementor;
@@ -13,15 +12,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use \Elementor\Controls_Manager;
-use \Elementor\Group_Control_Border;
-use \Elementor\Group_Control_Box_Shadow;
-use \Elementor\Group_Control_Typography;
-use \Elementor\Core\Kits\Documents\Tabs\Global_Typography;
-use \Elementor\Core\Kits\Documents\Tabs\Global_Colors;
-use \Elementor\Widget_Base;
-use \Elementor\Repeater;
-use \Elementor\Icons_Manager;
+use Elementor\Controls_Manager;
+use Elementor\Group_Control_Border;
+use Elementor\Group_Control_Typography;
+use Elementor\Group_Control_Box_Shadow;
+use Elementor\Core\Kits\Documents\Tabs\Global_Typography;
+use Elementor\Core\Kits\Documents\Tabs\Global_Colors;
+use Elementor\Widget_Base;
+use Elementor\Repeater;
+use Elementor\Icons_Manager;
 
 class Widget_Awesome_Price extends Widget_Base {
 
@@ -42,24 +41,34 @@ class Widget_Awesome_Price extends Widget_Base {
 	}
 
 	public function get_keywords() {
-		return [ 'awea', 'price', 'pricing', 'table', 'plan', 'tier', 'subscription', 'badge' ];
+		return [ 'awea', 'price', 'pricing', 'table', 'grid', 'plan', 'tier', 'subscription' ];
 	}
 
 	protected function register_controls() {
 
 		/* ==========================================================================
-		   CONTENT TAB: 1. HEADER
+		   CONTENT: 1. ITEMS (REPEATER)
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_section_price_header',
+			'awea_section_items',
 			[
-				'label' => esc_html__( 'Header', 'awesome-widgets-elementor' ),
+				'label' => esc_html__( 'Tiers', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
 			]
 		);
 
-		$this->add_control(
-			'awea_price_title',
+		$repeater = new Repeater();
+
+		$repeater->start_controls_tabs( 'awea_tier_tabs' );
+
+		// --- TAB 1: HEADER ---
+		$repeater->start_controls_tab(
+			'awea_tab_header',
+			[ 'label' => esc_html__( 'Header', 'awesome-widgets-elementor' ) ]
+		);
+
+		$repeater->add_control(
+			'awea_title',
 			[
 				'label'       => esc_html__( 'Title', 'awesome-widgets-elementor' ),
 				'type'        => Controls_Manager::TEXT,
@@ -69,8 +78,8 @@ class Widget_Awesome_Price extends Widget_Base {
 			]
 		);
 
-		$this->add_control(
-			'awea_is_featured',
+		$repeater->add_control(
+			'awea_featured',
 			[
 				'label'        => esc_html__( 'Featured', 'awesome-widgets-elementor' ),
 				'type'         => Controls_Manager::SWITCHER,
@@ -81,31 +90,26 @@ class Widget_Awesome_Price extends Widget_Base {
 			]
 		);
 
-		$this->add_control(
-			'awea_featured_badge_text',
+		$repeater->add_control(
+			'awea_ribbon',
 			[
 				'label'     => esc_html__( 'Ribbon Text', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::TEXT,
 				'default'   => esc_html__( 'Most Popular', 'awesome-widgets-elementor' ),
 				'dynamic'   => [ 'active' => true ],
-				'condition' => [ 'awea_is_featured' => 'yes' ],
+				'condition' => [ 'awea_featured' => 'yes' ],
 			]
 		);
 
-		$this->end_controls_section();
+		$repeater->end_controls_tab();
 
-		/* ==========================================================================
-		   CONTENT TAB: 2. VALUES
-		   ========================================================================== */
-		$this->start_controls_section(
-			'awea_section_price_amounts',
-			[
-				'label' => esc_html__( 'Values', 'awesome-widgets-elementor' ),
-				'tab'   => Controls_Manager::TAB_CONTENT,
-			]
+		// --- TAB 2: VALUES ---
+		$repeater->start_controls_tab(
+			'awea_tab_values',
+			[ 'label' => esc_html__( 'Values', 'awesome-widgets-elementor' ) ]
 		);
 
-		$this->add_control(
+		$repeater->add_control(
 			'awea_currency',
 			[
 				'label'   => esc_html__( 'Currency', 'awesome-widgets-elementor' ),
@@ -115,7 +119,7 @@ class Widget_Awesome_Price extends Widget_Base {
 			]
 		);
 
-		$this->add_control(
+		$repeater->add_control(
 			'awea_price',
 			[
 				'label'   => esc_html__( 'Amount', 'awesome-widgets-elementor' ),
@@ -125,7 +129,7 @@ class Widget_Awesome_Price extends Widget_Base {
 			]
 		);
 
-		$this->add_control(
+		$repeater->add_control(
 			'awea_period',
 			[
 				'label'   => esc_html__( 'Period', 'awesome-widgets-elementor' ),
@@ -135,34 +139,29 @@ class Widget_Awesome_Price extends Widget_Base {
 			]
 		);
 
-		$this->end_controls_section();
+		$repeater->end_controls_tab();
 
-		/* ==========================================================================
-		   CONTENT TAB: 3. FEATURES
-		   ========================================================================== */
-		$this->start_controls_section(
-			'awea_section_price_features',
-			[
-				'label' => esc_html__( 'Features', 'awesome-widgets-elementor' ),
-				'tab'   => Controls_Manager::TAB_CONTENT,
-			]
+		// --- TAB 3: FEATURES ---
+		$repeater->start_controls_tab(
+			'awea_tab_features',
+			[ 'label' => esc_html__( 'Features', 'awesome-widgets-elementor' ) ]
 		);
 
-		$repeater = new Repeater();
+		$feature_sub_repeater = new Repeater();
 
-		$repeater->add_control(
-			'awea_feature_text',
+		$feature_sub_repeater->add_control(
+			'awea_feat_text',
 			[
 				'label'       => esc_html__( 'Text', 'awesome-widgets-elementor' ),
 				'type'        => Controls_Manager::TEXT,
-				'default'     => esc_html__( 'Unlimited Neural Projects', 'awesome-widgets-elementor' ),
+				'default'     => esc_html__( 'Unlimited Projects', 'awesome-widgets-elementor' ),
 				'dynamic'     => [ 'active' => true ],
 				'label_block' => true,
 			]
 		);
 
-		$repeater->add_control(
-			'awea_feature_icon',
+		$feature_sub_repeater->add_control(
+			'awea_feat_icon',
 			[
 				'label'   => esc_html__( 'Icon', 'awesome-widgets-elementor' ),
 				'type'    => Controls_Manager::ICONS,
@@ -173,8 +172,8 @@ class Widget_Awesome_Price extends Widget_Base {
 			]
 		);
 
-		$repeater->add_control(
-			'awea_feature_active',
+		$feature_sub_repeater->add_control(
+			'awea_feat_active',
 			[
 				'label'        => esc_html__( 'Included', 'awesome-widgets-elementor' ),
 				'type'         => Controls_Manager::SWITCHER,
@@ -185,36 +184,31 @@ class Widget_Awesome_Price extends Widget_Base {
 			]
 		);
 
-		$this->add_control(
+		$repeater->add_control(
 			'awea_features_list',
 			[
-				'label'       => esc_html__( 'List', 'awesome-widgets-elementor' ),
+				'label'       => esc_html__( 'Checklist', 'awesome-widgets-elementor' ),
 				'type'        => Controls_Manager::REPEATER,
-				'fields'      => $repeater->get_controls(),
+				'fields'      => $feature_sub_repeater->get_controls(),
 				'default'     => [
-					[ 'awea_feature_text' => esc_html__( 'Unlimited Neural Projects', 'awesome-widgets-elementor' ), 'awea_feature_active' => 'yes' ],
-					[ 'awea_feature_text' => esc_html__( 'Ultra-Low Latency API Access', 'awesome-widgets-elementor' ), 'awea_feature_active' => 'yes' ],
-					[ 'awea_feature_text' => esc_html__( 'Real-Time Telemetry Tracking', 'awesome-widgets-elementor' ), 'awea_feature_active' => 'yes' ],
-					[ 'awea_feature_text' => esc_html__( '24/7 Dedicated Support Engineering', 'awesome-widgets-elementor' ), 'awea_feature_active' => 'yes' ],
+					[ 'awea_feat_text' => esc_html__( 'Unlimited Neural Projects', 'awesome-widgets-elementor' ), 'awea_feat_active' => 'yes' ],
+					[ 'awea_feat_text' => esc_html__( 'Ultra-Low Latency API Access', 'awesome-widgets-elementor' ), 'awea_feat_active' => 'yes' ],
+					[ 'awea_feat_text' => esc_html__( 'Real-Time Telemetry Tracking', 'awesome-widgets-elementor' ), 'awea_feat_active' => 'yes' ],
+					[ 'awea_feat_text' => esc_html__( '24/7 Dedicated Support Engineering', 'awesome-widgets-elementor' ), 'awea_feat_active' => 'yes' ],
 				],
-				'title_field' => '{{{ awea_feature_text }}}',
+				'title_field' => '{{{ awea_feat_text }}}',
 			]
 		);
 
-		$this->end_controls_section();
+		$repeater->end_controls_tab();
 
-		/* ==========================================================================
-		   CONTENT TAB: 4. BUTTON
-		   ========================================================================== */
-		$this->start_controls_section(
-			'awea_section_price_button',
-			[
-				'label' => esc_html__( 'Button', 'awesome-widgets-elementor' ),
-				'tab'   => Controls_Manager::TAB_CONTENT,
-			]
+		// --- TAB 4: BUTTON ---
+		$repeater->start_controls_tab(
+			'awea_tab_button',
+			[ 'label' => esc_html__( 'Button', 'awesome-widgets-elementor' ) ]
 		);
 
-		$this->add_control(
+		$repeater->add_control(
 			'awea_btn_text',
 			[
 				'label'       => esc_html__( 'Label', 'awesome-widgets-elementor' ),
@@ -225,7 +219,7 @@ class Widget_Awesome_Price extends Widget_Base {
 			]
 		);
 
-		$this->add_control(
+		$repeater->add_control(
 			'awea_btn_link',
 			[
 				'label'       => esc_html__( 'URL', 'awesome-widgets-elementor' ),
@@ -236,13 +230,112 @@ class Widget_Awesome_Price extends Widget_Base {
 			]
 		);
 
+		$repeater->end_controls_tab();
+
+		// --- TAB 5: HIGHLIGHT ---
+		$repeater->start_controls_tab(
+			'awea_tab_highlight',
+			[ 'label' => esc_html__( 'Highlight', 'awesome-widgets-elementor' ) ]
+		);
+
+		$repeater->add_control(
+			'awea_item_border',
+			[
+				'label'     => esc_html__( 'Card Border', 'awesome-widgets-elementor' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => [
+					'{{WRAPPER}} {{CURRENT_ITEM}}' => 'border-color: {{VALUE}};',
+				],
+			]
+		);
+
+		$repeater->end_controls_tab();
+
+		$repeater->end_controls_tabs();
+
+		$this->add_control(
+			'awea_pricing_tiers',
+			[
+				'label'       => esc_html__( 'Tiers', 'awesome-widgets-elementor' ),
+				'type'        => Controls_Manager::REPEATER,
+				'fields'      => $repeater->get_controls(),
+				'title_field' => '{{{ awea_title }}} ({{{ awea_currency }}}{{{ awea_price }}})',
+				'default'     => [
+					[
+						'awea_title'    => esc_html__( 'Starter', 'awesome-widgets-elementor' ),
+						'awea_price'    => '29',
+						'awea_btn_text' => esc_html__( 'Start Free Trial', 'awesome-widgets-elementor' ),
+					],
+					[
+						'awea_title'    => esc_html__( 'Evolution', 'awesome-widgets-elementor' ),
+						'awea_price'    => '79',
+						'awea_featured' => 'yes',
+						'awea_ribbon'   => esc_html__( 'Most Popular', 'awesome-widgets-elementor' ),
+						'awea_btn_text' => esc_html__( 'Get Started Now', 'awesome-widgets-elementor' ),
+					],
+					[
+						'awea_title'    => esc_html__( 'Enterprise', 'awesome-widgets-elementor' ),
+						'awea_price'    => '199',
+						'awea_btn_text' => esc_html__( 'Contact Sales', 'awesome-widgets-elementor' ),
+					],
+				],
+			]
+		);
+
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   STYLE TAB: 1. CARD
+		   CONTENT: 2. LAYOUT
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_section_style_card',
+			'awea_section_layout',
+			[
+				'label' => esc_html__( 'Layout', 'awesome-widgets-elementor' ),
+				'tab'   => Controls_Manager::TAB_CONTENT,
+			]
+		);
+
+		$this->add_responsive_control(
+			'awea_columns',
+			[
+				'label'          => esc_html__( 'Columns', 'awesome-widgets-elementor' ),
+				'type'           => Controls_Manager::SELECT,
+				'default'        => '3',
+				'tablet_default' => '2',
+				'mobile_default' => '1',
+				'options'        => [
+					'1' => '1',
+					'2' => '2',
+					'3' => '3',
+					'4' => '4',
+				],
+				'selectors'      => [
+					'{{WRAPPER}} .awea-pricing-grid' => 'grid-template-columns: repeat({{VALUE}}, minmax(0, 1fr));',
+				],
+			]
+		);
+
+		$this->add_responsive_control(
+			'awea_gap',
+			[
+				'label'      => esc_html__( 'Gap', 'awesome-widgets-elementor' ),
+				'type'       => Controls_Manager::SLIDER,
+				'size_units' => [ 'px', 'rem' ],
+				'range'      => [ 'px' => [ 'min' => 0, 'max' => 80 ] ],
+				'default'    => [ 'unit' => 'px', 'size' => 24 ],
+				'selectors'  => [
+					'{{WRAPPER}} .awea-pricing-grid' => 'gap: {{SIZE}}{{UNIT}};',
+				],
+			]
+		);
+
+		$this->end_controls_section();
+
+		/* ==========================================================================
+		   STYLE: 1. CARD
+		   ========================================================================== */
+		$this->start_controls_section(
+			'awea_style_card',
 			[
 				'label' => esc_html__( 'Card', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
@@ -255,7 +348,7 @@ class Widget_Awesome_Price extends Widget_Base {
 				'label'      => esc_html__( 'Padding', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', 'em', 'rem' ],
-				'default'    => [ 'top' => '40', 'right' => '32', 'bottom' => '40', 'left' => '32', 'unit' => 'px', 'isLinked' => true ],
+				'default'    => [ 'top' => '40', 'right' => '32', 'bottom' => '40', 'left' => '32', 'unit' => 'px', 'isLinked' => false ],
 				'selectors'  => [
 					'{{WRAPPER}} .awea-pricing-card' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
@@ -277,9 +370,8 @@ class Widget_Awesome_Price extends Widget_Base {
 
 		$this->start_controls_tabs( 'awea_card_state_tabs' );
 
-		// Normal
 		$this->start_controls_tab(
-			'awea_card_tab_normal',
+			'awea_card_normal',
 			[ 'label' => esc_html__( 'Normal', 'awesome-widgets-elementor' ) ]
 		);
 
@@ -298,8 +390,21 @@ class Widget_Awesome_Price extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Border::get_type(),
 			[
-				'name'     => 'awea_card_border',
-				'selector' => '{{WRAPPER}} .awea-pricing-card',
+				'name'           => 'awea_card_border',
+				'selector'       => '{{WRAPPER}} .awea-pricing-card',
+				'fields_options' => [
+					'border' => [ 'default' => 'solid' ],
+					'width'  => [
+						'default' => [
+							'top'      => '1',
+							'right'    => '1',
+							'bottom'   => '1',
+							'left'     => '1',
+							'isLinked' => true,
+						],
+					],
+					'color'  => [ 'default' => '#e2e8f0' ],
+				],
 			]
 		);
 
@@ -313,9 +418,8 @@ class Widget_Awesome_Price extends Widget_Base {
 
 		$this->end_controls_tab();
 
-		// Hover
 		$this->start_controls_tab(
-			'awea_card_tab_hover',
+			'awea_card_hover',
 			[ 'label' => esc_html__( 'Hover', 'awesome-widgets-elementor' ) ]
 		);
 
@@ -360,15 +464,14 @@ class Widget_Awesome_Price extends Widget_Base {
 		$this->add_control(
 			'awea_heading_featured_style',
 			[
-				'label'     => esc_html__( 'Featured Overrides', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Featured', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::HEADING,
 				'separator' => 'before',
-				'condition' => [ 'awea_is_featured' => 'yes' ],
 			]
 		);
 
 		$this->add_control(
-			'awea_featured_card_border_color',
+			'awea_featured_border',
 			[
 				'label'     => esc_html__( 'Border Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
@@ -378,26 +481,16 @@ class Widget_Awesome_Price extends Widget_Base {
 				'selectors' => [
 					'{{WRAPPER}} .awea-pricing-card.awea-is-featured' => 'border-color: {{VALUE}};',
 				],
-				'condition' => [ 'awea_is_featured' => 'yes' ],
-			]
-		);
-
-		$this->add_group_control(
-			Group_Control_Box_Shadow::get_type(),
-			[
-				'name'      => 'awea_featured_card_shadow',
-				'selector'  => '{{WRAPPER}} .awea-pricing-card.awea-is-featured',
-				'condition' => [ 'awea_is_featured' => 'yes' ],
 			]
 		);
 
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   STYLE TAB: 2. HEADER
+		   STYLE: 2. HEADER
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_section_style_header',
+			'awea_style_header',
 			[
 				'label' => esc_html__( 'Header', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
@@ -441,28 +534,12 @@ class Widget_Awesome_Price extends Widget_Base {
 			]
 		);
 
-		$this->add_responsive_control(
-			'awea_header_margin_bottom',
-			[
-				'label'      => esc_html__( 'Spacing', 'awesome-widgets-elementor' ),
-				'type'       => Controls_Manager::SLIDER,
-				'size_units' => [ 'px', 'em' ],
-				'range'      => [ 'px' => [ 'min' => 10, 'max' => 60 ] ],
-				'default'    => [ 'unit' => 'px', 'size' => 24 ],
-				'selectors'  => [
-					'{{WRAPPER}} .awea-pricing-card-header' => 'margin-bottom: {{SIZE}}{{UNIT}};',
-				],
-			]
-		);
-
-		// Ribbon
 		$this->add_control(
 			'awea_heading_ribbon_style',
 			[
 				'label'     => esc_html__( 'Ribbon', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::HEADING,
 				'separator' => 'before',
-				'condition' => [ 'awea_is_featured' => 'yes' ],
 			]
 		);
 
@@ -475,7 +552,6 @@ class Widget_Awesome_Price extends Widget_Base {
 				'selectors' => [
 					'{{WRAPPER}} .awea-pricing-ribbon' => 'color: {{VALUE}};',
 				],
-				'condition' => [ 'awea_is_featured' => 'yes' ],
 			]
 		);
 
@@ -490,48 +566,37 @@ class Widget_Awesome_Price extends Widget_Base {
 				'selectors' => [
 					'{{WRAPPER}} .awea-pricing-ribbon' => 'background-color: {{VALUE}};',
 				],
-				'condition' => [ 'awea_is_featured' => 'yes' ],
 			]
 		);
 
 		$this->add_group_control(
 			Group_Control_Typography::get_type(),
 			[
-				'name'      => 'awea_ribbon_typo',
-				'selector'  => '{{WRAPPER}} .awea-pricing-ribbon',
-				'global'    => [
+				'name'     => 'awea_ribbon_typo',
+				'selector' => '{{WRAPPER}} .awea-pricing-ribbon',
+				'global'   => [
 					'default' => Global_Typography::TYPOGRAPHY_SECONDARY,
 				],
-				'condition' => [ 'awea_is_featured' => 'yes' ],
 			]
 		);
 
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   STYLE TAB: 3. PRICING
+		   STYLE: 3. PRICING
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_section_style_pricing',
+			'awea_style_pricing',
 			[
 				'label' => esc_html__( 'Pricing', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
 
-		// Currency
-		$this->add_control(
-			'awea_heading_currency',
-			[
-				'label' => esc_html__( 'Currency', 'awesome-widgets-elementor' ),
-				'type'  => Controls_Manager::HEADING,
-			]
-		);
-
 		$this->add_control(
 			'awea_currency_color',
 			[
-				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Currency Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [
 					'default' => Global_Colors::COLOR_PRIMARY,
@@ -542,31 +607,10 @@ class Widget_Awesome_Price extends Widget_Base {
 			]
 		);
 
-		$this->add_group_control(
-			Group_Control_Typography::get_type(),
-			[
-				'name'     => 'awea_currency_typo',
-				'selector' => '{{WRAPPER}} .awea-pricing-currency',
-				'global'   => [
-					'default' => Global_Typography::TYPOGRAPHY_SECONDARY,
-				],
-			]
-		);
-
-		// Amount
-		$this->add_control(
-			'awea_heading_amount',
-			[
-				'label'     => esc_html__( 'Amount', 'awesome-widgets-elementor' ),
-				'type'      => Controls_Manager::HEADING,
-				'separator' => 'before',
-			]
-		);
-
 		$this->add_control(
 			'awea_price_color',
 			[
-				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Amount Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [
 					'default' => Global_Colors::COLOR_PRIMARY,
@@ -574,6 +618,7 @@ class Widget_Awesome_Price extends Widget_Base {
 				'selectors' => [
 					'{{WRAPPER}} .awea-pricing-amount' => 'color: {{VALUE}};',
 				],
+				'separator' => 'before',
 			]
 		);
 
@@ -588,20 +633,10 @@ class Widget_Awesome_Price extends Widget_Base {
 			]
 		);
 
-		// Period
-		$this->add_control(
-			'awea_heading_period',
-			[
-				'label'     => esc_html__( 'Period', 'awesome-widgets-elementor' ),
-				'type'      => Controls_Manager::HEADING,
-				'separator' => 'before',
-			]
-		);
-
 		$this->add_control(
 			'awea_period_color',
 			[
-				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Period Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [
 					'default' => Global_Colors::COLOR_TEXT,
@@ -609,27 +644,17 @@ class Widget_Awesome_Price extends Widget_Base {
 				'selectors' => [
 					'{{WRAPPER}} .awea-pricing-cycle' => 'color: {{VALUE}};',
 				],
-			]
-		);
-
-		$this->add_group_control(
-			Group_Control_Typography::get_type(),
-			[
-				'name'     => 'awea_period_typo',
-				'selector' => '{{WRAPPER}} .awea-pricing-cycle',
-				'global'   => [
-					'default' => Global_Typography::TYPOGRAPHY_SECONDARY,
-				],
+				'separator' => 'before',
 			]
 		);
 
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   STYLE TAB: 4. FEATURES
+		   STYLE: 4. FEATURES
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_section_style_features',
+			'awea_style_features',
 			[
 				'label' => esc_html__( 'Features', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
@@ -665,18 +690,6 @@ class Widget_Awesome_Price extends Widget_Base {
 			]
 		);
 
-		$this->add_control(
-			'awea_feature_disabled_color',
-			[
-				'label'     => esc_html__( 'Disabled Color', 'awesome-widgets-elementor' ),
-				'type'      => Controls_Manager::COLOR,
-				'default'   => '#94a3b8',
-				'selectors' => [
-					'{{WRAPPER}} .awea-pricing-feature-item.is-disabled' => 'color: {{VALUE}};',
-				],
-			]
-		);
-
 		$this->add_group_control(
 			Group_Control_Typography::get_type(),
 			[
@@ -699,31 +712,16 @@ class Widget_Awesome_Price extends Widget_Base {
 				'selectors'  => [
 					'{{WRAPPER}} .awea-pricing-feature-item:not(:last-child)' => 'margin-bottom: {{SIZE}}{{UNIT}};',
 				],
-				'separator'  => 'before',
-			]
-		);
-
-		$this->add_responsive_control(
-			'awea_features_bottom_spacing',
-			[
-				'label'      => esc_html__( 'Space Above Button', 'awesome-widgets-elementor' ),
-				'type'       => Controls_Manager::SLIDER,
-				'size_units' => [ 'px', 'rem' ],
-				'range'      => [ 'px' => [ 'min' => 16, 'max' => 60 ] ],
-				'default'    => [ 'unit' => 'px', 'size' => 32 ],
-				'selectors'  => [
-					'{{WRAPPER}} .awea-pricing-feature-list' => 'margin-bottom: {{SIZE}}{{UNIT}};',
-				],
 			]
 		);
 
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   STYLE TAB: 5. BUTTON
+		   STYLE: 5. BUTTON
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_section_style_button',
+			'awea_style_button',
 			[
 				'label' => esc_html__( 'Button', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
@@ -801,22 +799,6 @@ class Widget_Awesome_Price extends Widget_Base {
 			]
 		);
 
-		$this->add_group_control(
-			Group_Control_Border::get_type(),
-			[
-				'name'     => 'awea_btn_border',
-				'selector' => '{{WRAPPER}} .awea-pricing-btn-cta',
-			]
-		);
-
-		$this->add_group_control(
-			Group_Control_Box_Shadow::get_type(),
-			[
-				'name'     => 'awea_btn_shadow',
-				'selector' => '{{WRAPPER}} .awea-pricing-btn-cta',
-			]
-		);
-
 		$this->end_controls_tab();
 
 		// Hover
@@ -832,7 +814,7 @@ class Widget_Awesome_Price extends Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#ffffff',
 				'selectors' => [
-					'{{WRAPPER}} .awea-pricing-btn-cta:hover' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-pricing-btn-cta:hover, {{WRAPPER}} .awea-pricing-btn-cta:focus-visible' => 'color: {{VALUE}};',
 				],
 			]
 		);
@@ -846,27 +828,8 @@ class Widget_Awesome_Price extends Widget_Base {
 					'default' => Global_Colors::COLOR_ACCENT,
 				],
 				'selectors' => [
-					'{{WRAPPER}} .awea-pricing-btn-cta:hover' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .awea-pricing-btn-cta:hover, {{WRAPPER}} .awea-pricing-btn-cta:focus-visible' => 'background-color: {{VALUE}};',
 				],
-			]
-		);
-
-		$this->add_control(
-			'awea_btn_border_hover',
-			[
-				'label'     => esc_html__( 'Border Color', 'awesome-widgets-elementor' ),
-				'type'      => Controls_Manager::COLOR,
-				'selectors' => [
-					'{{WRAPPER}} .awea-pricing-btn-cta:hover' => 'border-color: {{VALUE}};',
-				],
-			]
-		);
-
-		$this->add_group_control(
-			Group_Control_Box_Shadow::get_type(),
-			[
-				'name'     => 'awea_btn_shadow_hover',
-				'selector' => '{{WRAPPER}} .awea-pricing-btn-cta:hover',
 			]
 		);
 
@@ -877,92 +840,102 @@ class Widget_Awesome_Price extends Widget_Base {
 	}
 
 	protected function render() {
-		$settings    = $this->get_settings_for_display();
-		$title       = $settings['awea_price_title'] ?? '';
-		$is_featured = 'yes' === ( $settings['awea_is_featured'] ?? 'no' );
-		$badge_text  = $settings['awea_featured_badge_text'] ?? '';
-		$currency    = $settings['awea_currency'] ?? '$';
-		$price       = $settings['awea_price'] ?? '79';
-		$period      = $settings['awea_period'] ?? 'mo';
-		$features    = $settings['awea_features_list'] ?? [];
-		$btn_text    = $settings['awea_btn_text'] ?? '';
+		$settings = $this->get_settings_for_display();
+		$tiers    = $settings['awea_pricing_tiers'] ?? [];
 
-		if ( ! empty( $settings['awea_btn_link']['url'] ) ) {
-			$this->add_link_attributes( 'awea_pricing_link', $settings['awea_btn_link'] );
-		}
-		$this->add_render_attribute( 'awea_pricing_link', 'class', 'awea-pricing-btn-cta' );
-
-		$card_classes = [ 'awea-pricing-card' ];
-		if ( $is_featured ) {
-			$card_classes[] = 'awea-is-featured';
+		if ( empty( $tiers ) ) {
+			return;
 		}
 		?>
-		<div class="<?php echo esc_attr( implode( ' ', $card_classes ) ); ?>">
-			
-			<?php if ( $is_featured && ! empty( $badge_text ) ) : ?>
-				<div class="awea-pricing-ribbon" aria-hidden="true">
-					<span><?php echo esc_html( $badge_text ); ?></span>
-				</div>
-			<?php endif; ?>
+		<div class="awea-pricing-grid">
+			<?php foreach ( $tiers as $index => $tier ) :
+				$id          = $tier['_id'] ?? $index;
+				$title       = $tier['awea_title'] ?? '';
+				$is_featured = 'yes' === ( $tier['awea_featured'] ?? 'no' );
+				$ribbon_text = $tier['awea_ribbon'] ?? '';
+				$currency    = $tier['awea_currency'] ?? '$';
+				$price       = $tier['awea_price'] ?? '';
+				$period      = $tier['awea_period'] ?? '';
+				$features    = $tier['awea_features_list'] ?? [];
+				$btn_text    = $tier['awea_btn_text'] ?? '';
+				$link_key    = 'link_' . $id;
 
-			<!-- Header & Pricing Block -->
-			<div class="awea-pricing-card-header">
-				<?php if ( ! empty( $title ) ) : ?>
-					<span class="awea-pricing-plan-tag"><?php echo esc_html( $title ); ?></span>
-				<?php endif; ?>
+				$btn_url = ! empty( $tier['awea_btn_link']['url'] ) ? $tier['awea_btn_link'] : [ 'url' => '#' ];
+				$this->add_link_attributes( $link_key, $btn_url );
+				$this->add_render_attribute( $link_key, 'class', 'awea-pricing-btn-cta' );
 
-				<div class="awea-pricing-price-box">
-					<?php if ( ! empty( $currency ) ) : ?>
-						<span class="awea-pricing-currency"><?php echo esc_html( $currency ); ?></span>
+				$card_classes = [ 'awea-pricing-card', 'elementor-repeater-item-' . esc_attr( $id ) ];
+				if ( $is_featured ) {
+					$card_classes[] = 'awea-is-featured';
+				}
+				?>
+				<article class="<?php echo esc_attr( implode( ' ', $card_classes ) ); ?>">
+
+					<?php if ( $is_featured && ! empty( $ribbon_text ) ) : ?>
+						<div class="awea-pricing-ribbon" aria-hidden="true">
+							<span><?php echo esc_html( $ribbon_text ); ?></span>
+						</div>
 					<?php endif; ?>
 
-					<?php if ( ! empty( $price ) ) : ?>
-						<span class="awea-pricing-amount"><?php echo esc_html( $price ); ?></span>
-					<?php endif; ?>
+					<!-- Header & Pricing Block -->
+					<div class="awea-pricing-card-header">
+						<?php if ( ! empty( $title ) ) : ?>
+							<span class="awea-pricing-plan-tag"><?php echo esc_html( $title ); ?></span>
+						<?php endif; ?>
 
-					<?php if ( ! empty( $period ) ) : ?>
-						<span class="awea-pricing-cycle">/<?php echo esc_html( ltrim( $period, '/' ) ); ?></span>
-					<?php endif; ?>
-				</div>
-			</div>
+						<div class="awea-pricing-price-box">
+							<?php if ( ! empty( $currency ) ) : ?>
+								<span class="awea-pricing-currency"><?php echo esc_html( $currency ); ?></span>
+							<?php endif; ?>
 
-			<!-- Body Features & CTA -->
-			<div class="awea-pricing-card-body">
-				<?php if ( ! empty( $features ) ) : ?>
-					<ul class="awea-pricing-feature-list" role="list">
-						<?php
-						foreach ( $features as $feature ) :
-							$f_text   = $feature['awea_feature_text'] ?? '';
-							$f_active = 'yes' === ( $feature['awea_feature_active'] ?? 'yes' );
-							if ( empty( $f_text ) ) {
-								continue;
-							}
-							?>
-							<li class="awea-pricing-feature-item <?php echo $f_active ? '' : 'is-disabled'; ?>">
-								<span class="awea-feature-icon" aria-hidden="true">
-									<?php
-									if ( ! empty( $feature['awea_feature_icon']['value'] ) ) {
-										Icons_Manager::render_icon( $feature['awea_feature_icon'], [ 'aria-hidden' => 'true' ] );
-									} else {
-										echo '<i class="fas fa-check" aria-hidden="true"></i>';
+							<?php if ( ! empty( $price ) ) : ?>
+								<span class="awea-pricing-amount"><?php echo esc_html( $price ); ?></span>
+							<?php endif; ?>
+
+							<?php if ( ! empty( $period ) ) : ?>
+								<span class="awea-pricing-cycle">/<?php echo esc_html( ltrim( $period, '/' ) ); ?></span>
+							<?php endif; ?>
+						</div>
+					</div>
+
+					<!-- Body Features & CTA -->
+					<div class="awea-pricing-card-body">
+						<?php if ( ! empty( $features ) ) : ?>
+							<ul class="awea-pricing-feature-list" role="list">
+								<?php foreach ( $features as $feature ) :
+									$f_text   = $feature['awea_feat_text'] ?? '';
+									$f_active = 'yes' === ( $feature['awea_feat_active'] ?? 'yes' );
+									if ( empty( $f_text ) ) {
+										continue;
 									}
 									?>
-								</span>
-								<span class="awea-feature-text"><?php echo esc_html( $f_text ); ?></span>
-							</li>
-						<?php endforeach; ?>
-					</ul>
-				<?php endif; ?>
+									<li class="awea-pricing-feature-item <?php echo $f_active ? '' : 'is-disabled'; ?>">
+										<span class="awea-feature-icon" aria-hidden="true">
+											<?php
+											if ( ! empty( $feature['awea_feat_icon']['value'] ) ) {
+												Icons_Manager::render_icon( $feature['awea_feat_icon'], [ 'aria-hidden' => 'true' ] );
+											} else {
+												echo '<i class="fas fa-check" aria-hidden="true"></i>';
+											}
+											?>
+										</span>
+										<span class="awea-feature-text"><?php echo esc_html( $f_text ); ?></span>
+									</li>
+								<?php endforeach; ?>
+							</ul>
+						<?php endif; ?>
 
-				<?php if ( ! empty( $btn_text ) ) : ?>
-					<div class="awea-pricing-btn-wrap">
-						<a <?php $this->print_render_attribute_string( 'awea_pricing_link' ); ?>>
-							<span><?php echo esc_html( $btn_text ); ?></span>
-						</a>
+						<?php if ( ! empty( $btn_text ) ) : ?>
+							<div class="awea-pricing-btn-wrap">
+								<a <?php $this->print_render_attribute_string( $link_key ); ?>>
+									<span><?php echo esc_html( $btn_text ); ?></span>
+								</a>
+							</div>
+						<?php endif; ?>
 					</div>
-				<?php endif; ?>
-			</div>
 
+				</article>
+			<?php endforeach; ?>
 		</div>
 		<?php
 	}

@@ -1,374 +1,405 @@
 /* ==========================================================================
-   AWEA Icon Box — Zero-Shadow Architectural UI (No Corner Glow)
+   Awesome Icon Box Widget
    ========================================================================== */
 
 .awea-icb-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 24px;
-  width: 100%;
-  box-sizing: border-box;
-  align-items: stretch;
+	--awea-icb-primary: var(--e-global-color-primary, #4f46e5);
+	--awea-icb-heading: #0f172a;
+	--awea-icb-text: #475569;
+	--awea-icb-border: #e2e8f0;
+	--awea-icb-align: flex-start;
+	--awea-icb-btn-align: flex-start;
+	--awea-icb-hex-border: 1.5px;
+
+	--awea-icb-ico-color: var(--awea-icb-primary);
+	--awea-icb-ico-color-hover: #ffffff;
+	--awea-icb-ico-bg: rgba(79, 70, 229, 0.08);
+	--awea-icb-ico-bg-hover: var(--awea-icb-primary);
+	--awea-icb-ico-border: var(--awea-icb-primary);
+	--awea-icb-ico-border-hover: var(--awea-icb-primary);
+
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 24px;
+	width: 100%;
+	box-sizing: border-box;
+	align-items: stretch;
+}
+
+.awea-icb-grid *,
+.awea-icb-grid *::before,
+.awea-icb-grid *::after {
+	box-sizing: border-box;
 }
 
 .awea-icb-card {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  text-align: left;
-  gap: 22px;
-  height: 100%;
-  width: 100%;
-  box-sizing: border-box;
-  background-color: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: 24px;
-  padding: 32px 28px;
-  overflow: hidden;
-  box-shadow: none;
-  transition:
-    background-color 0.3s ease,
-    border-color 0.3s ease,
-    transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+	--awea-icb-card-bg: #ffffff;
+
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	align-items: var(--awea-icb-align, flex-start);
+	text-align: left;
+	gap: 22px;
+	height: 100%;
+	width: 100%;
+	background-color: var(--awea-icb-card-bg);
+	border: 1px solid var(--awea-icb-border);
+	border-radius: 24px;
+	padding: 32px 28px;
+	overflow: hidden;
+	transition:
+		background-color 0.3s ease,
+		border-color 0.3s ease,
+		box-shadow 0.3s ease,
+		transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .awea-icb-card:hover {
-  background-color: #f8fafc;
-  border-color: var(--e-global-color-primary, #4f46e5);
-  box-shadow: none;
+	border-color: var(--awea-icb-primary);
 }
 
 .awea-icb-motion-yes .awea-icb-card:hover {
-  transform: translateY(-4px);
+	transform: translateY(-4px);
 }
 
 /* Whole-Card Overlay Link */
 .awea-icb-card-clickable {
-  cursor: pointer;
+	cursor: pointer;
 }
 
 .awea-icb-cover-link {
-  position: absolute;
-  inset: 0;
-  z-index: 4;
-  text-decoration: none;
+	position: absolute;
+	inset: 0;
+	z-index: 4;
+	text-decoration: none;
+	border-radius: inherit;
+}
+
+.awea-icb-cover-link:focus-visible {
+	outline: 2px solid var(--awea-icb-primary);
+	outline-offset: 2px;
 }
 
 /* Horizontal Icon Side Layouts (Left / Right) */
 .awea-icb-pos-left .awea-icb-card {
-  flex-direction: row;
-  align-items: flex-start;
+	flex-direction: row;
+	align-items: flex-start;
 }
 
 .awea-icb-pos-right .awea-icb-card {
-  flex-direction: row-reverse;
-  align-items: flex-start;
+	flex-direction: row-reverse;
+	align-items: flex-start;
 }
 
 /* Corner Badge Pill */
 .awea-icb-badge {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  z-index: 2;
-  padding: 4px 10px;
-  border-radius: 100px;
-  background-color: rgba(79, 70, 229, 0.08);
-  border: 1px solid rgba(79, 70, 229, 0.14);
-  color: var(--e-global-color-primary, #4f46e5);
-  font-size: 0.68rem;
-  font-weight: 700;
-  letter-spacing: 0.07em;
-  text-transform: uppercase;
-  line-height: 1.2;
-  user-select: none;
-  box-shadow: none;
+	position: absolute;
+	top: 20px;
+	right: 20px;
+	z-index: 3;
+	padding: 4px 10px;
+	border-radius: 100px;
+	background-color: rgba(79, 70, 229, 0.08);
+	border: 1px solid rgba(79, 70, 229, 0.14);
+	color: var(--awea-icb-primary);
+	font-size: 0.68rem;
+	font-weight: 700;
+	letter-spacing: 0.07em;
+	text-transform: uppercase;
+	line-height: 1.2;
+	user-select: none;
 }
 
 .awea-icb-pos-right .awea-icb-badge {
-  right: auto;
-  left: 20px;
+	right: auto;
+	left: 20px;
 }
 
-/* ==========================================================================
+/* --------------------------------------------------------------------------
    Icon Base, Views (Default / Stacked / Framed) & Shapes
-   ========================================================================== */
+   -------------------------------------------------------------------------- */
 .awea-icb-icon {
-  position: relative;
-  z-index: 2;
-  width: 60px;
-  height: 60px;
-  border-radius: 16px;
-  color: var(--e-global-color-primary, #4f46e5);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  box-sizing: border-box;
-  box-shadow: none;
-  transition:
-    background-color 0.3s ease,
-    border-color 0.3s ease,
-    color 0.3s ease,
-    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+	position: relative;
+	z-index: 2;
+	width: 60px;
+	height: 60px;
+	border-radius: 16px;
+	color: var(--awea-item-ico-color, var(--awea-icb-ico-color));
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+	transition:
+		background-color 0.3s ease,
+		border-color 0.3s ease,
+		color 0.3s ease,
+		transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .awea-icb-icon i {
-  font-size: 24px;
-  line-height: 1;
+	font-size: 24px;
+	line-height: 1;
 }
 
 .awea-icb-icon svg {
-  width: 24px;
-  height: 24px;
-  display: block;
-  fill: currentColor;
+	width: 24px;
+	height: 24px;
+	display: block;
+	fill: currentColor;
 }
 
-/* VIEW 1: Default (No Box, No Background, No Border) */
+/* VIEW 1: Default */
 .awea-icb-view-default .awea-icb-icon {
-  width: auto;
-  height: auto;
-  padding: 0;
-  background-color: transparent !important;
-  border: none !important;
-  border-radius: 0 !important;
-  clip-path: none !important;
+	width: auto;
+	height: auto;
+	padding: 0;
+	background-color: transparent !important;
+	border: none !important;
+	border-radius: 0 !important;
+	clip-path: none !important;
 }
 
 .awea-icb-view-default .awea-icb-card:hover .awea-icb-icon {
-  color: var(--e-global-color-primary, #4f46e5);
+	color: var(--awea-item-ico-color, var(--awea-icb-ico-color));
 }
 
-/* VIEW 2: Stacked (Solid / Tinted Background Box) */
+/* VIEW 2: Stacked */
 .awea-icb-view-stacked .awea-icb-icon {
-  background-color: rgba(79, 70, 229, 0.08);
-  border: none;
+	background-color: var(--awea-item-ico-accent, var(--awea-icb-ico-bg));
+	border: none;
 }
 
 .awea-icb-view-stacked .awea-icb-card:hover .awea-icb-icon {
-  background-color: var(--e-global-color-primary, #4f46e5);
-  color: #ffffff;
+	background-color: var(--awea-item-ico-color, var(--awea-icb-ico-bg-hover));
+	color: var(--awea-icb-ico-color-hover);
 }
 
-.awea-icb-view-stacked .awea-icb-card:hover .awea-icb-icon svg {
-  fill: #ffffff;
-}
-
-/* VIEW 3: Framed (Hairline Border Box) */
+/* VIEW 3: Framed */
 .awea-icb-view-framed .awea-icb-icon {
-  background-color: transparent;
-  border-style: solid;
-  border-width: 1.5px;
-  border-color: var(--e-global-color-primary, #4f46e5);
+	background-color: transparent;
+	border-style: solid;
+	border-width: 1.5px;
+	border-color: var(--awea-item-ico-accent, var(--awea-icb-ico-border));
 }
 
 .awea-icb-view-framed .awea-icb-card:hover .awea-icb-icon {
-  background-color: var(--e-global-color-primary, #4f46e5);
-  border-color: var(--e-global-color-primary, #4f46e5);
-  color: #ffffff;
+	background-color: var(--awea-item-ico-accent, var(--awea-icb-ico-bg-hover));
+	border-color: var(--awea-item-ico-accent, var(--awea-icb-ico-border-hover));
+	color: var(--awea-icb-ico-color-hover);
 }
 
-.awea-icb-view-framed .awea-icb-card:hover .awea-icb-icon svg {
-  fill: #ffffff;
-}
-
-/* SHAPES (Applied when View is Stacked or Framed) */
+/* SHAPES */
 .awea-icb-shape-circle .awea-icb-icon {
-  border-radius: 50% !important;
+	border-radius: 50% !important;
 }
 
 .awea-icb-shape-square .awea-icb-icon {
-  border-radius: 0px !important;
+	border-radius: 0 !important;
 }
 
 .awea-icb-shape-rounded .awea-icb-icon {
-  border-radius: 16px;
+	border-radius: 16px;
 }
 
 .awea-icb-shape-hexagon .awea-icb-icon {
-  border-radius: 0 !important;
-  border: none !important;
-  clip-path: polygon(50% 0%, 93% 25%, 93% 75%, 50% 100%, 7% 75%, 7% 25%);
+	border-radius: 0 !important;
+	border: none !important;
+	clip-path: polygon(50% 0%, 93% 25%, 93% 75%, 50% 100%, 7% 75%, 7% 25%);
 }
 
-/* Framed Hexagon: Outer Border Polygon + Inner Cutout Surface */
+/* Framed Hexagon: Outer Border Polygon + Card-Matched Inner Cutout */
 .awea-icb-view-framed.awea-icb-shape-hexagon .awea-icb-icon {
-  background-color: var(--e-global-color-primary, #4f46e5);
+	background-color: var(--awea-item-ico-accent, var(--awea-icb-ico-border));
 }
 
 .awea-icb-view-framed.awea-icb-shape-hexagon .awea-icb-icon::before {
-  content: "";
-  position: absolute;
-  inset: 2px;
-  background-color: #ffffff;
-  clip-path: polygon(50% 0%, 93% 25%, 93% 75%, 50% 100%, 7% 75%, 7% 25%);
-  z-index: -1;
-  transition: background-color 0.3s ease;
+	content: "";
+	position: absolute;
+	inset: var(--awea-icb-hex-border, 1.5px);
+	background-color: var(--awea-icb-card-bg);
+	clip-path: polygon(50% 0%, 93% 25%, 93% 75%, 50% 100%, 7% 75%, 7% 25%);
+	z-index: -1;
+	transition: background-color 0.3s ease;
 }
 
 .awea-icb-view-framed.awea-icb-shape-hexagon .awea-icb-card:hover .awea-icb-icon::before {
-  background-color: var(--e-global-color-primary, #4f46e5);
+	background-color: var(--awea-item-ico-accent, var(--awea-icb-ico-bg-hover));
 }
 
 .awea-icb-motion-yes .awea-icb-card:hover .awea-icb-icon {
-  transform: scale(1.05);
+	transform: scale(1.05);
 }
 
-/* ==========================================================================
-   Content Spine & Action Button
-   ========================================================================== */
+/* --------------------------------------------------------------------------
+   Content Body & Action Button
+   -------------------------------------------------------------------------- */
 .awea-icb-body {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  flex: 1 1 auto;
-  min-width: 0;
-  height: 100%;
-  width: 100%;
+	position: relative;
+	z-index: 2;
+	display: flex;
+	flex-direction: column;
+	align-items: var(--awea-icb-align, flex-start);
+	align-self: stretch;
+	flex: 1 1 auto;
+	min-width: 0;
+	width: 100%;
 }
 
 .awea-icb-title {
-  font-size: 1.28rem;
-  font-weight: 800;
-  line-height: 1.3;
-  letter-spacing: -0.02em;
-  color: #0f172a;
-  margin: 0 0 10px 0;
-  word-break: break-word;
-  transition: color 0.25s ease;
+	margin: 0 0 10px 0;
+	font-size: 1.28rem;
+	font-weight: 800;
+	line-height: 1.3;
+	letter-spacing: -0.02em;
+	color: var(--awea-icb-heading);
+	word-break: break-word;
+	transition: color 0.25s ease;
 }
 
 .awea-icb-title a {
-  color: inherit;
-  text-decoration: none;
-  transition: color 0.25s ease;
+	color: inherit;
+	text-decoration: none;
+	transition: color 0.25s ease;
+}
+
+.awea-icb-title a:focus-visible {
+	outline: 2px solid var(--awea-icb-primary);
+	outline-offset: 2px;
+	border-radius: 4px;
 }
 
 .awea-icb-card:hover .awea-icb-title,
 .awea-icb-card:hover .awea-icb-title a {
-  color: var(--e-global-color-primary, #4f46e5);
+	color: var(--awea-icb-primary);
 }
 
 .awea-icb-desc {
-  font-size: 0.95rem;
-  line-height: 1.62;
-  color: #475569;
-  margin: 0 0 22px 0;
-  word-break: break-word;
+	margin: 0 0 22px 0;
+	font-size: 0.95rem;
+	line-height: 1.62;
+	color: var(--awea-icb-text);
+	word-break: break-word;
 }
 
 /* Bottom-Anchored Action Button */
 .awea-icb-btn-wrap {
-  width: 100%;
-  margin-top: auto;
+	width: 100%;
+	margin-top: auto;
+	display: flex;
+	justify-content: var(--awea-icb-btn-align, flex-start);
 }
 
 .awea-icb-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 11px 20px;
-  border-radius: 10px;
-  background-color: #0f172a;
-  color: #ffffff;
-  border: 1px solid transparent;
-  font-size: 0.88rem;
-  font-weight: 700;
-  line-height: 1.2;
-  text-decoration: none;
-  width: fit-content;
-  box-sizing: border-box;
-  box-shadow: none;
-  transition:
-    background-color 0.25s ease,
-    border-color 0.25s ease,
-    color 0.25s ease;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	padding: 11px 20px;
+	border-radius: 10px;
+	background-color: var(--awea-icb-heading);
+	color: #ffffff;
+	border: 1px solid transparent;
+	font-size: 0.88rem;
+	font-weight: 700;
+	line-height: 1.2;
+	text-decoration: none;
+	transition:
+		background-color 0.25s ease,
+		border-color 0.25s ease,
+		color 0.25s ease;
+}
+
+.awea-icb-btn:focus-visible {
+	outline: 2px solid var(--awea-icb-primary);
+	outline-offset: 2px;
 }
 
 .awea-icb-btn:hover,
 .awea-icb-card:hover .awea-icb-btn {
-  background-color: var(--e-global-color-primary, #4f46e5);
-  box-shadow: none;
+	background-color: var(--awea-icb-primary);
+	color: #ffffff;
 }
 
 .awea-icb-ico {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  line-height: 1;
-  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	line-height: 1;
+	flex-shrink: 0;
+	transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .awea-icb-btn:hover .awea-icb-ico-right,
 .awea-icb-card:hover .awea-icb-ico-right {
-  transform: translateX(4px);
+	transform: translateX(4px);
 }
 
 .awea-icb-btn:hover .awea-icb-ico-left,
 .awea-icb-card:hover .awea-icb-ico-left {
-  transform: translateX(-4px);
+	transform: translateX(-4px);
 }
 
-.awea-icb-ico svg,
+.awea-icb-ico svg {
+	width: 12px;
+	height: 12px;
+	fill: currentColor;
+	display: block;
+}
+
 .awea-icb-ico i {
-  width: 12px;
-  height: 12px;
-  font-size: 12px;
+	font-size: 12px;
+	line-height: 1;
 }
 
-/* Reduced Motion */
+/* --------------------------------------------------------------------------
+   Accessibility & Responsive
+   -------------------------------------------------------------------------- */
 @media (prefers-reduced-motion: reduce) {
-  .awea-icb-card,
-  .awea-icb-icon,
-  .awea-icb-ico {
-    transition: none !important;
-    transform: none !important;
-  }
+	.awea-icb-card,
+	.awea-icb-icon,
+	.awea-icb-ico {
+		transition: none !important;
+		transform: none !important;
+	}
 }
 
-/* Mobile Stacking & Sizing (<= 768px) */
 @media (max-width: 768px) {
-  .awea-icb-pos-left .awea-icb-card,
-  .awea-icb-pos-right .awea-icb-card {
-    flex-direction: column;
-  }
+	.awea-icb-pos-left .awea-icb-card,
+	.awea-icb-pos-right .awea-icb-card {
+		flex-direction: column;
+	}
 
-  .awea-icb-card {
-    padding: 24px 20px;
-    border-radius: 18px;
-    gap: 18px;
-  }
+	.awea-icb-card {
+		padding: 24px 20px;
+		border-radius: 18px;
+		gap: 18px;
+	}
 
-  .awea-icb-view-stacked .awea-icb-icon,
-  .awea-icb-view-framed .awea-icb-icon {
-    width: 50px;
-    height: 50px;
-  }
+	:where(.awea-icb-view-stacked, .awea-icb-view-framed) .awea-icb-icon {
+		width: 50px;
+		height: 50px;
+	}
 
-  .awea-icb-icon i {
-    font-size: 20px;
-  }
+	:where(.awea-icb-icon) i {
+		font-size: 20px;
+	}
 
-  .awea-icb-icon svg {
-    width: 20px;
-    height: 20px;
-  }
+	:where(.awea-icb-icon) svg {
+		width: 20px;
+		height: 20px;
+	}
 
-  .awea-icb-title {
-    font-size: 1.15rem;
-  }
+	.awea-icb-title {
+		font-size: 1.15rem;
+	}
 
-  .awea-icb-desc {
-    font-size: 0.9rem;
-    margin-bottom: 18px;
-  }
+	.awea-icb-desc {
+		font-size: 0.9rem;
+		margin-bottom: 18px;
+	}
 
-  .awea-icb-btn {
-    width: 100%;
-  }
+	.awea-icb-btn {
+		width: 100%;
+	}
 }

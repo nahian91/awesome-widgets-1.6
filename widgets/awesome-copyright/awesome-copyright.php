@@ -1,10 +1,9 @@
 <?php
 /**
- * Awesome Copyright Studio Widget.
- * Clean, automated copyright notice with dynamic year, site tokens, and modular styling.
+ * Awesome Copyright Widget.
  *
  * @package AwesomeWidgetsElementor
- * @since 1.7.0
+ * @since   2.0.0
  */
 
 namespace Elementor;
@@ -13,11 +12,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use \Elementor\Controls_Manager;
-use \Elementor\Group_Control_Typography;
-use \Elementor\Core\Kits\Documents\Tabs\Global_Typography;
-use \Elementor\Core\Kits\Documents\Tabs\Global_Colors;
-use \Elementor\Widget_Base;
+use Elementor\Controls_Manager;
+use Elementor\Group_Control_Border;
+use Elementor\Group_Control_Typography;
+use Elementor\Core\Kits\Documents\Tabs\Global_Typography;
+use Elementor\Core\Kits\Documents\Tabs\Global_Colors;
+use Elementor\Widget_Base;
 
 class Widget_Awesome_Copyright extends Widget_Base {
 
@@ -26,7 +26,7 @@ class Widget_Awesome_Copyright extends Widget_Base {
 	}
 
 	public function get_title() {
-		return esc_html__( 'Copyright Studio', 'awesome-widgets-elementor' );
+		return esc_html__( 'Copyright', 'awesome-widgets-elementor' );
 	}
 
 	public function get_icon() {
@@ -34,20 +34,20 @@ class Widget_Awesome_Copyright extends Widget_Base {
 	}
 
 	public function get_categories() {
-		return [ 'awesome-header-footer', 'awesome-widgets-elementor' ];
+		return [ 'awesome-header-footer' ];
 	}
 
 	public function get_keywords() {
-		return [ 'awea', 'copyright', 'footer', 'year', 'legal', 'credits', 'notice' ];
+		return [ 'awea', 'copyright', 'footer', 'year', 'legal', 'notice' ];
 	}
 
 	protected function register_controls() {
 
 		/* ==========================================================================
-		   CONTENT TAB: 1. COPYRIGHT
+		   CONTENT: 1. COPYRIGHT
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_section_content_primary',
+			'awea_section_copyright',
 			[
 				'label' => esc_html__( 'Copyright', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
@@ -55,24 +55,57 @@ class Widget_Awesome_Copyright extends Widget_Base {
 		);
 
 		$this->add_control(
-			'awea_copyright_text',
+			'awea_text',
 			[
-				'label'       => esc_html__( 'Text', 'awesome-widgets-elementor' ),
+				'label'       => esc_html__( 'Copyright Text', 'awesome-widgets-elementor' ),
 				'type'        => Controls_Manager::TEXTAREA,
 				'rows'        => 3,
 				'default'     => esc_html__( 'Copyright {copy} {year} {site_title}. All rights reserved.', 'awesome-widgets-elementor' ),
-				'description' => esc_html__( 'Tokens: {copy}, {year}, {site_title}, {site_link}', 'awesome-widgets-elementor' ),
+				'description' => esc_html__( 'Available tokens: {copy}, {reg}, {tm}, {year}, {year_range}, {site_title}, {site_link}, {author_name}', 'awesome-widgets-elementor' ),
 				'dynamic'     => [ 'active' => true ],
+			]
+		);
+
+		$this->add_control(
+			'awea_start_year',
+			[
+				'label'       => esc_html__( 'Start Year (for {year_range})', 'awesome-widgets-elementor' ),
+				'type'        => Controls_Manager::TEXT,
+				'placeholder' => '2020',
+				'description' => esc_html__( 'Outputs e.g. 2020–2026 when {year_range} is used.', 'awesome-widgets-elementor' ),
+			]
+		);
+
+		$this->add_control(
+			'awea_author_name',
+			[
+				'label'       => esc_html__( 'Author / Credit Name', 'awesome-widgets-elementor' ),
+				'type'        => Controls_Manager::TEXT,
+				'default'     => esc_html__( 'Studio Nahian', 'awesome-widgets-elementor' ),
+				'dynamic'     => [ 'active' => true ],
+				'separator'   => 'before',
+			]
+		);
+
+		$this->add_control(
+			'awea_author_url',
+			[
+				'label'       => esc_html__( 'Author / Credit URL', 'awesome-widgets-elementor' ),
+				'type'        => Controls_Manager::URL,
+				'dynamic'     => [ 'active' => true ],
+				'placeholder' => 'https://example.com',
+				'condition'   => [ 'awea_author_name!' => '' ],
 			]
 		);
 
 		$this->add_control(
 			'awea_html_tag',
 			[
-				'label'   => esc_html__( 'HTML Tag', 'awesome-widgets-elementor' ),
-				'type'    => Controls_Manager::SELECT,
-				'default' => 'div',
-				'options' => [
+				'label'     => esc_html__( 'HTML Wrapper Tag', 'awesome-widgets-elementor' ),
+				'type'      => Controls_Manager::SELECT,
+				'default'   => 'div',
+				'separator' => 'before',
+				'options'   => [
 					'div'    => 'div',
 					'p'      => 'p',
 					'span'   => 'span',
@@ -84,10 +117,10 @@ class Widget_Awesome_Copyright extends Widget_Base {
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   CONTENT TAB: 2. SECONDARY TEXT
+		   CONTENT: 2. SECONDARY TEXT
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_section_content_secondary',
+			'awea_section_secondary',
 			[
 				'label' => esc_html__( 'Secondary Text', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
@@ -97,7 +130,7 @@ class Widget_Awesome_Copyright extends Widget_Base {
 		$this->add_control(
 			'awea_enable_secondary',
 			[
-				'label'        => esc_html__( 'Show Secondary', 'awesome-widgets-elementor' ),
+				'label'        => esc_html__( 'Show Secondary Text', 'awesome-widgets-elementor' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'label_on'     => esc_html__( 'Yes', 'awesome-widgets-elementor' ),
 				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
@@ -107,16 +140,14 @@ class Widget_Awesome_Copyright extends Widget_Base {
 		);
 
 		$this->add_control(
-			'awea_affiliate_notice',
+			'awea_secondary_text',
 			[
 				'label'       => esc_html__( 'Text', 'awesome-widgets-elementor' ),
 				'type'        => Controls_Manager::TEXT,
 				'default'     => esc_html__( 'Crafted with precision.', 'awesome-widgets-elementor' ),
 				'label_block' => true,
 				'dynamic'     => [ 'active' => true ],
-				'condition'   => [
-					'awea_enable_secondary' => 'yes',
-				],
+				'condition'   => [ 'awea_enable_secondary' => 'yes' ],
 			]
 		);
 
@@ -125,11 +156,9 @@ class Widget_Awesome_Copyright extends Widget_Base {
 			[
 				'label'       => esc_html__( 'Link', 'awesome-widgets-elementor' ),
 				'type'        => Controls_Manager::URL,
-				'placeholder' => esc_html__( 'https://your-site.com', 'awesome-widgets-elementor' ),
+				'placeholder' => 'https://example.com',
 				'dynamic'     => [ 'active' => true ],
-				'condition'   => [
-					'awea_enable_secondary' => 'yes',
-				],
+				'condition'   => [ 'awea_enable_secondary' => 'yes' ],
 			]
 		);
 
@@ -146,22 +175,34 @@ class Widget_Awesome_Copyright extends Widget_Base {
 					'—' => esc_html__( 'Dash ( — )', 'awesome-widgets-elementor' ),
 					''  => esc_html__( 'None', 'awesome-widgets-elementor' ),
 				],
-				'condition' => [
-					'awea_enable_secondary' => 'yes',
-				],
+				'condition' => [ 'awea_enable_secondary' => 'yes' ],
 			]
 		);
 
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   STYLE TAB: 1. LAYOUT
+		   CONTENT: 3. LAYOUT
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_section_style_layout',
+			'awea_section_layout',
 			[
 				'label' => esc_html__( 'Layout', 'awesome-widgets-elementor' ),
-				'tab'   => Controls_Manager::TAB_STYLE,
+				'tab'   => Controls_Manager::TAB_CONTENT,
+			]
+		);
+
+		$this->add_control(
+			'awea_layout_mode',
+			[
+				'label'        => esc_html__( 'Direction', 'awesome-widgets-elementor' ),
+				'type'         => Controls_Manager::SELECT,
+				'default'      => 'inline',
+				'options'      => [
+					'inline' => esc_html__( 'Inline', 'awesome-widgets-elementor' ),
+					'stack'  => esc_html__( 'Stacked', 'awesome-widgets-elementor' ),
+				],
+				'prefix_class' => 'awea-cp-dir-',
 			]
 		);
 
@@ -171,27 +212,32 @@ class Widget_Awesome_Copyright extends Widget_Base {
 				'label'                => esc_html__( 'Alignment', 'awesome-widgets-elementor' ),
 				'type'                 => Controls_Manager::CHOOSE,
 				'options'              => [
-					'left'   => [
+					'left'    => [
 						'title' => esc_html__( 'Left', 'awesome-widgets-elementor' ),
 						'icon'  => 'eicon-text-align-left',
 					],
-					'center' => [
+					'center'  => [
 						'title' => esc_html__( 'Center', 'awesome-widgets-elementor' ),
 						'icon'  => 'eicon-text-align-center',
 					],
-					'right'  => [
+					'right'   => [
 						'title' => esc_html__( 'Right', 'awesome-widgets-elementor' ),
 						'icon'  => 'eicon-text-align-right',
+					],
+					'justify' => [
+						'title' => esc_html__( 'Space Between', 'awesome-widgets-elementor' ),
+						'icon'  => 'eicon-text-align-justify',
 					],
 				],
 				'default'              => 'center',
 				'selectors_dictionary' => [
-					'left'   => 'justify-content: flex-start; text-align: left;',
-					'center' => 'justify-content: center; text-align: center;',
-					'right'  => 'justify-content: flex-end; text-align: right;',
+					'left'    => 'justify-content: flex-start; text-align: left;',
+					'center'  => 'justify-content: center; text-align: center;',
+					'right'   => 'justify-content: flex-end; text-align: right;',
+					'justify' => 'justify-content: space-between; text-align: left;',
 				],
 				'selectors'            => [
-					'{{WRAPPER}} .awea-copyright-wrap' => '{{VALUE}}',
+					'{{WRAPPER}} .awea-cp-wrap' => '{{VALUE}}',
 				],
 			]
 		);
@@ -199,19 +245,28 @@ class Widget_Awesome_Copyright extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_items_gap',
 			[
-				'label'      => esc_html__( 'Spacing', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Gap', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
-				'size_units' => [ 'px', 'em' ],
-				'range'      => [
-					'px' => [ 'min' => 0, 'max' => 50 ],
-				],
-				'default'    => [ 'unit' => 'px', 'size' => 8 ],
+				'size_units' => [ 'px' ],
+				'range'      => [ 'px' => [ 'min' => 0, 'max' => 36 ] ],
+				'default'    => [ 'unit' => 'px', 'size' => 10 ],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-copyright-wrap' => 'gap: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .awea-cp-wrap' => 'gap: {{SIZE}}{{UNIT}};',
 				],
-				'condition'  => [
-					'awea_enable_secondary' => 'yes',
-				],
+				'condition'  => [ 'awea_enable_secondary' => 'yes' ],
+			]
+		);
+
+		$this->end_controls_section();
+
+		/* ==========================================================================
+		   STYLE: 1. CONTAINER
+		   ========================================================================== */
+		$this->start_controls_section(
+			'awea_style_container',
+			[
+				'label' => esc_html__( 'Container', 'awesome-widgets-elementor' ),
+				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
 
@@ -220,23 +275,61 @@ class Widget_Awesome_Copyright extends Widget_Base {
 			[
 				'label'      => esc_html__( 'Padding', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
-				'size_units' => [ 'px', 'em', 'rem' ],
-				'selectors'  => [
-					'{{WRAPPER}} .awea-copyright-wrap' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				'size_units' => [ 'px', 'rem', '%' ],
+				'default'    => [
+					'top'      => '16',
+					'right'    => '24',
+					'bottom'   => '16',
+					'left'     => '24',
+					'unit'     => 'px',
+					'isLinked' => false,
 				],
-				'separator'  => 'before',
+				'selectors'  => [
+					'{{WRAPPER}} .awea-cp-wrap' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				],
+			]
+		);
+
+		$this->add_responsive_control(
+			'awea_radius',
+			[
+				'label'      => esc_html__( 'Border Radius', 'awesome-widgets-elementor' ),
+				'type'       => Controls_Manager::DIMENSIONS,
+				'size_units' => [ 'px', '%' ],
+				'selectors'  => [
+					'{{WRAPPER}} .awea-cp-wrap' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				],
+			]
+		);
+
+		$this->add_control(
+			'awea_bg',
+			[
+				'label'     => esc_html__( 'Background', 'awesome-widgets-elementor' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => [
+					'{{WRAPPER}} .awea-cp-wrap' => 'background-color: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->add_group_control(
+			Group_Control_Border::get_type(),
+			[
+				'name'     => 'awea_border',
+				'selector' => '{{WRAPPER}} .awea-cp-wrap',
 			]
 		);
 
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   STYLE TAB: 2. COPYRIGHT
+		   STYLE: 2. COPYRIGHT TEXT
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_section_style_primary',
+			'awea_style_text',
 			[
-				'label' => esc_html__( 'Copyright', 'awesome-widgets-elementor' ),
+				'label' => esc_html__( 'Copyright Text', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -246,11 +339,9 @@ class Widget_Awesome_Copyright extends Widget_Base {
 			[
 				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
-				'global'    => [
-					'default' => Global_Colors::COLOR_TEXT,
-				],
+				'global'    => [ 'default' => Global_Colors::COLOR_TEXT ],
 				'selectors' => [
-					'{{WRAPPER}} .awea-copyright-text' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-cp-primary' => 'color: {{VALUE}};',
 				],
 			]
 		);
@@ -258,27 +349,23 @@ class Widget_Awesome_Copyright extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Typography::get_type(),
 			[
-				'name'     => 'awea_text_typography',
-				'selector' => '{{WRAPPER}} .awea-copyright-text',
-				'global'   => [
-					'default' => Global_Typography::TYPOGRAPHY_TEXT,
-				],
+				'name'     => 'awea_text_typo',
+				'selector' => '{{WRAPPER}} .awea-cp-primary',
+				'global'   => [ 'default' => Global_Typography::TYPOGRAPHY_TEXT ],
 			]
 		);
 
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   STYLE TAB: 3. SECONDARY TEXT (CONDITIONAL)
+		   STYLE: 3. SECONDARY TEXT
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_section_style_secondary',
+			'awea_style_secondary',
 			[
 				'label'     => esc_html__( 'Secondary Text', 'awesome-widgets-elementor' ),
 				'tab'       => Controls_Manager::TAB_STYLE,
-				'condition' => [
-					'awea_enable_secondary' => 'yes',
-				],
+				'condition' => [ 'awea_enable_secondary' => 'yes' ],
 			]
 		);
 
@@ -288,7 +375,7 @@ class Widget_Awesome_Copyright extends Widget_Base {
 				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}} .awea-copyright-extra' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-cp-secondary' => 'color: {{VALUE}};',
 				],
 			]
 		);
@@ -296,65 +383,62 @@ class Widget_Awesome_Copyright extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Typography::get_type(),
 			[
-				'name'     => 'awea_secondary_typography',
-				'selector' => '{{WRAPPER}} .awea-copyright-extra',
+				'name'     => 'awea_secondary_typo',
+				'selector' => '{{WRAPPER}} .awea-cp-secondary',
 			]
 		);
 
 		$this->add_control(
-			'awea_heading_separator_style',
+			'awea_sep_heading',
 			[
 				'label'     => esc_html__( 'Separator', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::HEADING,
 				'separator' => 'before',
-				'condition' => [
-					'awea_separator_symbol!' => '',
-				],
+				'condition' => [ 'awea_separator_symbol!' => '' ],
 			]
 		);
 
 		$this->add_control(
-			'awea_separator_color',
+			'awea_sep_color',
 			[
-				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Separator Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}} .awea-copyright-divider' => 'color: {{VALUE}}; opacity: 1;',
+					'{{WRAPPER}} .awea-cp-sep' => 'color: {{VALUE}}; opacity: 1;',
 				],
-				'condition' => [
-					'awea_separator_symbol!' => '',
-				],
-			]
-		);
-
-		$this->add_responsive_control(
-			'awea_separator_size',
-			[
-				'label'      => esc_html__( 'Size', 'awesome-widgets-elementor' ),
-				'type'       => Controls_Manager::SLIDER,
-				'size_units' => [ 'px', 'em' ],
-				'range'      => [
-					'px' => [ 'min' => 8, 'max' => 32 ],
-				],
-				'selectors'  => [
-					'{{WRAPPER}} .awea-copyright-divider' => 'font-size: {{SIZE}}{{UNIT}};',
-				],
-				'condition'  => [
-					'awea_separator_symbol!' => '',
-				],
+				'condition' => [ 'awea_separator_symbol!' => '' ],
 			]
 		);
 
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   STYLE TAB: 4. LINKS
+		   STYLE: 4. LINKS
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_section_style_links',
+			'awea_style_links',
 			[
 				'label' => esc_html__( 'Links', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
+			]
+		);
+
+		$this->add_control(
+			'awea_link_weight',
+			[
+				'label'     => esc_html__( 'Font Weight', 'awesome-widgets-elementor' ),
+				'type'      => Controls_Manager::SELECT,
+				'default'   => '',
+				'options'   => [
+					''    => esc_html__( 'Default', 'awesome-widgets-elementor' ),
+					'400' => '400 (Regular)',
+					'500' => '500 (Medium)',
+					'600' => '600 (Semi Bold)',
+					'700' => '700 (Bold)',
+				],
+				'selectors' => [
+					'{{WRAPPER}} .awea-cp-wrap a' => 'font-weight: {{VALUE}};',
+				],
 			]
 		);
 
@@ -365,11 +449,11 @@ class Widget_Awesome_Copyright extends Widget_Base {
 				'type'      => Controls_Manager::SELECT,
 				'default'   => 'underline',
 				'options'   => [
-					'underline' => esc_html__( 'Yes', 'awesome-widgets-elementor' ),
-					'none'      => esc_html__( 'No', 'awesome-widgets-elementor' ),
+					'underline' => esc_html__( 'Always', 'awesome-widgets-elementor' ),
+					'none'      => esc_html__( 'None', 'awesome-widgets-elementor' ),
 				],
 				'selectors' => [
-					'{{WRAPPER}} .awea-copyright-wrap a' => 'text-decoration: {{VALUE}};',
+					'{{WRAPPER}} .awea-cp-wrap a' => 'text-decoration: {{VALUE}};',
 				],
 			]
 		);
@@ -377,7 +461,7 @@ class Widget_Awesome_Copyright extends Widget_Base {
 		$this->start_controls_tabs( 'awea_link_tabs' );
 
 		$this->start_controls_tab(
-			'awea_link_tab_normal',
+			'awea_link_normal',
 			[ 'label' => esc_html__( 'Normal', 'awesome-widgets-elementor' ) ]
 		);
 
@@ -386,11 +470,9 @@ class Widget_Awesome_Copyright extends Widget_Base {
 			[
 				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
-				'global'    => [
-					'default' => Global_Colors::COLOR_PRIMARY,
-				],
+				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
 				'selectors' => [
-					'{{WRAPPER}} .awea-copyright-wrap a' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-cp-wrap a' => 'color: {{VALUE}};',
 				],
 			]
 		);
@@ -398,20 +480,35 @@ class Widget_Awesome_Copyright extends Widget_Base {
 		$this->end_controls_tab();
 
 		$this->start_controls_tab(
-			'awea_link_tab_hover',
+			'awea_link_hover',
 			[ 'label' => esc_html__( 'Hover', 'awesome-widgets-elementor' ) ]
 		);
 
 		$this->add_control(
-			'awea_link_hover_color',
+			'awea_link_color_hover',
 			[
 				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
-				'global'    => [
-					'default' => Global_Colors::COLOR_ACCENT,
+				'global'    => [ 'default' => Global_Colors::COLOR_ACCENT ],
+				'selectors' => [
+					'{{WRAPPER}} .awea-cp-wrap a:hover, {{WRAPPER}} .awea-cp-wrap a:focus-visible' => 'color: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->add_control(
+			'awea_link_hover_underline',
+			[
+				'label'     => esc_html__( 'Hover Underline', 'awesome-widgets-elementor' ),
+				'type'      => Controls_Manager::SELECT,
+				'default'   => '',
+				'options'   => [
+					''          => esc_html__( 'Default', 'awesome-widgets-elementor' ),
+					'underline' => esc_html__( 'Underline', 'awesome-widgets-elementor' ),
+					'none'      => esc_html__( 'None', 'awesome-widgets-elementor' ),
 				],
 				'selectors' => [
-					'{{WRAPPER}} .awea-copyright-wrap a:hover' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-cp-wrap a:hover, {{WRAPPER}} .awea-cp-wrap a:focus-visible' => 'text-decoration: {{VALUE}};',
 				],
 			]
 		);
@@ -423,17 +520,24 @@ class Widget_Awesome_Copyright extends Widget_Base {
 	}
 
 	protected function render() {
-		$settings   = $this->get_settings_for_display();
-		$raw_text   = $settings['awea_copyright_text'] ?? '';
-		$tag        = Utils::validate_html_tag( $settings['awea_html_tag'] ?? 'div' );
-		$show_extra = ( 'yes' === ( $settings['awea_enable_secondary'] ?? '' ) );
-		$extra_text = $settings['awea_affiliate_notice'] ?? '';
-		$extra_link = $settings['awea_secondary_link'] ?? [];
-		$separator  = $settings['awea_separator_symbol'] ?? '•';
+		$settings    = $this->get_settings_for_display();
+		$raw_text    = $settings['awea_text'] ?? '';
+		$start_year  = trim( $settings['awea_start_year'] ?? '' );
+		$tag         = Utils::validate_html_tag( $settings['awea_html_tag'] ?? 'div' );
+		$show_extra  = 'yes' === ( $settings['awea_enable_secondary'] ?? '' );
+		$extra_text  = $settings['awea_secondary_text'] ?? '';
+		$extra_link  = $settings['awea_secondary_link'] ?? [];
+		$separator   = $settings['awea_separator_symbol'] ?? '•';
+		$author_name = $settings['awea_author_name'] ?? '';
+		$author_data = $settings['awea_author_url'] ?? [];
 
 		$current_year = date_i18n( 'Y' );
-		$site_title   = get_bloginfo( 'name' );
-		$site_url     = home_url( '/' );
+		$year_range   = ( ! empty( $start_year ) && $start_year !== $current_year )
+			? $start_year . '–' . $current_year
+			: $current_year;
+
+		$site_title = get_bloginfo( 'name' );
+		$site_url   = home_url( '/' );
 
 		$site_link = sprintf(
 			'<a href="%s">%s</a>',
@@ -441,34 +545,50 @@ class Widget_Awesome_Copyright extends Widget_Base {
 			esc_html( $site_title )
 		);
 
-		// Dynamic Token Replacements
-		$replacements = [
+		$author_link = '';
+		if ( ! empty( $author_name ) ) {
+			if ( ! empty( $author_data['url'] ) ) {
+				$this->add_link_attributes( 'author_url', $author_data );
+				$author_link = sprintf(
+					'<a %s>%s</a>',
+					$this->get_render_attribute_string( 'author_url' ),
+					esc_html( $author_name )
+				);
+			} else {
+				$author_link = esc_html( $author_name );
+			}
+		}
+
+		$tokens = [
 			'{year}'         => esc_html( $current_year ),
 			'{current_year}' => esc_html( $current_year ),
+			'{year_range}'   => esc_html( $year_range ),
 			'{site_title}'   => esc_html( $site_title ),
 			'{site_link}'    => $site_link,
+			'{author_name}'  => $author_link,
 			'{copy}'         => '&copy;',
+			'{reg}'          => '&reg;',
+			'{tm}'           => '&trade;',
 		];
 
-		$output = str_replace( array_keys( $replacements ), array_values( $replacements ), $raw_text );
+		$output = str_replace( array_keys( $tokens ), array_values( $tokens ), $raw_text );
 
-		// Build Secondary Link Attributes if URL exists
 		$has_extra_link = ! empty( $extra_link['url'] );
 		if ( $has_extra_link ) {
 			$this->add_link_attributes( 'secondary_url', $extra_link );
 		}
 		?>
-		<<?php Utils::print_validated_html_tag( $tag ); ?> class="awea-copyright-wrap">
+		<<?php Utils::print_validated_html_tag( $tag ); ?> class="awea-cp-wrap">
 			<?php if ( ! empty( $output ) ) : ?>
-				<span class="awea-copyright-text"><?php echo wp_kses_post( $output ); ?></span>
+				<span class="awea-cp-primary"><?php echo wp_kses_post( $output ); ?></span>
 			<?php endif; ?>
 
 			<?php if ( $show_extra && ! empty( $extra_text ) ) : ?>
 				<?php if ( ! empty( $output ) && '' !== $separator ) : ?>
-					<span class="awea-copyright-divider" aria-hidden="true"><?php echo esc_html( $separator ); ?></span>
+					<span class="awea-cp-sep" aria-hidden="true"><?php echo esc_html( $separator ); ?></span>
 				<?php endif; ?>
 
-				<span class="awea-copyright-extra">
+				<span class="awea-cp-secondary">
 					<?php if ( $has_extra_link ) : ?>
 						<a <?php $this->print_render_attribute_string( 'secondary_url' ); ?>><?php echo esc_html( $extra_text ); ?></a>
 					<?php else : ?>

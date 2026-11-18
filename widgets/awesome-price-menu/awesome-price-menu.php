@@ -1,10 +1,9 @@
 <?php
 /**
- * Awesome Price Menu Studio Widget.
- * Modern Architectural Restaurant & Service Menu with Dotted Leaders & Dynamic Tags.
+ * Awesome Price Menu Widget.
  *
  * @package AwesomeWidgetsElementor
- * @since 1.0.0
+ * @since   2.0.0
  */
 
 namespace Elementor;
@@ -13,15 +12,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use \Elementor\Controls_Manager;
-use \Elementor\Group_Control_Border;
-use \Elementor\Group_Control_Box_Shadow;
-use \Elementor\Group_Control_Typography;
-use \Elementor\Group_Control_Image_Size;
-use \Elementor\Core\Kits\Documents\Tabs\Global_Typography;
-use \Elementor\Core\Kits\Documents\Tabs\Global_Colors;
-use \Elementor\Widget_Base;
-use \Elementor\Repeater;
+use Elementor\Controls_Manager;
+use Elementor\Group_Control_Border;
+use Elementor\Group_Control_Box_Shadow;
+use Elementor\Group_Control_Typography;
+use Elementor\Group_Control_Image_Size;
+use Elementor\Core\Kits\Documents\Tabs\Global_Typography;
+use Elementor\Core\Kits\Documents\Tabs\Global_Colors;
+use Elementor\Widget_Base;
+use Elementor\Repeater;
 
 class Widget_Awesome_Price_Menu extends Widget_Base {
 
@@ -42,16 +41,16 @@ class Widget_Awesome_Price_Menu extends Widget_Base {
 	}
 
 	public function get_keywords() {
-		return [ 'awea', 'price menu', 'restaurant', 'catalog', 'pricing', 'food menu', 'services' ];
+		return [ 'awea', 'price menu', 'restaurant', 'catalog', 'pricing', 'food menu' ];
 	}
 
 	protected function register_controls() {
 
 		/* ==========================================================================
-		   CONTENT TAB: 1. MENU ITEMS
+		   CONTENT: 1. ITEMS (REPEATER)
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_section_price_menu_content',
+			'awea_section_items',
 			[
 				'label' => esc_html__( 'Items', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
@@ -84,6 +83,17 @@ class Widget_Awesome_Price_Menu extends Widget_Base {
 		);
 
 		$repeater->add_control(
+			'awea_item_badge',
+			[
+				'label'       => esc_html__( 'Tag / Dietary Badge', 'awesome-widgets-elementor' ),
+				'type'        => Controls_Manager::TEXT,
+				'default'     => '',
+				'placeholder' => esc_html__( 'Chef’s Pick', 'awesome-widgets-elementor' ),
+				'dynamic'     => [ 'active' => true ],
+			]
+		);
+
+		$repeater->add_control(
 			'awea_item_price',
 			[
 				'label'   => esc_html__( 'Price', 'awesome-widgets-elementor' ),
@@ -104,15 +114,26 @@ class Widget_Awesome_Price_Menu extends Widget_Base {
 			]
 		);
 
+		$repeater->add_control(
+			'awea_item_link',
+			[
+				'label'       => esc_html__( 'Link', 'awesome-widgets-elementor' ),
+				'type'        => Controls_Manager::URL,
+				'dynamic'     => [ 'active' => true ],
+				'placeholder' => 'https://example.com',
+			]
+		);
+
 		$this->add_control(
 			'awea_price_menu_items',
 			[
-				'label'       => esc_html__( 'List', 'awesome-widgets-elementor' ),
+				'label'       => esc_html__( 'Menu List', 'awesome-widgets-elementor' ),
 				'type'        => Controls_Manager::REPEATER,
 				'fields'      => $repeater->get_controls(),
 				'default'     => [
 					[
 						'awea_item_title'       => esc_html__( 'Signature Truffle Burger', 'awesome-widgets-elementor' ),
+						'awea_item_badge'       => esc_html__( 'Popular', 'awesome-widgets-elementor' ),
 						'awea_item_price'       => '$28.00',
 						'awea_item_description' => esc_html__( 'Wagyu beef patty, aged Gruyère, caramelized shallots, and house black truffle aioli.', 'awesome-widgets-elementor' ),
 					],
@@ -123,6 +144,7 @@ class Widget_Awesome_Price_Menu extends Widget_Base {
 					],
 					[
 						'awea_item_title'       => esc_html__( 'Artisanal Burrata & Heirloom', 'awesome-widgets-elementor' ),
+						'awea_item_badge'       => esc_html__( 'GF', 'awesome-widgets-elementor' ),
 						'awea_item_price'       => '$22.00',
 						'awea_item_description' => esc_html__( 'Fresh creamy burrata, organic heirloom tomatoes, basil oil, and 25-year aged balsamic.', 'awesome-widgets-elementor' ),
 					],
@@ -134,10 +156,10 @@ class Widget_Awesome_Price_Menu extends Widget_Base {
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   CONTENT TAB: 2. SETTINGS
+		   CONTENT: 2. SETTINGS
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_section_price_menu_settings',
+			'awea_section_settings',
 			[
 				'label' => esc_html__( 'Settings', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
@@ -147,7 +169,7 @@ class Widget_Awesome_Price_Menu extends Widget_Base {
 		$this->add_control(
 			'awea_title_tag',
 			[
-				'label'   => esc_html__( 'HTML Tag', 'awesome-widgets-elementor' ),
+				'label'   => esc_html__( 'Title HTML Tag', 'awesome-widgets-elementor' ),
 				'type'    => Controls_Manager::SELECT,
 				'default' => 'h4',
 				'options' => [
@@ -166,12 +188,12 @@ class Widget_Awesome_Price_Menu extends Widget_Base {
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   STYLE TAB: 1. CONTAINER SHELL
+		   STYLE: 1. CONTAINER
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_section_style_layout',
+			'awea_style_container',
 			[
-				'label' => esc_html__( 'Container Shell', 'awesome-widgets-elementor' ),
+				'label' => esc_html__( 'Container', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -179,7 +201,7 @@ class Widget_Awesome_Price_Menu extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_container_max_width',
 			[
-				'label'      => esc_html__( 'Maximum Width', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Max Width', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px', '%', 'vw' ],
 				'range'      => [
@@ -196,10 +218,17 @@ class Widget_Awesome_Price_Menu extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_container_padding',
 			[
-				'label'      => esc_html__( 'Card Padding', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Padding', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', 'em', 'rem' ],
-				'default'    => [ 'top' => '36', 'right' => '36', 'bottom' => '36', 'left' => '36', 'unit' => 'px', 'isLinked' => true ],
+				'default'    => [
+					'top'      => '36',
+					'right'    => '36',
+					'bottom'   => '36',
+					'left'     => '36',
+					'unit'     => 'px',
+					'isLinked' => true,
+				],
 				'selectors'  => [
 					'{{WRAPPER}} .awea-price-menu-list' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
@@ -209,10 +238,17 @@ class Widget_Awesome_Price_Menu extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_container_radius',
 			[
-				'label'      => esc_html__( 'Corner Radius', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Border Radius', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
-				'size_units' => [ 'px', '%', 'rem' ],
-				'default'    => [ 'top' => '28', 'right' => '28', 'bottom' => '28', 'left' => '28', 'unit' => 'px', 'isLinked' => true ],
+				'size_units' => [ 'px', '%' ],
+				'default'    => [
+					'top'      => '28',
+					'right'    => '28',
+					'bottom'   => '28',
+					'left'     => '28',
+					'unit'     => 'px',
+					'isLinked' => true,
+				],
 				'selectors'  => [
 					'{{WRAPPER}} .awea-price-menu-list' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
@@ -221,7 +257,7 @@ class Widget_Awesome_Price_Menu extends Widget_Base {
 
 		$this->start_controls_tabs( 'awea_container_state_tabs' );
 
-		// Normal Container
+		// Normal
 		$this->start_controls_tab(
 			'awea_container_tab_normal',
 			[ 'label' => esc_html__( 'Normal', 'awesome-widgets-elementor' ) ]
@@ -230,7 +266,7 @@ class Widget_Awesome_Price_Menu extends Widget_Base {
 		$this->add_control(
 			'awea_container_bg',
 			[
-				'label'     => esc_html__( 'Background Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Background', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#ffffff',
 				'selectors' => [
@@ -242,9 +278,21 @@ class Widget_Awesome_Price_Menu extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Border::get_type(),
 			[
-				'name'     => 'awea_container_border',
-				'label'    => esc_html__( 'Border', 'awesome-widgets-elementor' ),
-				'selector' => '{{WRAPPER}} .awea-price-menu-list',
+				'name'           => 'awea_container_border',
+				'selector'       => '{{WRAPPER}} .awea-price-menu-list',
+				'fields_options' => [
+					'border' => [ 'default' => 'solid' ],
+					'width'  => [
+						'default' => [
+							'top'      => '1',
+							'right'    => '1',
+							'bottom'   => '1',
+							'left'     => '1',
+							'isLinked' => true,
+						],
+					],
+					'color'  => [ 'default' => '#e2e8f0' ],
+				],
 			]
 		);
 
@@ -252,14 +300,13 @@ class Widget_Awesome_Price_Menu extends Widget_Base {
 			Group_Control_Box_Shadow::get_type(),
 			[
 				'name'     => 'awea_container_shadow',
-				'label'    => esc_html__( 'Box Shadow', 'awesome-widgets-elementor' ),
 				'selector' => '{{WRAPPER}} .awea-price-menu-list',
 			]
 		);
 
 		$this->end_controls_tab();
 
-		// Hover Container (No lift / No zoom)
+		// Hover
 		$this->start_controls_tab(
 			'awea_container_tab_hover',
 			[ 'label' => esc_html__( 'Hover', 'awesome-widgets-elementor' ) ]
@@ -268,7 +315,7 @@ class Widget_Awesome_Price_Menu extends Widget_Base {
 		$this->add_control(
 			'awea_container_bg_hover',
 			[
-				'label'     => esc_html__( 'Background Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Background', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#ffffff',
 				'selectors' => [
@@ -278,7 +325,7 @@ class Widget_Awesome_Price_Menu extends Widget_Base {
 		);
 
 		$this->add_control(
-			'awea_container_border_color_hover',
+			'awea_container_border_hover',
 			[
 				'label'     => esc_html__( 'Border Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
@@ -295,7 +342,6 @@ class Widget_Awesome_Price_Menu extends Widget_Base {
 			Group_Control_Box_Shadow::get_type(),
 			[
 				'name'     => 'awea_container_shadow_hover',
-				'label'    => esc_html__( 'Box Shadow', 'awesome-widgets-elementor' ),
 				'selector' => '{{WRAPPER}} .awea-price-menu-list:hover',
 			]
 		);
@@ -306,12 +352,12 @@ class Widget_Awesome_Price_Menu extends Widget_Base {
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   STYLE TAB: 2. THUMBNAIL PHOTO
+		   STYLE: 2. PHOTO
 		   ========================================================================== */
 		$this->start_controls_section(
 			'awea_section_style_image',
 			[
-				'label' => esc_html__( 'Thumbnail Photo', 'awesome-widgets-elementor' ),
+				'label' => esc_html__( 'Photo', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -328,7 +374,7 @@ class Widget_Awesome_Price_Menu extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_thumb_size',
 			[
-				'label'      => esc_html__( 'Photo Dimensions', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Size', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px', 'rem' ],
 				'range'      => [ 'px' => [ 'min' => 44, 'max' => 140 ] ],
@@ -342,10 +388,17 @@ class Widget_Awesome_Price_Menu extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_thumb_radius',
 			[
-				'label'      => esc_html__( 'Corner Radius', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Border Radius', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
-				'size_units' => [ 'px', '%', 'rem' ],
-				'default'    => [ 'top' => '16', 'right' => '16', 'bottom' => '16', 'left' => '16', 'unit' => 'px', 'isLinked' => true ],
+				'size_units' => [ 'px', '%' ],
+				'default'    => [
+					'top'      => '16',
+					'right'    => '16',
+					'bottom'   => '16',
+					'left'     => '16',
+					'unit'     => 'px',
+					'isLinked' => true,
+				],
 				'selectors'  => [
 					'{{WRAPPER}} .awea-price-menu-thumb' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
@@ -356,7 +409,6 @@ class Widget_Awesome_Price_Menu extends Widget_Base {
 			Group_Control_Border::get_type(),
 			[
 				'name'     => 'awea_thumb_border',
-				'label'    => esc_html__( 'Border', 'awesome-widgets-elementor' ),
 				'selector' => '{{WRAPPER}} .awea-price-menu-thumb',
 			]
 		);
@@ -364,12 +416,12 @@ class Widget_Awesome_Price_Menu extends Widget_Base {
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   STYLE TAB: 3. TYPOGRAPHY & LEADERS
+		   STYLE: 3. TEXT & LEADER
 		   ========================================================================== */
 		$this->start_controls_section(
 			'awea_section_style_typography',
 			[
-				'label' => esc_html__( 'Typography & Leaders', 'awesome-widgets-elementor' ),
+				'label' => esc_html__( 'Typography & Leader', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -378,16 +430,26 @@ class Widget_Awesome_Price_Menu extends Widget_Base {
 		$this->add_control(
 			'awea_heading_title',
 			[
-				'label' => esc_html__( 'Item Title', 'awesome-widgets-elementor' ),
+				'label' => esc_html__( 'Title', 'awesome-widgets-elementor' ),
 				'type'  => Controls_Manager::HEADING,
+			]
+		);
+
+		$this->add_group_control(
+			Group_Control_Typography::get_type(),
+			[
+				'name'     => 'awea_title_typography',
+				'selector' => '{{WRAPPER}} .awea-price-menu-title',
+				'global'   => [
+					'default' => Global_Typography::TYPOGRAPHY_PRIMARY,
+				],
 			]
 		);
 
 		$this->start_controls_tabs( 'awea_title_tabs' );
 
-		// Normal Title
 		$this->start_controls_tab(
-			'awea_title_tab_normal',
+			'awea_title_normal',
 			[ 'label' => esc_html__( 'Normal', 'awesome-widgets-elementor' ) ]
 		);
 
@@ -396,20 +458,17 @@ class Widget_Awesome_Price_Menu extends Widget_Base {
 			[
 				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
-				'global'    => [
-					'default' => Global_Colors::COLOR_PRIMARY,
-				],
+				'default'   => '#0f172a',
 				'selectors' => [
-					'{{WRAPPER}} .awea-price-menu-title' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-price-menu-title, {{WRAPPER}} .awea-price-menu-title a' => 'color: {{VALUE}};',
 				],
 			]
 		);
 
 		$this->end_controls_tab();
 
-		// Hover Title
 		$this->start_controls_tab(
-			'awea_title_tab_hover',
+			'awea_title_hover',
 			[ 'label' => esc_html__( 'Hover', 'awesome-widgets-elementor' ) ]
 		);
 
@@ -419,10 +478,10 @@ class Widget_Awesome_Price_Menu extends Widget_Base {
 				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [
-					'default' => Global_Colors::COLOR_ACCENT,
+					'default' => Global_Colors::COLOR_PRIMARY,
 				],
 				'selectors' => [
-					'{{WRAPPER}} .awea-price-menu:hover .awea-price-menu-title' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-price-menu:hover .awea-price-menu-title, {{WRAPPER}} .awea-price-menu:hover .awea-price-menu-title a' => 'color: {{VALUE}};',
 				],
 			]
 		);
@@ -430,14 +489,36 @@ class Widget_Awesome_Price_Menu extends Widget_Base {
 		$this->end_controls_tab();
 		$this->end_controls_tabs();
 
-		$this->add_group_control(
-			Group_Control_Typography::get_type(),
+		// Badge
+		$this->add_control(
+			'awea_heading_badge',
 			[
-				'name'     => 'awea_title_typography',
-				'label'    => esc_html__( 'Typography', 'awesome-widgets-elementor' ),
-				'selector' => '{{WRAPPER}} .awea-price-menu-title',
-				'global'   => [
-					'default' => Global_Typography::TYPOGRAPHY_PRIMARY,
+				'label'     => esc_html__( 'Tag Badge', 'awesome-widgets-elementor' ),
+				'type'      => Controls_Manager::HEADING,
+				'separator' => 'before',
+			]
+		);
+
+		$this->add_control(
+			'awea_badge_color',
+			[
+				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
+				'type'      => Controls_Manager::COLOR,
+				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
+				'selectors' => [
+					'{{WRAPPER}} .awea-price-menu-badge' => 'color: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->add_control(
+			'awea_badge_bg',
+			[
+				'label'     => esc_html__( 'Background', 'awesome-widgets-elementor' ),
+				'type'      => Controls_Manager::COLOR,
+				'default'   => 'rgba(79, 70, 229, 0.08)',
+				'selectors' => [
+					'{{WRAPPER}} .awea-price-menu-badge' => 'background-color: {{VALUE}};',
 				],
 			]
 		);
@@ -446,7 +527,7 @@ class Widget_Awesome_Price_Menu extends Widget_Base {
 		$this->add_control(
 			'awea_heading_price',
 			[
-				'label'     => esc_html__( 'Price Amount', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Price', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::HEADING,
 				'separator' => 'before',
 			]
@@ -470,7 +551,6 @@ class Widget_Awesome_Price_Menu extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'awea_price_typography',
-				'label'    => esc_html__( 'Typography', 'awesome-widgets-elementor' ),
 				'selector' => '{{WRAPPER}} .awea-price',
 				'global'   => [
 					'default' => Global_Typography::TYPOGRAPHY_PRIMARY,
@@ -491,14 +571,14 @@ class Widget_Awesome_Price_Menu extends Widget_Base {
 		$this->add_control(
 			'awea_leader_style',
 			[
-				'label'     => esc_html__( 'Line Style', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Style', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::SELECT,
 				'default'   => 'dotted',
 				'options'   => [
 					'dotted' => esc_html__( 'Dotted', 'awesome-widgets-elementor' ),
 					'dashed' => esc_html__( 'Dashed', 'awesome-widgets-elementor' ),
 					'solid'  => esc_html__( 'Solid', 'awesome-widgets-elementor' ),
-					'none'   => esc_html__( 'None (Hide Line)', 'awesome-widgets-elementor' ),
+					'none'   => esc_html__( 'None', 'awesome-widgets-elementor' ),
 				],
 				'selectors' => [
 					'{{WRAPPER}} .awea-price-menu-header::after' => 'border-bottom-style: {{VALUE}};',
@@ -509,7 +589,7 @@ class Widget_Awesome_Price_Menu extends Widget_Base {
 		$this->add_control(
 			'awea_leader_color',
 			[
-				'label'     => esc_html__( 'Line Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => 'rgba(15, 23, 42, 0.16)',
 				'selectors' => [
@@ -522,7 +602,7 @@ class Widget_Awesome_Price_Menu extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_leader_thickness',
 			[
-				'label'      => esc_html__( 'Line Thickness', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Thickness', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [ 'px' => [ 'min' => 1, 'max' => 6 ] ],
@@ -562,7 +642,6 @@ class Widget_Awesome_Price_Menu extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'awea_desc_typography',
-				'label'    => esc_html__( 'Typography', 'awesome-widgets-elementor' ),
 				'selector' => '{{WRAPPER}} .awea-description',
 				'global'   => [
 					'default' => Global_Typography::TYPOGRAPHY_TEXT,
@@ -573,7 +652,7 @@ class Widget_Awesome_Price_Menu extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_desc_margin_top',
 			[
-				'label'      => esc_html__( 'Space Above Description', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Spacing', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px', 'rem' ],
 				'range'      => [ 'px' => [ 'min' => 0, 'max' => 24 ] ],
@@ -588,7 +667,7 @@ class Widget_Awesome_Price_Menu extends Widget_Base {
 		$this->add_control(
 			'awea_heading_row_spacing',
 			[
-				'label'     => esc_html__( 'Rows & Dividers', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Row Dividers', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::HEADING,
 				'separator' => 'before',
 			]
@@ -597,7 +676,7 @@ class Widget_Awesome_Price_Menu extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_row_gap',
 			[
-				'label'      => esc_html__( 'Space Between Rows', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Spacing', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px', 'em' ],
 				'range'      => [ 'px' => [ 'min' => 10, 'max' => 60 ] ],
@@ -611,7 +690,7 @@ class Widget_Awesome_Price_Menu extends Widget_Base {
 		$this->add_control(
 			'awea_row_divider_color',
 			[
-				'label'     => esc_html__( 'Row Divider Line Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => 'rgba(15, 23, 42, 0.06)',
 				'selectors' => [
@@ -633,15 +712,21 @@ class Widget_Awesome_Price_Menu extends Widget_Base {
 		}
 		?>
 		<ul class="awea-price-menu-list" role="list">
-			<?php
-			foreach ( $items as $item ) :
-				$title = $item['awea_item_title'] ?? '';
-				$price = $item['awea_item_price'] ?? '';
-				$desc  = $item['awea_item_description'] ?? '';
+			<?php foreach ( $items as $index => $item ) :
+				$id       = $item['_id'] ?? $index;
+				$title    = $item['awea_item_title'] ?? '';
+				$badge    = $item['awea_item_badge'] ?? '';
+				$price    = $item['awea_item_price'] ?? '';
+				$desc     = $item['awea_item_description'] ?? '';
+				$has_link = ! empty( $item['awea_item_link']['url'] );
+				$link_key = 'link_' . $id;
+
+				if ( $has_link ) {
+					$this->add_link_attributes( $link_key, $item['awea_item_link'] );
+				}
 				?>
-				<li class="awea-price-menu" role="listitem">
-					
-					<!-- Thumbnail Image -->
+				<li class="awea-price-menu elementor-repeater-item-<?php echo esc_attr( $id ); ?>" role="listitem">
+
 					<?php if ( ! empty( $item['awea_item_image']['url'] ) ) : ?>
 						<div class="awea-price-menu-thumb">
 							<?php
@@ -654,12 +739,18 @@ class Widget_Awesome_Price_Menu extends Widget_Base {
 						</div>
 					<?php endif; ?>
 
-					<!-- Item Details -->
 					<div class="awea-price-menu-details">
 						<div class="awea-price-menu-header">
 							<?php if ( ! empty( $title ) ) : ?>
 								<<?php Utils::print_validated_html_tag( $title_tag ); ?> class="awea-price-menu-title">
-									<?php echo esc_html( $title ); ?>
+									<?php if ( $has_link ) : ?>
+										<a <?php $this->print_render_attribute_string( $link_key ); ?>><?php echo esc_html( $title ); ?></a>
+									<?php else : ?>
+										<?php echo esc_html( $title ); ?>
+									<?php endif; ?>
+									<?php if ( ! empty( $badge ) ) : ?>
+										<span class="awea-price-menu-badge"><?php echo esc_html( $badge ); ?></span>
+									<?php endif; ?>
 								</<?php Utils::print_validated_html_tag( $title_tag ); ?>>
 							<?php endif; ?>
 
@@ -677,6 +768,59 @@ class Widget_Awesome_Price_Menu extends Widget_Base {
 
 				</li>
 			<?php endforeach; ?>
+		</ul>
+		<?php
+	}
+
+	/**
+	 * Instant Live Editor Preview (Backbone.js Template).
+	 */
+	protected function content_template() {
+		?>
+		<#
+		var items = settings.awea_price_menu_items || [];
+		if ( ! items.length ) {
+			return;
+		}
+		var tag = elementor.helpers.validateHTMLTag( settings.awea_title_tag || 'h4' );
+		#>
+		<ul class="awea-price-menu-list" role="list">
+			<# _.each( items, function( item ) {
+				var imgUrl = item.awea_item_image && item.awea_item_image.url ? item.awea_item_image.url : '';
+			#>
+				<li class="awea-price-menu elementor-repeater-item-{{ item._id }}" role="listitem">
+					<# if ( imgUrl ) { #>
+						<div class="awea-price-menu-thumb">
+							<img src="{{ imgUrl }}" alt="{{ item.awea_item_title }}" loading="lazy" />
+						</div>
+					<# } #>
+
+					<div class="awea-price-menu-details">
+						<div class="awea-price-menu-header">
+							<# if ( item.awea_item_title ) { #>
+								<{{{ tag }}} class="awea-price-menu-title">
+									<# if ( item.awea_item_link && item.awea_item_link.url ) { #>
+										<a href="{{ item.awea_item_link.url }}">{{{ item.awea_item_title }}}</a>
+									<# } else { #>
+										{{{ item.awea_item_title }}}
+									<# } #>
+									<# if ( item.awea_item_badge ) { #>
+										<span class="awea-price-menu-badge">{{{ item.awea_item_badge }}}</span>
+									<# } #>
+								</{{{ tag }}}>
+							<# } #>
+
+							<# if ( item.awea_item_price ) { #>
+								<span class="awea-price">{{{ item.awea_item_price }}}</span>
+							<# } #>
+						</div>
+
+						<# if ( item.awea_item_description ) { #>
+							<p class="awea-description">{{{ item.awea_item_description }}}</p>
+						<# } #>
+					</div>
+				</li>
+			<# } ); #>
 		</ul>
 		<?php
 	}

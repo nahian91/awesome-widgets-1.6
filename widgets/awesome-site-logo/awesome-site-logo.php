@@ -1,10 +1,9 @@
 <?php
 /**
- * Awesome Site Logo Studio Widget.
- * Modern Architectural Logo Component with Custom Branding & Zero Hover Lift.
+ * Awesome Site Logo Studio Widget (Zero-Shadow Architectural Edition).
  *
  * @package AwesomeWidgetsElementor
- * @since 1.8.0
+ * @since   2.0.0
  */
 
 namespace Elementor;
@@ -13,15 +12,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use \Elementor\Controls_Manager;
-use \Elementor\Group_Control_Border;
-use \Elementor\Group_Control_Box_Shadow;
-use \Elementor\Group_Control_Css_Filter;
-use \Elementor\Group_Control_Image_Size;
-use \Elementor\Group_Control_Typography;
-use \Elementor\Core\Kits\Documents\Tabs\Global_Typography;
-use \Elementor\Core\Kits\Documents\Tabs\Global_Colors;
-use \Elementor\Widget_Base;
+use Elementor\Controls_Manager;
+use Elementor\Group_Control_Border;
+use Elementor\Group_Control_Css_Filter;
+use Elementor\Group_Control_Image_Size;
+use Elementor\Group_Control_Typography;
+use Elementor\Core\Kits\Documents\Tabs\Global_Typography;
+use Elementor\Core\Kits\Documents\Tabs\Global_Colors;
+use Elementor\Widget_Base;
+use Elementor\Icons_Manager;
 
 class Widget_Awesome_Site_Logo extends Widget_Base {
 
@@ -42,16 +41,16 @@ class Widget_Awesome_Site_Logo extends Widget_Base {
 	}
 
 	public function get_keywords() {
-		return [ 'awea', 'logo', 'site logo', 'brand', 'image', 'header', 'home', 'retina' ];
+		return [ 'awea', 'logo', 'site logo', 'brand', 'image', 'header', 'retina', 'sticky' ];
 	}
 
 	protected function register_controls() {
 
 		/* ==========================================================================
-		   CONTENT TAB: 1. LOGO
+		   CONTENT: 1. LOGO
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_section_logo_content',
+			'awea_section_logo',
 			[
 				'label' => esc_html__( 'Logo', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
@@ -65,7 +64,7 @@ class Widget_Awesome_Site_Logo extends Widget_Base {
 				'type'    => Controls_Manager::SELECT,
 				'default' => 'image',
 				'options' => [
-					'image' => esc_html__( 'Image / SVG', 'awesome-widgets-elementor' ),
+					'image' => esc_html__( 'Image', 'awesome-widgets-elementor' ),
 					'text'  => esc_html__( 'Text', 'awesome-widgets-elementor' ),
 				],
 			]
@@ -79,8 +78,8 @@ class Widget_Awesome_Site_Logo extends Widget_Base {
 				'type'      => Controls_Manager::SELECT,
 				'default'   => 'custom',
 				'options'   => [
-					'custom'    => esc_html__( 'Custom Upload', 'awesome-widgets-elementor' ),
-					'site_logo' => esc_html__( 'WordPress Logo', 'awesome-widgets-elementor' ),
+					'custom'    => esc_html__( 'Custom', 'awesome-widgets-elementor' ),
+					'site_logo' => esc_html__( 'WordPress Site Identity', 'awesome-widgets-elementor' ),
 				],
 				'condition' => [
 					'awea_logo_type' => 'image',
@@ -91,12 +90,27 @@ class Widget_Awesome_Site_Logo extends Widget_Base {
 		$this->add_control(
 			'awea_custom_logo',
 			[
-				'label'     => esc_html__( 'Primary Image', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Image', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::MEDIA,
+				'dynamic'   => [ 'active' => true ],
 				'default'   => [
 					'url' => Utils::get_placeholder_image_src(),
 				],
 				'condition' => [
+					'awea_logo_type'   => 'image',
+					'awea_logo_source' => 'custom',
+				],
+			]
+		);
+
+		$this->add_control(
+			'awea_retina_logo',
+			[
+				'label'       => esc_html__( 'Retina Logo (2x)', 'awesome-widgets-elementor' ),
+				'description' => esc_html__( 'Optional high-DPI 2x version for crisp rendering on Retina displays.', 'awesome-widgets-elementor' ),
+				'type'        => Controls_Manager::MEDIA,
+				'dynamic'     => [ 'active' => true ],
+				'condition'   => [
 					'awea_logo_type'   => 'image',
 					'awea_logo_source' => 'custom',
 				],
@@ -112,6 +126,7 @@ class Widget_Awesome_Site_Logo extends Widget_Base {
 				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
 				'return_value' => 'yes',
 				'default'      => 'no',
+				'separator'    => 'before',
 				'condition'    => [
 					'awea_logo_type'   => 'image',
 					'awea_logo_source' => 'custom',
@@ -122,12 +137,42 @@ class Widget_Awesome_Site_Logo extends Widget_Base {
 		$this->add_control(
 			'awea_custom_hover_logo',
 			[
-				'label'     => esc_html__( 'Choose Hover Image', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Hover Image', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::MEDIA,
+				'dynamic'   => [ 'active' => true ],
 				'condition' => [
 					'awea_logo_type'         => 'image',
 					'awea_logo_source'       => 'custom',
 					'awea_enable_hover_logo' => 'yes',
+				],
+			]
+		);
+
+		$this->add_control(
+			'awea_enable_sticky_logo',
+			[
+				'label'        => esc_html__( 'Sticky Header Logo', 'awesome-widgets-elementor' ),
+				'description'  => esc_html__( 'Automatically switches logo when parent header becomes sticky.', 'awesome-widgets-elementor' ),
+				'type'         => Controls_Manager::SWITCHER,
+				'label_on'     => esc_html__( 'Yes', 'awesome-widgets-elementor' ),
+				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
+				'return_value' => 'yes',
+				'default'      => 'no',
+				'condition'    => [
+					'awea_logo_type' => 'image',
+				],
+			]
+		);
+
+		$this->add_control(
+			'awea_sticky_logo',
+			[
+				'label'     => esc_html__( 'Sticky Image', 'awesome-widgets-elementor' ),
+				'type'      => Controls_Manager::MEDIA,
+				'dynamic'   => [ 'active' => true ],
+				'condition' => [
+					'awea_logo_type'          => 'image',
+					'awea_enable_sticky_logo' => 'yes',
 				],
 			]
 		);
@@ -137,6 +182,7 @@ class Widget_Awesome_Site_Logo extends Widget_Base {
 			[
 				'name'      => 'awea_logo_image_size',
 				'default'   => 'full',
+				'separator' => 'before',
 				'condition' => [
 					'awea_logo_type'   => 'image',
 					'awea_logo_source' => 'custom',
@@ -146,12 +192,62 @@ class Widget_Awesome_Site_Logo extends Widget_Base {
 
 		// TEXT CONTROLS
 		$this->add_control(
+			'awea_show_logo_icon',
+			[
+				'label'        => esc_html__( 'Brand Icon', 'awesome-widgets-elementor' ),
+				'type'         => Controls_Manager::SWITCHER,
+				'label_on'     => esc_html__( 'Yes', 'awesome-widgets-elementor' ),
+				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
+				'return_value' => 'yes',
+				'default'      => 'no',
+				'condition'    => [
+					'awea_logo_type' => 'text',
+				],
+			]
+		);
+
+		$this->add_control(
+			'awea_logo_icon',
+			[
+				'label'     => esc_html__( 'Icon', 'awesome-widgets-elementor' ),
+				'type'      => Controls_Manager::ICONS,
+				'default'   => [
+					'value'   => 'fas fa-shapes',
+					'library' => 'fa-solid',
+				],
+				'condition' => [
+					'awea_logo_type'      => 'text',
+					'awea_show_logo_icon' => 'yes',
+				],
+			]
+		);
+
+		$this->add_control(
 			'awea_text_logo_title',
 			[
-				'label'     => esc_html__( 'Title', 'awesome-widgets-elementor' ),
-				'type'      => Controls_Manager::TEXT,
-				'default'   => get_bloginfo( 'name' ),
-				'dynamic'   => [ 'active' => true ],
+				'label'       => esc_html__( 'Title', 'awesome-widgets-elementor' ),
+				'type'        => Controls_Manager::TEXT,
+				'default'     => get_bloginfo( 'name' ),
+				'dynamic'     => [ 'active' => true ],
+				'label_block' => true,
+				'condition'   => [
+					'awea_logo_type' => 'text',
+				],
+			]
+		);
+
+		$this->add_control(
+			'awea_title_tag',
+			[
+				'label'     => esc_html__( 'HTML Tag', 'awesome-widgets-elementor' ),
+				'type'      => Controls_Manager::SELECT,
+				'default'   => 'span',
+				'options'   => [
+					'h1'   => 'H1',
+					'h2'   => 'H2',
+					'div'  => 'div',
+					'span' => 'span',
+				],
 				'condition' => [
 					'awea_logo_type' => 'text',
 				],
@@ -161,7 +257,7 @@ class Widget_Awesome_Site_Logo extends Widget_Base {
 		$this->add_control(
 			'awea_show_tagline',
 			[
-				'label'        => esc_html__( 'Show Tagline', 'awesome-widgets-elementor' ),
+				'label'        => esc_html__( 'Tagline', 'awesome-widgets-elementor' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'label_on'     => esc_html__( 'Yes', 'awesome-widgets-elementor' ),
 				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
@@ -176,11 +272,12 @@ class Widget_Awesome_Site_Logo extends Widget_Base {
 		$this->add_control(
 			'awea_text_logo_tagline',
 			[
-				'label'     => esc_html__( 'Tagline', 'awesome-widgets-elementor' ),
-				'type'      => Controls_Manager::TEXT,
-				'default'   => get_bloginfo( 'description' ),
-				'dynamic'   => [ 'active' => true ],
-				'condition' => [
+				'label'       => esc_html__( 'Tagline Text', 'awesome-widgets-elementor' ),
+				'type'        => Controls_Manager::TEXT,
+				'default'     => get_bloginfo( 'description' ),
+				'dynamic'     => [ 'active' => true ],
+				'label_block' => true,
+				'condition'   => [
 					'awea_logo_type'    => 'text',
 					'awea_show_tagline' => 'yes',
 				],
@@ -190,12 +287,12 @@ class Widget_Awesome_Site_Logo extends Widget_Base {
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   CONTENT TAB: 2. LINK & LAYOUT
+		   CONTENT: 2. LAYOUT
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_section_logo_link',
+			'awea_section_layout',
 			[
-				'label' => esc_html__( 'Link & Layout', 'awesome-widgets-elementor' ),
+				'label' => esc_html__( 'Layout & Link', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
 			]
 		);
@@ -219,7 +316,7 @@ class Widget_Awesome_Site_Logo extends Widget_Base {
 			[
 				'label'       => esc_html__( 'URL', 'awesome-widgets-elementor' ),
 				'type'        => Controls_Manager::URL,
-				'placeholder' => esc_html__( 'https://yourwebsite.com', 'awesome-widgets-elementor' ),
+				'placeholder' => 'https://example.com',
 				'dynamic'     => [ 'active' => true ],
 				'condition'   => [
 					'awea_logo_link_type' => 'custom',
@@ -261,10 +358,10 @@ class Widget_Awesome_Site_Logo extends Widget_Base {
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   STYLE TAB: 1. IMAGE (CONDITIONAL: IMAGE TYPE)
+		   STYLE: 1. IMAGE
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_section_style_image',
+			'awea_style_image',
 			[
 				'label'     => esc_html__( 'Image', 'awesome-widgets-elementor' ),
 				'tab'       => Controls_Manager::TAB_STYLE,
@@ -289,8 +386,7 @@ class Widget_Awesome_Site_Logo extends Widget_Base {
 					'size' => 160,
 				],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-site-logo-wrap img' => 'width: {{SIZE}}{{UNIT}}; max-width: 100%; height: auto;',
-					'{{WRAPPER}} .awea-site-logo-wrap svg' => 'width: {{SIZE}}{{UNIT}}; max-width: 100%; height: auto;',
+					'{{WRAPPER}} .awea-site-logo-wrap img, {{WRAPPER}} .awea-site-logo-wrap svg' => 'width: {{SIZE}}{{UNIT}}; max-width: 100%; height: auto;',
 				],
 			]
 		);
@@ -305,8 +401,19 @@ class Widget_Awesome_Site_Logo extends Widget_Base {
 					'px' => [ 'min' => 15, 'max' => 250 ],
 				],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-site-logo-wrap img' => 'max-height: {{SIZE}}{{UNIT}}; object-fit: contain;',
-					'{{WRAPPER}} .awea-site-logo-wrap svg' => 'max-height: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .awea-site-logo-wrap img, {{WRAPPER}} .awea-site-logo-wrap svg' => 'max-height: {{SIZE}}{{UNIT}}; object-fit: contain;',
+				],
+			]
+		);
+
+		$this->add_responsive_control(
+			'awea_logo_radius',
+			[
+				'label'      => esc_html__( 'Border Radius', 'awesome-widgets-elementor' ),
+				'type'       => Controls_Manager::DIMENSIONS,
+				'size_units' => [ 'px', '%' ],
+				'selectors'  => [
+					'{{WRAPPER}} .awea-site-logo-wrap img, {{WRAPPER}} .awea-site-logo-wrap svg' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
 		);
@@ -319,38 +426,23 @@ class Widget_Awesome_Site_Logo extends Widget_Base {
 			]
 		);
 
-		$this->add_responsive_control(
-			'awea_logo_radius',
-			[
-				'label'      => esc_html__( 'Radius', 'awesome-widgets-elementor' ),
-				'type'       => Controls_Manager::DIMENSIONS,
-				'size_units' => [ 'px', '%' ],
-				'selectors'  => [
-					'{{WRAPPER}} .awea-site-logo-wrap img' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
-				],
-			]
-		);
+		$this->start_controls_tabs( 'awea_logo_filter_tabs' );
 
-		$this->start_controls_tabs( 'awea_logo_image_tabs' );
-
-		// Normal
 		$this->start_controls_tab(
-			'awea_tab_image_normal',
+			'awea_logo_filter_normal',
 			[ 'label' => esc_html__( 'Normal', 'awesome-widgets-elementor' ) ]
 		);
 
 		$this->add_control(
-			'awea_image_opacity',
+			'awea_logo_opacity',
 			[
 				'label'     => esc_html__( 'Opacity', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::SLIDER,
 				'range'     => [
 					'px' => [ 'min' => 0.1, 'max' => 1, 'step' => 0.05 ],
 				],
-				'default'   => [ 'size' => 1 ],
 				'selectors' => [
-					'{{WRAPPER}} .awea-site-logo-wrap img' => 'opacity: {{SIZE}};',
-					'{{WRAPPER}} .awea-site-logo-wrap svg' => 'opacity: {{SIZE}};',
+					'{{WRAPPER}} .awea-site-logo-wrap' => 'opacity: {{SIZE}};',
 				],
 			]
 		);
@@ -358,29 +450,20 @@ class Widget_Awesome_Site_Logo extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Css_Filter::get_type(),
 			[
-				'name'     => 'awea_image_filters',
+				'name'     => 'awea_logo_css_filters',
 				'selector' => '{{WRAPPER}} .awea-site-logo-wrap img, {{WRAPPER}} .awea-site-logo-wrap svg',
-			]
-		);
-
-		$this->add_group_control(
-			Group_Control_Box_Shadow::get_type(),
-			[
-				'name'     => 'awea_logo_shadow',
-				'selector' => '{{WRAPPER}} .awea-site-logo-wrap img',
 			]
 		);
 
 		$this->end_controls_tab();
 
-		// Hover
 		$this->start_controls_tab(
-			'awea_tab_image_hover',
+			'awea_logo_filter_hover',
 			[ 'label' => esc_html__( 'Hover', 'awesome-widgets-elementor' ) ]
 		);
 
 		$this->add_control(
-			'awea_image_opacity_hover',
+			'awea_logo_opacity_hover',
 			[
 				'label'     => esc_html__( 'Opacity', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::SLIDER,
@@ -388,8 +471,7 @@ class Widget_Awesome_Site_Logo extends Widget_Base {
 					'px' => [ 'min' => 0.1, 'max' => 1, 'step' => 0.05 ],
 				],
 				'selectors' => [
-					'{{WRAPPER}} .awea-site-logo-wrap:hover img' => 'opacity: {{SIZE}};',
-					'{{WRAPPER}} .awea-site-logo-wrap:hover svg' => 'opacity: {{SIZE}};',
+					'{{WRAPPER}} .awea-site-logo-wrap:hover' => 'opacity: {{SIZE}};',
 				],
 			]
 		);
@@ -397,16 +479,8 @@ class Widget_Awesome_Site_Logo extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Css_Filter::get_type(),
 			[
-				'name'     => 'awea_image_filters_hover',
+				'name'     => 'awea_logo_css_filters_hover',
 				'selector' => '{{WRAPPER}} .awea-site-logo-wrap:hover img, {{WRAPPER}} .awea-site-logo-wrap:hover svg',
-			]
-		);
-
-		$this->add_group_control(
-			Group_Control_Box_Shadow::get_type(),
-			[
-				'name'     => 'awea_logo_shadow_hover',
-				'selector' => '{{WRAPPER}} .awea-site-logo-wrap:hover img',
 			]
 		);
 
@@ -416,10 +490,69 @@ class Widget_Awesome_Site_Logo extends Widget_Base {
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   STYLE TAB: 2. TITLE (CONDITIONAL: TEXT TYPE)
+		   STYLE: 2. BRAND ICON (TEXT MODE)
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_section_style_title',
+			'awea_style_logo_icon',
+			[
+				'label'     => esc_html__( 'Brand Icon', 'awesome-widgets-elementor' ),
+				'tab'       => Controls_Manager::TAB_STYLE,
+				'condition' => [
+					'awea_logo_type'      => 'text',
+					'awea_show_logo_icon' => 'yes',
+				],
+			]
+		);
+
+		$this->add_responsive_control(
+			'awea_logo_icon_size',
+			[
+				'label'      => esc_html__( 'Size', 'awesome-widgets-elementor' ),
+				'type'       => Controls_Manager::SLIDER,
+				'size_units' => [ 'px' ],
+				'range'      => [ 'px' => [ 'min' => 14, 'max' => 64 ] ],
+				'default'    => [ 'unit' => 'px', 'size' => 26 ],
+				'selectors'  => [
+					'{{WRAPPER}} .awea-logo-brand-ico i'   => 'font-size: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .awea-logo-brand-ico svg' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}};',
+				],
+			]
+		);
+
+		$this->add_responsive_control(
+			'awea_logo_icon_gap',
+			[
+				'label'      => esc_html__( 'Spacing', 'awesome-widgets-elementor' ),
+				'type'       => Controls_Manager::SLIDER,
+				'size_units' => [ 'px' ],
+				'range'      => [ 'px' => [ 'min' => 4, 'max' => 30 ] ],
+				'default'    => [ 'unit' => 'px', 'size' => 10 ],
+				'selectors'  => [
+					'{{WRAPPER}} .awea-brand-lockup' => 'gap: {{SIZE}}{{UNIT}};',
+				],
+			]
+		);
+
+		$this->add_control(
+			'awea_logo_icon_color',
+			[
+				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
+				'type'      => Controls_Manager::COLOR,
+				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
+				'selectors' => [
+					'{{WRAPPER}} .awea-logo-brand-ico'     => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-logo-brand-ico svg' => 'fill: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->end_controls_section();
+
+		/* ==========================================================================
+		   STYLE: 3. TITLE
+		   ========================================================================== */
+		$this->start_controls_section(
+			'awea_style_title',
 			[
 				'label'     => esc_html__( 'Title', 'awesome-widgets-elementor' ),
 				'tab'       => Controls_Manager::TAB_STYLE,
@@ -432,17 +565,10 @@ class Widget_Awesome_Site_Logo extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Typography::get_type(),
 			[
-				'name'     => 'awea_title_typography',
+				'name'     => 'awea_title_typo',
 				'global'   => [ 'default' => Global_Typography::TYPOGRAPHY_PRIMARY ],
 				'selector' => '{{WRAPPER}} .awe-logo-title',
 			]
-		);
-
-		$this->start_controls_tabs( 'awea_title_color_tabs' );
-
-		$this->start_controls_tab(
-			'awea_tab_title_normal',
-			[ 'label' => esc_html__( 'Normal', 'awesome-widgets-elementor' ) ]
 		);
 
 		$this->add_control(
@@ -450,41 +576,32 @@ class Widget_Awesome_Site_Logo extends Widget_Base {
 			[
 				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
-				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
+				'default'   => '#0f172a',
 				'selectors' => [
 					'{{WRAPPER}} .awe-logo-title' => 'color: {{VALUE}};',
 				],
 			]
 		);
 
-		$this->end_controls_tab();
-
-		$this->start_controls_tab(
-			'awea_tab_title_hover',
-			[ 'label' => esc_html__( 'Hover', 'awesome-widgets-elementor' ) ]
-		);
-
 		$this->add_control(
 			'awea_title_color_hover',
 			[
-				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Hover Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
+				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
 				'selectors' => [
-					'{{WRAPPER}} .awea-site-logo-wrap:hover .awe-logo-title' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awe-logo-link:hover .awe-logo-title, {{WRAPPER}} .awe-logo-link:focus-visible .awe-logo-title' => 'color: {{VALUE}};',
 				],
 			]
 		);
 
-		$this->end_controls_tab();
-		$this->end_controls_tabs();
-
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   STYLE TAB: 3. TAGLINE (CONDITIONAL: TEXT TYPE + SHOW TAGLINE)
+		   STYLE: 4. TAGLINE
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_section_style_tagline',
+			'awea_style_tagline',
 			[
 				'label'     => esc_html__( 'Tagline', 'awesome-widgets-elementor' ),
 				'tab'       => Controls_Manager::TAB_STYLE,
@@ -498,7 +615,7 @@ class Widget_Awesome_Site_Logo extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Typography::get_type(),
 			[
-				'name'     => 'awea_tagline_typography',
+				'name'     => 'awea_tagline_typo',
 				'selector' => '{{WRAPPER}} .awe-logo-tagline',
 			]
 		);
@@ -516,14 +633,12 @@ class Widget_Awesome_Site_Logo extends Widget_Base {
 		);
 
 		$this->add_responsive_control(
-			'awea_tagline_spacing',
+			'awea_tagline_space',
 			[
-				'label'      => esc_html__( 'Spacing', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Top Spacing', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
-				'size_units' => [ 'px', 'em' ],
-				'range'      => [
-					'px' => [ 'min' => 0, 'max' => 40 ],
-				],
+				'size_units' => [ 'px' ],
+				'range'      => [ 'px' => [ 'min' => 0, 'max' => 24 ] ],
 				'default'    => [ 'unit' => 'px', 'size' => 4 ],
 				'selectors'  => [
 					'{{WRAPPER}} .awe-logo-tagline' => 'margin-top: {{SIZE}}{{UNIT}};',
@@ -538,63 +653,118 @@ class Widget_Awesome_Site_Logo extends Widget_Base {
 		$settings  = $this->get_settings_for_display();
 		$logo_type = $settings['awea_logo_type'] ?? 'image';
 		$link_type = $settings['awea_logo_link_type'] ?? 'home';
+		$site_name = get_bloginfo( 'name' );
 
-		// Compute destination link URL
-		$link_url = '';
-		$target   = '';
-		$rel      = '';
+		$has_link = false;
+		$this->remove_render_attribute( 'logo_link' );
+		$this->add_render_attribute( 'logo_link', 'class', 'awe-logo-link' );
 
 		if ( 'home' === $link_type ) {
-			$link_url = esc_url( home_url( '/' ) );
-			$rel      = 'home';
+			$has_link = true;
+			$this->add_render_attribute( 'logo_link', 'href', esc_url( home_url( '/' ) ) );
+			$this->add_render_attribute( 'logo_link', 'rel', 'home' );
+			if ( is_front_page() ) {
+				$this->add_render_attribute( 'logo_link', 'aria-current', 'page' );
+			}
 		} elseif ( 'custom' === $link_type && ! empty( $settings['awea_logo_custom_link']['url'] ) ) {
-			$link_url = esc_url( $settings['awea_logo_custom_link']['url'] );
-			$target   = ! empty( $settings['awea_logo_custom_link']['is_external'] ) ? ' target="_blank"' : '';
-			$rel      = ! empty( $settings['awea_logo_custom_link']['nofollow'] ) ? 'nofollow' : '';
+			$has_link = true;
+			$this->add_link_attributes( 'logo_link', $settings['awea_logo_custom_link'] );
 		}
-
-		$has_link = ! empty( $link_url );
 		?>
 		<div class="awea-site-logo-outer">
 			<div class="awea-site-logo-wrap">
 				<?php if ( $has_link ) : ?>
-					<a href="<?php echo $link_url; ?>" <?php echo $target; ?> <?php echo $rel ? 'rel="' . esc_attr( $rel ) . '"' : ''; ?> class="awe-logo-link">
+					<a <?php $this->print_render_attribute_string( 'logo_link' ); ?>>
 				<?php else : ?>
 					<div class="awe-logo-link">
 				<?php endif; ?>
 
-					<?php if ( 'text' === $logo_type ) : ?>
-						<div class="awe-text-logo-group">
-							<span class="awe-logo-title"><?php echo esc_html( $settings['awea_text_logo_title'] ); ?></span>
-							<?php if ( 'yes' === ( $settings['awea_show_tagline'] ?? 'no' ) && ! empty( $settings['awea_text_logo_tagline'] ) ) : ?>
-								<span class="awe-logo-tagline"><?php echo esc_html( $settings['awea_text_logo_tagline'] ); ?></span>
+					<?php if ( 'text' === $logo_type ) :
+						$title_tag = Utils::validate_html_tag( $settings['awea_title_tag'] ?? 'span' );
+						$show_icon = 'yes' === ( $settings['awea_show_logo_icon'] ?? 'no' ) && ! empty( $settings['awea_logo_icon']['value'] );
+						?>
+						<div class="awea-brand-lockup">
+							<?php if ( $show_icon ) : ?>
+								<span class="awea-logo-brand-ico" aria-hidden="true">
+									<?php Icons_Manager::render_icon( $settings['awea_logo_icon'], [ 'aria-hidden' => 'true' ] ); ?>
+								</span>
 							<?php endif; ?>
+
+							<div class="awe-text-logo-group">
+								<<?php Utils::print_validated_html_tag( $title_tag ); ?> class="awe-logo-title">
+									<?php echo esc_html( $settings['awea_text_logo_title'] ?? $site_name ); ?>
+								</<?php Utils::print_validated_html_tag( $title_tag ); ?>>
+
+								<?php if ( 'yes' === ( $settings['awea_show_tagline'] ?? 'no' ) && ! empty( $settings['awea_text_logo_tagline'] ) ) : ?>
+									<span class="awe-logo-tagline"><?php echo esc_html( $settings['awea_text_logo_tagline'] ); ?></span>
+								<?php endif; ?>
+							</div>
 						</div>
 					<?php else : ?>
 						<?php
-						$source         = $settings['awea_logo_source'] ?? 'custom';
-						$has_hover_logo = ( 'yes' === ( $settings['awea_enable_hover_logo'] ?? 'no' ) ) && ! empty( $settings['awea_custom_hover_logo']['url'] );
-						$primary_html   = '';
-						$hover_html     = '';
+						$source          = $settings['awea_logo_source'] ?? 'custom';
+						$has_hover_logo  = ( 'custom' === $source && 'yes' === ( $settings['awea_enable_hover_logo'] ?? 'no' ) ) && ! empty( $settings['awea_custom_hover_logo']['url'] );
+						$has_sticky_logo = ( 'yes' === ( $settings['awea_enable_sticky_logo'] ?? 'no' ) ) && ! empty( $settings['awea_sticky_logo']['url'] );
+						$retina_url      = ( 'custom' === $source && ! empty( $settings['awea_retina_logo']['url'] ) ) ? $settings['awea_retina_logo']['url'] : '';
+						$primary_html    = '';
 
 						if ( 'site_logo' === $source && function_exists( 'has_custom_logo' ) && has_custom_logo() ) {
 							$custom_logo_id = get_theme_mod( 'custom_logo' );
-							$primary_html   = wp_get_attachment_image( $custom_logo_id, 'full', false, [ 'class' => 'awe-primary-logo awe-logo-image' ] );
+							$primary_html   = wp_get_attachment_image(
+								$custom_logo_id,
+								'full',
+								false,
+								[
+									'class'   => 'awe-primary-logo awe-logo-image',
+									'loading' => 'eager',
+								]
+							);
 						} elseif ( ! empty( $settings['awea_custom_logo']['url'] ) ) {
-							$image_html   = Group_Control_Image_Size::get_attachment_image_html( $settings, 'awea_logo_image_size', 'awea_custom_logo' );
-							$primary_html = ! empty( $image_html ) ? $image_html : '<img src="' . esc_url( $settings['awea_custom_logo']['url'] ) . '" alt="' . esc_attr( get_bloginfo( 'name' ) ) . '" class="awe-primary-logo" />';
+							if ( ! empty( $retina_url ) ) {
+								$base_url     = $settings['awea_custom_logo']['url'];
+								$alt_text     = ! empty( $settings['awea_custom_logo']['alt'] ) ? $settings['awea_custom_logo']['alt'] : $site_name;
+								$primary_html = sprintf(
+									'<img src="%1$s" srcset="%1$s 1x, %2$s 2x" alt="%3$s" class="awe-primary-logo awe-logo-image" loading="eager" />',
+									esc_url( $base_url ),
+									esc_url( $retina_url ),
+									esc_attr( $alt_text )
+								);
+							} else {
+								$image_html = Group_Control_Image_Size::get_attachment_image_html( $settings, 'awea_logo_image_size', 'awea_custom_logo' );
+								if ( ! empty( $image_html ) ) {
+									$primary_html = preg_replace( '/class="([^"]*)"/', 'class="$1 awe-primary-logo"', $image_html, 1 );
+									if ( false === strpos( $primary_html, 'awe-primary-logo' ) ) {
+										$primary_html = str_replace( '<img ', '<img class="awe-primary-logo" ', $primary_html );
+									}
+								} else {
+									$primary_html = sprintf(
+										'<img src="%s" alt="%s" class="awe-primary-logo" loading="eager" />',
+										esc_url( $settings['awea_custom_logo']['url'] ),
+										esc_attr( $site_name )
+									);
+								}
+							}
 						} else {
-							$primary_html = '<span class="awe-logo-title">' . esc_html( get_bloginfo( 'name' ) ) . '</span>';
+							$primary_html = '<span class="awe-logo-title">' . esc_html( $site_name ) . '</span>';
 						}
 
+						$group_classes = [ 'awe-image-logo-group' ];
 						if ( $has_hover_logo ) {
-							$hover_html = '<img src="' . esc_url( $settings['awea_custom_hover_logo']['url'] ) . '" alt="' . esc_attr( get_bloginfo( 'name' ) ) . '" class="awe-hover-logo" />';
+							$group_classes[] = 'has-hover-logo';
+						}
+						if ( $has_sticky_logo ) {
+							$group_classes[] = 'has-sticky-logo';
 						}
 						?>
-						<div class="awe-image-logo-group <?php echo $has_hover_logo ? 'has-hover-logo' : ''; ?>">
+						<div class="<?php echo esc_attr( implode( ' ', $group_classes ) ); ?>">
 							<?php echo $primary_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+
 							<?php if ( $has_hover_logo ) : ?>
-								<?php echo $hover_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+								<img src="<?php echo esc_url( $settings['awea_custom_hover_logo']['url'] ); ?>" alt="<?php echo esc_attr( $site_name ); ?>" class="awe-hover-logo" />
+							<?php endif; ?>
+
+							<?php if ( $has_sticky_logo ) : ?>
+								<img src="<?php echo esc_url( $settings['awea_sticky_logo']['url'] ); ?>" alt="<?php echo esc_attr( $site_name ); ?>" class="awe-sticky-logo" />
 							<?php endif; ?>
 						</div>
 					<?php endif; ?>
@@ -604,6 +774,75 @@ class Widget_Awesome_Site_Logo extends Widget_Base {
 				<?php else : ?>
 					</div>
 				<?php endif; ?>
+			</div>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Instant Live Editor Preview (Backbone.js Template).
+	 */
+	protected function content_template() {
+		?>
+		<#
+		var logoType = settings.awea_logo_type || 'image';
+		var linkType = settings.awea_logo_link_type || 'home';
+		var hasLink  = 'none' !== linkType;
+		var linkUrl  = 'home' === linkType ? '<?php echo esc_url( home_url( '/' ) ); ?>' : ( settings.awea_logo_custom_link ? settings.awea_logo_custom_link.url : '#' );
+		var siteName = <?php echo wp_json_encode( get_bloginfo( 'name' ) ); ?>;
+		#>
+		<div class="awea-site-logo-outer">
+			<div class="awea-site-logo-wrap">
+				<# if ( hasLink ) { #>
+					<a href="{{ linkUrl }}" class="awe-logo-link">
+				<# } else { #>
+					<div class="awe-logo-link">
+				<# } #>
+
+					<# if ( 'text' === logoType ) {
+						var titleTag = elementor.helpers.validateHTMLTag( settings.awea_title_tag || 'span' );
+						var iconHTML = elementor.helpers.renderIcon( view, settings.awea_logo_icon, { 'aria-hidden': true }, 'i', 'object' );
+					#>
+						<div class="awea-brand-lockup">
+							<# if ( 'yes' === settings.awea_show_logo_icon && iconHTML && iconHTML.rendered ) { #>
+								<span class="awea-logo-brand-ico" aria-hidden="true">{{{ iconHTML.value }}}</span>
+							<# } #>
+
+							<div class="awe-text-logo-group">
+								<{{{ titleTag }}} class="awe-logo-title">{{{ settings.awea_text_logo_title || siteName }}}</{{{ titleTag }}}>
+								<# if ( 'yes' === settings.awea_show_tagline && settings.awea_text_logo_tagline ) { #>
+									<span class="awe-logo-tagline">{{{ settings.awea_text_logo_tagline }}}</span>
+								<# } #>
+							</div>
+						</div>
+					<# } else {
+						var primaryUrl = ( settings.awea_custom_logo && settings.awea_custom_logo.url ) ? settings.awea_custom_logo.url : '';
+						var hasHover   = 'custom' === settings.awea_logo_source && 'yes' === settings.awea_enable_hover_logo && settings.awea_custom_hover_logo && settings.awea_custom_hover_logo.url;
+						var hasSticky  = 'yes' === settings.awea_enable_sticky_logo && settings.awea_sticky_logo && settings.awea_sticky_logo.url;
+						var groupClass = 'awe-image-logo-group' + ( hasHover ? ' has-hover-logo' : '' ) + ( hasSticky ? ' has-sticky-logo' : '' );
+					#>
+						<div class="{{ groupClass }}">
+							<# if ( primaryUrl ) { #>
+								<img src="{{ primaryUrl }}" alt="{{ siteName }}" class="awe-primary-logo" />
+							<# } else { #>
+								<span class="awe-logo-title">{{{ siteName }}}</span>
+							<# } #>
+
+							<# if ( hasHover ) { #>
+								<img src="{{ settings.awea_custom_hover_logo.url }}" alt="{{ siteName }}" class="awe-hover-logo" />
+							<# } #>
+
+							<# if ( hasSticky ) { #>
+								<img src="{{ settings.awea_sticky_logo.url }}" alt="{{ siteName }}" class="awe-sticky-logo" />
+							<# } #>
+						</div>
+					<# } #>
+
+				<# if ( hasLink ) { #>
+					</a>
+				<# } else { #>
+					</div>
+				<# } #>
 			</div>
 		</div>
 		<?php

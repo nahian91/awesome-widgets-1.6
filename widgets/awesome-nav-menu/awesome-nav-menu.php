@@ -1,10 +1,9 @@
 <?php
 /**
- * Awesome Navigation Menu Studio Widget.
- * Modern Architectural Header & Footer Navigation with Zero Hover Lift.
+ * Awesome Navigation Menu Widget.
  *
  * @package AwesomeWidgetsElementor
- * @since 1.8.0
+ * @since   1.8.0
  */
 
 namespace Elementor;
@@ -13,81 +12,89 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use \Elementor\Controls_Manager;
-use \Elementor\Group_Control_Border;
-use \Elementor\Group_Control_Box_Shadow;
-use \Elementor\Group_Control_Typography;
-use \Elementor\Core\Kits\Documents\Tabs\Global_Typography;
-use \Elementor\Core\Kits\Documents\Tabs\Global_Colors;
-use \Elementor\Widget_Base;
+use Elementor\Controls_Manager;
+use Elementor\Group_Control_Border;
+use Elementor\Group_Control_Box_Shadow;
+use Elementor\Group_Control_Typography;
+use Elementor\Core\Kits\Documents\Tabs\Global_Typography;
+use Elementor\Core\Kits\Documents\Tabs\Global_Colors;
+use Elementor\Widget_Base;
 
-/**
- * Custom Menu Walker to natively append the indicator chevron on the server.
- */
-class AWEA_Nav_Walker extends \Walker_Nav_Menu {
-	private $show_indicator;
+if ( ! class_exists( __NAMESPACE__ . '\AWEA_Nav_Walker' ) ) {
+	/**
+	 * Custom Menu Walker to natively append submenu indicators and ARIA attributes.
+	 */
+	class AWEA_Nav_Walker extends \Walker_Nav_Menu {
+		private $show_indicator;
 
-	public function __construct( $show_indicator = true ) {
-		$this->show_indicator = $show_indicator;
-	}
-
-	public function start_el( &$output, $item, $depth = 0, $args = null, $id = 0 ) {
-		$classes   = empty( $item->classes ) ? [] : (array) $item->classes;
-		$classes[] = 'menu-item-' . $item->ID;
-
-		$has_children = in_array( 'menu-item-has-children', $classes, true );
-
-		$class_names = implode( ' ', apply_filters( 'nav_menu_css_class', array_filter( $classes ), $item, $args, $depth ) );
-		$class_names = $class_names ? ' class="' . esc_attr( $class_names ) . '"' : '';
-
-		$id = apply_filters( 'nav_menu_item_id', 'menu-item-' . $item->ID, $item, $args, $depth );
-		$id = $id ? ' id="' . esc_attr( $id ) . '"' : '';
-
-		$output .= '<li' . $id . $class_names . '>';
-
-		$atts           = [];
-		$atts['title']  = ! empty( $item->attr_title ) ? $item->attr_title : '';
-		$atts['target'] = ! empty( $item->target ) ? $item->target : '';
-		if ( '_blank' === $item->target && empty( $item->xfn ) ) {
-			$atts['rel'] = 'noopener noreferrer';
-		} else {
-			$atts['rel'] = $item->xfn;
-		}
-		$atts['href']         = ! empty( $item->url ) ? $item->url : '';
-		$atts['aria-current'] = $item->current ? 'page' : '';
-
-		if ( $has_children ) {
-			$atts['aria-haspopup'] = 'true';
-			$atts['aria-expanded'] = 'false';
+		public function __construct( $show_indicator = true ) {
+			$this->show_indicator = (bool) $show_indicator;
 		}
 
-		$atts = apply_filters( 'nav_menu_link_attributes', $atts, $item, $args, $depth );
+		public function start_el( &$output, $item, $depth = 0, $args = null, $id = 0 ) {
+			$classes   = empty( $item->classes ) ? [] : (array) $item->classes;
+			$classes[] = 'menu-item-' . $item->ID;
 
-		$attributes = '';
-		foreach ( $atts as $attr => $value ) {
-			if ( is_scalar( $value ) && '' !== $value && false !== $value ) {
-				$value       = ( 'href' === $attr ) ? esc_url( $value ) : esc_attr( $value );
-				$attributes .= ' ' . $attr . '="' . $value . '"';
+			$has_children = in_array( 'menu-item-has-children', $classes, true );
+
+			// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
+			$class_names = implode( ' ', apply_filters( 'nav_menu_css_class', array_filter( $classes ), $item, $args, $depth ) );
+			$class_names = $class_names ? ' class="' . esc_attr( $class_names ) . '"' : '';
+
+			// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
+			$item_id = apply_filters( 'nav_menu_item_id', 'menu-item-' . $item->ID, $item, $args, $depth );
+			$item_id = $item_id ? ' id="' . esc_attr( $item_id ) . '"' : '';
+
+			$output .= '<li' . $item_id . $class_names . '>';
+
+			$atts           = [];
+			$atts['title']  = ! empty( $item->attr_title ) ? $item->attr_title : '';
+			$atts['target'] = ! empty( $item->target ) ? $item->target : '';
+			if ( '_blank' === $item->target && empty( $item->xfn ) ) {
+				$atts['rel'] = 'noopener noreferrer';
+			} else {
+				$atts['rel'] = $item->xfn;
 			}
+			$atts['href']         = ! empty( $item->url ) ? $item->url : '';
+			$atts['aria-current'] = $item->current ? 'page' : '';
+
+			if ( $has_children ) {
+				$atts['aria-haspopup'] = 'true';
+				$atts['aria-expanded'] = 'false';
+			}
+
+			// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
+			$atts = apply_filters( 'nav_menu_link_attributes', $atts, $item, $args, $depth );
+
+			$attributes = '';
+			foreach ( $atts as $attr => $value ) {
+				if ( is_scalar( $value ) && '' !== $value && false !== $value ) {
+					$value       = ( 'href' === $attr ) ? esc_url( $value ) : esc_attr( $value );
+					$attributes .= ' ' . $attr . '="' . $value . '"';
+				}
+			}
+
+			// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
+			$title = apply_filters( 'the_title', $item->title, $item->ID );
+			// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
+			$title = apply_filters( 'nav_menu_item_title', $title, $item, $args, $depth );
+
+			$item_output  = $args->before ?? '';
+			$item_output .= '<a' . $attributes . '>';
+			$item_output .= '<span class="awea-menu-label">' . ( $args->link_before ?? '' ) . wp_kses_post( $title ) . ( $args->link_after ?? '' ) . '</span>';
+
+			if ( $has_children && $this->show_indicator ) {
+				$item_output .= '<span class="awea-sub-indicator" aria-hidden="true">';
+				$item_output .= '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>';
+				$item_output .= '</span>';
+			}
+
+			$item_output .= '</a>';
+			$item_output .= $args->after ?? '';
+
+			// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
+			$output .= apply_filters( 'walker_nav_menu_start_el', $item_output, $item, $depth, $args );
 		}
-
-		$title = apply_filters( 'the_title', $item->title, $item->ID );
-		$title = apply_filters( 'nav_menu_item_title', $title, $item, $args, $depth );
-
-		$item_output  = $args->before ?? '';
-		$item_output .= '<a' . $attributes . '>';
-		$item_output .= '<span class="awea-menu-label">' . ( $args->link_before ?? '' ) . $title . ( $args->link_after ?? '' ) . '</span>';
-
-		if ( $has_children && $this->show_indicator ) {
-			$item_output .= '<span class="awea-sub-indicator" aria-hidden="true">';
-			$item_output .= '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>';
-			$item_output .= '</span>';
-		}
-
-		$item_output .= '</a>';
-		$item_output .= $args->after ?? '';
-
-		$output .= apply_filters( 'walker_nav_menu_start_el', $item_output, $item, $depth, $args );
 	}
 }
 
@@ -205,7 +212,7 @@ class Widget_Awesome_Nav_Menu extends Widget_Base {
 		$this->add_control(
 			'awea_show_submenu_indicator',
 			[
-				'label'        => esc_html__( 'Submenu Icon', 'awesome-widgets-elementor' ),
+				'label'        => esc_html__( 'Submenu Indicator', 'awesome-widgets-elementor' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'label_on'     => esc_html__( 'Yes', 'awesome-widgets-elementor' ),
 				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
@@ -246,7 +253,7 @@ class Widget_Awesome_Nav_Menu extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_mobile_toggle_align',
 			[
-				'label'     => esc_html__( 'Alignment', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Toggle Alignment', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::CHOOSE,
 				'options'   => [
 					'flex-start' => [
@@ -297,7 +304,7 @@ class Widget_Awesome_Nav_Menu extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_menu_item_spacing',
 			[
-				'label'      => esc_html__( 'Spacing', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Item Spacing', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px', 'em' ],
 				'range'      => [
@@ -319,7 +326,14 @@ class Widget_Awesome_Nav_Menu extends Widget_Base {
 				'label'      => esc_html__( 'Padding', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', 'em', 'rem' ],
-				'default'    => [ 'top' => '8', 'right' => '16', 'bottom' => '8', 'left' => '16', 'unit' => 'px', 'isLinked' => false ],
+				'default'    => [
+					'top'      => '8',
+					'right'    => '16',
+					'bottom'   => '8',
+					'left'     => '16',
+					'unit'     => 'px',
+					'isLinked' => false,
+				],
 				'selectors'  => [
 					'{{WRAPPER}} .awea-nav-menu-list > li > a' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
@@ -329,7 +343,7 @@ class Widget_Awesome_Nav_Menu extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_item_radius',
 			[
-				'label'      => esc_html__( 'Radius', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Border Radius', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', 'rem', '%' ],
 				'selectors'  => [
@@ -384,8 +398,7 @@ class Widget_Awesome_Nav_Menu extends Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
 				'selectors' => [
-					'{{WRAPPER}} .awea-nav-menu-list > li > a:hover' => 'color: {{VALUE}};',
-					'{{WRAPPER}} .awea-nav-menu-list > li:hover > a' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-nav-menu-list > li > a:hover, {{WRAPPER}} .awea-nav-menu-list > li:hover > a, {{WRAPPER}} .awea-nav-menu-list > li > a:focus-visible' => 'color: {{VALUE}};',
 				],
 			]
 		);
@@ -396,8 +409,7 @@ class Widget_Awesome_Nav_Menu extends Widget_Base {
 				'label'     => esc_html__( 'Background', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}} .awea-nav-menu-list > li > a:hover' => 'background-color: {{VALUE}};',
-					'{{WRAPPER}} .awea-nav-menu-list > li:hover > a' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .awea-nav-menu-list > li > a:hover, {{WRAPPER}} .awea-nav-menu-list > li:hover > a, {{WRAPPER}} .awea-nav-menu-list > li > a:focus-visible' => 'background-color: {{VALUE}};',
 				],
 			]
 		);
@@ -417,8 +429,7 @@ class Widget_Awesome_Nav_Menu extends Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
 				'selectors' => [
-					'{{WRAPPER}} .awea-nav-menu-list > li.current-menu-item > a'     => 'color: {{VALUE}};',
-					'{{WRAPPER}} .awea-nav-menu-list > li.current-menu-ancestor > a' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-nav-menu-list > li.current-menu-item > a, {{WRAPPER}} .awea-nav-menu-list > li.current-menu-ancestor > a' => 'color: {{VALUE}};',
 				],
 			]
 		);
@@ -429,8 +440,7 @@ class Widget_Awesome_Nav_Menu extends Widget_Base {
 				'label'     => esc_html__( 'Background', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}} .awea-nav-menu-list > li.current-menu-item > a'     => 'background-color: {{VALUE}};',
-					'{{WRAPPER}} .awea-nav-menu-list > li.current-menu-ancestor > a' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .awea-nav-menu-list > li.current-menu-item > a, {{WRAPPER}} .awea-nav-menu-list > li.current-menu-ancestor > a' => 'background-color: {{VALUE}};',
 				],
 			]
 		);
@@ -446,7 +456,7 @@ class Widget_Awesome_Nav_Menu extends Widget_Base {
 		$this->start_controls_section(
 			'awea_section_style_indicator',
 			[
-				'label'     => esc_html__( 'Submenu Icon', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Submenu Indicator', 'awesome-widgets-elementor' ),
 				'tab'       => Controls_Manager::TAB_STYLE,
 				'condition' => [
 					'awea_show_submenu_indicator' => 'yes',
@@ -497,6 +507,17 @@ class Widget_Awesome_Nav_Menu extends Widget_Base {
 			]
 		);
 
+		$this->add_control(
+			'awea_indicator_hover_color',
+			[
+				'label'     => esc_html__( 'Hover / Active Color', 'awesome-widgets-elementor' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => [
+					'{{WRAPPER}} .awea-nav-menu-list li:hover > a .awea-sub-indicator, {{WRAPPER}} .awea-nav-menu-list li.current-menu-item > a .awea-sub-indicator, {{WRAPPER}} .awea-nav-menu-list li.current-menu-ancestor > a .awea-sub-indicator' => 'color: {{VALUE}};',
+				],
+			]
+		);
+
 		$this->end_controls_section();
 
 		/* ==========================================================================
@@ -513,7 +534,7 @@ class Widget_Awesome_Nav_Menu extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_submenu_width',
 			[
-				'label'      => esc_html__( 'Width', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Min Width', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px', 'rem' ],
 				'range'      => [
@@ -543,8 +564,7 @@ class Widget_Awesome_Nav_Menu extends Widget_Base {
 					'size' => 8,
 				],
 				'selectors'  => [
-					'{{WRAPPER}}.awea-nav-layout-row .awea-nav-menu-list > li > ul.sub-menu'    => 'margin-top: {{SIZE}}{{UNIT}};',
-					'{{WRAPPER}}.awea-nav-layout-column .awea-nav-menu-list > li > ul.sub-menu' => 'margin-left: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .awea-nav-menu-wrapper' => '--awea-submenu-offset: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
@@ -567,7 +587,14 @@ class Widget_Awesome_Nav_Menu extends Widget_Base {
 				'label'      => esc_html__( 'Padding', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', 'em' ],
-				'default'    => [ 'top' => '8', 'right' => '8', 'bottom' => '8', 'left' => '8', 'unit' => 'px', 'isLinked' => true ],
+				'default'    => [
+					'top'      => '8',
+					'right'    => '8',
+					'bottom'   => '8',
+					'left'     => '8',
+					'unit'     => 'px',
+					'isLinked' => true,
+				],
 				'selectors'  => [
 					'{{WRAPPER}} .awea-nav-menu-list ul.sub-menu' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
@@ -577,10 +604,17 @@ class Widget_Awesome_Nav_Menu extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_submenu_radius',
 			[
-				'label'      => esc_html__( 'Radius', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Border Radius', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', 'rem' ],
-				'default'    => [ 'top' => '14', 'right' => '14', 'bottom' => '14', 'left' => '14', 'unit' => 'px', 'isLinked' => true ],
+				'default'    => [
+					'top'      => '14',
+					'right'    => '14',
+					'bottom'   => '14',
+					'left'     => '14',
+					'unit'     => 'px',
+					'isLinked' => true,
+				],
 				'selectors'  => [
 					'{{WRAPPER}} .awea-nav-menu-list ul.sub-menu' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
@@ -606,7 +640,7 @@ class Widget_Awesome_Nav_Menu extends Widget_Base {
 		$this->add_control(
 			'awea_submenu_items_heading',
 			[
-				'label'     => esc_html__( 'Links', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Dropdown Links', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::HEADING,
 				'separator' => 'before',
 			]
@@ -626,7 +660,14 @@ class Widget_Awesome_Nav_Menu extends Widget_Base {
 				'label'      => esc_html__( 'Padding', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', 'em' ],
-				'default'    => [ 'top' => '10', 'right' => '16', 'bottom' => '10', 'left' => '16', 'unit' => 'px', 'isLinked' => false ],
+				'default'    => [
+					'top'      => '10',
+					'right'    => '16',
+					'bottom'   => '10',
+					'left'     => '16',
+					'unit'     => 'px',
+					'isLinked' => false,
+				],
 				'selectors'  => [
 					'{{WRAPPER}} .awea-nav-menu-list ul.sub-menu li a' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
@@ -677,7 +718,7 @@ class Widget_Awesome_Nav_Menu extends Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
 				'selectors' => [
-					'{{WRAPPER}} .awea-nav-menu-list ul.sub-menu li a:hover' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-nav-menu-list ul.sub-menu li a:hover, {{WRAPPER}} .awea-nav-menu-list ul.sub-menu li a:focus-visible' => 'color: {{VALUE}};',
 				],
 			]
 		);
@@ -689,7 +730,37 @@ class Widget_Awesome_Nav_Menu extends Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#f8fafc',
 				'selectors' => [
-					'{{WRAPPER}} .awea-nav-menu-list ul.sub-menu li a:hover' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .awea-nav-menu-list ul.sub-menu li a:hover, {{WRAPPER}} .awea-nav-menu-list ul.sub-menu li a:focus-visible' => 'background-color: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->end_controls_tab();
+
+		$this->start_controls_tab(
+			'awea_subitem_tab_active',
+			[ 'label' => esc_html__( 'Active', 'awesome-widgets-elementor' ) ]
+		);
+
+		$this->add_control(
+			'awea_subitem_active_color',
+			[
+				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
+				'type'      => Controls_Manager::COLOR,
+				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
+				'selectors' => [
+					'{{WRAPPER}} .awea-nav-menu-list ul.sub-menu li.current-menu-item > a, {{WRAPPER}} .awea-nav-menu-list ul.sub-menu li.current-menu-ancestor > a' => 'color: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->add_control(
+			'awea_subitem_active_bg',
+			[
+				'label'     => esc_html__( 'Background', 'awesome-widgets-elementor' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => [
+					'{{WRAPPER}} .awea-nav-menu-list ul.sub-menu li.current-menu-item > a, {{WRAPPER}} .awea-nav-menu-list ul.sub-menu li.current-menu-ancestor > a' => 'background-color: {{VALUE}};',
 				],
 			]
 		);
@@ -748,10 +819,17 @@ class Widget_Awesome_Nav_Menu extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_toggle_radius',
 			[
-				'label'      => esc_html__( 'Radius', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Border Radius', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
-				'default'    => [ 'top' => '8', 'right' => '8', 'bottom' => '8', 'left' => '8', 'unit' => 'px', 'isLinked' => true ],
+				'default'    => [
+					'top'      => '8',
+					'right'    => '8',
+					'bottom'   => '8',
+					'left'     => '8',
+					'unit'     => 'px',
+					'isLinked' => true,
+				],
 				'selectors'  => [
 					'{{WRAPPER}} .awea-mobile-toggle-btn' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
@@ -873,7 +951,14 @@ class Widget_Awesome_Nav_Menu extends Widget_Base {
 				'label'      => esc_html__( 'Padding', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', 'em' ],
-				'default'    => [ 'top' => '12', 'right' => '12', 'bottom' => '12', 'left' => '12', 'unit' => 'px', 'isLinked' => true ],
+				'default'    => [
+					'top'      => '12',
+					'right'    => '12',
+					'bottom'   => '12',
+					'left'     => '12',
+					'unit'     => 'px',
+					'isLinked' => true,
+				],
 				'selectors'  => [
 					'{{WRAPPER}} .awea-nav-menu-wrapper' => '--awea-drawer-padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
@@ -883,10 +968,17 @@ class Widget_Awesome_Nav_Menu extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_drawer_radius',
 			[
-				'label'      => esc_html__( 'Radius', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Border Radius', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', 'rem' ],
-				'default'    => [ 'top' => '16', 'right' => '16', 'bottom' => '16', 'left' => '16', 'unit' => 'px', 'isLinked' => true ],
+				'default'    => [
+					'top'      => '16',
+					'right'    => '16',
+					'bottom'   => '16',
+					'left'     => '16',
+					'unit'     => 'px',
+					'isLinked' => true,
+				],
 				'selectors'  => [
 					'{{WRAPPER}} .awea-nav-menu-wrapper' => '--awea-drawer-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
@@ -923,16 +1015,16 @@ class Widget_Awesome_Nav_Menu extends Widget_Base {
 		$show_indicator = ( 'yes' === ( $settings['awea_show_submenu_indicator'] ?? 'yes' ) );
 		?>
 		<div class="awea-nav-menu-wrapper" data-nav-id="<?php echo esc_attr( $unique_id ); ?>">
-			
-			<?php if ( 'none' !== $settings['awea_enable_mobile_breakpoint'] ) : ?>
+
+			<?php if ( 'none' !== ( $settings['awea_enable_mobile_breakpoint'] ?? 'mobile' ) ) : ?>
 				<div class="awea-mobile-toggle-wrapper">
-					<button class="awea-mobile-toggle-btn" aria-expanded="false" aria-label="<?php esc_attr_e( 'Toggle Navigation', 'awesome-widgets-elementor' ); ?>">
-						<svg class="awea-icon-open" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+					<button type="button" class="awea-mobile-toggle-btn" aria-expanded="false" aria-label="<?php esc_attr_e( 'Toggle Navigation', 'awesome-widgets-elementor' ); ?>">
+						<svg class="awea-icon-open" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
 							<line x1="3" y1="12" x2="21" y2="12"></line>
 							<line x1="3" y1="6" x2="21" y2="6"></line>
 							<line x1="3" y1="18" x2="21" y2="18"></line>
 						</svg>
-						<svg class="awea-icon-close" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+						<svg class="awea-icon-close" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
 							<line x1="18" y1="6" x2="6" y2="18"></line>
 							<line x1="6" y1="6" x2="18" y2="18"></line>
 						</svg>
@@ -957,47 +1049,91 @@ class Widget_Awesome_Nav_Menu extends Widget_Base {
 
 		<script>
 		(function() {
-			function initNavMenu() {
-				var wrapper = document.querySelector('[data-nav-id="<?php echo esc_js( $unique_id ); ?>"]');
-				if (!wrapper) return;
+			function bindNavMenu(wrapper) {
+				if (!wrapper || wrapper.dataset.aweaBound === '1') return;
+				wrapper.dataset.aweaBound = '1';
 
 				var toggleBtn     = wrapper.querySelector('.awea-mobile-toggle-btn');
 				var menuContainer = wrapper.querySelector('.awea-nav-menu-container');
 
-				if (toggleBtn && menuContainer && !toggleBtn.__aweaBound) {
-					toggleBtn.__aweaBound = true;
+				function closeDrawer() {
+					if (!toggleBtn || !menuContainer) return;
+					toggleBtn.setAttribute('aria-expanded', 'false');
+					menuContainer.classList.remove('awea-menu-open');
+					wrapper.querySelectorAll('.menu-item-has-children.awea-sub-open').forEach(function(li) {
+						li.classList.remove('awea-sub-open');
+						var anchor = li.querySelector(':scope > a');
+						if (anchor) anchor.setAttribute('aria-expanded', 'false');
+					});
+				}
 
+				if (toggleBtn && menuContainer) {
 					toggleBtn.addEventListener('click', function(e) {
 						e.preventDefault();
 						var expanded = this.getAttribute('aria-expanded') === 'true';
-						this.setAttribute('aria-expanded', !expanded);
-						menuContainer.classList.toggle('awea-menu-open');
+						if (expanded) {
+							closeDrawer();
+						} else {
+							this.setAttribute('aria-expanded', 'true');
+							menuContainer.classList.add('awea-menu-open');
+						}
 					});
 
 					document.addEventListener('click', function(e) {
+						if (!document.body.contains(wrapper)) return;
 						if (!wrapper.contains(e.target) && menuContainer.classList.contains('awea-menu-open')) {
-							toggleBtn.setAttribute('aria-expanded', 'false');
-							menuContainer.classList.remove('awea-menu-open');
+							closeDrawer();
 						}
 					});
 
 					document.addEventListener('keydown', function(e) {
+						if (!document.body.contains(wrapper)) return;
 						if (e.key === 'Escape' && menuContainer.classList.contains('awea-menu-open')) {
-							toggleBtn.setAttribute('aria-expanded', 'false');
-							menuContainer.classList.remove('awea-menu-open');
+							closeDrawer();
+							toggleBtn.focus();
 						}
 					});
 				}
+
+				// Mobile drawer submenu accordion toggle
+				wrapper.querySelectorAll('.menu-item-has-children > a').forEach(function(link) {
+					link.addEventListener('click', function(e) {
+						var toggleVisible = toggleBtn && window.getComputedStyle(toggleBtn.parentElement).display !== 'none';
+						if (!toggleVisible) return;
+
+						var parentLi = this.parentElement;
+						var subMenu  = parentLi ? parentLi.querySelector(':scope > ul.sub-menu') : null;
+						if (!subMenu) return;
+
+						var href = (this.getAttribute('href') || '').trim();
+						var isPlaceholder = !href || href === '#';
+						var isOpen = parentLi.classList.contains('awea-sub-open');
+
+						if (isPlaceholder || !isOpen) {
+							e.preventDefault();
+							parentLi.classList.toggle('awea-sub-open', !isOpen);
+							this.setAttribute('aria-expanded', String(!isOpen));
+						}
+					});
+				});
+			}
+
+			function initById() {
+				bindNavMenu(document.querySelector('[data-nav-id="<?php echo esc_js( $unique_id ); ?>"]'));
 			}
 
 			if (document.readyState === 'loading') {
-				document.addEventListener('DOMContentLoaded', initNavMenu);
+				document.addEventListener('DOMContentLoaded', initById);
 			} else {
-				initNavMenu();
+				initById();
 			}
 
-			if (window.elementorFrontend && window.elementorFrontend.hooks) {
-				window.elementorFrontend.hooks.addAction('frontend/element_ready/awesome-nav-menu.default', initNavMenu);
+			if (window.elementorFrontend && window.elementorFrontend.hooks && !window.aweaNavMenuHooked) {
+				window.aweaNavMenuHooked = true;
+				window.elementorFrontend.hooks.addAction('frontend/element_ready/awesome-nav-menu.default', function($scope) {
+					var el = $scope && $scope[0] ? $scope[0].querySelector('.awea-nav-menu-wrapper') : null;
+					bindNavMenu(el);
+				});
 			}
 		})();
 		</script>

@@ -1,53 +1,85 @@
 /* ==========================================================================
-   AWEA Copyright Studio 10/10 Architecture (Zero Gradients / Flat)
+   Awesome Copyright Widget
    ========================================================================== */
 
-.awea-copyright-wrap {
-  width: 100%;
-  box-sizing: border-box;
-  font-size: 0.875rem;
-  line-height: 1.6;
-  color: var(--e-global-color-text, #64748b);
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
+.awea-cp-wrap {
+	width: 100%;
+	box-sizing: border-box;
+	font-size: 0.875rem;
+	line-height: 1.6;
+	color: var(--e-global-color-text, #64748b);
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
+	gap: 10px;
 }
 
-.awea-copyright-text p {
-  margin: 0;
-  display: inline;
+.awea-cp-wrap *,
+.awea-cp-wrap *::before,
+.awea-cp-wrap *::after {
+	box-sizing: border-box;
 }
 
-.awea-copyright-wrap a {
-  color: var(--e-global-color-primary, #0f172a);
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  transition: color 0.2s ease, opacity 0.2s ease;
+/* Stacked Layout Direction */
+.awea-cp-dir-stack .awea-cp-wrap {
+	flex-direction: column;
+	gap: 4px;
 }
 
-.awea-copyright-wrap a:hover {
-  color: var(--e-global-color-accent, #38bdf8);
+.awea-cp-dir-stack .awea-cp-sep {
+	display: none;
 }
 
-.awea-copyright-divider {
-  opacity: 0.45;
-  user-select: none;
-  line-height: 1;
+.awea-cp-primary p {
+	margin: 0;
+	display: inline;
 }
 
-.awea-copyright-extra {
-  font-weight: 500;
+.awea-cp-wrap a {
+	color: var(--e-global-color-primary, #0f172a);
+	text-decoration: underline;
+	text-decoration-thickness: 0.08em;
+	text-underline-offset: 3px;
+	transition: color 0.2s ease;
 }
 
+.awea-cp-wrap a:hover,
+.awea-cp-wrap a:focus-visible {
+	color: var(--e-global-color-accent, #38bdf8);
+}
+
+.awea-cp-wrap a:focus-visible {
+	outline: 2px solid currentColor;
+	outline-offset: 2px;
+	border-radius: 3px;
+}
+
+.awea-cp-sep {
+	opacity: 0.45;
+	user-select: none;
+	line-height: 1;
+}
+
+.awea-cp-secondary {
+	font-weight: 500;
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+	.awea-cp-wrap a {
+		transition: none !important;
+	}
+}
+
+/* Mobile Stacking (<= 640px) */
 @media (max-width: 640px) {
-  .awea-copyright-wrap {
-    flex-direction: column;
-    gap: 4px;
-  }
+	.awea-cp-dir-inline .awea-cp-wrap {
+		flex-direction: column;
+		gap: 4px;
+	}
 
-  .awea-copyright-divider {
-    display: none;
-  }
+	.awea-cp-dir-inline .awea-cp-sep {
+		display: none;
+	}
 }

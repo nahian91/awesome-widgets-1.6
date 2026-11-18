@@ -1,17 +1,11 @@
 /* ==========================================================================
-   AWEA Progress Bar Studio Master Architecture (Zero Hover Zoom / No Scale)
+   AWEA Progress Bar — Zero-Shadow Architectural Meters
    ========================================================================== */
 
 .awea-progress-wrapper {
   width: 100%;
   position: relative;
   box-sizing: border-box;
-  transform: none; /* No hover lift */
-}
-
-/* Strictly locked in place on hover - no scale */
-.awea-progress-wrapper:hover {
-  transform: none;
 }
 
 /* 1. Radial Circle Style */
@@ -30,12 +24,6 @@
   justify-content: center;
   align-items: center;
   box-sizing: border-box;
-  transform: none; /* Strictly no zoom/scale */
-  transition: filter 0.3s ease;
-}
-
-.awea-radial-container:hover {
-  transform: none;
 }
 
 .awea-progress-svg {
@@ -51,7 +39,7 @@
 }
 
 .awea-progress-track {
-  stroke: rgba(15, 23, 42, 0.08);
+  stroke: #e2e8f0;
   stroke-width: 8px;
 }
 
@@ -60,7 +48,7 @@
   stroke-width: 8px;
   stroke-dasharray: 263.89;
   stroke-dashoffset: 263.89;
-  transition: stroke-dashoffset 1.8s cubic-bezier(0.16, 1, 0.3, 1), stroke 0.3s ease;
+  transition: stroke 0.3s ease;
 }
 
 .awea-radial-content {
@@ -85,11 +73,6 @@
 .awea-linear-container {
   width: 100%;
   box-sizing: border-box;
-  transform: none;
-}
-
-.awea-linear-container:hover {
-  transform: none;
 }
 
 .awea-linear-meta {
@@ -104,7 +87,7 @@
 .awea-line-track {
   width: 100%;
   height: 10px;
-  background-color: rgba(15, 23, 42, 0.08);
+  background-color: #e2e8f0;
   border-radius: 100px;
   overflow: hidden;
   position: relative;
@@ -116,17 +99,17 @@
   width: 0%;
   background-color: var(--e-global-color-primary, #4f46e5);
   border-radius: 100px;
-  transition: width 1.8s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.3s ease;
+  transition: background-color 0.3s ease;
   will-change: width;
 }
 
-/* 3. Typography Defaults */
+/* Typography Defaults */
 .awea-progress-percent {
   font-size: 2.25rem;
   font-weight: 800;
   line-height: 1;
   letter-spacing: -0.03em;
-  color: var(--e-global-color-primary, #0f172a);
+  color: #0f172a;
   font-variant-numeric: tabular-nums;
   display: inline-block;
   white-space: nowrap;
@@ -142,14 +125,12 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: var(--e-global-color-text, #64748b);
+  color: #64748b;
   line-height: 1.35;
   word-break: break-word;
 }
 
-/* ==========================================================================
-   Super Mobile Friendly System (<= 767px)
-   ========================================================================== */
+/* Mobile (<= 767px) */
 @media (max-width: 767px) {
   .awea-radial-container {
     width: min(200px, 80vw);
@@ -162,15 +143,5 @@
 
   .awea-radial-content .awea-progress-percent {
     font-size: 1.85rem;
-  }
-
-  .awea-radial-content .awea-progress-label {
-    font-size: 0.72rem;
-    letter-spacing: 0.08em;
-  }
-
-  .awea-linear-meta {
-    flex-wrap: wrap;
-    gap: 8px;
   }
 }

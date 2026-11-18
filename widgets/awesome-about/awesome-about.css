@@ -1,387 +1,405 @@
 /* ==========================================================================
-   AWEA About Studio Master Architecture (Zero Hover Zoom / No Scale)
+   Awesome About Widget
    ========================================================================== */
 
-.awea-about-master-grid {
-  width: 100%;
-  max-width: 1240px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 70px;
-  align-items: center;
-  position: relative;
-  box-sizing: border-box;
-  transform: none;
+.awea-about-grid {
+	--awea-about-primary: var(--e-global-color-primary, #4f46e5);
+	--awea-about-accent: var(--e-global-color-accent, #38bdf8);
+	--awea-about-heading: #0f172a;
+	--awea-about-text: #475569;
+	--awea-about-muted: #64748b;
+	--awea-phone-ico-color: var(--awea-about-primary);
+	--awea-phone-ico-bg: #f1f5f9;
+
+	width: 100%;
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 64px;
+	align-items: center;
+	box-sizing: border-box;
 }
 
-/* Image Position: Right Swap */
-.awea-about-pos-right .awea-about-visual-container {
-  order: 2;
-  justify-content: flex-end;
+.awea-about-grid *,
+.awea-about-grid *::before,
+.awea-about-grid *::after {
+	box-sizing: border-box;
 }
 
-.awea-about-pos-right .awea-about-text-content {
-  order: 1;
+/* Media Right Alignment Swap */
+.awea-about-pos-right .awea-about-visual {
+	order: 2;
 }
 
-.awea-about-pos-right .awea-about-floating-circle {
-  right: auto;
-  left: -5%;
+.awea-about-pos-right .awea-about-content {
+	order: 1;
 }
 
-.awea-about-pos-right .awea-about-ribbon {
-  left: auto;
-  right: -20px;
+.awea-about-pos-right .awea-about-main-img {
+	margin-left: auto;
 }
 
-/* 1. Visual Framing & Fluid Geometry */
-.awea-about-visual-container {
-  position: relative;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  box-sizing: border-box;
+.awea-about-pos-right .awea-about-float-img {
+	right: auto;
+	left: 0;
 }
 
-.awea-about-image-frame {
-  width: 90%;
-  aspect-ratio: 4 / 5;
-  overflow: hidden;
-  position: relative;
-  background-color: #0f172a;
-  border-radius: 80px 24px 24px 80px;
-  box-shadow: 0 30px 60px -15px rgba(15, 23, 42, 0.18);
-  box-sizing: border-box;
+.awea-about-pos-right .awea-about-badge {
+	left: auto;
+	right: -12px;
 }
 
-.awea-about-image-frame img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  transform: none;
-  transition: opacity 0.3s ease;
+/* --------------------------------------------------------------------------
+1. Visual Column
+   -------------------------------------------------------------------------- */
+.awea-about-visual {
+	position: relative;
+	width: 100%;
 }
 
-.awea-about-visual-container:hover .awea-about-image-frame img {
-  transform: none;
+.awea-about-main-img {
+	width: 92%;
+	aspect-ratio: 4 / 5;
+	border-radius: 64px 20px 20px 64px;
+	overflow: hidden;
+	background-color: #e2e8f0;
 }
 
-/* Floating Secondary Circle */
-.awea-about-floating-circle {
-  position: absolute;
-  width: 320px;
-  height: 320px;
-  right: -5%;
-  top: 10%;
-  border-radius: 50%;
-  border: 12px solid #ffffff;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.22);
-  overflow: hidden;
-  z-index: 5;
-  box-sizing: border-box;
-  animation: aweaAboutFloat 6s ease-in-out infinite alternate;
-  will-change: transform;
+.awea-about-main-img img {
+	width: 100%;
+	max-width: none;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+	transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.awea-about-floating-circle img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
+.awea-about-visual:hover .awea-about-main-img img {
+	transform: scale(1.03);
 }
 
-@keyframes aweaAboutFloat {
-  0% {
-    transform: translateY(0) rotate(0deg);
-  }
-  100% {
-    transform: translateY(-16px) rotate(1.5deg);
-  }
+.awea-about-float-img {
+	position: absolute;
+	width: 38%;
+	aspect-ratio: 1 / 1;
+	right: 0;
+	bottom: 10%;
+	z-index: 2;
+	border-radius: 50%;
+	border: 8px solid #ffffff;
+	overflow: hidden;
+	background-color: #cbd5e1;
 }
 
-/* Experience Ribbon Badge */
-.awea-about-ribbon {
-  position: absolute;
-  bottom: 8%;
-  left: -20px;
-  padding: 16px 36px;
-  background-color: var(--e-global-color-primary, #4f46e5);
-  color: #ffffff;
-  font-weight: 800;
-  font-size: 1.15rem;
-  letter-spacing: -0.01em;
-  border-radius: 8px;
-  box-shadow: 0 16px 32px -8px rgba(79, 70, 229, 0.45);
-  z-index: 10;
-  box-sizing: border-box;
-  transform: none;
-  transition: background-color 0.3s ease;
-  line-height: 1.2;
+.awea-about-float-img img {
+	width: 100%;
+	max-width: none;
+	height: 100%;
+	object-fit: cover;
+	display: block;
 }
 
-.awea-about-ribbon::before {
-  content: "";
-  position: absolute;
-  top: -10px;
-  left: 0;
-  width: 10px;
-  height: 10px;
-  background-color: inherit;
-  filter: brightness(0.65);
-  clip-path: polygon(100% 0, 0 100%, 100% 100%);
+.awea-about-badge {
+	position: absolute;
+	top: 8%;
+	left: -12px;
+	z-index: 3;
+	padding: 12px 22px;
+	border-radius: 100px;
+	background-color: var(--awea-about-primary);
+	color: #ffffff;
+	font-size: 0.8125rem;
+	font-weight: 700;
+	line-height: 1.2;
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
 }
 
-.awea-about-pos-right .awea-about-ribbon::before {
-  left: auto;
-  right: 0;
-  clip-path: polygon(0 0, 0 100%, 100% 100%);
+/* --------------------------------------------------------------------------
+2. Editorial Content Column
+   -------------------------------------------------------------------------- */
+.awea-about-content {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
 }
 
-.awea-about-visual-container:hover .awea-about-ribbon {
-  transform: none;
+.awea-about-sub {
+	display: inline-flex;
+	align-items: center;
+	gap: 12px;
+	margin-bottom: 16px;
+	font-size: 0.8125rem;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.14em;
+	line-height: 1.3;
+	color: var(--awea-about-accent);
 }
 
-/* 2. Editorial Content Column */
-.awea-about-text-content {
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
+.awea-about-line {
+	width: 28px;
+	height: 2px;
+	border-radius: 2px;
+	background-color: currentColor;
+	flex-shrink: 0;
 }
 
-.awea-about-label-group {
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  font-size: 0.82rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-  margin-bottom: 20px;
-  line-height: 1.2;
+.awea-about-title {
+	margin: 0 0 20px 0;
+	font-size: clamp(1.875rem, 3.8vw, 3rem);
+	font-weight: 800;
+	line-height: 1.15;
+	letter-spacing: -0.025em;
+	color: var(--awea-about-heading);
+	word-break: break-word;
 }
 
-.awea-about-label-line {
-  width: 32px;
-  height: 3px;
-  border-radius: 10px;
-  background-color: currentColor;
-  flex-shrink: 0;
+.awea-about-desc {
+	margin: 0 0 28px 0;
+	font-size: 1.03125rem;
+	line-height: 1.72;
+	color: var(--awea-about-text);
+	word-break: break-word;
 }
 
-.awea-about-heading {
-  font-size: clamp(2.15rem, 5vw, 2.85rem);
-  font-weight: 800;
-  line-height: 1.15;
-  letter-spacing: -0.03em;
-  margin-top: 0;
-  margin-bottom: 24px;
-  word-break: break-word;
+.awea-about-desc p {
+	margin: 0 0 1em 0;
 }
 
-.awea-about-main-desc {
-  font-size: 1.05rem;
-  line-height: 1.75;
-  margin-top: 0;
-  margin-bottom: 35px;
-  word-break: break-word;
+.awea-about-desc p:last-child {
+	margin-bottom: 0;
 }
 
-.awea-about-main-desc p:last-child {
-  margin-bottom: 0;
+/* --------------------------------------------------------------------------
+3. Highlights / Features Matrix
+   -------------------------------------------------------------------------- */
+.awea-about-feats {
+	width: 100%;
+	list-style: none;
+	margin: 0 0 36px 0;
+	padding: 0;
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 14px 20px;
 }
 
-/* Feature Check Matrix */
-.awea-about-feature-box {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px 20px;
-  margin-bottom: 40px;
-  box-sizing: border-box;
+.awea-about-feat {
+	display: flex;
+	align-items: flex-start;
+	gap: 10px;
+	font-size: 0.9375rem;
+	font-weight: 600;
+	line-height: 1.45;
+	color: var(--awea-about-heading);
+	word-break: break-word;
 }
 
-.awea-about-check-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 0.95rem;
-  font-weight: 700;
-  line-height: 1.4;
-  word-break: break-word;
+.awea-about-feat-icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	margin-top: 2px;
+	font-size: 18px;
+	line-height: 1;
+	color: var(--awea-about-primary);
+	flex-shrink: 0;
 }
 
-.awea-about-check-item i,
-.awea-about-check-item svg {
-  width: 18px;
-  height: 18px;
-  flex-shrink: 0;
-  display: block;
+.awea-about-feat-icon svg {
+	width: 18px;
+	height: 18px;
+	fill: currentColor;
+	display: block;
 }
 
-/* 3. Call to Action Controls */
-.awea-about-cta-wrapper {
-  display: flex;
-  align-items: center;
-  gap: 36px;
-  flex-wrap: wrap;
-  box-sizing: border-box;
+/* --------------------------------------------------------------------------
+4. Call to Action & Direct Phone
+   -------------------------------------------------------------------------- */
+.awea-about-actions {
+	display: flex;
+	align-items: center;
+	gap: 28px;
+	flex-wrap: wrap;
 }
 
-.awea-about-prime-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  padding: 16px 36px;
-  border-radius: 100px;
-  background-color: var(--e-global-color-primary, #4f46e5);
-  color: #ffffff;
-  text-decoration: none;
-  font-weight: 700;
-  font-size: 0.95rem;
-  box-shadow: 0 10px 25px -5px rgba(79, 70, 229, 0.4);
-  transform: none;
-  transition: background-color 0.25s ease, box-shadow 0.3s ease, color 0.25s ease;
-  line-height: 1.2;
-  box-sizing: border-box;
+.awea-about-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 10px;
+	padding: 15px 30px;
+	border: 1px solid transparent;
+	border-radius: 12px;
+	background-color: var(--awea-about-primary);
+	color: #ffffff;
+	font-size: 0.9375rem;
+	font-weight: 700;
+	line-height: 1.2;
+	text-decoration: none;
+	cursor: pointer;
+	transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease, transform 0.2s ease;
 }
 
-.awea-about-prime-btn svg {
-  width: 16px;
-  height: 16px;
-  transform: none;
-  transition: none;
+.awea-about-btn:hover,
+.awea-about-btn:focus-visible {
+	background-color: var(--awea-about-heading);
+	color: #ffffff;
+	transform: translateY(-2px);
 }
 
-.awea-about-prime-btn:hover {
-  transform: none;
+.awea-about-btn-icon {
+	display: inline-flex;
+	align-items: center;
+	transition: transform 0.25s ease;
 }
 
-/* Phone Trigger */
-.awea-about-phone-call {
-  display: inline-flex;
-  align-items: center;
-  gap: 16px;
-  text-decoration: none;
-  color: inherit;
-  transform: none;
+.awea-about-btn-icon svg {
+	width: 14px;
+	height: 14px;
+	fill: currentColor;
 }
 
-.awea-about-icon-circle {
-  width: 52px;
-  height: 52px;
-  border-radius: 50%;
-  background-color: var(--e-global-color-primary, #4f46e5);
-  color: #ffffff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  box-shadow: 0 10px 20px -5px rgba(79, 70, 229, 0.35);
-  box-sizing: border-box;
-  transform: none;
-  transition: background-color 0.3s ease;
+.awea-about-btn:hover .awea-about-btn-icon {
+	transform: translateX(3px);
 }
 
-.awea-about-icon-circle svg {
-  width: 20px;
-  height: 20px;
-  display: block;
+/* Direct Contact Link */
+.awea-about-phone-link {
+	display: inline-flex;
+	align-items: center;
+	gap: 14px;
+	text-decoration: none;
+	color: inherit;
+	transition: opacity 0.2s ease;
 }
 
-.awea-about-phone-call:hover .awea-about-icon-circle {
-  transform: none;
+.awea-about-phone-link:hover {
+	opacity: 0.85;
+}
+
+.awea-about-phone-ico {
+	position: relative;
+	width: 46px;
+	height: 46px;
+	border-radius: 12px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	color: var(--awea-phone-ico-color, var(--awea-about-primary));
+	background-color: var(--awea-phone-ico-bg, #f1f5f9);
+	border: 1px solid #e2e8f0;
+	flex-shrink: 0;
+	transition: transform 0.25s ease, background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+}
+
+.awea-about-phone-ico i {
+	font-size: 18px;
+	line-height: 1;
+}
+
+.awea-about-phone-ico svg {
+	width: 18px;
+	height: 18px;
+	fill: currentColor;
+}
+
+.awea-about-phone-link:hover .awea-about-phone-ico {
+	background-color: var(--awea-about-primary);
+	border-color: var(--awea-about-primary);
+	color: #ffffff;
+	transform: scale(1.05);
 }
 
 .awea-about-phone-meta {
-  display: flex;
-  flex-direction: column;
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
 }
 
-.awea-about-phone-label {
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: #64748b;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  line-height: 1.2;
+.awea-about-phone-lbl {
+	font-size: 0.75rem;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+	line-height: 1.2;
+	color: var(--awea-about-muted);
 }
 
-.awea-about-phone-number {
-  font-size: 1.15rem;
-  font-weight: 800;
-  letter-spacing: -0.01em;
-  line-height: 1.3;
-  word-break: break-word;
+.awea-about-phone-num {
+	font-size: 1.0625rem;
+	font-weight: 800;
+	line-height: 1.3;
+	letter-spacing: -0.01em;
+	color: var(--awea-about-heading);
 }
 
-/* 4. Responsive Breakpoints */
+/* --------------------------------------------------------------------------
+5. Accessibility & Responsive Breakpoints
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+	.awea-about-main-img img,
+	.awea-about-btn,
+	.awea-about-btn-icon,
+	.awea-about-phone-link,
+	.awea-about-phone-ico {
+		transition: none !important;
+		transform: none !important;
+	}
+}
+
 @media (max-width: 1024px) {
-  .awea-about-master-grid {
-    grid-template-columns: 1fr;
-    gap: 50px;
-  }
+	.awea-about-grid {
+		grid-template-columns: 1fr;
+		gap: 44px;
+	}
 
-  .awea-about-pos-right .awea-about-visual-container {
-    order: 0;
-  }
+	.awea-about-pos-right .awea-about-visual,
+	.awea-about-pos-right .awea-about-content {
+		order: initial;
+	}
 
-  .awea-about-pos-right .awea-about-text-content {
-    order: 0;
-  }
+	.awea-about-visual {
+		max-width: 580px;
+		margin: 0 auto;
+	}
 
-  .awea-about-visual-container {
-    max-width: 600px;
-    margin: 0 auto;
-  }
-
-  .awea-about-floating-circle {
-    width: 240px;
-    height: 240px;
-    right: 0;
-    left: auto;
-    top: 5%;
-  }
+	.awea-about-badge,
+	.awea-about-pos-right .awea-about-badge {
+		left: 12px;
+		right: auto;
+	}
 }
 
 @media (max-width: 640px) {
-  .awea-about-image-frame {
-    width: 100%;
-    border-radius: 40px;
-  }
+	:where(.awea-about-main-img) {
+		width: 100%;
+		border-radius: 28px;
+	}
 
-  .awea-about-floating-circle {
-    width: 180px;
-    height: 180px;
-    border-width: 6px;
-    right: -10px;
-    left: auto;
-    top: -20px;
-  }
+	:where(.awea-about-float-img, .awea-about-pos-right .awea-about-float-img) {
+		width: 34%;
+		right: 12px;
+		left: auto;
+		bottom: 12px;
+		border-width: 5px;
+	}
 
-  .awea-about-ribbon {
-    left: 0;
-    right: auto;
-    bottom: -15px;
-    padding: 12px 24px;
-    font-size: 0.95rem;
-  }
+	:where(.awea-about-badge, .awea-about-pos-right .awea-about-badge) {
+		top: 12px;
+		left: 12px;
+		right: auto;
+		padding: 8px 14px;
+		font-size: 0.72rem;
+	}
 
-  .awea-about-feature-box {
-    grid-template-columns: 1fr !important;
-  }
+	.awea-about-actions {
+		flex-direction: column;
+		align-items: stretch;
+		width: 100%;
+		gap: 18px;
+	}
 
-  .awea-about-cta-wrapper {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 20px;
-  }
-
-  .awea-about-prime-btn {
-    width: 100%;
-    box-sizing: border-box;
-    justify-content: center;
-  }
+	.awea-about-btn {
+		width: 100%;
+	}
 }

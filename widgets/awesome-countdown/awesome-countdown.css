@@ -1,141 +1,155 @@
 /* ==========================================================================
-   AWEA Countdown Studio Master Architecture (Zero Hover Zoom / No Scale)
+   Awesome Countdown Widget
    ========================================================================== */
 
-.awea-countdown-wrapper {
-  width: 100%;
-  position: relative;
-  box-sizing: border-box;
-  text-align: center;
+.awea-countdown-wrap {
+	--awea-cd-primary: var(--e-global-color-primary, #4f46e5);
+	--awea-cd-heading: #0f172a;
+	--awea-cd-muted: #64748b;
+	--awea-cd-border: #e2e8f0;
+
+	width: 100%;
+	position: relative;
+	box-sizing: border-box;
+	text-align: center;
 }
 
-/* 1. Flex Timer Row */
+.awea-countdown-wrap *,
+.awea-countdown-wrap *::before,
+.awea-countdown-wrap *::after {
+	box-sizing: border-box;
+}
+
+/* --------------------------------------------------------------------------
+   1. Timer Row
+   -------------------------------------------------------------------------- */
 .awea-timer-row {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-  flex-wrap: wrap;
-  box-sizing: border-box;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 16px;
+	flex-wrap: wrap;
 }
 
 .awea-timer-row.awea-is-hidden {
-  display: none !important;
+	display: none !important;
 }
 
-/* 2. Micro-Interactive Time Cells */
+/* --------------------------------------------------------------------------
+   2. Time Cells
+   -------------------------------------------------------------------------- */
 .awea-time-cell {
-  flex: 1 1 auto;
-  min-width: 120px;
-  max-width: 220px;
-  padding: 28px 20px 24px 20px;
-  background-color: #ffffff;
-  border-style: solid;
-  border-width: 1px;
-  border-color: rgba(15, 23, 42, 0.08);
-  border-radius: 24px;
-  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.04);
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  transform: none;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+	flex: 1 1 auto;
+	min-width: 120px;
+	max-width: 220px;
+	padding: 28px 20px 24px 20px;
+	background-color: #ffffff;
+	border: 1px solid var(--awea-cd-border);
+	border-radius: 20px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 6px;
+	transition:
+		background-color 0.25s ease,
+		border-color 0.25s ease,
+		box-shadow 0.25s ease,
+		transform 0.2s ease;
 }
 
 .awea-time-cell:hover {
-  transform: none;
+	background-color: #f8fafc;
+	border-color: var(--awea-cd-primary);
 }
 
-/* 3. Tabular Numeric Typography */
+/* --------------------------------------------------------------------------
+   3. Numeric Digits & Unit Labels
+   -------------------------------------------------------------------------- */
 .awea-digit {
-  display: block;
-  font-size: clamp(2.25rem, 5vw, 3.5rem);
-  font-weight: 800;
-  letter-spacing: -0.04em;
-  color: var(--e-global-color-primary, #0f172a);
-  line-height: 1;
-  margin-bottom: 8px;
-  font-variant-numeric: tabular-nums;
-  font-feature-settings: "tnum";
+	display: block;
+	font-size: clamp(2.15rem, 4.8vw, 3.5rem);
+	font-weight: 800;
+	letter-spacing: -0.04em;
+	color: var(--awea-cd-primary);
+	line-height: 1;
+	font-variant-numeric: tabular-nums;
+	font-feature-settings: "tnum";
 }
 
 .awea-unit {
-  font-size: 0.75rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
-  color: var(--e-global-color-text, #64748b);
-  line-height: 1;
-  word-break: break-word;
+	display: block;
+	font-size: 0.75rem;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.12em;
+	color: var(--awea-cd-muted);
+	line-height: 1.2;
 }
 
-/* 4. Colon Separators */
+/* --------------------------------------------------------------------------
+   4. Separators
+   -------------------------------------------------------------------------- */
 .awea-colon-sep {
-  font-size: 28px;
-  font-weight: 800;
-  color: var(--e-global-color-primary, #4f46e5);
-  line-height: 1;
-  user-select: none;
-  transform: none;
-  animation: aweaColonBlink 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+	font-size: 28px;
+	font-weight: 800;
+	color: var(--awea-cd-primary);
+	line-height: 1;
+	user-select: none;
+	flex-shrink: 0;
 }
 
-@keyframes aweaColonBlink {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.35;
-  }
-}
-
-/* 5. Expired State Container */
+/* --------------------------------------------------------------------------
+   5. Expired Notice
+   -------------------------------------------------------------------------- */
 .awea-countdown-expired {
-  display: none;
-  padding: 36px 24px;
-  font-size: 1.5rem;
-  font-weight: 800;
-  color: var(--e-global-color-primary, #0f172a);
-  letter-spacing: -0.02em;
-  line-height: 1.35;
+	display: none;
+	padding: 26px 24px;
+	border-radius: 16px;
+	background-color: #f8fafc;
+	border: 1px solid var(--awea-cd-border);
+	font-size: 1.2rem;
+	font-weight: 800;
+	color: var(--awea-cd-heading);
+	letter-spacing: -0.02em;
+	line-height: 1.4;
 }
 
 .awea-countdown-expired.awea-is-visible {
-  display: block !important;
+	display: block !important;
 }
 
-/* ==========================================================================
-   Super Mobile Friendly System (<= 768px)
-   ========================================================================== */
+/* --------------------------------------------------------------------------
+   6. Accessibility & Responsive
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+	.awea-time-cell {
+		transition: none !important;
+	}
+}
+
 @media (max-width: 768px) {
-  .awea-timer-row {
-    gap: 10px;
-  }
+	.awea-timer-row {
+		gap: 10px;
+	}
 
-  .awea-time-cell {
-    min-width: calc(50% - 10px);
-    max-width: calc(50% - 10px);
-    padding: 20px 10px;
-    border-radius: 18px;
-  }
+	.awea-time-cell {
+		min-width: calc(50% - 6px);
+		max-width: calc(50% - 6px);
+		padding: 20px 12px;
+		border-radius: 16px;
+	}
 
-  .awea-digit {
-    font-size: 2.25rem;
-  }
+	.awea-digit {
+		font-size: 2.1rem;
+	}
 
-  .awea-unit {
-    font-size: 0.68rem;
-    letter-spacing: 0.08em;
-  }
+	.awea-unit {
+		font-size: 0.68rem;
+		letter-spacing: 0.08em;
+	}
 
-  .awea-colon-sep {
-    display: none;
-  }
-
-  .awea-countdown-expired {
-    padding: 24px 16px;
-    font-size: 1.25rem;
-  }
+	.awea-colon-sep {
+		display: none;
+	}
 }

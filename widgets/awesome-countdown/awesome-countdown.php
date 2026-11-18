@@ -1,10 +1,9 @@
 <?php
 /**
- * Awesome Countdown Studio Widget.
- * Architectural Precision Countdown with Timezone Calibration & Kinetic Micro-Interactions.
+ * Awesome Countdown Widget.
  *
  * @package AwesomeWidgetsElementor
- * @since 1.0.0
+ * @since   2.0.0
  */
 
 namespace Elementor;
@@ -13,13 +12,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use \Elementor\Controls_Manager;
-use \Elementor\Group_Control_Border;
-use \Elementor\Group_Control_Box_Shadow;
-use \Elementor\Group_Control_Typography;
-use \Elementor\Core\Kits\Documents\Tabs\Global_Typography;
-use \Elementor\Core\Kits\Documents\Tabs\Global_Colors;
-use \Elementor\Widget_Base;
+use Elementor\Controls_Manager;
+use Elementor\Group_Control_Border;
+use Elementor\Group_Control_Typography;
+use Elementor\Group_Control_Box_Shadow;
+use Elementor\Core\Kits\Documents\Tabs\Global_Typography;
+use Elementor\Core\Kits\Documents\Tabs\Global_Colors;
+use Elementor\Widget_Base;
 
 class Widget_Awesome_Countdown extends Widget_Base {
 
@@ -40,13 +39,13 @@ class Widget_Awesome_Countdown extends Widget_Base {
 	}
 
 	public function get_keywords() {
-		return [ 'awea', 'countdown', 'timer', 'clock', 'launch', 'sale', 'urgent', 'event' ];
+		return [ 'awea', 'countdown', 'timer', 'clock', 'launch', 'sale', 'urgent' ];
 	}
 
 	protected function register_controls() {
 
 		/* ==========================================================================
-		   CONTENT TAB: 1. TIMER
+		   CONTENT: 1. TIMER
 		   ========================================================================== */
 		$this->start_controls_section(
 			'awea_section_timer',
@@ -64,7 +63,7 @@ class Widget_Awesome_Countdown extends Widget_Base {
 				'default'     => wp_date( 'Y-m-d H:i', strtotime( '+1 month' ) ),
 				'description' => sprintf(
 					/* translators: %s: Site current timezone string */
-					esc_html__( 'Timezone: %s', 'awesome-widgets-elementor' ),
+					esc_html__( 'Site Timezone: %s', 'awesome-widgets-elementor' ),
 					'<strong>' . esc_html( wp_timezone_string() ) . '</strong>'
 				),
 			]
@@ -73,7 +72,7 @@ class Widget_Awesome_Countdown extends Widget_Base {
 		$this->add_control(
 			'awea_expire_type',
 			[
-				'label'   => esc_html__( 'On Expiry', 'awesome-widgets-elementor' ),
+				'label'   => esc_html__( 'Action on Expiry', 'awesome-widgets-elementor' ),
 				'type'    => Controls_Manager::SELECT,
 				'default' => 'message',
 				'options' => [
@@ -87,7 +86,7 @@ class Widget_Awesome_Countdown extends Widget_Base {
 		$this->add_control(
 			'awea_expire_message',
 			[
-				'label'     => esc_html__( 'Message', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Expiry Message', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::TEXTAREA,
 				'rows'      => 3,
 				'default'   => esc_html__( 'This event or offer has concluded.', 'awesome-widgets-elementor' ),
@@ -99,7 +98,7 @@ class Widget_Awesome_Countdown extends Widget_Base {
 		$this->add_control(
 			'awea_expire_link',
 			[
-				'label'       => esc_html__( 'URL', 'awesome-widgets-elementor' ),
+				'label'       => esc_html__( 'Redirect URL', 'awesome-widgets-elementor' ),
 				'type'        => Controls_Manager::URL,
 				'dynamic'     => [ 'active' => true ],
 				'placeholder' => 'https://example.com',
@@ -110,12 +109,12 @@ class Widget_Awesome_Countdown extends Widget_Base {
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   CONTENT TAB: 2. UNITS
+		   CONTENT: 2. UNITS
 		   ========================================================================== */
 		$this->start_controls_section(
 			'awea_section_units',
 			[
-				'label' => esc_html__( 'Units', 'awesome-widgets-elementor' ),
+				'label' => esc_html__( 'Time Units', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
 			]
 		);
@@ -125,8 +124,8 @@ class Widget_Awesome_Countdown extends Widget_Base {
 			[
 				'label'        => esc_html__( 'Days', 'awesome-widgets-elementor' ),
 				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => esc_html__( 'Yes', 'awesome-widgets-elementor' ),
-				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
+				'label_on'     => esc_html__( 'Show', 'awesome-widgets-elementor' ),
+				'label_off'    => esc_html__( 'Hide', 'awesome-widgets-elementor' ),
 				'return_value' => 'yes',
 				'default'      => 'yes',
 			]
@@ -135,7 +134,7 @@ class Widget_Awesome_Countdown extends Widget_Base {
 		$this->add_control(
 			'awea_label_days',
 			[
-				'label'     => esc_html__( 'Label', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Days Label', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::TEXT,
 				'default'   => esc_html__( 'Days', 'awesome-widgets-elementor' ),
 				'dynamic'   => [ 'active' => true ],
@@ -148,8 +147,8 @@ class Widget_Awesome_Countdown extends Widget_Base {
 			[
 				'label'        => esc_html__( 'Hours', 'awesome-widgets-elementor' ),
 				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => esc_html__( 'Yes', 'awesome-widgets-elementor' ),
-				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
+				'label_on'     => esc_html__( 'Show', 'awesome-widgets-elementor' ),
+				'label_off'    => esc_html__( 'Hide', 'awesome-widgets-elementor' ),
 				'return_value' => 'yes',
 				'default'      => 'yes',
 				'separator'    => 'before',
@@ -159,7 +158,7 @@ class Widget_Awesome_Countdown extends Widget_Base {
 		$this->add_control(
 			'awea_label_hours',
 			[
-				'label'     => esc_html__( 'Label', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Hours Label', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::TEXT,
 				'default'   => esc_html__( 'Hours', 'awesome-widgets-elementor' ),
 				'dynamic'   => [ 'active' => true ],
@@ -172,8 +171,8 @@ class Widget_Awesome_Countdown extends Widget_Base {
 			[
 				'label'        => esc_html__( 'Minutes', 'awesome-widgets-elementor' ),
 				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => esc_html__( 'Yes', 'awesome-widgets-elementor' ),
-				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
+				'label_on'     => esc_html__( 'Show', 'awesome-widgets-elementor' ),
+				'label_off'    => esc_html__( 'Hide', 'awesome-widgets-elementor' ),
 				'return_value' => 'yes',
 				'default'      => 'yes',
 				'separator'    => 'before',
@@ -183,7 +182,7 @@ class Widget_Awesome_Countdown extends Widget_Base {
 		$this->add_control(
 			'awea_label_minutes',
 			[
-				'label'     => esc_html__( 'Label', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Minutes Label', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::TEXT,
 				'default'   => esc_html__( 'Mins', 'awesome-widgets-elementor' ),
 				'dynamic'   => [ 'active' => true ],
@@ -196,8 +195,8 @@ class Widget_Awesome_Countdown extends Widget_Base {
 			[
 				'label'        => esc_html__( 'Seconds', 'awesome-widgets-elementor' ),
 				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => esc_html__( 'Yes', 'awesome-widgets-elementor' ),
-				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
+				'label_on'     => esc_html__( 'Show', 'awesome-widgets-elementor' ),
+				'label_off'    => esc_html__( 'Hide', 'awesome-widgets-elementor' ),
 				'return_value' => 'yes',
 				'default'      => 'yes',
 				'separator'    => 'before',
@@ -207,7 +206,7 @@ class Widget_Awesome_Countdown extends Widget_Base {
 		$this->add_control(
 			'awea_label_seconds',
 			[
-				'label'     => esc_html__( 'Label', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Seconds Label', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::TEXT,
 				'default'   => esc_html__( 'Secs', 'awesome-widgets-elementor' ),
 				'dynamic'   => [ 'active' => true ],
@@ -218,7 +217,7 @@ class Widget_Awesome_Countdown extends Widget_Base {
 		$this->add_control(
 			'awea_show_separators',
 			[
-				'label'        => esc_html__( 'Separators', 'awesome-widgets-elementor' ),
+				'label'        => esc_html__( 'Show Separators', 'awesome-widgets-elementor' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'label_on'     => esc_html__( 'Yes', 'awesome-widgets-elementor' ),
 				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
@@ -228,13 +227,29 @@ class Widget_Awesome_Countdown extends Widget_Base {
 			]
 		);
 
+		$this->add_control(
+			'awea_sep_char',
+			[
+				'label'     => esc_html__( 'Separator Symbol', 'awesome-widgets-elementor' ),
+				'type'      => Controls_Manager::SELECT,
+				'default'   => ':',
+				'options'   => [
+					':' => esc_html__( 'Colon ( : )', 'awesome-widgets-elementor' ),
+					'/' => esc_html__( 'Slash ( / )', 'awesome-widgets-elementor' ),
+					'•' => esc_html__( 'Dot ( • )', 'awesome-widgets-elementor' ),
+					'—' => esc_html__( 'Dash ( — )', 'awesome-widgets-elementor' ),
+				],
+				'condition' => [ 'awea_show_separators' => 'yes' ],
+			]
+		);
+
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   STYLE TAB: 1. BOXES
+		   STYLE: 1. BOXES
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_section_style_cells',
+			'awea_style_cells',
 			[
 				'label' => esc_html__( 'Boxes', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
@@ -247,9 +262,18 @@ class Widget_Awesome_Countdown extends Widget_Base {
 				'label'     => esc_html__( 'Alignment', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::CHOOSE,
 				'options'   => [
-					'flex-start' => [ 'title' => esc_html__( 'Left', 'awesome-widgets-elementor' ), 'icon' => 'eicon-text-align-left' ],
-					'center'     => [ 'title' => esc_html__( 'Center', 'awesome-widgets-elementor' ), 'icon' => 'eicon-text-align-center' ],
-					'flex-end'   => [ 'title' => esc_html__( 'Right', 'awesome-widgets-elementor' ), 'icon' => 'eicon-text-align-right' ],
+					'flex-start' => [
+						'title' => esc_html__( 'Left', 'awesome-widgets-elementor' ),
+						'icon'  => 'eicon-text-align-left',
+					],
+					'center'     => [
+						'title' => esc_html__( 'Center', 'awesome-widgets-elementor' ),
+						'icon'  => 'eicon-text-align-center',
+					],
+					'flex-end'   => [
+						'title' => esc_html__( 'Right', 'awesome-widgets-elementor' ),
+						'icon'  => 'eicon-text-align-right',
+					],
 				],
 				'default'   => 'center',
 				'selectors' => [
@@ -258,13 +282,33 @@ class Widget_Awesome_Countdown extends Widget_Base {
 			]
 		);
 
+		$this->add_control(
+			'awea_cell_direction',
+			[
+				'label'     => esc_html__( 'Content Layout', 'awesome-widgets-elementor' ),
+				'type'      => Controls_Manager::SELECT,
+				'default'   => 'column',
+				'options'   => [
+					'column'         => esc_html__( 'Stacked (Digits Top)', 'awesome-widgets-elementor' ),
+					'column-reverse' => esc_html__( 'Stacked (Label Top)', 'awesome-widgets-elementor' ),
+					'row'            => esc_html__( 'Inline (Side by Side)', 'awesome-widgets-elementor' ),
+				],
+				'selectors' => [
+					'{{WRAPPER}} .awea-time-cell' => 'flex-direction: {{VALUE}};',
+				],
+			]
+		);
+
 		$this->add_responsive_control(
 			'awea_cells_gap',
 			[
-				'label'      => esc_html__( 'Spacing', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Spacing Between Boxes', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
-				'size_units' => [ 'px', 'em', 'rem' ],
-				'range'      => [ 'px' => [ 'min' => 0, 'max' => 50 ] ],
+				'size_units' => [ 'px', 'rem' ],
+				'range'      => [
+					'px'  => [ 'min' => 0, 'max' => 50 ],
+					'rem' => [ 'min' => 0, 'max' => 4 ],
+				],
 				'default'    => [ 'unit' => 'px', 'size' => 16 ],
 				'selectors'  => [
 					'{{WRAPPER}} .awea-timer-row' => 'gap: {{SIZE}}{{UNIT}};',
@@ -278,10 +322,30 @@ class Widget_Awesome_Countdown extends Widget_Base {
 				'label'      => esc_html__( 'Min Width', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px', '%' ],
-				'range'      => [ 'px' => [ 'min' => 60, 'max' => 250 ] ],
+				'range'      => [
+					'px' => [ 'min' => 60, 'max' => 280 ],
+					'%'  => [ 'min' => 15, 'max' => 50 ],
+				],
 				'default'    => [ 'unit' => 'px', 'size' => 120 ],
 				'selectors'  => [
 					'{{WRAPPER}} .awea-time-cell' => 'min-width: {{SIZE}}{{UNIT}};',
+				],
+			]
+		);
+
+		$this->add_responsive_control(
+			'awea_cell_max_width',
+			[
+				'label'      => esc_html__( 'Max Width', 'awesome-widgets-elementor' ),
+				'type'       => Controls_Manager::SLIDER,
+				'size_units' => [ 'px', '%' ],
+				'range'      => [
+					'px' => [ 'min' => 80, 'max' => 400 ],
+					'%'  => [ 'min' => 20, 'max' => 100 ],
+				],
+				'default'    => [ 'unit' => 'px', 'size' => 220 ],
+				'selectors'  => [
+					'{{WRAPPER}} .awea-time-cell' => 'max-width: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
@@ -291,8 +355,15 @@ class Widget_Awesome_Countdown extends Widget_Base {
 			[
 				'label'      => esc_html__( 'Padding', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
-				'size_units' => [ 'px', 'em', 'rem' ],
-				'default'    => [ 'top' => '28', 'right' => '20', 'bottom' => '24', 'left' => '20', 'unit' => 'px', 'isLinked' => false ],
+				'size_units' => [ 'px', 'rem' ],
+				'default'    => [
+					'top'      => '28',
+					'right'    => '20',
+					'bottom'   => '24',
+					'left'     => '20',
+					'unit'     => 'px',
+					'isLinked' => false,
+				],
 				'selectors'  => [
 					'{{WRAPPER}} .awea-time-cell' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
@@ -302,26 +373,32 @@ class Widget_Awesome_Countdown extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_cell_radius',
 			[
-				'label'      => esc_html__( 'Radius', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Border Radius', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
-				'size_units' => [ 'px', '%', 'rem' ],
-				'default'    => [ 'top' => '24', 'right' => '24', 'bottom' => '24', 'left' => '24', 'unit' => 'px', 'isLinked' => true ],
+				'size_units' => [ 'px', '%' ],
+				'default'    => [
+					'top'      => '20',
+					'right'    => '20',
+					'bottom'   => '20',
+					'left'     => '20',
+					'unit'     => 'px',
+					'isLinked' => true,
+				],
 				'selectors'  => [
 					'{{WRAPPER}} .awea-time-cell' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
 		);
 
-		$this->start_controls_tabs( 'awea_cell_state_tabs' );
+		$this->start_controls_tabs( 'awea_cell_tabs' );
 
-		// Normal
 		$this->start_controls_tab(
-			'awea_cell_tab_normal',
+			'awea_cell_normal',
 			[ 'label' => esc_html__( 'Normal', 'awesome-widgets-elementor' ) ]
 		);
 
 		$this->add_control(
-			'awea_cell_bg_color',
+			'awea_cell_bg',
 			[
 				'label'     => esc_html__( 'Background', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
@@ -335,8 +412,21 @@ class Widget_Awesome_Countdown extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Border::get_type(),
 			[
-				'name'     => 'awea_cell_border',
-				'selector' => '{{WRAPPER}} .awea-time-cell',
+				'name'           => 'awea_cell_border',
+				'selector'       => '{{WRAPPER}} .awea-time-cell',
+				'fields_options' => [
+					'border' => [ 'default' => 'solid' ],
+					'width'  => [
+						'default' => [
+							'top'      => '1',
+							'right'    => '1',
+							'bottom'   => '1',
+							'left'     => '1',
+							'isLinked' => true,
+						],
+					],
+					'color'  => [ 'default' => '#e2e8f0' ],
+				],
 			]
 		);
 
@@ -350,14 +440,13 @@ class Widget_Awesome_Countdown extends Widget_Base {
 
 		$this->end_controls_tab();
 
-		// Hover
 		$this->start_controls_tab(
-			'awea_cell_tab_hover',
+			'awea_cell_hover',
 			[ 'label' => esc_html__( 'Hover', 'awesome-widgets-elementor' ) ]
 		);
 
 		$this->add_control(
-			'awea_cell_bg_color_hover',
+			'awea_cell_bg_hover',
 			[
 				'label'     => esc_html__( 'Background', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
@@ -373,9 +462,7 @@ class Widget_Awesome_Countdown extends Widget_Base {
 			[
 				'label'     => esc_html__( 'Border Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
-				'global'    => [
-					'default' => Global_Colors::COLOR_PRIMARY,
-				],
+				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
 				'selectors' => [
 					'{{WRAPPER}} .awea-time-cell:hover' => 'border-color: {{VALUE}};',
 				],
@@ -396,10 +483,10 @@ class Widget_Awesome_Countdown extends Widget_Base {
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   STYLE TAB: 2. DIGITS
+		   STYLE: 2. DIGITS
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_section_style_digits',
+			'awea_style_digits',
 			[
 				'label' => esc_html__( 'Digits', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
@@ -411,9 +498,7 @@ class Widget_Awesome_Countdown extends Widget_Base {
 			[
 				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
-				'global'    => [
-					'default' => Global_Colors::COLOR_PRIMARY,
-				],
+				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
 				'selectors' => [
 					'{{WRAPPER}} .awea-digit' => 'color: {{VALUE}};',
 				],
@@ -423,24 +508,22 @@ class Widget_Awesome_Countdown extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Typography::get_type(),
 			[
-				'name'     => 'awea_digit_typography',
+				'name'     => 'awea_digit_typo',
 				'selector' => '{{WRAPPER}} .awea-digit',
-				'global'   => [
-					'default' => Global_Typography::TYPOGRAPHY_PRIMARY,
-				],
+				'global'   => [ 'default' => Global_Typography::TYPOGRAPHY_PRIMARY ],
 			]
 		);
 
 		$this->add_responsive_control(
-			'awea_digit_margin_bottom',
+			'awea_digit_space',
 			[
-				'label'      => esc_html__( 'Spacing', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Digits / Label Gap', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
-				'size_units' => [ 'px', 'rem' ],
+				'size_units' => [ 'px' ],
 				'range'      => [ 'px' => [ 'min' => 0, 'max' => 30 ] ],
-				'default'    => [ 'unit' => 'px', 'size' => 8 ],
+				'default'    => [ 'unit' => 'px', 'size' => 6 ],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-digit' => 'margin-bottom: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .awea-time-cell' => 'gap: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
@@ -448,10 +531,10 @@ class Widget_Awesome_Countdown extends Widget_Base {
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   STYLE TAB: 3. LABELS
+		   STYLE: 3. LABELS
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_section_style_labels',
+			'awea_style_labels',
 			[
 				'label' => esc_html__( 'Labels', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
@@ -463,9 +546,7 @@ class Widget_Awesome_Countdown extends Widget_Base {
 			[
 				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
-				'global'    => [
-					'default' => Global_Colors::COLOR_TEXT,
-				],
+				'global'    => [ 'default' => Global_Colors::COLOR_TEXT ],
 				'selectors' => [
 					'{{WRAPPER}} .awea-unit' => 'color: {{VALUE}};',
 				],
@@ -475,21 +556,19 @@ class Widget_Awesome_Countdown extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Typography::get_type(),
 			[
-				'name'     => 'awea_unit_typography',
+				'name'     => 'awea_unit_typo',
 				'selector' => '{{WRAPPER}} .awea-unit',
-				'global'   => [
-					'default' => Global_Typography::TYPOGRAPHY_SECONDARY,
-				],
+				'global'   => [ 'default' => Global_Typography::TYPOGRAPHY_SECONDARY ],
 			]
 		);
 
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   STYLE TAB: 4. SEPARATORS (CONDITIONAL)
+		   STYLE: 4. SEPARATORS
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_section_style_separators',
+			'awea_style_separators',
 			[
 				'label'     => esc_html__( 'Separators', 'awesome-widgets-elementor' ),
 				'tab'       => Controls_Manager::TAB_STYLE,
@@ -502,7 +581,7 @@ class Widget_Awesome_Countdown extends Widget_Base {
 			[
 				'label'      => esc_html__( 'Size', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
-				'size_units' => [ 'px', 'rem' ],
+				'size_units' => [ 'px' ],
 				'range'      => [ 'px' => [ 'min' => 14, 'max' => 60 ] ],
 				'default'    => [ 'unit' => 'px', 'size' => 28 ],
 				'selectors'  => [
@@ -516,9 +595,7 @@ class Widget_Awesome_Countdown extends Widget_Base {
 			[
 				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
-				'global'    => [
-					'default' => Global_Colors::COLOR_PRIMARY,
-				],
+				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
 				'selectors' => [
 					'{{WRAPPER}} .awea-colon-sep' => 'color: {{VALUE}};',
 				],
@@ -528,12 +605,12 @@ class Widget_Awesome_Countdown extends Widget_Base {
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   STYLE TAB: 5. EXPIRED (CONDITIONAL)
+		   STYLE: 5. EXPIRED
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_section_style_expired',
+			'awea_style_expired',
 			[
-				'label'     => esc_html__( 'Expired', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Expired Notice', 'awesome-widgets-elementor' ),
 				'tab'       => Controls_Manager::TAB_STYLE,
 				'condition' => [ 'awea_expire_type' => 'message' ],
 			]
@@ -544,7 +621,15 @@ class Widget_Awesome_Countdown extends Widget_Base {
 			[
 				'label'      => esc_html__( 'Padding', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
-				'size_units' => [ 'px', 'em', 'rem' ],
+				'size_units' => [ 'px', 'rem' ],
+				'default'    => [
+					'top'      => '24',
+					'right'    => '24',
+					'bottom'   => '24',
+					'left'     => '24',
+					'unit'     => 'px',
+					'isLinked' => true,
+				],
 				'selectors'  => [
 					'{{WRAPPER}} .awea-countdown-expired' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
@@ -554,11 +639,9 @@ class Widget_Awesome_Countdown extends Widget_Base {
 		$this->add_control(
 			'awea_expired_color',
 			[
-				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Text Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
-				'global'    => [
-					'default' => Global_Colors::COLOR_PRIMARY,
-				],
+				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
 				'selectors' => [
 					'{{WRAPPER}} .awea-countdown-expired' => 'color: {{VALUE}};',
 				],
@@ -570,6 +653,7 @@ class Widget_Awesome_Countdown extends Widget_Base {
 			[
 				'label'     => esc_html__( 'Background', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
+				'default'   => '#f8fafc',
 				'selectors' => [
 					'{{WRAPPER}} .awea-countdown-expired' => 'background-color: {{VALUE}};',
 				],
@@ -579,20 +663,34 @@ class Widget_Awesome_Countdown extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Typography::get_type(),
 			[
-				'name'     => 'awea_expired_typography',
+				'name'     => 'awea_expired_typo',
 				'selector' => '{{WRAPPER}} .awea-countdown-expired',
-				'global'   => [
-					'default' => Global_Typography::TYPOGRAPHY_PRIMARY,
-				],
+				'global'   => [ 'default' => Global_Typography::TYPOGRAPHY_PRIMARY ],
+			]
+		);
+
+		$this->add_group_control(
+			Group_Control_Border::get_type(),
+			[
+				'name'     => 'awea_expired_border',
+				'selector' => '{{WRAPPER}} .awea-countdown-expired',
 			]
 		);
 
 		$this->add_responsive_control(
 			'awea_expired_radius',
 			[
-				'label'      => esc_html__( 'Radius', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Border Radius', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
+				'default'    => [
+					'top'      => '16',
+					'right'    => '16',
+					'bottom'   => '16',
+					'left'     => '16',
+					'unit'     => 'px',
+					'isLinked' => true,
+				],
 				'selectors'  => [
 					'{{WRAPPER}} .awea-countdown-expired' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
@@ -607,26 +705,26 @@ class Widget_Awesome_Countdown extends Widget_Base {
 		$due_date_raw = ! empty( $settings['awea_due_date'] ) ? $settings['awea_due_date'] : '';
 		$widget_id    = $this->get_id();
 
-		// Convert Elementor input string to target timestamp in site's timezone
 		$site_timezone = wp_timezone();
 		$datetime      = date_create( $due_date_raw, $site_timezone );
 		$target_time   = $datetime ? $datetime->getTimestamp() : strtotime( '+1 month' );
 		$current_time  = (int) wp_date( 'U' );
 		$diff          = max( 0, $target_time - $current_time );
 
-		// Pre-compute server-side numbers to prevent 00:00 flash
-		$days    = floor( $diff / 86400 );
-		$hours   = floor( ( $diff % 86400 ) / 3600 );
-		$minutes = floor( ( $diff % 3600 ) / 60 );
-		$seconds = floor( $diff % 60 );
+		$days    = (int) floor( $diff / 86400 );
+		$hours   = (int) floor( ( $diff % 86400 ) / 3600 );
+		$minutes = (int) floor( ( $diff % 3600 ) / 60 );
+		$seconds = (int) floor( $diff % 60 );
 
 		$show_days    = 'yes' === ( $settings['awea_show_days'] ?? 'no' );
 		$show_hours   = 'yes' === ( $settings['awea_show_hours'] ?? 'no' );
 		$show_mins    = 'yes' === ( $settings['awea_show_minutes'] ?? 'no' );
 		$show_secs    = 'yes' === ( $settings['awea_show_seconds'] ?? 'no' );
 		$show_seps    = 'yes' === ( $settings['awea_show_separators'] ?? 'no' );
+		$sep_char     = ! empty( $settings['awea_sep_char'] ) ? $settings['awea_sep_char'] : ':';
 		$expire_type  = $settings['awea_expire_type'] ?? 'message';
-		$redirect_url = $settings['awea_expire_link']['url'] ?? '';
+		$raw_redirect = $settings['awea_expire_link']['url'] ?? '';
+		$redirect_url = $raw_redirect ? esc_url_raw( $raw_redirect, [ 'http', 'https' ] ) : '';
 
 		$active_units = [];
 		if ( $show_days ) {
@@ -643,7 +741,7 @@ class Widget_Awesome_Countdown extends Widget_Base {
 		}
 		$last_unit = end( $active_units );
 		?>
-		<div class="awea-countdown-wrapper"
+		<div class="awea-countdown-wrap"
 			 id="awea-countdown-<?php echo esc_attr( $widget_id ); ?>"
 			 data-target="<?php echo esc_attr( (string) $target_time ); ?>"
 			 data-server="<?php echo esc_attr( (string) $current_time ); ?>"
@@ -651,41 +749,41 @@ class Widget_Awesome_Countdown extends Widget_Base {
 			 data-redirect="<?php echo esc_url( $redirect_url ); ?>">
 
 			<div class="awea-timer-row <?php echo ( $diff <= 0 && 'message' === $expire_type ) ? 'awea-is-hidden' : ''; ?>">
-				
+
 				<?php if ( $show_days ) : ?>
 					<div class="awea-time-cell awea-unit-days">
 						<span class="awea-digit awea-val-days"><?php echo esc_html( sprintf( '%02d', $days ) ); ?></span>
-						<span class="awea-unit"><?php echo esc_html( $settings['awea_label_days'] ); ?></span>
+						<span class="awea-unit"><?php echo esc_html( $settings['awea_label_days'] ?? '' ); ?></span>
 					</div>
 					<?php if ( $show_seps && 'days' !== $last_unit ) : ?>
-						<span class="awea-colon-sep" aria-hidden="true">:</span>
+						<span class="awea-colon-sep" aria-hidden="true"><?php echo esc_html( $sep_char ); ?></span>
 					<?php endif; ?>
 				<?php endif; ?>
 
 				<?php if ( $show_hours ) : ?>
 					<div class="awea-time-cell awea-unit-hours">
 						<span class="awea-digit awea-val-hours"><?php echo esc_html( sprintf( '%02d', $hours ) ); ?></span>
-						<span class="awea-unit"><?php echo esc_html( $settings['awea_label_hours'] ); ?></span>
+						<span class="awea-unit"><?php echo esc_html( $settings['awea_label_hours'] ?? '' ); ?></span>
 					</div>
 					<?php if ( $show_seps && 'hours' !== $last_unit ) : ?>
-						<span class="awea-colon-sep" aria-hidden="true">:</span>
+						<span class="awea-colon-sep" aria-hidden="true"><?php echo esc_html( $sep_char ); ?></span>
 					<?php endif; ?>
 				<?php endif; ?>
 
 				<?php if ( $show_mins ) : ?>
 					<div class="awea-time-cell awea-unit-minutes">
 						<span class="awea-digit awea-val-minutes"><?php echo esc_html( sprintf( '%02d', $minutes ) ); ?></span>
-						<span class="awea-unit"><?php echo esc_html( $settings['awea_label_minutes'] ); ?></span>
+						<span class="awea-unit"><?php echo esc_html( $settings['awea_label_minutes'] ?? '' ); ?></span>
 					</div>
 					<?php if ( $show_seps && 'minutes' !== $last_unit ) : ?>
-						<span class="awea-colon-sep" aria-hidden="true">:</span>
+						<span class="awea-colon-sep" aria-hidden="true"><?php echo esc_html( $sep_char ); ?></span>
 					<?php endif; ?>
 				<?php endif; ?>
 
 				<?php if ( $show_secs ) : ?>
 					<div class="awea-time-cell awea-unit-seconds">
 						<span class="awea-digit awea-val-seconds"><?php echo esc_html( sprintf( '%02d', $seconds ) ); ?></span>
-						<span class="awea-unit"><?php echo esc_html( $settings['awea_label_seconds'] ); ?></span>
+						<span class="awea-unit"><?php echo esc_html( $settings['awea_label_seconds'] ?? '' ); ?></span>
 					</div>
 				<?php endif; ?>
 
@@ -693,7 +791,7 @@ class Widget_Awesome_Countdown extends Widget_Base {
 
 			<?php if ( 'message' === $expire_type ) : ?>
 				<div class="awea-countdown-expired <?php echo ( $diff <= 0 ) ? 'awea-is-visible' : ''; ?>" aria-live="polite">
-					<?php echo esc_html( $settings['awea_expire_message'] ); ?>
+					<?php echo esc_html( $settings['awea_expire_message'] ?? '' ); ?>
 				</div>
 			<?php endif; ?>
 
@@ -703,8 +801,8 @@ class Widget_Awesome_Countdown extends Widget_Base {
 		(function() {
 			function initCountdown() {
 				var el = document.getElementById('awea-countdown-<?php echo esc_js( $widget_id ); ?>');
-				if (!el || el.__aweaBound) return;
-				el.__aweaBound = true;
+				if (!el || el.dataset.aweaBound === '1') return;
+				el.dataset.aweaBound = '1';
 
 				var targetTs    = parseInt(el.getAttribute('data-target'), 10) || 0;
 				var serverTs    = parseInt(el.getAttribute('data-server'), 10) || Math.floor(Date.now() / 1000);
@@ -729,11 +827,19 @@ class Widget_Awesome_Countdown extends Widget_Base {
 						if (expiredBox) expiredBox.classList.add('awea-is-visible');
 					} else if (expireType === 'redirect' && redirectUrl) {
 						var isEditor = document.body.classList.contains('elementor-editor-active');
-						if (!isEditor) {
-							window.location.href = redirectUrl;
+						if (!isEditor && /^https?:\/\//i.test(redirectUrl)) {
+							window.location.assign(redirectUrl);
 						}
 					}
 				}
+
+				var interval = setInterval(function() {
+					if (!document.body.contains(el)) {
+						clearInterval(interval);
+						return;
+					}
+					update();
+				}, 1000);
 
 				function update() {
 					var nowTs = Math.floor(Date.now() / 1000) + clockOffset;
@@ -755,7 +861,6 @@ class Widget_Awesome_Countdown extends Widget_Base {
 					}
 				}
 
-				var interval = setInterval(update, 1000);
 				update();
 			}
 
