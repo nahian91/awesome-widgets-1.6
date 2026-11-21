@@ -1,14 +1,14 @@
 /* ==========================================================================
-   Awesome Image Box Widget
+   Awesome Image Box Widget (v2.0.0)
    ========================================================================== */
 
-.awea-ib-grid {
-	--awea-ib-primary: var(--e-global-color-primary, #4f46e5);
-	--awea-ib-heading: #0f172a;
-	--awea-ib-text: #475569;
-	--awea-ib-border: #e2e8f0;
-	--awea-ib-media-w: 42%;
-	--awea-ib-btn-bg: var(--awea-ib-heading);
+.awea_image_box_grid {
+	--awea_image_box_primary: var(--e-global-color-primary, #4f46e5);
+	--awea_image_box_heading: #0f172a;
+	--awea_image_box_text: #475569;
+	--awea_image_box_border: #e2e8f0;
+	--awea_image_box_media_w: 42%;
+	--awea_image_box_btn_bg: var(--awea_image_box_heading);
 
 	display: grid;
 	grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -18,13 +18,13 @@
 	align-items: stretch;
 }
 
-.awea-ib-grid *,
-.awea-ib-grid *::before,
-.awea-ib-grid *::after {
+.awea_image_box_grid *,
+.awea_image_box_grid *::before,
+.awea_image_box_grid *::after {
 	box-sizing: border-box;
 }
 
-.awea-ib-card {
+.awea_image_box_card {
 	position: relative;
 	display: flex;
 	flex-direction: column;
@@ -32,7 +32,7 @@
 	height: 100%;
 	width: 100%;
 	background-color: #ffffff;
-	border: 1px solid var(--awea-ib-border);
+	border: 1px solid var(--awea_image_box_border);
 	border-radius: 24px;
 	padding: 22px;
 	overflow: hidden;
@@ -43,20 +43,20 @@
 		transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.awea-ib-card:hover {
-	border-color: var(--awea-ib-primary);
+.awea_image_box_card:hover {
+	border-color: var(--awea_image_box_primary);
 }
 
-.awea-ib-motion-yes .awea-ib-card:hover {
+.awea_image_box_motion_yes .awea_image_box_card:hover {
 	transform: translateY(-4px);
 }
 
 /* Whole-Card Overlay Link */
-.awea-ib-card-clickable {
+.awea_image_box_card_clickable {
 	cursor: pointer;
 }
 
-.awea-ib-cover-link {
+.awea_image_box_cover_link {
 	position: absolute;
 	inset: 0;
 	z-index: 4;
@@ -64,32 +64,32 @@
 	border-radius: inherit;
 }
 
-.awea-ib-cover-link:focus-visible {
-	outline: 2px solid var(--awea-ib-primary);
+.awea_image_box_cover_link:focus-visible {
+	outline: 2px solid var(--awea_image_box_primary);
 	outline-offset: 2px;
 }
 
 /* Horizontal Image Side Layouts (Left / Right) */
-.awea-ib-pos-left .awea-ib-card {
+.awea_image_box_pos_left .awea_image_box_card {
 	flex-direction: row;
 	align-items: stretch;
 }
 
-.awea-ib-pos-right .awea-ib-card {
+.awea_image_box_pos_right .awea_image_box_card {
 	flex-direction: row-reverse;
 	align-items: stretch;
 }
 
-.awea-ib-pos-left .awea-ib-media,
-.awea-ib-pos-right .awea-ib-media {
-	width: var(--awea-ib-media-w, 42%);
+.awea_image_box_pos_left .awea_image_box_media,
+.awea_image_box_pos_right .awea_image_box_media {
+	width: var(--awea_image_box_media_w, 42%);
 	height: auto;
 	align-self: stretch;
 	flex-shrink: 0;
 }
 
 /* Media Frame */
-.awea-ib-media {
+.awea_image_box_media {
 	position: relative;
 	width: 100%;
 	aspect-ratio: 16 / 10;
@@ -100,7 +100,7 @@
 	flex-shrink: 0;
 }
 
-.awea-ib-media img {
+.awea_image_box_media img {
 	width: 100%;
 	height: 100%;
 	object-fit: cover;
@@ -108,15 +108,15 @@
 	transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.awea-ib-motion-yes .awea-ib-card:hover .awea-ib-media img {
+.awea_image_box_motion_yes .awea_image_box_card:hover .awea_image_box_media img {
 	transform: scale(1.04);
 }
 
 /* Frosted Pill Badge */
-.awea-ib-badge {
+.awea_image_box_badge {
 	position: absolute;
 	top: 12px;
-	left: 12px;
+	inset-inline-start: 12px;
 	z-index: 2;
 	padding: 5px 12px;
 	border-radius: 100px;
@@ -134,63 +134,65 @@
 }
 
 /* Content Body */
-.awea-ib-body {
+.awea_image_box_body {
 	display: flex;
 	flex-direction: column;
 	flex: 1 1 auto;
 	min-width: 0;
 }
 
-.awea-ib-title {
+.awea_image_box_title {
 	margin: 0 0 10px 0;
 	font-size: 1.28rem;
 	font-weight: 800;
-	color: var(--awea-ib-heading);
+	color: var(--awea_image_box_heading);
 	line-height: 1.3;
 	letter-spacing: -0.02em;
 	word-break: break-word;
 	transition: color 0.25s ease;
 }
 
-.awea-ib-title a {
+.awea_image_box_title a {
 	color: inherit;
 	text-decoration: none;
 	transition: color 0.25s ease;
 }
 
-.awea-ib-title a:focus-visible {
-	outline: 2px solid var(--awea-ib-primary);
+.awea_image_box_title a:focus-visible {
+	outline: 2px solid var(--awea_image_box_primary);
 	outline-offset: 2px;
 	border-radius: 4px;
 }
 
-.awea-ib-card:hover .awea-ib-title,
-.awea-ib-card:hover .awea-ib-title a {
-	color: var(--awea-ib-primary);
+.awea_image_box_card:hover .awea_image_box_title,
+.awea_image_box_card:hover .awea_image_box_title a {
+	color: var(--awea_image_box_primary);
 }
 
-.awea-ib-desc {
+.awea_image_box_desc {
 	margin: 0 0 22px 0;
 	font-size: 0.95rem;
 	line-height: 1.62;
-	color: var(--awea-ib-text);
+	color: var(--awea_image_box_text);
 	word-break: break-word;
 }
 
 /* Bottom-Anchored Action Button */
-.awea-ib-btn-wrap {
+.awea_image_box_btn_wrap {
 	width: 100%;
 	margin-top: auto;
+	display: flex;
+	justify-content: flex-start;
 }
 
-.awea-ib-btn {
+.awea_image_box_btn {
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
 	gap: 8px;
 	padding: 11px 20px;
 	border-radius: 10px;
-	background-color: var(--awea-item-btn-bg, var(--awea-ib-btn-bg));
+	background-color: var(--awea_image_box_item_btn_bg, var(--awea_image_box_btn_bg));
 	color: #ffffff;
 	border: 1px solid transparent;
 	font-size: 0.88rem;
@@ -201,21 +203,22 @@
 	transition:
 		background-color 0.25s ease,
 		border-color 0.25s ease,
-		color 0.25s ease;
+		color 0.25s ease,
+		box-shadow 0.25s ease;
 }
 
-.awea-ib-btn:focus-visible {
-	outline: 2px solid var(--awea-ib-primary);
+.awea_image_box_btn:focus-visible {
+	outline: 2px solid var(--awea_image_box_primary);
 	outline-offset: 2px;
 }
 
-.awea-ib-btn:hover,
-.awea-ib-card:hover .awea-ib-btn {
-	background-color: var(--awea-ib-primary);
+.awea_image_box_btn:hover,
+.awea_image_box_card:hover .awea_image_box_btn {
+	background-color: var(--awea_image_box_primary);
 	color: #ffffff;
 }
 
-.awea-ib-ico {
+.awea_image_box_ico {
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
@@ -224,24 +227,34 @@
 	transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.awea-ib-btn:hover .awea-ib-ico-right,
-.awea-ib-card:hover .awea-ib-ico-right {
+.awea_image_box_btn:hover .awea_image_box_ico_right,
+.awea_image_box_card:hover .awea_image_box_ico_right {
 	transform: translateX(4px);
 }
 
-.awea-ib-btn:hover .awea-ib-ico-left,
-.awea-ib-card:hover .awea-ib-ico-left {
+.awea_image_box_btn:hover .awea_image_box_ico_left,
+.awea_image_box_card:hover .awea_image_box_ico_left {
 	transform: translateX(-4px);
 }
 
-.awea-ib-ico svg {
+[dir="rtl"] .awea_image_box_btn:hover .awea_image_box_ico_right,
+[dir="rtl"] .awea_image_box_card:hover .awea_image_box_ico_right {
+	transform: translateX(-4px);
+}
+
+[dir="rtl"] .awea_image_box_btn:hover .awea_image_box_ico_left,
+[dir="rtl"] .awea_image_box_card:hover .awea_image_box_ico_left {
+	transform: translateX(4px);
+}
+
+.awea_image_box_ico svg {
 	width: 12px;
 	height: 12px;
 	fill: currentColor;
 	display: block;
 }
 
-.awea-ib-ico i {
+.awea_image_box_ico i {
 	font-size: 12px;
 	line-height: 1;
 }
@@ -250,46 +263,46 @@
    Accessibility & Responsive
    -------------------------------------------------------------------------- */
 @media (prefers-reduced-motion: reduce) {
-	.awea-ib-card,
-	.awea-ib-media img,
-	.awea-ib-ico {
+	.awea_image_box_card,
+	.awea_image_box_media img,
+	.awea_image_box_ico {
 		transition: none !important;
 		transform: none !important;
 	}
 }
 
 @media (max-width: 768px) {
-	.awea-ib-pos-left .awea-ib-card,
-	.awea-ib-pos-right .awea-ib-card {
+	.awea_image_box_pos_left .awea_image_box_card,
+	.awea_image_box_pos_right .awea_image_box_card {
 		flex-direction: column;
 	}
 
-	.awea-ib-pos-left .awea-ib-media,
-	.awea-ib-pos-right .awea-ib-media {
+	.awea_image_box_pos_left .awea_image_box_media,
+	.awea_image_box_pos_right .awea_image_box_media {
 		width: 100%;
 		min-height: auto;
 	}
 
-	.awea-ib-card {
+	.awea_image_box_card {
 		padding: 18px;
 		border-radius: 18px;
 		gap: 16px;
 	}
 
-	.awea-ib-media {
+	.awea_image_box_media {
 		border-radius: 12px;
 	}
 
-	.awea-ib-title {
+	.awea_image_box_title {
 		font-size: 1.15rem;
 	}
 
-	.awea-ib-desc {
+	.awea_image_box_desc {
 		font-size: 0.9rem;
 		margin-bottom: 18px;
 	}
 
-	.awea-ib-btn {
+	.awea_image_box_btn {
 		width: 100%;
 	}
 }

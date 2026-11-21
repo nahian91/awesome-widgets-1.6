@@ -1,8 +1,8 @@
 /* ==========================================================================
-   AWEA Team — Zero-Shadow Architectural Repeater Grid
+   Awesome Team Studio Widget (v2.0.0)
    ========================================================================== */
 
-.awea-tm-grid {
+.awea_team_grid {
 	display: grid;
 	grid-template-columns: repeat(3, minmax(0, 1fr));
 	gap: 24px;
@@ -11,7 +11,7 @@
 	align-items: stretch;
 }
 
-.awea-tm-card {
+.awea_team_card {
 	position: relative;
 	display: flex;
 	flex-direction: column;
@@ -29,13 +29,13 @@
 		border-color 0.25s ease;
 }
 
-.awea-tm-card:hover {
+.awea_team_card:hover {
 	border-color: var(--e-global-color-primary, #4f46e5);
 	box-shadow: none;
 }
 
 /* 1. Photo Canvas */
-.awea-tm-media {
+.awea_team_media {
 	position: relative;
 	width: 100%;
 	aspect-ratio: 4 / 5;
@@ -45,18 +45,18 @@
 	flex-shrink: 0;
 }
 
-.awea-tm-media img {
+.awea_team_media img {
 	width: 100%;
 	height: 100%;
 	object-fit: cover;
 	display: block;
 }
 
-/* Department Pill Badge */
-.awea-tm-badge {
+/* Department Pill Badge (RTL Safe) */
+.awea_team_badge {
 	position: absolute;
 	top: 12px;
-	left: 12px;
+	inset-inline-start: 12px;
 	z-index: 2;
 	padding: 5px 12px;
 	border-radius: 100px;
@@ -76,7 +76,7 @@
 /* ==========================================================================
    MODE 1: Glass Overlay Card (Default)
    ========================================================================== */
-.awea-tm-style-overlay .awea-tm-scrim {
+.awea_team_style_overlay .awea_team_scrim {
 	position: absolute;
 	inset: 0;
 	background: linear-gradient(180deg, rgba(15, 23, 42, 0) 42%, rgba(15, 23, 42, 0.86) 100%);
@@ -84,10 +84,10 @@
 	z-index: 1;
 }
 
-.awea-tm-style-overlay .awea-tm-panel {
+.awea_team_style_overlay .awea_team_panel {
 	position: absolute;
-	left: 22px;
-	right: 22px;
+	inset-inline-start: 22px;
+	inset-inline-end: 22px;
 	bottom: 22px;
 	padding: 18px;
 	border-radius: 18px;
@@ -104,7 +104,7 @@
 		border-color 0.25s ease;
 }
 
-.awea-tm-style-overlay .awea-tm-name {
+.awea_team_style_overlay .awea_team_name {
 	color: #ffffff;
 	font-size: 1.22rem;
 	font-weight: 800;
@@ -113,7 +113,7 @@
 	letter-spacing: -0.02em;
 }
 
-.awea-tm-style-overlay .awea-tm-role {
+.awea_team_style_overlay .awea_team_role {
 	display: block;
 	color: #93c5fd;
 	font-size: 0.74rem;
@@ -123,7 +123,7 @@
 	margin-bottom: 8px;
 }
 
-.awea-tm-style-overlay .awea-tm-bio {
+.awea_team_style_overlay .awea_team_bio {
 	color: rgba(255, 255, 255, 0.78);
 	font-size: 0.86rem;
 	line-height: 1.5;
@@ -134,7 +134,7 @@
 	overflow: hidden;
 }
 
-.awea-tm-style-overlay .awea-tm-socials {
+.awea_team_style_overlay .awea_team_socials {
 	max-height: 0;
 	opacity: 0;
 	visibility: hidden;
@@ -147,9 +147,9 @@
 		visibility 0s linear 0.35s;
 }
 
-.awea-tm-style-overlay .awea-tm-card:hover .awea-tm-socials,
-.awea-tm-style-overlay .awea-tm-card:focus-within .awea-tm-socials,
-.awea-tm-style-overlay.awea-tm-dock-open-yes .awea-tm-socials {
+.awea_team_style_overlay .awea_team_card:hover .awea_team_socials,
+.awea_team_style_overlay .awea_team_card:focus-within .awea_team_socials,
+.awea_team_style_overlay.awea_team_dock_open_yes .awea_team_socials {
 	max-height: 64px;
 	opacity: 1;
 	visibility: visible;
@@ -161,7 +161,7 @@
 		visibility 0s;
 }
 
-.awea-tm-style-overlay .awea-tm-soc-btn {
+.awea_team_style_overlay .awea_team_soc_btn {
 	background-color: rgba(255, 255, 255, 0.1);
 	border-color: rgba(255, 255, 255, 0.18);
 	color: #ffffff;
@@ -170,20 +170,20 @@
 /* ==========================================================================
    MODE 2: Editorial Card (Clean Light Surface Body Below Photo)
    ========================================================================== */
-.awea-tm-style-editorial .awea-tm-scrim {
+.awea_team_style_editorial .awea_team_scrim {
 	display: none;
 }
 
-.awea-tm-style-editorial .awea-tm-panel {
+.awea_team_style_editorial .awea_team_panel {
 	display: flex;
 	flex-direction: column;
 	flex: 1 1 auto;
 	padding: 20px 10px 10px 10px;
-	text-align: left;
+	text-align: start;
 	box-sizing: border-box;
 }
 
-.awea-tm-style-editorial .awea-tm-name {
+.awea_team_style_editorial .awea_team_name {
 	color: #0f172a;
 	font-size: 1.24rem;
 	font-weight: 800;
@@ -192,7 +192,7 @@
 	letter-spacing: -0.02em;
 }
 
-.awea-tm-style-editorial .awea-tm-role {
+.awea_team_style_editorial .awea_team_role {
 	display: block;
 	color: var(--e-global-color-primary, #4f46e5);
 	font-size: 0.76rem;
@@ -202,19 +202,19 @@
 	margin-bottom: 10px;
 }
 
-.awea-tm-style-editorial .awea-tm-bio {
+.awea_team_style_editorial .awea_team_bio {
 	color: #475569;
 	font-size: 0.92rem;
 	line-height: 1.6;
 	margin: 0 0 18px 0;
 }
 
-.awea-tm-style-editorial .awea-tm-socials {
+.awea_team_style_editorial .awea_team_socials {
 	justify-content: flex-start;
 	margin-top: auto;
 }
 
-.awea-tm-style-editorial .awea-tm-soc-btn {
+.awea_team_style_editorial .awea_team_soc_btn {
 	background-color: #f1f5f9;
 	border-color: #e2e8f0;
 	color: #0f172a;
@@ -223,14 +223,14 @@
 /* ==========================================================================
    Shared Social Buttons
    ========================================================================== */
-.awea-tm-socials {
+.awea_team_socials {
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	gap: 8px;
 }
 
-.awea-tm-soc-btn {
+.awea_team_soc_btn {
 	width: 36px;
 	height: 36px;
 	border-radius: 10px;
@@ -248,13 +248,13 @@
 		color 0.25s ease;
 }
 
-.awea-tm-soc-btn:focus-visible {
+.awea_team_soc_btn:focus-visible {
 	outline: 2px solid var(--e-global-color-primary, #4f46e5);
 	outline-offset: 2px;
 }
 
-.awea-tm-soc-btn i,
-.awea-tm-soc-btn svg {
+.awea_team_soc_btn i,
+.awea_team_soc_btn svg {
 	width: 14px;
 	height: 14px;
 	font-size: 14px;
@@ -263,8 +263,8 @@
 	line-height: 1;
 }
 
-.awea-tm-soc-btn:hover,
-.awea-tm-soc-btn:focus-visible {
+.awea_team_soc_btn:hover,
+.awea_team_soc_btn:focus-visible {
 	background-color: var(--e-global-color-primary, #4f46e5);
 	border-color: var(--e-global-color-primary, #4f46e5);
 	color: #ffffff;
@@ -272,24 +272,24 @@
 
 /* Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
-	.awea-tm-card,
-	.awea-tm-panel,
-	.awea-tm-socials,
-	.awea-tm-soc-btn {
+	.awea_team_card,
+	.awea_team_panel,
+	.awea_team_socials,
+	.awea_team_soc_btn {
 		transition: none !important;
 	}
 }
 
 /* Mobile (<= 767px) */
 @media (max-width: 767px) {
-	.awea-tm-style-overlay .awea-tm-panel {
-		left: 18px;
-		right: 18px;
+	.awea_team_style_overlay .awea_team_panel {
+		inset-inline-start: 18px;
+		inset-inline-end: 18px;
 		bottom: 18px;
 		padding: 14px;
 	}
 
-	.awea-tm-style-overlay .awea-tm-socials {
+	.awea_team_style_overlay .awea_team_socials {
 		max-height: 64px !important;
 		opacity: 1 !important;
 		visibility: visible !important;

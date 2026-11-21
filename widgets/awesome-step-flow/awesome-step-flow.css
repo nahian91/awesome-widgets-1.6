@@ -1,17 +1,17 @@
 /* ==========================================================================
-   Awesome Step Flow Widget
+   Awesome Step Flow Widget (v2.0.0)
    ========================================================================== */
 
-.awea-sf-wrap {
-	--awea-sf-primary: var(--e-global-color-primary, #4f46e5);
-	--awea-sf-heading: #0f172a;
-	--awea-sf-text: #475569;
-	--awea-sf-border: #e2e8f0;
-	--awea-sf-track-color: #e2e8f0;
-	--awea-sf-line-size: 2px;
-	--awea-sf-box-size: 76px;
-	--awea-sf-card-pt: 0px;
-	--awea-sf-card-pl: 0px;
+.awea_step_flow_wrap {
+	--awea_step_flow_primary: var(--e-global-color-primary, #4f46e5);
+	--awea_step_flow_heading: #0f172a;
+	--awea_step_flow_text: #475569;
+	--awea_step_flow_border: #e2e8f0;
+	--awea_step_flow_track_color: #e2e8f0;
+	--awea_step_flow_line_size: 2px;
+	--awea_step_flow_box_size: 76px;
+	--awea_step_flow_card_pt: 0px;
+	--awea_step_flow_card_pl: 0px;
 
 	display: flex;
 	align-items: flex-start;
@@ -22,16 +22,16 @@
 	box-sizing: border-box;
 }
 
-.awea-sf-wrap *,
-.awea-sf-wrap *::before,
-.awea-sf-wrap *::after {
+.awea_step_flow_wrap *,
+.awea_step_flow_wrap *::before,
+.awea_step_flow_wrap *::after {
 	box-sizing: border-box;
 }
 
 /* --------------------------------------------------------------------------
-1. Step Node
+   1. Step Node
    -------------------------------------------------------------------------- */
-.awea-sf-item {
+.awea_step_flow_item {
 	flex: 1 1 0;
 	display: flex;
 	flex-direction: column;
@@ -40,6 +40,8 @@
 	position: relative;
 	z-index: 2;
 	min-width: 0;
+	text-decoration: none;
+	color: inherit;
 	transition:
 		background-color 0.25s ease,
 		border-color 0.25s ease,
@@ -47,33 +49,33 @@
 }
 
 /* Optional Card Container Mode */
-.awea-sf-card-yes .awea-sf-wrap {
-	--awea-sf-card-pt: 28px;
-	--awea-sf-card-pl: 24px;
+.awea_step_flow_card_yes .awea_step_flow_wrap {
+	--awea_step_flow_card_pt: 28px;
+	--awea_step_flow_card_pl: 24px;
 }
 
-.awea-sf-card-yes .awea-sf-item {
+.awea_step_flow_card_yes .awea_step_flow_item {
 	background-color: #ffffff;
-	border: 1px solid var(--awea-sf-border);
+	border: 1px solid var(--awea_step_flow_border);
 	border-radius: 22px;
 	padding: 28px 24px;
 }
 
-.awea-sf-card-yes .awea-sf-item:hover {
-	border-color: var(--awea-sf-primary);
+.awea_step_flow_card_yes .awea_step_flow_item:hover {
+	border-color: var(--awea_step_flow_primary);
 }
 
 /* --------------------------------------------------------------------------
-2. Icon Box & Floating Number Badge
+   2. Icon Box & Floating Number Badge
    -------------------------------------------------------------------------- */
-.awea-sf-box {
+.awea_step_flow_box {
 	position: relative;
-	width: var(--awea-sf-box-size, 76px);
-	height: var(--awea-sf-box-size, 76px);
+	width: var(--awea_step_flow_box_size, 76px);
+	height: var(--awea_step_flow_box_size, 76px);
 	border-radius: 22px;
 	background-color: #ffffff;
-	border: 1px solid var(--awea-sf-border);
-	color: var(--awea-sf-primary);
+	border: 1px solid var(--awea_step_flow_border);
+	color: var(--awea_step_flow_primary);
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -84,37 +86,37 @@
 		color 0.25s ease;
 }
 
-.awea-sf-box i {
+.awea_step_flow_box i {
 	font-size: 24px;
 	line-height: 1;
 }
 
-.awea-sf-box svg {
+.awea_step_flow_box svg {
 	width: 24px;
 	height: 24px;
 	display: block;
 	fill: currentColor;
 }
 
-.awea-sf-item:hover .awea-sf-box {
-	background-color: var(--awea-sf-primary);
-	border-color: var(--awea-sf-primary);
+.awea_step_flow_item:hover .awea_step_flow_box {
+	background-color: var(--awea_step_flow_primary);
+	border-color: var(--awea_step_flow_primary);
 	color: #ffffff;
 }
 
-.awea-sf-item:hover .awea-sf-box svg {
+.awea_step_flow_item:hover .awea_step_flow_box svg {
 	fill: #ffffff;
 }
 
-/* Floating Badge Pill */
-.awea-sf-num {
+/* Floating Badge Pill (RTL Safe) */
+.awea_step_flow_num {
 	position: absolute;
 	top: -7px;
-	right: -7px;
+	inset-inline-end: -7px;
 	width: 28px;
 	height: 28px;
 	border-radius: 100px;
-	background-color: var(--awea-sf-heading);
+	background-color: var(--awea_step_flow_heading);
 	color: #ffffff;
 	border: 2px solid #ffffff;
 	font-size: 0.72rem;
@@ -128,42 +130,42 @@
 	transition: background-color 0.25s ease;
 }
 
-.awea-sf-item:hover .awea-sf-num {
-	background-color: var(--awea-sf-primary);
+.awea_step_flow_item:hover .awea_step_flow_num {
+	background-color: var(--awea_step_flow_primary);
 }
 
 /* --------------------------------------------------------------------------
-3. Connecting Lines (Horizontal Default)
+   3. Connecting Lines (Horizontal Default)
    -------------------------------------------------------------------------- */
-.awea-sf-line {
+.awea_step_flow_line {
 	flex: 0.45;
-	height: var(--awea-sf-line-size);
-	background-color: var(--awea-sf-track-color, #e2e8f0);
-	margin-top: calc(var(--awea-sf-card-pt, 0px) + (var(--awea-sf-box-size, 76px) / 2));
+	height: var(--awea_step_flow_line_size);
+	background-color: var(--awea_step_flow_track_color, #e2e8f0);
+	margin-top: calc(var(--awea_step_flow_card_pt, 0px) + (var(--awea_step_flow_box_size, 76px) / 2));
 	position: relative;
 	min-width: 28px;
 	overflow: hidden;
 	align-self: flex-start;
 }
 
-.awea-sf-line-dashed .awea-sf-line {
+.awea_step_flow_line_dashed .awea_step_flow_line {
 	background-color: transparent !important;
-	border-top: var(--awea-sf-line-size) dashed var(--awea-sf-track-color, #cbd5e1);
+	border-top: var(--awea_step_flow_line_size) dashed var(--awea_step_flow_track_color, #cbd5e1);
 	height: 0 !important;
 }
 
-.awea-sf-line-solid .awea-sf-line {
-	background-color: var(--awea-sf-primary);
+.awea_step_flow_line_solid .awea_step_flow_line {
+	background-color: var(--awea_step_flow_primary);
 }
 
-.awea-sf-beam {
+.awea_step_flow_beam {
 	position: absolute;
 	inset: 0;
-	background-color: var(--awea-sf-primary);
-	animation: aweaSfFlowH 3s infinite cubic-bezier(0.22, 1, 0.36, 1);
+	background-color: var(--awea_step_flow_primary);
+	animation: awea_step_flow_flow_h 3s infinite cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-@keyframes aweaSfFlowH {
+@keyframes awea_step_flow_flow_h {
 	0% {
 		transform: translateX(-100%);
 	}
@@ -172,92 +174,101 @@
 	}
 }
 
+[dir="rtl"] @keyframes awea_step_flow_flow_h {
+	0% {
+		transform: translateX(100%);
+	}
+	100% {
+		transform: translateX(-100%);
+	}
+}
+
 /* --------------------------------------------------------------------------
-4. Typography Body
+   4. Typography Body
    -------------------------------------------------------------------------- */
-.awea-sf-body {
+.awea_step_flow_body {
 	margin-top: 20px;
 	padding: 0 10px;
 	width: 100%;
 }
 
-.awea-sf-title {
+.awea_step_flow_title {
 	margin: 0 0 8px 0;
 	font-size: 1.22rem;
 	font-weight: 800;
-	color: var(--awea-sf-heading);
+	color: var(--awea_step_flow_heading);
 	line-height: 1.28;
 	letter-spacing: -0.02em;
 	word-break: break-word;
 	transition: color 0.25s ease;
 }
 
-.awea-sf-title a {
+.awea_step_flow_title a {
 	color: inherit;
 	text-decoration: none;
 }
 
-.awea-sf-title a:focus-visible {
-	outline: 2px solid var(--awea-sf-primary);
+.awea_step_flow_title a:focus-visible {
+	outline: 2px solid var(--awea_step_flow_primary);
 	outline-offset: 3px;
 	border-radius: 4px;
 }
 
-.awea-sf-item:hover .awea-sf-title,
-.awea-sf-item:hover .awea-sf-title a {
-	color: var(--awea-sf-primary);
+.awea_step_flow_item:hover .awea_step_flow_title,
+.awea_step_flow_item:hover .awea_step_flow_title a {
+	color: var(--awea_step_flow_primary);
 }
 
-.awea-sf-desc {
+.awea_step_flow_desc {
 	margin: 0;
 	font-size: 0.94rem;
-	color: var(--awea-sf-text);
+	color: var(--awea_step_flow_text);
 	line-height: 1.62;
 	word-break: break-word;
 }
 
 /* --------------------------------------------------------------------------
-5. Vertical Roadmap Direction Mode
+   5. Vertical Roadmap Direction Mode
    -------------------------------------------------------------------------- */
-.awea-sf-dir-vertical .awea-sf-wrap {
+.awea_step_flow_dir_vertical .awea_step_flow_wrap {
 	flex-direction: column;
 	align-items: stretch;
 	max-width: 680px;
 }
 
-.awea-sf-dir-vertical .awea-sf-item {
+.awea_step_flow_dir_vertical .awea_step_flow_item {
 	flex: none;
 	flex-direction: row;
 	align-items: flex-start;
-	text-align: left;
+	text-align: start;
 	gap: 20px;
 }
 
-.awea-sf-dir-vertical .awea-sf-body {
+.awea_step_flow_dir_vertical .awea_step_flow_body {
 	margin-top: 4px;
 	padding: 0;
 }
 
-.awea-sf-dir-vertical .awea-sf-line {
+.awea_step_flow_dir_vertical .awea_step_flow_line {
 	flex: none;
-	width: var(--awea-sf-line-size);
+	width: var(--awea_step_flow_line_size);
 	height: 36px;
 	min-width: 0;
-	margin: 10px 0 10px calc(var(--awea-sf-card-pl, 0px) + (var(--awea-sf-box-size, 76px) / 2) - (var(--awea-sf-line-size) / 2));
+	margin: 10px 0 10px calc(var(--awea_step_flow_card_pl, 0px) + (var(--awea_step_flow_box_size, 76px) / 2) - (var(--awea_step_flow_line_size) / 2));
 	align-self: flex-start;
 }
 
-.awea-sf-dir-vertical.awea-sf-line-dashed .awea-sf-line {
+.awea_step_flow_dir_vertical.awea_step_flow_line_dashed .awea_step_flow_line {
 	border-top: none;
-	border-left: var(--awea-sf-line-size) dashed var(--awea-sf-track-color, #cbd5e1);
+	border-inline-start: var(--awea_step_flow_line_size) dashed var(--awea_step_flow_track_color, #cbd5e1);
 	width: 0 !important;
 }
 
-.awea-sf-dir-vertical .awea-sf-beam {
-	animation: aweaSfFlowV 3s infinite cubic-bezier(0.22, 1, 0.36, 1);
+.awea_step_flow_dir_vertical .awea_step_flow_beam {
+	animation: awea_step_flow_flow_v 3s infinite cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-@keyframes aweaSfFlowV {
+@keyframes awea_step_flow_flow_v {
 	0% {
 		transform: translateY(-100%);
 	}
@@ -267,48 +278,48 @@
 }
 
 /* --------------------------------------------------------------------------
-6. Accessibility & Responsive Stacking
+   6. Accessibility & Responsive Stacking
    -------------------------------------------------------------------------- */
 @media (prefers-reduced-motion: reduce) {
-	.awea-sf-beam {
+	.awea_step_flow_beam {
 		animation: none !important;
 	}
 
-	.awea-sf-item,
-	.awea-sf-box,
-	.awea-sf-num {
+	.awea_step_flow_item,
+	.awea_step_flow_box,
+	.awea_step_flow_num {
 		transition: none !important;
 	}
 }
 
 @media (max-width: 850px) {
-	.awea-sf-dir-horizontal .awea-sf-wrap {
+	.awea_step_flow_dir_horizontal .awea_step_flow_wrap {
 		flex-direction: column;
 		align-items: center;
 	}
 
-	.awea-sf-dir-horizontal .awea-sf-item {
+	.awea_step_flow_dir_horizontal .awea_step_flow_item {
 		flex: none;
 		width: 100%;
 		max-width: 440px;
 	}
 
-	.awea-sf-dir-horizontal .awea-sf-line {
+	.awea_step_flow_dir_horizontal .awea_step_flow_line {
 		flex: none;
-		width: var(--awea-sf-line-size);
+		width: var(--awea_step_flow_line_size);
 		height: 34px;
 		margin: 12px auto !important;
 		min-width: 0;
 		align-self: center;
 	}
 
-	.awea-sf-dir-horizontal.awea-sf-line-dashed .awea-sf-line {
+	.awea_step_flow_dir_horizontal.awea_step_flow_line_dashed .awea_step_flow_line {
 		border-top: none;
-		border-left: var(--awea-sf-line-size) dashed var(--awea-sf-track-color, #cbd5e1);
+		border-inline-start: var(--awea_step_flow_line_size) dashed var(--awea_step_flow_track_color, #cbd5e1);
 		width: 0 !important;
 	}
 
-	.awea-sf-dir-horizontal .awea-sf-beam {
-		animation: aweaSfFlowV 3s infinite cubic-bezier(0.22, 1, 0.36, 1);
+	.awea_step_flow_dir_horizontal .awea_step_flow_beam {
+		animation: awea_step_flow_flow_v 3s infinite cubic-bezier(0.22, 1, 0.36, 1);
 	}
 }

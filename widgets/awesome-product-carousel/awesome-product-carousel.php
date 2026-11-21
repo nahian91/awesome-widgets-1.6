@@ -19,6 +19,7 @@ use Elementor\Group_Control_Typography;
 use Elementor\Core\Kits\Documents\Tabs\Global_Typography;
 use Elementor\Core\Kits\Documents\Tabs\Global_Colors;
 use Elementor\Widget_Base;
+use Elementor\Utils;
 
 class Widget_Awesome_Product_Carousel extends Widget_Base {
 
@@ -43,12 +44,20 @@ class Widget_Awesome_Product_Carousel extends Widget_Base {
 	}
 
 	protected function register_controls() {
+		$this->register_content_controls();
+		$this->register_style_controls();
+	}
+
+	/**
+	 * Content Tab Controls
+	 */
+	protected function register_content_controls() {
 
 		/* ==========================================================================
 		   CONTENT: 1. QUERY
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_section_query',
+			'awea_product_carousel_section_query',
 			[
 				'label' => esc_html__( 'Query', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
@@ -56,9 +65,9 @@ class Widget_Awesome_Product_Carousel extends Widget_Base {
 		);
 
 		$this->add_control(
-			'awea_post_count',
+			'awea_product_carousel_post_count',
 			[
-				'label'   => esc_html__( 'Count', 'awesome-widgets-elementor' ),
+				'label'   => esc_html__( 'Products Count', 'awesome-widgets-elementor' ),
 				'type'    => Controls_Manager::NUMBER,
 				'default' => 8,
 				'min'     => 1,
@@ -82,7 +91,7 @@ class Widget_Awesome_Product_Carousel extends Widget_Base {
 		}
 
 		$this->add_control(
-			'awea_product_categories',
+			'awea_product_carousel_categories',
 			[
 				'label'       => esc_html__( 'Categories', 'awesome-widgets-elementor' ),
 				'type'        => Controls_Manager::SELECT2,
@@ -94,9 +103,9 @@ class Widget_Awesome_Product_Carousel extends Widget_Base {
 		);
 
 		$this->add_control(
-			'awea_orderby',
+			'awea_product_carousel_orderby',
 			[
-				'label'   => esc_html__( 'Sort', 'awesome-widgets-elementor' ),
+				'label'   => esc_html__( 'Sort By', 'awesome-widgets-elementor' ),
 				'type'    => Controls_Manager::SELECT,
 				'default' => 'date',
 				'options' => [
@@ -111,7 +120,7 @@ class Widget_Awesome_Product_Carousel extends Widget_Base {
 		);
 
 		$this->add_control(
-			'awea_order',
+			'awea_product_carousel_order',
 			[
 				'label'   => esc_html__( 'Order', 'awesome-widgets-elementor' ),
 				'type'    => Controls_Manager::SELECT,
@@ -126,20 +135,56 @@ class Widget_Awesome_Product_Carousel extends Widget_Base {
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   CONTENT: 2. SETTINGS
+		   CONTENT: 2. ELEMENTS
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_section_settings',
+			'awea_product_carousel_section_elements',
 			[
-				'label' => esc_html__( 'Settings', 'awesome-widgets-elementor' ),
+				'label' => esc_html__( 'Elements', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
 			]
 		);
 
 		$this->add_control(
-			'awea_title_tag',
+			'awea_product_carousel_show_sale',
 			[
-				'label'   => esc_html__( 'Tag', 'awesome-widgets-elementor' ),
+				'label'        => esc_html__( 'Sale Badge', 'awesome-widgets-elementor' ),
+				'type'         => Controls_Manager::SWITCHER,
+				'label_on'     => esc_html__( 'Yes', 'awesome-widgets-elementor' ),
+				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
+				'return_value' => 'yes',
+				'default'      => 'yes',
+			]
+		);
+
+		$this->add_control(
+			'awea_product_carousel_show_rating',
+			[
+				'label'        => esc_html__( 'Star Rating', 'awesome-widgets-elementor' ),
+				'type'         => Controls_Manager::SWITCHER,
+				'label_on'     => esc_html__( 'Yes', 'awesome-widgets-elementor' ),
+				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
+				'return_value' => 'yes',
+				'default'      => 'yes',
+			]
+		);
+
+		$this->add_control(
+			'awea_product_carousel_show_stock',
+			[
+				'label'        => esc_html__( 'Stock Status', 'awesome-widgets-elementor' ),
+				'type'         => Controls_Manager::SWITCHER,
+				'label_on'     => esc_html__( 'Yes', 'awesome-widgets-elementor' ),
+				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
+				'return_value' => 'yes',
+				'default'      => '',
+			]
+		);
+
+		$this->add_control(
+			'awea_product_carousel_title_tag',
+			[
+				'label'   => esc_html__( 'Title HTML Tag', 'awesome-widgets-elementor' ),
 				'type'    => Controls_Manager::SELECT,
 				'default' => 'h3',
 				'options' => [
@@ -162,17 +207,17 @@ class Widget_Awesome_Product_Carousel extends Widget_Base {
 		   CONTENT: 3. SLIDER
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_section_slider',
+			'awea_product_carousel_section_slider',
 			[
-				'label' => esc_html__( 'Slider', 'awesome-widgets-elementor' ),
+				'label' => esc_html__( 'Slider Settings', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
 			]
 		);
 
 		$this->add_responsive_control(
-			'awea_slides_per_view',
+			'awea_product_carousel_slides_per_view',
 			[
-				'label'          => esc_html__( 'Slides', 'awesome-widgets-elementor' ),
+				'label'          => esc_html__( 'Slides Per View', 'awesome-widgets-elementor' ),
 				'type'           => Controls_Manager::SELECT,
 				'default'        => '3',
 				'tablet_default' => '2',
@@ -188,9 +233,9 @@ class Widget_Awesome_Product_Carousel extends Widget_Base {
 		);
 
 		$this->add_responsive_control(
-			'awea_slide_gap',
+			'awea_product_carousel_slide_gap',
 			[
-				'label'      => esc_html__( 'Gap', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Slide Gap', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [ 'px' => [ 'min' => 0, 'max' => 60 ] ],
@@ -199,9 +244,9 @@ class Widget_Awesome_Product_Carousel extends Widget_Base {
 		);
 
 		$this->add_control(
-			'awea_carousel_loop',
+			'awea_product_carousel_loop',
 			[
-				'label'        => esc_html__( 'Loop', 'awesome-widgets-elementor' ),
+				'label'        => esc_html__( 'Infinite Loop', 'awesome-widgets-elementor' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'label_on'     => esc_html__( 'Yes', 'awesome-widgets-elementor' ),
 				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
@@ -212,7 +257,7 @@ class Widget_Awesome_Product_Carousel extends Widget_Base {
 		);
 
 		$this->add_control(
-			'awea_carousel_autoplay',
+			'awea_product_carousel_autoplay',
 			[
 				'label'        => esc_html__( 'Autoplay', 'awesome-widgets-elementor' ),
 				'type'         => Controls_Manager::SWITCHER,
@@ -224,35 +269,35 @@ class Widget_Awesome_Product_Carousel extends Widget_Base {
 		);
 
 		$this->add_control(
-			'awea_carousel_pause',
+			'awea_product_carousel_pause',
 			[
-				'label'        => esc_html__( 'Pause', 'awesome-widgets-elementor' ),
+				'label'        => esc_html__( 'Pause on Hover', 'awesome-widgets-elementor' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'label_on'     => esc_html__( 'Yes', 'awesome-widgets-elementor' ),
 				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
 				'return_value' => 'yes',
 				'default'      => 'yes',
-				'condition'    => [ 'awea_carousel_autoplay' => 'yes' ],
+				'condition'    => [ 'awea_product_carousel_autoplay' => 'yes' ],
 			]
 		);
 
 		$this->add_control(
-			'awea_carousel_autoplay_speed',
+			'awea_product_carousel_autoplay_speed',
 			[
-				'label'     => esc_html__( 'Interval', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Autoplay Interval (ms)', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::NUMBER,
 				'default'   => 5000,
 				'min'       => 1000,
 				'max'       => 15000,
 				'step'      => 500,
-				'condition' => [ 'awea_carousel_autoplay' => 'yes' ],
+				'condition' => [ 'awea_product_carousel_autoplay' => 'yes' ],
 			]
 		);
 
 		$this->add_control(
-			'awea_carousel_transition_speed',
+			'awea_product_carousel_transition_speed',
 			[
-				'label'   => esc_html__( 'Speed', 'awesome-widgets-elementor' ),
+				'label'   => esc_html__( 'Transition Speed (ms)', 'awesome-widgets-elementor' ),
 				'type'    => Controls_Manager::NUMBER,
 				'default' => 450,
 				'min'     => 100,
@@ -267,7 +312,7 @@ class Widget_Awesome_Product_Carousel extends Widget_Base {
 		   CONTENT: 4. NAVIGATION
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_section_navigation',
+			'awea_product_carousel_section_navigation',
 			[
 				'label' => esc_html__( 'Navigation', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
@@ -275,9 +320,9 @@ class Widget_Awesome_Product_Carousel extends Widget_Base {
 		);
 
 		$this->add_control(
-			'awea_carousel_arrows',
+			'awea_product_carousel_arrows',
 			[
-				'label'        => esc_html__( 'Arrows', 'awesome-widgets-elementor' ),
+				'label'        => esc_html__( 'Show Arrows', 'awesome-widgets-elementor' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'label_on'     => esc_html__( 'Yes', 'awesome-widgets-elementor' ),
 				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
@@ -287,9 +332,9 @@ class Widget_Awesome_Product_Carousel extends Widget_Base {
 		);
 
 		$this->add_control(
-			'awea_carousel_dots',
+			'awea_product_carousel_dots',
 			[
-				'label'        => esc_html__( 'Dots', 'awesome-widgets-elementor' ),
+				'label'        => esc_html__( 'Show Dots', 'awesome-widgets-elementor' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'label_on'     => esc_html__( 'Yes', 'awesome-widgets-elementor' ),
 				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
@@ -299,12 +344,18 @@ class Widget_Awesome_Product_Carousel extends Widget_Base {
 		);
 
 		$this->end_controls_section();
+	}
+
+	/**
+	 * Style Tab Controls
+	 */
+	protected function register_style_controls() {
 
 		/* ==========================================================================
 		   STYLE: 1. CARD
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_style_card',
+			'awea_product_carousel_style_card',
 			[
 				'label' => esc_html__( 'Card', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
@@ -312,7 +363,7 @@ class Widget_Awesome_Product_Carousel extends Widget_Base {
 		);
 
 		$this->add_responsive_control(
-			'awea_card_padding',
+			'awea_product_carousel_card_padding',
 			[
 				'label'      => esc_html__( 'Padding', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
@@ -326,15 +377,15 @@ class Widget_Awesome_Product_Carousel extends Widget_Base {
 					'isLinked' => true,
 				],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-product-card' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .awea_product_carousel_card' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
 		);
 
 		$this->add_responsive_control(
-			'awea_card_radius',
+			'awea_product_carousel_card_radius',
 			[
-				'label'      => esc_html__( 'Radius', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Border Radius', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'default'    => [
@@ -346,26 +397,26 @@ class Widget_Awesome_Product_Carousel extends Widget_Base {
 					'isLinked' => true,
 				],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-product-card' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .awea_product_carousel_card' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
 		);
 
-		$this->start_controls_tabs( 'awea_card_tabs' );
+		$this->start_controls_tabs( 'awea_product_carousel_card_tabs' );
 
 		$this->start_controls_tab(
-			'awea_card_normal',
+			'awea_product_carousel_card_normal',
 			[ 'label' => esc_html__( 'Normal', 'awesome-widgets-elementor' ) ]
 		);
 
 		$this->add_control(
-			'awea_card_bg',
+			'awea_product_carousel_card_bg',
 			[
 				'label'     => esc_html__( 'Background', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#ffffff',
 				'selectors' => [
-					'{{WRAPPER}} .awea-product-card' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .awea_product_carousel_card' => 'background-color: {{VALUE}};',
 				],
 			]
 		);
@@ -373,9 +424,9 @@ class Widget_Awesome_Product_Carousel extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Border::get_type(),
 			[
-				'name'           => 'awea_card_border',
+				'name'           => 'awea_product_carousel_card_border',
 				'label'          => esc_html__( 'Border', 'awesome-widgets-elementor' ),
-				'selector'       => '{{WRAPPER}} .awea-product-card',
+				'selector'       => '{{WRAPPER}} .awea_product_carousel_card',
 				'fields_options' => [
 					'border' => [ 'default' => 'solid' ],
 					'width'  => [
@@ -392,24 +443,51 @@ class Widget_Awesome_Product_Carousel extends Widget_Base {
 			]
 		);
 
+		$this->add_group_control(
+			Group_Control_Box_Shadow::get_type(),
+			[
+				'name'     => 'awea_product_carousel_card_shadow',
+				'selector' => '{{WRAPPER}} .awea_product_carousel_card',
+			]
+		);
+
 		$this->end_controls_tab();
 
 		$this->start_controls_tab(
-			'awea_card_hover',
+			'awea_product_carousel_card_hover',
 			[ 'label' => esc_html__( 'Hover', 'awesome-widgets-elementor' ) ]
 		);
 
 		$this->add_control(
-			'awea_card_border_hover',
+			'awea_product_carousel_card_bg_hover',
 			[
-				'label'     => esc_html__( 'Border', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Background', 'awesome-widgets-elementor' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => [
+					'{{WRAPPER}} .awea_product_carousel_card:hover' => 'background-color: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->add_control(
+			'awea_product_carousel_card_border_hover',
+			[
+				'label'     => esc_html__( 'Border Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [
 					'default' => Global_Colors::COLOR_PRIMARY,
 				],
 				'selectors' => [
-					'{{WRAPPER}} .awea-product-card:hover' => 'border-color: {{VALUE}};',
+					'{{WRAPPER}} .awea_product_carousel_card:hover' => 'border-color: {{VALUE}};',
 				],
+			]
+		);
+
+		$this->add_group_control(
+			Group_Control_Box_Shadow::get_type(),
+			[
+				'name'     => 'awea_product_carousel_card_shadow_hover',
+				'selector' => '{{WRAPPER}} .awea_product_carousel_card:hover',
 			]
 		);
 
@@ -422,7 +500,7 @@ class Widget_Awesome_Product_Carousel extends Widget_Base {
 		   STYLE: 2. IMAGE
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_style_image',
+			'awea_product_carousel_style_image',
 			[
 				'label' => esc_html__( 'Image', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
@@ -430,27 +508,27 @@ class Widget_Awesome_Product_Carousel extends Widget_Base {
 		);
 
 		$this->add_responsive_control(
-			'awea_image_aspect_ratio',
+			'awea_product_carousel_image_aspect_ratio',
 			[
-				'label'     => esc_html__( 'Ratio', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Aspect Ratio', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::SELECT,
 				'default'   => '1/1',
 				'options'   => [
-					'1/1'  => '1:1',
-					'4/5'  => '4:5',
-					'3/4'  => '3:4',
-					'16/9' => '16:9',
+					'1/1'  => '1:1 (Square)',
+					'4/5'  => '4:5 (Portrait)',
+					'3/4'  => '3:4 (Classic)',
+					'16/9' => '16:9 (Wide)',
 				],
 				'selectors' => [
-					'{{WRAPPER}} .awea-product-img-wrap' => 'aspect-ratio: {{VALUE}};',
+					'{{WRAPPER}} .awea_product_carousel_img_wrap' => 'aspect-ratio: {{VALUE}};',
 				],
 			]
 		);
 
 		$this->add_responsive_control(
-			'awea_image_radius',
+			'awea_product_carousel_image_radius',
 			[
-				'label'      => esc_html__( 'Radius', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Border Radius', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'default'    => [
@@ -462,7 +540,7 @@ class Widget_Awesome_Product_Carousel extends Widget_Base {
 					'isLinked' => true,
 				],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-product-img-wrap' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .awea_product_carousel_img_wrap' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
 		);
@@ -473,35 +551,35 @@ class Widget_Awesome_Product_Carousel extends Widget_Base {
 		   STYLE: 3. TEXT
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_style_text',
+			'awea_product_carousel_style_text',
 			[
-				'label' => esc_html__( 'Text', 'awesome-widgets-elementor' ),
+				'label' => esc_html__( 'Title & Price', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
 
 		$this->add_control(
-			'awea_title_color',
+			'awea_product_carousel_title_color',
 			[
-				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Title Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#0f172a',
 				'selectors' => [
-					'{{WRAPPER}} .awea-product-title a' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea_product_carousel_title a' => 'color: {{VALUE}};',
 				],
 			]
 		);
 
 		$this->add_control(
-			'awea_title_hover',
+			'awea_product_carousel_title_hover',
 			[
-				'label'     => esc_html__( 'Hover', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Title Hover Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [
-					'default' => Global_Colors::COLOR_ACCENT,
+					'default' => Global_Colors::COLOR_PRIMARY,
 				],
 				'selectors' => [
-					'{{WRAPPER}} .awea-product-card:hover .awea-product-title a' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea_product_carousel_card:hover .awea_product_carousel_title a' => 'color: {{VALUE}};',
 				],
 			]
 		);
@@ -509,9 +587,8 @@ class Widget_Awesome_Product_Carousel extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Typography::get_type(),
 			[
-				'name'     => 'awea_title_typo',
-				'label'    => esc_html__( 'Typography', 'awesome-widgets-elementor' ),
-				'selector' => '{{WRAPPER}} .awea-product-title a',
+				'name'     => 'awea_product_carousel_title_typo',
+				'selector' => '{{WRAPPER}} .awea_product_carousel_title a',
 				'global'   => [
 					'default' => Global_Typography::TYPOGRAPHY_PRIMARY,
 				],
@@ -519,16 +596,16 @@ class Widget_Awesome_Product_Carousel extends Widget_Base {
 		);
 
 		$this->add_control(
-			'awea_price_color',
+			'awea_product_carousel_price_color',
 			[
-				'label'     => esc_html__( 'Price', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Price Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [
 					'default' => Global_Colors::COLOR_PRIMARY,
 				],
 				'separator' => 'before',
 				'selectors' => [
-					'{{WRAPPER}} .awea-product-price, {{WRAPPER}} .awea-product-price ins' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea_product_carousel_price, {{WRAPPER}} .awea_product_carousel_price ins' => 'color: {{VALUE}};',
 				],
 			]
 		);
@@ -536,9 +613,8 @@ class Widget_Awesome_Product_Carousel extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Typography::get_type(),
 			[
-				'name'     => 'awea_price_typo',
-				'label'    => esc_html__( 'Typography', 'awesome-widgets-elementor' ),
-				'selector' => '{{WRAPPER}} .awea-product-price',
+				'name'     => 'awea_product_carousel_price_typo',
+				'selector' => '{{WRAPPER}} .awea_product_carousel_price',
 				'global'   => [
 					'default' => Global_Typography::TYPOGRAPHY_SECONDARY,
 				],
@@ -551,9 +627,9 @@ class Widget_Awesome_Product_Carousel extends Widget_Base {
 		   STYLE: 4. BUTTON
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_style_button',
+			'awea_product_carousel_style_button',
 			[
-				'label' => esc_html__( 'Button', 'awesome-widgets-elementor' ),
+				'label' => esc_html__( 'Cart Button', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -561,42 +637,41 @@ class Widget_Awesome_Product_Carousel extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Typography::get_type(),
 			[
-				'name'     => 'awea_btn_typo',
-				'label'    => esc_html__( 'Typography', 'awesome-widgets-elementor' ),
-				'selector' => '{{WRAPPER}} .awea-product-cart-btn',
+				'name'     => 'awea_product_carousel_btn_typo',
+				'selector' => '{{WRAPPER}} .awea_product_carousel_cart_btn',
 				'global'   => [
 					'default' => Global_Typography::TYPOGRAPHY_SECONDARY,
 				],
 			]
 		);
 
-		$this->start_controls_tabs( 'awea_btn_state_tabs' );
+		$this->start_controls_tabs( 'awea_product_carousel_btn_state_tabs' );
 
 		$this->start_controls_tab(
-			'awea_btn_normal',
+			'awea_product_carousel_btn_normal',
 			[ 'label' => esc_html__( 'Normal', 'awesome-widgets-elementor' ) ]
 		);
 
 		$this->add_control(
-			'awea_btn_color',
+			'awea_product_carousel_btn_color',
 			[
 				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#ffffff',
 				'selectors' => [
-					'{{WRAPPER}} .awea-product-cart-btn' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea_product_carousel_cart_btn' => 'color: {{VALUE}};',
 				],
 			]
 		);
 
 		$this->add_control(
-			'awea_btn_bg',
+			'awea_product_carousel_btn_bg',
 			[
 				'label'     => esc_html__( 'Background', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#0f172a',
 				'selectors' => [
-					'{{WRAPPER}} .awea-product-cart-btn' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .awea_product_carousel_cart_btn' => 'background-color: {{VALUE}};',
 				],
 			]
 		);
@@ -604,24 +679,24 @@ class Widget_Awesome_Product_Carousel extends Widget_Base {
 		$this->end_controls_tab();
 
 		$this->start_controls_tab(
-			'awea_btn_hover',
+			'awea_product_carousel_btn_hover',
 			[ 'label' => esc_html__( 'Hover', 'awesome-widgets-elementor' ) ]
 		);
 
 		$this->add_control(
-			'awea_btn_color_hover',
+			'awea_product_carousel_btn_color_hover',
 			[
 				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#ffffff',
 				'selectors' => [
-					'{{WRAPPER}} .awea-product-card:hover .awea-product-cart-btn, {{WRAPPER}} .awea-product-cart-btn:focus-visible' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea_product_carousel_card:hover .awea_product_carousel_cart_btn, {{WRAPPER}} .awea_product_carousel_cart_btn:focus-visible' => 'color: {{VALUE}};',
 				],
 			]
 		);
 
 		$this->add_control(
-			'awea_btn_bg_hover',
+			'awea_product_carousel_btn_bg_hover',
 			[
 				'label'     => esc_html__( 'Background', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
@@ -629,7 +704,7 @@ class Widget_Awesome_Product_Carousel extends Widget_Base {
 					'default' => Global_Colors::COLOR_PRIMARY,
 				],
 				'selectors' => [
-					'{{WRAPPER}} .awea-product-card:hover .awea-product-cart-btn, {{WRAPPER}} .awea-product-cart-btn:focus-visible' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .awea_product_carousel_card:hover .awea_product_carousel_cart_btn, {{WRAPPER}} .awea_product_carousel_cart_btn:focus-visible' => 'background-color: {{VALUE}};',
 				],
 			]
 		);
@@ -638,7 +713,7 @@ class Widget_Awesome_Product_Carousel extends Widget_Base {
 		$this->end_controls_tabs();
 
 		$this->add_responsive_control(
-			'awea_btn_padding',
+			'awea_product_carousel_btn_padding',
 			[
 				'label'      => esc_html__( 'Padding', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
@@ -649,19 +724,19 @@ class Widget_Awesome_Product_Carousel extends Widget_Base {
 					'bottom'   => '12',
 					'left'     => '24',
 					'unit'     => 'px',
-					'isLinked' => false,
+					'isLinked' => true,
 				],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-product-cart-btn' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .awea_product_carousel_cart_btn' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 				'separator'  => 'before',
 			]
 		);
 
 		$this->add_responsive_control(
-			'awea_btn_radius',
+			'awea_product_carousel_btn_radius',
 			[
-				'label'      => esc_html__( 'Radius', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Border Radius', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'default'    => [
@@ -673,7 +748,7 @@ class Widget_Awesome_Product_Carousel extends Widget_Base {
 					'isLinked' => true,
 				],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-product-cart-btn' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .awea_product_carousel_cart_btn' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
 		);
@@ -684,16 +759,16 @@ class Widget_Awesome_Product_Carousel extends Widget_Base {
 		   STYLE: 5. ARROWS
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_section_style_arrows',
+			'awea_product_carousel_section_style_arrows',
 			[
 				'label'     => esc_html__( 'Arrows', 'awesome-widgets-elementor' ),
 				'tab'       => Controls_Manager::TAB_STYLE,
-				'condition' => [ 'awea_carousel_arrows' => 'yes' ],
+				'condition' => [ 'awea_product_carousel_arrows' => 'yes' ],
 			]
 		);
 
 		$this->add_responsive_control(
-			'awea_arrow_size',
+			'awea_product_carousel_arrow_size',
 			[
 				'label'      => esc_html__( 'Size', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
@@ -701,31 +776,31 @@ class Widget_Awesome_Product_Carousel extends Widget_Base {
 				'range'      => [ 'px' => [ 'min' => 32, 'max' => 64 ] ],
 				'default'    => [ 'unit' => 'px', 'size' => 44 ],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-carousel-arrow-border' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}}; line-height: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .awea_product_carousel_arrow_border' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}}; line-height: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
 
 		$this->add_control(
-			'awea_arrow_color',
+			'awea_product_carousel_arrow_color',
 			[
 				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#0f172a',
 				'selectors' => [
-					'{{WRAPPER}} .awea-carousel-arrow-border i' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea_product_carousel_arrow_border i' => 'color: {{VALUE}};',
 				],
 			]
 		);
 
 		$this->add_control(
-			'awea_arrow_bg',
+			'awea_product_carousel_arrow_bg',
 			[
 				'label'     => esc_html__( 'Background', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#ffffff',
 				'selectors' => [
-					'{{WRAPPER}} .awea-carousel-arrow-border' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .awea_product_carousel_arrow_border' => 'background-color: {{VALUE}};',
 				],
 			]
 		);
@@ -733,9 +808,9 @@ class Widget_Awesome_Product_Carousel extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Border::get_type(),
 			[
-				'name'           => 'awea_arrow_border',
+				'name'           => 'awea_product_carousel_arrow_border',
 				'label'          => esc_html__( 'Border', 'awesome-widgets-elementor' ),
-				'selector'       => '{{WRAPPER}} .awea-carousel-arrow-border',
+				'selector'       => '{{WRAPPER}} .awea_product_carousel_arrow_border',
 				'fields_options' => [
 					'border' => [ 'default' => 'solid' ],
 					'width'  => [
@@ -758,28 +833,28 @@ class Widget_Awesome_Product_Carousel extends Widget_Base {
 		   STYLE: 6. DOTS
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_section_style_dots',
+			'awea_product_carousel_section_style_dots',
 			[
 				'label'     => esc_html__( 'Dots', 'awesome-widgets-elementor' ),
 				'tab'       => Controls_Manager::TAB_STYLE,
-				'condition' => [ 'awea_carousel_dots' => 'yes' ],
+				'condition' => [ 'awea_product_carousel_dots' => 'yes' ],
 			]
 		);
 
 		$this->add_control(
-			'awea_dots_color',
+			'awea_product_carousel_dots_color',
 			[
 				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#cbd5e1',
 				'selectors' => [
-					'{{WRAPPER}} .awea-product-carousel .owl-dots button.owl-dot' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .awea_product_carousel .owl-dots button.owl-dot' => 'background-color: {{VALUE}};',
 				],
 			]
 		);
 
 		$this->add_control(
-			'awea_dots_active_color',
+			'awea_product_carousel_dots_active_color',
 			[
 				'label'     => esc_html__( 'Active', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
@@ -787,7 +862,7 @@ class Widget_Awesome_Product_Carousel extends Widget_Base {
 					'default' => Global_Colors::COLOR_PRIMARY,
 				],
 				'selectors' => [
-					'{{WRAPPER}} .awea-product-carousel .owl-dots button.owl-dot.active' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .awea_product_carousel .owl-dots button.owl-dot.active' => 'background-color: {{VALUE}};',
 				],
 			]
 		);
@@ -797,32 +872,35 @@ class Widget_Awesome_Product_Carousel extends Widget_Base {
 
 	protected function render() {
 		if ( ! class_exists( 'WooCommerce' ) ) {
-			echo '<div class="awea-notice-error"><p>' . esc_html__( 'WooCommerce must be installed and active to use the Product Carousel widget.', 'awesome-widgets-elementor' ) . '</p></div>';
+			echo '<div class="awea_product_carousel_notice_error"><p>' . esc_html__( 'WooCommerce must be installed and active to use the Product Carousel widget.', 'awesome-widgets-elementor' ) . '</p></div>';
 			return;
 		}
 
 		$settings     = $this->get_settings_for_display();
-		$num_products = ! empty( $settings['awea_post_count'] ) ? absint( $settings['awea_post_count'] ) : 8;
-		$order        = $settings['awea_order'] ?? 'DESC';
-		$orderby      = $settings['awea_orderby'] ?? 'date';
-		$categories   = $settings['awea_product_categories'] ?? [];
-		$title_tag    = Utils::validate_html_tag( $settings['awea_title_tag'] ?? 'h3' );
+		$num_products = ! empty( $settings['awea_product_carousel_post_count'] ) ? absint( $settings['awea_product_carousel_post_count'] ) : 8;
+		$order        = $settings['awea_product_carousel_order'] ?? 'DESC';
+		$orderby      = $settings['awea_product_carousel_orderby'] ?? 'date';
+		$categories   = $settings['awea_product_carousel_categories'] ?? [];
+		$title_tag    = Utils::validate_html_tag( $settings['awea_product_carousel_title_tag'] ?? 'h3' );
+		$show_sale    = 'yes' === ( $settings['awea_product_carousel_show_sale'] ?? 'no' );
+		$show_rating  = 'yes' === ( $settings['awea_product_carousel_show_rating'] ?? 'no' );
+		$show_stock   = 'yes' === ( $settings['awea_product_carousel_show_stock'] ?? 'no' );
 
-		$items_desktop = ! empty( $settings['awea_slides_per_view'] ) ? (int) $settings['awea_slides_per_view'] : 3;
-		$items_tablet  = ! empty( $settings['awea_slides_per_view_tablet'] ) ? (int) $settings['awea_slides_per_view_tablet'] : 2;
-		$items_mobile  = ! empty( $settings['awea_slides_per_view_mobile'] ) ? (int) $settings['awea_slides_per_view_mobile'] : 1;
+		$items_desktop = ! empty( $settings['awea_product_carousel_slides_per_view'] ) ? (int) $settings['awea_product_carousel_slides_per_view'] : 3;
+		$items_tablet  = ! empty( $settings['awea_product_carousel_slides_per_view_tablet'] ) ? (int) $settings['awea_product_carousel_slides_per_view_tablet'] : 2;
+		$items_mobile  = ! empty( $settings['awea_product_carousel_slides_per_view_mobile'] ) ? (int) $settings['awea_product_carousel_slides_per_view_mobile'] : 1;
 
-		$gap_desktop   = isset( $settings['awea_slide_gap']['size'] ) ? (int) $settings['awea_slide_gap']['size'] : 24;
-		$gap_tablet    = isset( $settings['awea_slide_gap_tablet']['size'] ) ? (int) $settings['awea_slide_gap_tablet']['size'] : 20;
-		$gap_mobile    = isset( $settings['awea_slide_gap_mobile']['size'] ) ? (int) $settings['awea_slide_gap_mobile']['size'] : 16;
+		$gap_desktop   = isset( $settings['awea_product_carousel_slide_gap']['size'] ) ? (int) $settings['awea_product_carousel_slide_gap']['size'] : 24;
+		$gap_tablet    = isset( $settings['awea_product_carousel_slide_gap_tablet']['size'] ) ? (int) $settings['awea_product_carousel_slide_gap_tablet']['size'] : 20;
+		$gap_mobile    = isset( $settings['awea_product_carousel_slide_gap_mobile']['size'] ) ? (int) $settings['awea_product_carousel_slide_gap_mobile']['size'] : 16;
 
-		$arrows     = ( 'yes' === ( $settings['awea_carousel_arrows'] ?? 'no' ) ) ? 'yes' : 'no';
-		$dots       = ( 'yes' === ( $settings['awea_carousel_dots'] ?? 'no' ) ) ? 'yes' : 'no';
-		$loop       = ( 'yes' === ( $settings['awea_carousel_loop'] ?? 'no' ) ) ? 'yes' : 'no';
-		$autoplay   = ( 'yes' === ( $settings['awea_carousel_autoplay'] ?? 'no' ) ) ? 'yes' : 'no';
-		$pause      = ( 'yes' === ( $settings['awea_carousel_pause'] ?? 'no' ) ) ? 'yes' : 'no';
-		$auto_speed = ! empty( $settings['awea_carousel_autoplay_speed'] ) ? absint( $settings['awea_carousel_autoplay_speed'] ) : 5000;
-		$anim_speed = ! empty( $settings['awea_carousel_transition_speed'] ) ? absint( $settings['awea_carousel_transition_speed'] ) : 450;
+		$arrows     = ( 'yes' === ( $settings['awea_product_carousel_arrows'] ?? 'no' ) ) ? 'yes' : 'no';
+		$dots       = ( 'yes' === ( $settings['awea_product_carousel_dots'] ?? 'no' ) ) ? 'yes' : 'no';
+		$loop       = ( 'yes' === ( $settings['awea_product_carousel_loop'] ?? 'no' ) ) ? 'yes' : 'no';
+		$autoplay   = ( 'yes' === ( $settings['awea_product_carousel_autoplay'] ?? 'no' ) ) ? 'yes' : 'no';
+		$pause      = ( 'yes' === ( $settings['awea_product_carousel_pause'] ?? 'no' ) ) ? 'yes' : 'no';
+		$auto_speed = ! empty( $settings['awea_product_carousel_autoplay_speed'] ) ? absint( $settings['awea_product_carousel_autoplay_speed'] ) : 5000;
+		$anim_speed = ! empty( $settings['awea_product_carousel_transition_speed'] ) ? absint( $settings['awea_product_carousel_transition_speed'] ) : 450;
 		$widget_id  = $this->get_id();
 
 		$args = [
@@ -859,22 +937,22 @@ class Widget_Awesome_Product_Carousel extends Widget_Base {
 			}
 		}
 		?>
-		<div class="awea-product-carousel-wrap">
-			<div class="awea-product-carousel owl-carousel"
-				 id="awea-prod-carousel-<?php echo esc_attr( $widget_id ); ?>"
-				 data-items-desktop="<?php echo esc_attr( $items_desktop ); ?>"
-				 data-items-tablet="<?php echo esc_attr( $items_tablet ); ?>"
-				 data-items-mobile="<?php echo esc_attr( $items_mobile ); ?>"
-				 data-gap-desktop="<?php echo esc_attr( $gap_desktop ); ?>"
-				 data-gap-tablet="<?php echo esc_attr( $gap_tablet ); ?>"
-				 data-gap-mobile="<?php echo esc_attr( $gap_mobile ); ?>"
-				 data-arrows="<?php echo esc_attr( $arrows ); ?>"
-				 data-dots="<?php echo esc_attr( $dots ); ?>"
-				 data-loop="<?php echo esc_attr( $loop ); ?>"
-				 data-autoplay="<?php echo esc_attr( $autoplay ); ?>"
-				 data-pause="<?php echo esc_attr( $pause ); ?>"
-				 data-speed="<?php echo esc_attr( (string) $anim_speed ); ?>"
-				 data-timeout="<?php echo esc_attr( (string) $auto_speed ); ?>">
+		<div class="awea_product_carousel_wrap">
+			<div class="awea_product_carousel owl-carousel"
+				 id="awea_product_carousel_<?php echo esc_attr( $widget_id ); ?>"
+				 data-awea_product_carousel_items_desktop="<?php echo esc_attr( $items_desktop ); ?>"
+				 data-awea_product_carousel_items_tablet="<?php echo esc_attr( $items_tablet ); ?>"
+				 data-awea_product_carousel_items_mobile="<?php echo esc_attr( $items_mobile ); ?>"
+				 data-awea_product_carousel_gap_desktop="<?php echo esc_attr( $gap_desktop ); ?>"
+				 data-awea_product_carousel_gap_tablet="<?php echo esc_attr( $gap_tablet ); ?>"
+				 data-awea_product_carousel_gap_mobile="<?php echo esc_attr( $gap_mobile ); ?>"
+				 data-awea_product_carousel_arrows="<?php echo esc_attr( $arrows ); ?>"
+				 data-awea_product_carousel_dots="<?php echo esc_attr( $dots ); ?>"
+				 data-awea_product_carousel_loop="<?php echo esc_attr( $loop ); ?>"
+				 data-awea_product_carousel_autoplay="<?php echo esc_attr( $autoplay ); ?>"
+				 data-awea_product_carousel_pause="<?php echo esc_attr( $pause ); ?>"
+				 data-awea_product_carousel_speed="<?php echo esc_attr( (string) $anim_speed ); ?>"
+				 data-awea_product_carousel_timeout="<?php echo esc_attr( (string) $auto_speed ); ?>">
 
 				<?php
 				while ( $query->have_posts() ) :
@@ -887,47 +965,59 @@ class Widget_Awesome_Product_Carousel extends Widget_Base {
 					$is_on_sale   = $product->is_on_sale();
 					$in_cart      = isset( $cart_product_ids[ $product_id ] );
 					$supports_ajx = $product->supports( 'ajax_add_to_cart' ) && $product->is_purchasable() && $product->is_in_stock();
-					$btn_classes  = [ 'awea-product-cart-btn', 'awea-add-to-cart-btn', 'product_type_' . $product->get_type() ];
+					$btn_classes  = [ 'awea_product_carousel_cart_btn', 'awea_product_carousel_add_cart', 'product_type_' . $product->get_type() ];
 					if ( $supports_ajx ) {
 						$btn_classes[] = 'ajax_add_to_cart';
 						$btn_classes[] = 'add_to_cart_button';
 					}
 
-					$card_classes = [ 'awea-product-card' ];
+					$card_classes = [ 'awea_product_carousel_card' ];
 					if ( $in_cart ) {
-						$card_classes[] = 'product-in-cart';
+						$card_classes[] = 'awea_product_carousel_in_cart';
 					}
 					?>
-					<div class="awea-product-slide">
+					<div class="awea_product_carousel_slide">
 						<article class="<?php echo esc_attr( implode( ' ', $card_classes ) ); ?>">
 
-							<div class="awea-product-img-wrap">
-								<?php if ( $is_on_sale ) : ?>
-									<span class="awea-product-sale-badge"><?php esc_html_e( 'Sale', 'awesome-widgets-elementor' ); ?></span>
+							<div class="awea_product_carousel_img_wrap">
+								<?php if ( $show_sale && $is_on_sale ) : ?>
+									<span class="awea_product_carousel_sale_badge"><?php esc_html_e( 'Sale', 'awesome-widgets-elementor' ); ?></span>
 								<?php endif; ?>
 
-								<a href="<?php echo esc_url( get_the_permalink() ); ?>" class="awea-product-img-link" aria-label="<?php the_title_attribute(); ?>">
+								<a href="<?php echo esc_url( get_the_permalink() ); ?>" class="awea_product_carousel_img_link" aria-label="<?php the_title_attribute(); ?>">
 									<?php if ( has_post_thumbnail() ) : ?>
-										<?php the_post_thumbnail( 'woocommerce_thumbnail', [ 'class' => 'awea-product-img', 'loading' => 'lazy' ] ); ?>
+										<?php the_post_thumbnail( 'woocommerce_thumbnail', [ 'class' => 'awea_product_carousel_img', 'loading' => 'lazy' ] ); ?>
 									<?php else : ?>
-										<img src="<?php echo esc_url( Utils::get_placeholder_image_src() ); ?>" class="awea-product-img" alt="<?php the_title_attribute(); ?>" loading="lazy" />
+										<img src="<?php echo esc_url( Utils::get_placeholder_image_src() ); ?>" class="awea_product_carousel_img" alt="<?php the_title_attribute(); ?>" loading="lazy" />
 									<?php endif; ?>
 								</a>
 							</div>
 
-							<div class="awea-product-body">
-								<<?php Utils::print_validated_html_tag( $title_tag ); ?> class="awea-product-title">
+							<div class="awea_product_carousel_body">
+								<<?php Utils::print_validated_html_tag( $title_tag ); ?> class="awea_product_carousel_title">
 									<a href="<?php echo esc_url( get_the_permalink() ); ?>"><?php the_title(); ?></a>
 								</<?php Utils::print_validated_html_tag( $title_tag ); ?>>
 
-								<div class="awea-product-price">
+								<?php if ( $show_rating && function_exists( 'wc_get_rating_html' ) && $product->get_average_rating() > 0 ) : ?>
+									<div class="awea_product_carousel_rating">
+										<?php echo $product->get_image_id() ? wc_get_rating_html( $product->get_average_rating() ) : ''; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+									</div>
+								<?php endif; ?>
+
+								<?php if ( $show_stock ) :
+									$stock_html = $product->is_in_stock() ? '<span class="awea_in_stock">' . esc_html__( 'In Stock', 'awesome-widgets-elementor' ) . '</span>' : '<span class="awea_out_stock">' . esc_html__( 'Out of Stock', 'awesome-widgets-elementor' ) . '</span>';
+									?>
+									<div class="awea_product_carousel_stock"><?php echo $stock_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></div>
+								<?php endif; ?>
+
+								<div class="awea_product_carousel_price">
 									<?php echo $product->get_price_html(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 								</div>
 							</div>
 
-							<div class="awea-product-footer">
+							<div class="awea_product_carousel_footer">
 								<a href="<?php echo esc_url( function_exists( 'wc_get_cart_url' ) ? wc_get_cart_url() : '#' ); ?>" 
-								   class="awea-product-cart-btn awea-view-cart-btn"
+								   class="awea_product_carousel_cart_btn awea_product_carousel_view_cart"
 								   aria-label="<?php esc_attr_e( 'View Cart', 'awesome-widgets-elementor' ); ?>">
 									<i class="fas fa-check" aria-hidden="true"></i>
 									<span><?php esc_html_e( 'View Cart', 'awesome-widgets-elementor' ); ?></span>
@@ -959,7 +1049,7 @@ class Widget_Awesome_Product_Carousel extends Widget_Base {
 		if (typeof jQuery !== 'undefined') {
 			jQuery(window).on('elementor/frontend/init', function () {
 				elementorFrontend.hooks.addAction('frontend/element_ready/awesome-product-carousel.default', function ($scope, $) {
-					var $carousel = $scope.find('.awea-product-carousel');
+					var $carousel = $scope.find('.awea_product_carousel');
 					if (!$carousel.length || typeof $carousel.owlCarousel !== 'function') return;
 
 					if ($carousel.hasClass('owl-loaded')) {
@@ -967,24 +1057,25 @@ class Widget_Awesome_Product_Carousel extends Widget_Base {
 						$carousel.find('.owl-stage-outer').children().unwrap();
 					}
 
-					var itemsDesktop = parseInt($carousel.data('items-desktop'), 10) || 3;
-					var itemsTablet  = parseInt($carousel.data('items-tablet'), 10) || 2;
-					var itemsMobile  = parseInt($carousel.data('items-mobile'), 10) || 1;
-					var gapDesktop   = parseInt($carousel.data('gap-desktop'), 10) || 24;
-					var gapTablet    = parseInt($carousel.data('gap-tablet'), 10) || 20;
-					var gapMobile    = parseInt($carousel.data('gap-mobile'), 10) || 16;
+					var itemsDesktop = parseInt($carousel.attr('data-awea_product_carousel_items_desktop'), 10) || 3;
+					var itemsTablet  = parseInt($carousel.attr('data-awea_product_carousel_items_tablet'), 10) || 2;
+					var itemsMobile  = parseInt($carousel.attr('data-awea_product_carousel_items_mobile'), 10) || 1;
+					var gapDesktop   = parseInt($carousel.attr('data-awea_product_carousel_gap_desktop'), 10) || 24;
+					var gapTablet    = parseInt($carousel.attr('data-awea_product_carousel_gap_tablet'), 10) || 20;
+					var gapMobile    = parseInt($carousel.attr('data-awea_product_carousel_gap_mobile'), 10) || 16;
 
 					$carousel.owlCarousel({
-						nav: $carousel.data('arrows') === 'yes',
-						dots: $carousel.data('dots') === 'yes',
-						loop: $carousel.data('loop') === 'yes',
-						autoplay: $carousel.data('autoplay') === 'yes',
-						autoplayTimeout: parseInt($carousel.data('timeout'), 10) || 5000,
-						smartSpeed: parseInt($carousel.data('speed'), 10) || 450,
-						autoplayHoverPause: $carousel.data('pause') === 'yes',
+						rtl: document.dir === 'rtl',
+						nav: $carousel.attr('data-awea_product_carousel_arrows') === 'yes',
+						dots: $carousel.attr('data-awea_product_carousel_dots') === 'yes',
+						loop: $carousel.attr('data-awea_product_carousel_loop') === 'yes',
+						autoplay: $carousel.attr('data-awea_product_carousel_autoplay') === 'yes',
+						autoplayTimeout: parseInt($carousel.attr('data-awea_product_carousel_timeout'), 10) || 5000,
+						smartSpeed: parseInt($carousel.attr('data-awea_product_carousel_speed'), 10) || 450,
+						autoplayHoverPause: $carousel.attr('data-awea_product_carousel_pause') === 'yes',
 						navText: [
-							'<div class="awea-carousel-arrow-border" aria-label="Previous"><i class="fas fa-chevron-left" aria-hidden="true"></i></div>',
-							'<div class="awea-carousel-arrow-border" aria-label="Next"><i class="fas fa-chevron-right" aria-hidden="true"></i></div>'
+							'<div class="awea_product_carousel_arrow_border" aria-label="<?php echo esc_js( __( 'Previous', 'awesome-widgets-elementor' ) ); ?>"><i class="fas fa-chevron-left" aria-hidden="true"></i></div>',
+							'<div class="awea_product_carousel_arrow_border" aria-label="<?php echo esc_js( __( 'Next', 'awesome-widgets-elementor' ) ); ?>"><i class="fas fa-chevron-right" aria-hidden="true"></i></div>'
 						],
 						responsive: {
 							0: { items: itemsMobile, margin: gapMobile },
@@ -995,12 +1086,12 @@ class Widget_Awesome_Product_Carousel extends Widget_Base {
 				});
 			});
 
-			if (!window.__aweaProdCarouselBound) {
-				window.__aweaProdCarouselBound = true;
+			if (!window.__awea_product_carousel_bound) {
+				window.__awea_product_carousel_bound = true;
 				jQuery(function($) {
 					$(document.body).on('added_to_cart', function(event, fragments, cart_hash, $button) {
 						if ($button && $button.length) {
-							$button.closest('.awea-product-card').addClass('product-in-cart');
+							$button.closest('.awea_product_carousel_card').addClass('awea_product_carousel_in_cart');
 						}
 					});
 				});

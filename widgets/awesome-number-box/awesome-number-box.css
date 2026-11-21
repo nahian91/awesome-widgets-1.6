@@ -1,12 +1,12 @@
 /* ==========================================================================
-   Awesome Number Box Widget
+   Awesome Number Box Widget (v2.0.0)
    ========================================================================== */
 
-.awea-nb-grid {
-	--awea-nb-primary: var(--e-global-color-primary, #4f46e5);
-	--awea-nb-heading: #0f172a;
-	--awea-nb-text: #475569;
-	--awea-nb-border: #e2e8f0;
+.awea_number_box_grid {
+	--awea_number_box_primary: var(--e-global-color-primary, #4f46e5);
+	--awea_number_box_heading: #0f172a;
+	--awea_number_box_text: #475569;
+	--awea_number_box_border: #e2e8f0;
 
 	display: grid;
 	grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -16,43 +16,48 @@
 	align-items: stretch;
 }
 
-.awea-nb-grid *,
-.awea-nb-grid *::before,
-.awea-nb-grid *::after {
+.awea_number_box_grid *,
+.awea_number_box_grid *::before,
+.awea_number_box_grid *::after {
 	box-sizing: border-box;
 }
 
-.awea-nb-card {
-	--awea-nb-wm-left: auto;
-	--awea-nb-wm-right: 16px;
-	--awea-nb-btn-align: flex-start;
+.awea_number_box_card {
+	--awea_number_box_wm_start: auto;
+	--awea_number_box_wm_end: 16px;
+	--awea_number_box_btn_align: flex-start;
 
 	position: relative;
 	display: flex;
 	flex-direction: column;
 	align-items: flex-start;
-	text-align: left;
+	text-align: start;
 	gap: 22px;
 	height: 100%;
 	width: 100%;
 	background-color: #ffffff;
-	border: 1px solid var(--awea-nb-border);
+	border: 1px solid var(--awea_number_box_border);
 	border-radius: 24px;
 	padding: 32px 28px;
 	overflow: hidden;
 	transition:
 		background-color 0.25s ease,
 		border-color 0.25s ease,
-		box-shadow 0.25s ease;
+		box-shadow 0.25s ease,
+		transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.awea-nb-card:hover {
+.awea_number_box_card:hover {
 	background-color: #f8fafc;
-	border-color: var(--awea-nb-primary);
+	border-color: var(--awea_number_box_primary);
+}
+
+.awea_number_box_motion_yes .awea_number_box_card:hover {
+	transform: translateY(-4px);
 }
 
 /* Split Side Layout Mode */
-.awea-nb-mode-split .awea-nb-card {
+.awea_number_box_mode_split .awea_number_box_card {
 	flex-direction: row;
 	align-items: flex-start;
 }
@@ -60,18 +65,18 @@
 /* --------------------------------------------------------------------------
    1. Solid & Outlined Number Badges
    -------------------------------------------------------------------------- */
-.awea-nb-badge-wrap {
+.awea_number_box_badge_wrap {
 	position: relative;
 	z-index: 2;
 	flex-shrink: 0;
 }
 
-.awea-nb-badge {
+.awea_number_box_badge {
 	width: 54px;
 	height: 54px;
 	border-radius: 16px;
-	background-color: var(--awea-nb-primary);
-	border: 1.5px solid var(--awea-nb-primary);
+	background-color: var(--awea_number_box_primary);
+	border: 1.5px solid var(--awea_number_box_primary);
 	color: #ffffff;
 	font-size: 1.25rem;
 	font-weight: 800;
@@ -88,28 +93,28 @@
 }
 
 /* Outlined Mode Variant */
-.awea-nb-mode-outlined .awea-nb-badge {
+.awea_number_box_mode_outlined .awea_number_box_badge {
 	background-color: transparent;
-	color: var(--awea-nb-primary);
+	color: var(--awea_number_box_primary);
 }
 
-.awea-nb-mode-outlined .awea-nb-card:hover .awea-nb-badge {
-	background-color: var(--awea-nb-primary);
+.awea_number_box_mode_outlined .awea_number_box_card:hover .awea_number_box_badge {
+	background-color: var(--awea_number_box_primary);
 	color: #ffffff;
 }
 
 /* --------------------------------------------------------------------------
    2. Ghost Watermark Mode
    -------------------------------------------------------------------------- */
-.awea-nb-watermark {
+.awea_number_box_watermark {
 	position: absolute;
 	top: -10px;
-	left: var(--awea-nb-wm-left, auto);
-	right: var(--awea-nb-wm-right, 16px);
+	inset-inline-start: var(--awea_number_box_wm_start, auto);
+	inset-inline-end: var(--awea_number_box_wm_end, 16px);
 	font-size: 7.5rem;
 	font-weight: 900;
 	line-height: 1;
-	color: var(--awea-nb-primary);
+	color: var(--awea_number_box_primary);
 	opacity: 0.08;
 	pointer-events: none;
 	user-select: none;
@@ -119,14 +124,14 @@
 	transition: opacity 0.3s ease;
 }
 
-.awea-nb-card:hover .awea-nb-watermark {
+.awea_number_box_card:hover .awea_number_box_watermark {
 	opacity: 0.13;
 }
 
 /* --------------------------------------------------------------------------
    3. Content Body
    -------------------------------------------------------------------------- */
-.awea-nb-body {
+.awea_number_box_body {
 	position: relative;
 	z-index: 2;
 	display: flex;
@@ -136,69 +141,69 @@
 	min-width: 0;
 }
 
-.awea-nb-tag {
+.awea_number_box_tag {
 	display: inline-block;
 	font-size: 0.72rem;
 	font-weight: 700;
 	letter-spacing: 0.08em;
 	text-transform: uppercase;
-	color: var(--awea-nb-primary);
+	color: var(--awea_number_box_primary);
 	margin-bottom: 6px;
 	line-height: 1.2;
 }
 
-.awea-nb-title {
+.awea_number_box_title {
 	margin: 0 0 10px 0;
 	font-size: 1.28rem;
 	font-weight: 800;
 	line-height: 1.3;
 	letter-spacing: -0.02em;
-	color: var(--awea-nb-heading);
+	color: var(--awea_number_box_heading);
 	word-break: break-word;
 	transition: color 0.25s ease;
 }
 
-.awea-nb-card:hover .awea-nb-title {
-	color: var(--awea-nb-primary);
+.awea_number_box_card:hover .awea_number_box_title {
+	color: var(--awea_number_box_primary);
 }
 
-.awea-nb-desc {
+.awea_number_box_desc {
 	margin: 0 0 20px 0;
 	font-size: 0.95rem;
 	line-height: 1.62;
-	color: var(--awea-nb-text);
+	color: var(--awea_number_box_text);
 	word-break: break-word;
 }
 
 /* --------------------------------------------------------------------------
    4. Bottom-Anchored Text Link
    -------------------------------------------------------------------------- */
-.awea-nb-btn-wrap {
+.awea_number_box_btn_wrap {
 	width: 100%;
 	margin-top: auto;
 	display: flex;
-	justify-content: var(--awea-nb-btn-align, flex-start);
+	justify-content: var(--awea_number_box_btn_align, flex-start);
 }
 
-.awea-nb-btn {
+.awea_number_box_btn {
 	display: inline-flex;
 	align-items: center;
 	gap: 7px;
 	text-decoration: none;
 	font-size: 0.9rem;
 	font-weight: 700;
-	color: var(--awea-nb-primary);
+	color: var(--awea_number_box_primary);
 	line-height: 1.2;
 	transition: color 0.25s ease;
 }
 
-.awea-nb-btn:focus-visible {
-	outline: 2px solid var(--awea-nb-primary);
+.awea_number_box_btn:focus-visible {
+	outline: 2px solid var(--awea_number_box_primary);
 	outline-offset: 3px;
 	border-radius: 4px;
 }
 
-.awea-nb-btn-ico {
+.awea_number_box_btn_ico {
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
@@ -207,67 +212,71 @@
 	transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.awea-nb-btn-ico svg {
+.awea_number_box_btn_ico svg {
 	width: 14px;
 	height: 14px;
 	fill: currentColor;
 	display: block;
 }
 
-.awea-nb-btn-ico i {
+.awea_number_box_btn_ico i {
 	font-size: 13px;
 	line-height: 1;
 }
 
-.awea-nb-btn:hover,
-.awea-nb-btn:focus-visible {
-	color: var(--awea-nb-heading);
+.awea_number_box_btn:hover,
+.awea_number_box_btn:focus-visible {
+	color: var(--awea_number_box_heading);
 }
 
-.awea-nb-btn:hover .awea-nb-btn-ico {
+.awea_number_box_btn:hover .awea_number_box_btn_ico {
 	transform: translateX(4px);
+}
+
+[dir="rtl"] .awea_number_box_btn:hover .awea_number_box_btn_ico {
+	transform: translateX(-4px);
 }
 
 /* --------------------------------------------------------------------------
    5. Accessibility & Responsive
    -------------------------------------------------------------------------- */
 @media (prefers-reduced-motion: reduce) {
-	.awea-nb-card,
-	.awea-nb-badge,
-	.awea-nb-watermark,
-	.awea-nb-btn-ico {
+	.awea_number_box_card,
+	.awea_number_box_badge,
+	.awea_number_box_watermark,
+	.awea_number_box_btn_ico {
 		transition: none !important;
 		transform: none !important;
 	}
 }
 
 @media (max-width: 768px) {
-	.awea-nb-mode-split .awea-nb-card {
+	.awea_number_box_mode_split .awea_number_box_card {
 		flex-direction: column;
 	}
 
-	.awea-nb-card {
+	.awea_number_box_card {
 		padding: 24px 20px;
 		border-radius: 18px;
 		gap: 18px;
 	}
 
-	.awea-nb-badge {
+	.awea_number_box_badge {
 		width: 48px;
 		height: 48px;
 		font-size: 1.1rem;
 	}
 
-	.awea-nb-watermark {
+	.awea_number_box_watermark {
 		font-size: 5.5rem;
 		top: -6px;
 	}
 
-	.awea-nb-title {
+	.awea_number_box_title {
 		font-size: 1.16rem;
 	}
 
-	.awea-nb-desc {
+	.awea_number_box_desc {
 		font-size: 0.9rem;
 		line-height: 1.55;
 	}

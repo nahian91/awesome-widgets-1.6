@@ -20,6 +20,7 @@ use Elementor\Group_Control_Background;
 use Elementor\Core\Kits\Documents\Tabs\Global_Typography;
 use Elementor\Core\Kits\Documents\Tabs\Global_Colors;
 use Elementor\Widget_Base;
+use Elementor\Utils;
 
 class Widget_Awesome_Product_Category_Grid extends Widget_Base {
 
@@ -44,12 +45,20 @@ class Widget_Awesome_Product_Category_Grid extends Widget_Base {
 	}
 
 	protected function register_controls() {
+		$this->register_content_controls();
+		$this->register_style_controls();
+	}
+
+	/**
+	 * Content Tab Controls
+	 */
+	protected function register_content_controls() {
 
 		/* ==========================================================================
 		   CONTENT: 1. QUERY
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_section_query',
+			'awea_product_cat_grid_section_query',
 			[
 				'label' => esc_html__( 'Query', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
@@ -72,7 +81,7 @@ class Widget_Awesome_Product_Category_Grid extends Widget_Base {
 		}
 
 		$this->add_control(
-			'awea_taxonomy_filter',
+			'awea_product_cat_grid_taxonomy_filter',
 			[
 				'label'       => esc_html__( 'Categories', 'awesome-widgets-elementor' ),
 				'type'        => Controls_Manager::SELECT2,
@@ -84,7 +93,7 @@ class Widget_Awesome_Product_Category_Grid extends Widget_Base {
 		);
 
 		$this->add_control(
-			'awea_posts_per_page',
+			'awea_product_cat_grid_posts_per_page',
 			[
 				'label'   => esc_html__( 'Count', 'awesome-widgets-elementor' ),
 				'type'    => Controls_Manager::NUMBER,
@@ -95,7 +104,7 @@ class Widget_Awesome_Product_Category_Grid extends Widget_Base {
 		);
 
 		$this->add_control(
-			'awea_orderby',
+			'awea_product_cat_grid_orderby',
 			[
 				'label'   => esc_html__( 'Sort', 'awesome-widgets-elementor' ),
 				'type'    => Controls_Manager::SELECT,
@@ -111,7 +120,7 @@ class Widget_Awesome_Product_Category_Grid extends Widget_Base {
 		);
 
 		$this->add_control(
-			'awea_order',
+			'awea_product_cat_grid_order',
 			[
 				'label'   => esc_html__( 'Order', 'awesome-widgets-elementor' ),
 				'type'    => Controls_Manager::SELECT,
@@ -129,7 +138,7 @@ class Widget_Awesome_Product_Category_Grid extends Widget_Base {
 		   CONTENT: 2. LAYOUT
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_section_layout',
+			'awea_product_cat_grid_section_layout',
 			[
 				'label' => esc_html__( 'Layout', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
@@ -137,7 +146,7 @@ class Widget_Awesome_Product_Category_Grid extends Widget_Base {
 		);
 
 		$this->add_responsive_control(
-			'awea_columns',
+			'awea_product_cat_grid_columns',
 			[
 				'label'          => esc_html__( 'Columns', 'awesome-widgets-elementor' ),
 				'type'           => Controls_Manager::SELECT,
@@ -151,13 +160,13 @@ class Widget_Awesome_Product_Category_Grid extends Widget_Base {
 					'4' => '4',
 				],
 				'selectors'      => [
-					'{{WRAPPER}} .awea-grid-wrapper' => 'grid-template-columns: repeat({{VALUE}}, minmax(0, 1fr));',
+					'{{WRAPPER}} .awea_product_cat_grid_wrapper' => 'grid-template-columns: repeat({{VALUE}}, minmax(0, 1fr));',
 				],
 			]
 		);
 
 		$this->add_control(
-			'awea_kicker_text',
+			'awea_product_cat_grid_kicker_text',
 			[
 				'label'       => esc_html__( 'Kicker', 'awesome-widgets-elementor' ),
 				'type'        => Controls_Manager::TEXT,
@@ -169,7 +178,7 @@ class Widget_Awesome_Product_Category_Grid extends Widget_Base {
 		);
 
 		$this->add_control(
-			'awea_action_text',
+			'awea_product_cat_grid_action_text',
 			[
 				'label'       => esc_html__( 'Action', 'awesome-widgets-elementor' ),
 				'type'        => Controls_Manager::TEXT,
@@ -179,13 +188,32 @@ class Widget_Awesome_Product_Category_Grid extends Widget_Base {
 			]
 		);
 
+		$this->add_control(
+			'awea_product_cat_grid_image_grayscale',
+			[
+				'label'        => esc_html__( 'Grayscale Filter', 'awesome-widgets-elementor' ),
+				'type'         => Controls_Manager::SWITCHER,
+				'label_on'     => esc_html__( 'Yes', 'awesome-widgets-elementor' ),
+				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
+				'return_value' => 'yes',
+				'default'      => 'yes',
+				'prefix_class' => 'awea_product_cat_grid_grayscale_',
+			]
+		);
+
 		$this->end_controls_section();
+	}
+
+	/**
+	 * Style Tab Controls
+	 */
+	protected function register_style_controls() {
 
 		/* ==========================================================================
 		   STYLE: 1. CARD
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_style_card',
+			'awea_product_cat_grid_style_card',
 			[
 				'label' => esc_html__( 'Card', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
@@ -193,7 +221,7 @@ class Widget_Awesome_Product_Category_Grid extends Widget_Base {
 		);
 
 		$this->add_responsive_control(
-			'awea_card_height',
+			'awea_product_cat_grid_card_height',
 			[
 				'label'          => esc_html__( 'Height', 'awesome-widgets-elementor' ),
 				'type'           => Controls_Manager::SLIDER,
@@ -203,13 +231,13 @@ class Widget_Awesome_Product_Category_Grid extends Widget_Base {
 				'tablet_default' => [ 'unit' => 'px', 'size' => 460 ],
 				'mobile_default' => [ 'unit' => 'px', 'size' => 380 ],
 				'selectors'      => [
-					'{{WRAPPER}} .awea-cat-card' => 'height: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .awea_product_cat_grid_card' => 'height: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
 
 		$this->add_responsive_control(
-			'awea_column_gap',
+			'awea_product_cat_grid_column_gap',
 			[
 				'label'      => esc_html__( 'Gap', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
@@ -217,13 +245,13 @@ class Widget_Awesome_Product_Category_Grid extends Widget_Base {
 				'range'      => [ 'px' => [ 'min' => 0, 'max' => 60 ] ],
 				'default'    => [ 'unit' => 'px', 'size' => 24 ],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-grid-wrapper' => 'gap: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .awea_product_cat_grid_wrapper' => 'gap: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
 
 		$this->add_responsive_control(
-			'awea_card_radius',
+			'awea_product_cat_grid_card_radius',
 			[
 				'label'      => esc_html__( 'Radius', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
@@ -237,24 +265,24 @@ class Widget_Awesome_Product_Category_Grid extends Widget_Base {
 					'isLinked' => true,
 				],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-cat-card' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .awea_product_cat_grid_card' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
 		);
 
-		$this->start_controls_tabs( 'awea_card_tabs' );
+		$this->start_controls_tabs( 'awea_product_cat_grid_card_tabs' );
 
 		$this->start_controls_tab(
-			'awea_card_normal',
+			'awea_product_cat_grid_card_normal',
 			[ 'label' => esc_html__( 'Normal', 'awesome-widgets-elementor' ) ]
 		);
 
 		$this->add_group_control(
 			Group_Control_Border::get_type(),
 			[
-				'name'           => 'awea_card_border',
+				'name'           => 'awea_product_cat_grid_card_border',
 				'label'          => esc_html__( 'Border', 'awesome-widgets-elementor' ),
-				'selector'       => '{{WRAPPER}} .awea-cat-card',
+				'selector'       => '{{WRAPPER}} .awea_product_cat_grid_card',
 				'fields_options' => [
 					'border' => [ 'default' => 'solid' ],
 					'width'  => [
@@ -274,12 +302,12 @@ class Widget_Awesome_Product_Category_Grid extends Widget_Base {
 		$this->end_controls_tab();
 
 		$this->start_controls_tab(
-			'awea_card_hover',
+			'awea_product_cat_grid_card_hover',
 			[ 'label' => esc_html__( 'Hover', 'awesome-widgets-elementor' ) ]
 		);
 
 		$this->add_control(
-			'awea_card_border_hover',
+			'awea_product_cat_grid_card_border_hover',
 			[
 				'label'     => esc_html__( 'Border', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
@@ -287,7 +315,7 @@ class Widget_Awesome_Product_Category_Grid extends Widget_Base {
 					'default' => Global_Colors::COLOR_PRIMARY,
 				],
 				'selectors' => [
-					'{{WRAPPER}} .awea-cat-card:hover' => 'border-color: {{VALUE}};',
+					'{{WRAPPER}} .awea_product_cat_grid_card:hover' => 'border-color: {{VALUE}};',
 				],
 			]
 		);
@@ -301,7 +329,7 @@ class Widget_Awesome_Product_Category_Grid extends Widget_Base {
 		   STYLE: 2. OVERLAY
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_style_overlay',
+			'awea_product_cat_grid_style_overlay',
 			[
 				'label' => esc_html__( 'Overlay', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
@@ -311,28 +339,28 @@ class Widget_Awesome_Product_Category_Grid extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Background::get_type(),
 			[
-				'name'     => 'awea_image_overlay_bg',
+				'name'     => 'awea_product_cat_grid_image_overlay_bg',
 				'label'    => esc_html__( 'Gradient', 'awesome-widgets-elementor' ),
 				'types'    => [ 'classic', 'gradient' ],
-				'selector' => '{{WRAPPER}} .awea-cat-card::before',
+				'selector' => '{{WRAPPER}} .awea_product_cat_grid_card::before',
 			]
 		);
 
 		$this->add_control(
-			'awea_glass_box_bg',
+			'awea_product_cat_grid_glass_box_bg',
 			[
 				'label'     => esc_html__( 'Background', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => 'rgba(255, 255, 255, 0.06)',
 				'selectors' => [
-					'{{WRAPPER}} .awea-cat-info' => 'background: {{VALUE}};',
+					'{{WRAPPER}} .awea_product_cat_grid_info' => 'background: {{VALUE}};',
 				],
 				'separator' => 'before',
 			]
 		);
 
 		$this->add_responsive_control(
-			'awea_glass_padding',
+			'awea_product_cat_grid_glass_padding',
 			[
 				'label'      => esc_html__( 'Padding', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
@@ -346,13 +374,13 @@ class Widget_Awesome_Product_Category_Grid extends Widget_Base {
 					'isLinked' => true,
 				],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-cat-info' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .awea_product_cat_grid_info' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
 		);
 
 		$this->add_responsive_control(
-			'awea_glass_radius',
+			'awea_product_cat_grid_glass_radius',
 			[
 				'label'      => esc_html__( 'Radius', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
@@ -366,7 +394,7 @@ class Widget_Awesome_Product_Category_Grid extends Widget_Base {
 					'isLinked' => true,
 				],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-cat-info' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .awea_product_cat_grid_info' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
 		);
@@ -377,7 +405,7 @@ class Widget_Awesome_Product_Category_Grid extends Widget_Base {
 		   STYLE: 3. TEXT
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_style_text',
+			'awea_product_cat_grid_style_text',
 			[
 				'label' => esc_html__( 'Text', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
@@ -385,13 +413,13 @@ class Widget_Awesome_Product_Category_Grid extends Widget_Base {
 		);
 
 		$this->add_control(
-			'awea_sub_color',
+			'awea_product_cat_grid_sub_color',
 			[
 				'label'     => esc_html__( 'Subtitle', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => 'rgba(255, 255, 255, 0.65)',
 				'selectors' => [
-					'{{WRAPPER}} .awea-cat-info span' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea_product_cat_grid_info span' => 'color: {{VALUE}};',
 				],
 			]
 		);
@@ -399,22 +427,22 @@ class Widget_Awesome_Product_Category_Grid extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Typography::get_type(),
 			[
-				'name'     => 'awea_sub_typo',
+				'name'     => 'awea_product_cat_grid_sub_typo',
 				'label'    => esc_html__( 'Typography', 'awesome-widgets-elementor' ),
-				'selector' => '{{WRAPPER}} .awea-cat-info span',
+				'selector' => '{{WRAPPER}} .awea_product_cat_grid_info span',
 				'global'   => [ 'default' => Global_Typography::TYPOGRAPHY_SECONDARY ],
 			]
 		);
 
 		$this->add_control(
-			'awea_title_color',
+			'awea_product_cat_grid_title_color',
 			[
 				'label'     => esc_html__( 'Title', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#ffffff',
 				'separator' => 'before',
 				'selectors' => [
-					'{{WRAPPER}} .awea-cat-info h3' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea_product_cat_grid_info h3' => 'color: {{VALUE}};',
 				],
 			]
 		);
@@ -422,22 +450,22 @@ class Widget_Awesome_Product_Category_Grid extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Typography::get_type(),
 			[
-				'name'     => 'awea_title_typo',
+				'name'     => 'awea_product_cat_grid_title_typo',
 				'label'    => esc_html__( 'Typography', 'awesome-widgets-elementor' ),
-				'selector' => '{{WRAPPER}} .awea-cat-info h3',
+				'selector' => '{{WRAPPER}} .awea_product_cat_grid_info h3',
 				'global'   => [ 'default' => Global_Typography::TYPOGRAPHY_PRIMARY ],
 			]
 		);
 
 		$this->add_control(
-			'awea_btn_color',
+			'awea_product_cat_grid_btn_color',
 			[
 				'label'     => esc_html__( 'Action', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#ffffff',
 				'separator' => 'before',
 				'selectors' => [
-					'{{WRAPPER}} .awea-view-collection' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea_product_cat_grid_view_collection' => 'color: {{VALUE}};',
 				],
 			]
 		);
@@ -445,9 +473,9 @@ class Widget_Awesome_Product_Category_Grid extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Typography::get_type(),
 			[
-				'name'     => 'awea_btn_typo',
+				'name'     => 'awea_product_cat_grid_btn_typo',
 				'label'    => esc_html__( 'Typography', 'awesome-widgets-elementor' ),
-				'selector' => '{{WRAPPER}} .awea-view-collection',
+				'selector' => '{{WRAPPER}} .awea_product_cat_grid_view_collection',
 				'global'   => [ 'default' => Global_Typography::TYPOGRAPHY_ACCENT ],
 			]
 		);
@@ -457,17 +485,17 @@ class Widget_Awesome_Product_Category_Grid extends Widget_Base {
 
 	protected function render() {
 		if ( ! class_exists( 'WooCommerce' ) ) {
-			echo '<div class="awea-notice-error"><p>' . esc_html__( 'WooCommerce must be installed and active to use the Product Category Grid widget.', 'awesome-widgets-elementor' ) . '</p></div>';
+			echo '<div class="awea_product_cat_grid_notice_error"><p>' . esc_html__( 'WooCommerce must be installed and active to use the Product Category Grid widget.', 'awesome-widgets-elementor' ) . '</p></div>';
 			return;
 		}
 
 		$settings = $this->get_settings_for_display();
-		$limit    = ! empty( $settings['awea_posts_per_page'] ) ? absint( $settings['awea_posts_per_page'] ) : 3;
-		$orderby  = $settings['awea_orderby'] ?? 'name';
-		$order    = $settings['awea_order'] ?? 'ASC';
-		$filter   = $settings['awea_taxonomy_filter'] ?? [];
-		$kicker   = ! empty( $settings['awea_kicker_text'] ) ? $settings['awea_kicker_text'] : esc_html__( 'Collection', 'awesome-widgets-elementor' );
-		$action   = ! empty( $settings['awea_action_text'] ) ? $settings['awea_action_text'] : esc_html__( 'Explore Collection', 'awesome-widgets-elementor' );
+		$limit    = ! empty( $settings['awea_product_cat_grid_posts_per_page'] ) ? absint( $settings['awea_product_cat_grid_posts_per_page'] ) : 3;
+		$orderby  = $settings['awea_product_cat_grid_orderby'] ?? 'name';
+		$order    = $settings['awea_product_cat_grid_order'] ?? 'ASC';
+		$filter   = $settings['awea_product_cat_grid_taxonomy_filter'] ?? [];
+		$kicker   = ! empty( $settings['awea_product_cat_grid_kicker_text'] ) ? $settings['awea_product_cat_grid_kicker_text'] : esc_html__( 'Collection', 'awesome-widgets-elementor' );
+		$action   = ! empty( $settings['awea_product_cat_grid_action_text'] ) ? $settings['awea_product_cat_grid_action_text'] : esc_html__( 'Explore Collection', 'awesome-widgets-elementor' );
 
 		$args = [
 			'taxonomy'   => 'product_cat',
@@ -490,8 +518,8 @@ class Widget_Awesome_Product_Category_Grid extends Widget_Base {
 			return;
 		}
 		?>
-		<div class="awea-product-category-grid-wrap">
-			<div class="awea-grid-wrapper" role="list">
+		<div class="awea_product_cat_grid_wrap">
+			<div class="awea_product_cat_grid_wrapper" role="list">
 				<?php foreach ( $terms as $term ) :
 					$thumbnail_id = get_term_meta( $term->term_id, 'thumbnail_id', true );
 					$image_url    = $thumbnail_id ? wp_get_attachment_image_url( $thumbnail_id, 'large' ) : ( function_exists( 'wc_placeholder_img_src' ) ? wc_placeholder_img_src() : '' );
@@ -500,26 +528,52 @@ class Widget_Awesome_Product_Category_Grid extends Widget_Base {
 						continue;
 					}
 					?>
-					<div class="awea-grid-item" role="listitem">
-						<a href="<?php echo esc_url( $link ); ?>" class="awea-cat-card" aria-label="<?php echo esc_attr( $term->name ); ?>">
+					<div class="awea_product_cat_grid_item" role="listitem">
+						<a href="<?php echo esc_url( $link ); ?>" class="awea_product_cat_grid_card" aria-label="<?php echo esc_attr( $term->name ); ?>">
 							<?php if ( ! empty( $image_url ) ) : ?>
-								<img src="<?php echo esc_url( $image_url ); ?>" class="awea-cat-image" alt="<?php echo esc_attr( $term->name ); ?>" loading="lazy" />
+								<img src="<?php echo esc_url( $image_url ); ?>" class="awea_product_cat_grid_image" alt="<?php echo esc_attr( $term->name ); ?>" loading="lazy" />
 							<?php endif; ?>
 
-							<div class="awea-cat-info">
+							<div class="awea_product_cat_grid_info">
 								<?php if ( ! empty( $kicker ) ) : ?>
 									<span aria-hidden="true"><?php echo esc_html( $kicker ); ?></span>
 								<?php endif; ?>
 								<h3><?php echo esc_html( $term->name ); ?></h3>
 								<?php if ( ! empty( $action ) ) : ?>
-									<div class="awea-view-collection">
-										<?php echo esc_html( $action ); ?>
+									<div class="awea_product_cat_grid_view_collection">
+										<span><?php echo esc_html( $action ); ?></span>
+										<svg class="awea_product_cat_grid_arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
 									</div>
 								<?php endif; ?>
 							</div>
 						</a>
 					</div>
 				<?php endforeach; ?>
+			</div>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Instant Live Editor Preview (Backbone.js Template).
+	 */
+	protected function content_template() {
+		?>
+		<div class="awea_product_cat_grid_wrap">
+			<div class="awea_product_cat_grid_wrapper" role="list">
+				<div class="awea_product_cat_grid_item" role="listitem">
+					<a href="#" class="awea_product_cat_grid_card">
+						<img src="<?php echo esc_url( Utils::get_placeholder_image_src() ); ?>" class="awea_product_cat_grid_image" alt="Placeholder" loading="lazy" />
+						<div class="awea_product_cat_grid_info">
+							<span aria-hidden="true">{{{ settings.awea_product_cat_grid_kicker_text || 'Collection' }}}</span>
+							<h3><?php esc_html_e( 'Sample Category', 'awesome-widgets-elementor' ); ?></h3>
+							<div class="awea_product_cat_grid_view_collection">
+								<span>{{{ settings.awea_product_cat_grid_action_text || 'Explore Collection' }}}</span>
+								<svg class="awea_product_cat_grid_arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+							</div>
+						</div>
+					</a>
+				</div>
 			</div>
 		</div>
 		<?php

@@ -19,6 +19,7 @@ use Elementor\Group_Control_Typography;
 use Elementor\Core\Kits\Documents\Tabs\Global_Typography;
 use Elementor\Core\Kits\Documents\Tabs\Global_Colors;
 use Elementor\Widget_Base;
+use Elementor\Utils;
 
 class Widget_Awesome_Progress_Bar extends Widget_Base {
 
@@ -43,12 +44,20 @@ class Widget_Awesome_Progress_Bar extends Widget_Base {
 	}
 
 	protected function register_controls() {
+		$this->register_content_controls();
+		$this->register_style_controls();
+	}
+
+	/**
+	 * Content Tab Controls
+	 */
+	protected function register_content_controls() {
 
 		/* ==========================================================================
 		   CONTENT: 1. CONTENT
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_section_content',
+			'awea_progress_bar_section_content',
 			[
 				'label' => esc_html__( 'Content', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
@@ -56,7 +65,7 @@ class Widget_Awesome_Progress_Bar extends Widget_Base {
 		);
 
 		$this->add_control(
-			'awea_layout_style',
+			'awea_progress_bar_layout_style',
 			[
 				'label'   => esc_html__( 'Style', 'awesome-widgets-elementor' ),
 				'type'    => Controls_Manager::SELECT,
@@ -69,7 +78,7 @@ class Widget_Awesome_Progress_Bar extends Widget_Base {
 		);
 
 		$this->add_control(
-			'awea_title',
+			'awea_progress_bar_title',
 			[
 				'label'       => esc_html__( 'Title', 'awesome-widgets-elementor' ),
 				'type'        => Controls_Manager::TEXT,
@@ -80,7 +89,7 @@ class Widget_Awesome_Progress_Bar extends Widget_Base {
 		);
 
 		$this->add_control(
-			'awea_percent',
+			'awea_progress_bar_percent',
 			[
 				'label'   => esc_html__( 'Percent', 'awesome-widgets-elementor' ),
 				'type'    => Controls_Manager::SLIDER,
@@ -99,7 +108,7 @@ class Widget_Awesome_Progress_Bar extends Widget_Base {
 		);
 
 		$this->add_control(
-			'awea_suffix',
+			'awea_progress_bar_suffix',
 			[
 				'label'   => esc_html__( 'Suffix', 'awesome-widgets-elementor' ),
 				'type'    => Controls_Manager::TEXT,
@@ -114,7 +123,7 @@ class Widget_Awesome_Progress_Bar extends Widget_Base {
 		   CONTENT: 2. OPTIONS
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_section_options',
+			'awea_progress_bar_section_options',
 			[
 				'label' => esc_html__( 'Options', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
@@ -122,9 +131,9 @@ class Widget_Awesome_Progress_Bar extends Widget_Base {
 		);
 
 		$this->add_control(
-			'awea_duration',
+			'awea_progress_bar_duration',
 			[
-				'label'   => esc_html__( 'Duration', 'awesome-widgets-elementor' ),
+				'label'   => esc_html__( 'Duration (ms)', 'awesome-widgets-elementor' ),
 				'type'    => Controls_Manager::NUMBER,
 				'default' => 1800,
 				'min'     => 300,
@@ -139,7 +148,7 @@ class Widget_Awesome_Progress_Bar extends Widget_Base {
 		   STYLE: 1. LAYOUT
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_style_layout',
+			'awea_progress_bar_style_layout',
 			[
 				'label' => esc_html__( 'Layout', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
@@ -147,7 +156,7 @@ class Widget_Awesome_Progress_Bar extends Widget_Base {
 		);
 
 		$this->add_responsive_control(
-			'awea_circle_dimension',
+			'awea_progress_bar_circle_dimension',
 			[
 				'label'      => esc_html__( 'Diameter', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
@@ -157,14 +166,14 @@ class Widget_Awesome_Progress_Bar extends Widget_Base {
 				],
 				'default'    => [ 'unit' => 'px', 'size' => 200 ],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-radial-container' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .awea_progress_bar_radial_container' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}};',
 				],
-				'condition'  => [ 'awea_layout_style' => 'circle' ],
+				'condition'  => [ 'awea_progress_bar_layout_style' => 'circle' ],
 			]
 		);
 
 		$this->add_responsive_control(
-			'awea_line_max_width',
+			'awea_progress_bar_line_max_width',
 			[
 				'label'      => esc_html__( 'Width', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
@@ -175,14 +184,14 @@ class Widget_Awesome_Progress_Bar extends Widget_Base {
 				],
 				'default'    => [ 'unit' => '%', 'size' => 100 ],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-linear-container' => 'max-width: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .awea_progress_bar_linear_container' => 'max-width: {{SIZE}}{{UNIT}};',
 				],
-				'condition'  => [ 'awea_layout_style' => 'line' ],
+				'condition'  => [ 'awea_progress_bar_layout_style' => 'line' ],
 			]
 		);
 
 		$this->add_responsive_control(
-			'awea_container_alignment',
+			'awea_progress_bar_alignment',
 			[
 				'label'     => esc_html__( 'Alignment', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::CHOOSE,
@@ -193,7 +202,7 @@ class Widget_Awesome_Progress_Bar extends Widget_Base {
 				],
 				'default'   => 'center',
 				'selectors' => [
-					'{{WRAPPER}} .awea-progress-wrapper' => 'display: flex; justify-content: {{VALUE}};',
+					'{{WRAPPER}} .awea_progress_bar_wrapper' => 'display: flex; justify-content: {{VALUE}};',
 				],
 			]
 		);
@@ -204,7 +213,7 @@ class Widget_Awesome_Progress_Bar extends Widget_Base {
 		   STYLE: 2. COLORS
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_style_colors',
+			'awea_progress_bar_style_colors',
 			[
 				'label' => esc_html__( 'Colors', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
@@ -212,77 +221,77 @@ class Widget_Awesome_Progress_Bar extends Widget_Base {
 		);
 
 		$this->add_control(
-			'awea_accent_color',
+			'awea_progress_bar_accent_color',
 			[
-				'label'     => esc_html__( 'Fill', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Fill Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [
 					'default' => Global_Colors::COLOR_PRIMARY,
 				],
 				'selectors' => [
-					'{{WRAPPER}} .awea-progress-circle-fill' => 'stroke: {{VALUE}};',
-					'{{WRAPPER}} .awea-line-fill'           => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .awea_progress_bar_circle_fill' => 'stroke: {{VALUE}};',
+					'{{WRAPPER}} .awea_progress_bar_line_fill'   => 'background-color: {{VALUE}};',
 				],
 			]
 		);
 
 		$this->add_control(
-			'awea_track_color',
+			'awea_progress_bar_track_color',
 			[
-				'label'     => esc_html__( 'Track', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Track Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#e2e8f0',
 				'selectors' => [
-					'{{WRAPPER}} .awea-progress-track' => 'stroke: {{VALUE}};',
-					'{{WRAPPER}} .awea-line-track'     => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .awea_progress_bar_track' => 'stroke: {{VALUE}};',
+					'{{WRAPPER}} .awea_progress_bar_line_track'     => 'background-color: {{VALUE}};',
 				],
 			]
 		);
 
 		$this->add_responsive_control(
-			'awea_stroke_width',
+			'awea_progress_bar_stroke_width',
 			[
-				'label'      => esc_html__( 'Stroke', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Stroke Width', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [ 'px' => [ 'min' => 2, 'max' => 24 ] ],
 				'default'    => [ 'unit' => 'px', 'size' => 8 ],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-progress-svg circle' => 'stroke-width: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .awea_progress_bar_svg circle' => 'stroke-width: {{SIZE}}{{UNIT}};',
 				],
-				'condition'  => [ 'awea_layout_style' => 'circle' ],
+				'condition'  => [ 'awea_progress_bar_layout_style' => 'circle' ],
 				'separator'  => 'before',
 			]
 		);
 
 		$this->add_responsive_control(
-			'awea_line_height',
+			'awea_progress_bar_line_height',
 			[
-				'label'      => esc_html__( 'Height', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Bar Height', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [ 'px' => [ 'min' => 4, 'max' => 36 ] ],
 				'default'    => [ 'unit' => 'px', 'size' => 10 ],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-line-track, {{WRAPPER}} .awea-line-fill' => 'height: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .awea_progress_bar_line_track, {{WRAPPER}} .awea_progress_bar_line_fill' => 'height: {{SIZE}}{{UNIT}};',
 				],
-				'condition'  => [ 'awea_layout_style' => 'line' ],
+				'condition'  => [ 'awea_progress_bar_layout_style' => 'line' ],
 				'separator'  => 'before',
 			]
 		);
 
 		$this->add_responsive_control(
-			'awea_line_radius',
+			'awea_progress_bar_line_radius',
 			[
-				'label'      => esc_html__( 'Radius', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Border Radius', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px', '%' ],
 				'range'      => [ 'px' => [ 'min' => 0, 'max' => 30 ] ],
 				'default'    => [ 'unit' => 'px', 'size' => 10 ],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-line-track, {{WRAPPER}} .awea-line-fill' => 'border-radius: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .awea_progress_bar_line_track, {{WRAPPER}} .awea_progress_bar_line_fill' => 'border-radius: {{SIZE}}{{UNIT}};',
 				],
-				'condition'  => [ 'awea_layout_style' => 'line' ],
+				'condition'  => [ 'awea_progress_bar_layout_style' => 'line' ],
 			]
 		);
 
@@ -292,7 +301,7 @@ class Widget_Awesome_Progress_Bar extends Widget_Base {
 		   STYLE: 3. TYPOGRAPHY
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_style_typography',
+			'awea_progress_bar_style_typography',
 			[
 				'label' => esc_html__( 'Typography', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
@@ -300,7 +309,7 @@ class Widget_Awesome_Progress_Bar extends Widget_Base {
 		);
 
 		$this->add_control(
-			'awea_digit_color',
+			'awea_progress_bar_digit_color',
 			[
 				'label'     => esc_html__( 'Digit Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
@@ -308,7 +317,7 @@ class Widget_Awesome_Progress_Bar extends Widget_Base {
 					'default' => Global_Colors::COLOR_PRIMARY,
 				],
 				'selectors' => [
-					'{{WRAPPER}} .awea-progress-percent' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea_progress_bar_percent' => 'color: {{VALUE}};',
 				],
 			]
 		);
@@ -316,9 +325,9 @@ class Widget_Awesome_Progress_Bar extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Typography::get_type(),
 			[
-				'name'     => 'awea_digit_typo',
+				'name'     => 'awea_progress_bar_digit_typo',
 				'label'    => esc_html__( 'Digit Typography', 'awesome-widgets-elementor' ),
-				'selector' => '{{WRAPPER}} .awea-progress-percent',
+				'selector' => '{{WRAPPER}} .awea_progress_bar_percent',
 				'global'   => [
 					'default' => Global_Typography::TYPOGRAPHY_PRIMARY,
 				],
@@ -326,7 +335,7 @@ class Widget_Awesome_Progress_Bar extends Widget_Base {
 		);
 
 		$this->add_control(
-			'awea_label_color',
+			'awea_progress_bar_label_color',
 			[
 				'label'     => esc_html__( 'Label Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
@@ -335,7 +344,7 @@ class Widget_Awesome_Progress_Bar extends Widget_Base {
 				],
 				'separator' => 'before',
 				'selectors' => [
-					'{{WRAPPER}} .awea-progress-label' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea_progress_bar_label' => 'color: {{VALUE}};',
 				],
 			]
 		);
@@ -343,9 +352,9 @@ class Widget_Awesome_Progress_Bar extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Typography::get_type(),
 			[
-				'name'     => 'awea_label_typo',
+				'name'     => 'awea_progress_bar_label_typo',
 				'label'    => esc_html__( 'Label Typography', 'awesome-widgets-elementor' ),
-				'selector' => '{{WRAPPER}} .awea-progress-label',
+				'selector' => '{{WRAPPER}} .awea_progress_bar_label',
 				'global'   => [
 					'default' => Global_Typography::TYPOGRAPHY_SECONDARY,
 				],
@@ -357,50 +366,50 @@ class Widget_Awesome_Progress_Bar extends Widget_Base {
 
 	protected function render() {
 		$settings      = $this->get_settings_for_display();
-		$style         = $settings['awea_layout_style'] ?? 'circle';
-		$target        = isset( $settings['awea_percent']['size'] ) && '' !== $settings['awea_percent']['size'] ? min( 100, max( 0, absint( $settings['awea_percent']['size'] ) ) ) : 0;
-		$label         = $settings['awea_title'] ?? '';
-		$duration      = ! empty( $settings['awea_duration'] ) ? absint( $settings['awea_duration'] ) : 1800;
-		$suffix        = $settings['awea_suffix'] ?? '%';
+		$style         = $settings['awea_progress_bar_layout_style'] ?? 'circle';
+		$target        = isset( $settings['awea_progress_bar_percent']['size'] ) && '' !== $settings['awea_progress_bar_percent']['size'] ? min( 100, max( 0, absint( $settings['awea_progress_bar_percent']['size'] ) ) ) : 0;
+		$label         = $settings['awea_progress_bar_title'] ?? '';
+		$duration      = ! empty( $settings['awea_progress_bar_duration'] ) ? absint( $settings['awea_progress_bar_duration'] ) : 1800;
+		$suffix        = $settings['awea_progress_bar_suffix'] ?? '%';
 		$widget_id     = $this->get_id();
 		$circumference = 263.89;
 		$initial_text  = $target . $suffix;
 		?>
-		<div class="awea-progress-wrapper awea-style-<?php echo esc_attr( $style ); ?>"
-			 id="awea-progress-<?php echo esc_attr( $widget_id ); ?>"
+		<div class="awea_progress_bar_wrapper awea_progress_bar_style_<?php echo esc_attr( $style ); ?>"
+			 id="awea_progress_bar_<?php echo esc_attr( $widget_id ); ?>"
 			 role="progressbar"
 			 aria-valuemin="0"
 			 aria-valuemax="100"
 			 aria-valuenow="<?php echo esc_attr( (string) $target ); ?>"
 			 <?php if ( ! empty( $label ) ) : ?>aria-label="<?php echo esc_attr( $label ); ?>"<?php endif; ?>
-			 data-target="<?php echo esc_attr( (string) $target ); ?>"
-			 data-duration="<?php echo esc_attr( (string) $duration ); ?>"
-			 data-suffix="<?php echo esc_attr( $suffix ); ?>"
-			 data-style="<?php echo esc_attr( $style ); ?>">
+			 data-awea_progress_bar_target="<?php echo esc_attr( (string) $target ); ?>"
+			 data-awea_progress_bar_duration="<?php echo esc_attr( (string) $duration ); ?>"
+			 data-awea_progress_bar_suffix="<?php echo esc_attr( $suffix ); ?>"
+			 data-awea_progress_bar_style="<?php echo esc_attr( $style ); ?>">
 
 			<?php if ( 'circle' === $style ) : ?>
-				<div class="awea-radial-container">
-					<svg class="awea-progress-svg" viewBox="0 0 100 100" aria-hidden="true">
-						<circle class="awea-progress-track" cx="50" cy="50" r="42" fill="none"></circle>
-						<circle class="awea-progress-circle-fill" cx="50" cy="50" r="42" fill="none" stroke-dasharray="<?php echo esc_attr( (string) $circumference ); ?>" stroke-dashoffset="<?php echo esc_attr( (string) $circumference ); ?>" data-circumference="<?php echo esc_attr( (string) $circumference ); ?>"></circle>
+				<div class="awea_progress_bar_radial_container">
+					<svg class="awea_progress_bar_svg" viewBox="0 0 100 100" aria-hidden="true">
+						<circle class="awea_progress_bar_track" cx="50" cy="50" r="42" fill="none"></circle>
+						<circle class="awea_progress_bar_circle_fill" cx="50" cy="50" r="42" fill="none" stroke-dasharray="<?php echo esc_attr( (string) $circumference ); ?>" stroke-dashoffset="<?php echo esc_attr( (string) $circumference ); ?>" data-awea_progress_bar_circumference="<?php echo esc_attr( (string) $circumference ); ?>"></circle>
 					</svg>
-					<div class="awea-radial-content">
-						<span class="awea-progress-percent" aria-hidden="true"><?php echo esc_html( $initial_text ); ?></span>
+					<div class="awea_progress_bar_radial_content">
+						<span class="awea_progress_bar_percent" aria-hidden="true"><?php echo esc_html( $initial_text ); ?></span>
 						<?php if ( ! empty( $label ) ) : ?>
-							<span class="awea-progress-label"><?php echo esc_html( $label ); ?></span>
+							<span class="awea_progress_bar_label"><?php echo esc_html( $label ); ?></span>
 						<?php endif; ?>
 					</div>
 				</div>
 			<?php else : ?>
-				<div class="awea-linear-container">
-					<div class="awea-linear-meta">
+				<div class="awea_progress_bar_linear_container">
+					<div class="awea_progress_bar_linear_meta">
 						<?php if ( ! empty( $label ) ) : ?>
-							<span class="awea-progress-label"><?php echo esc_html( $label ); ?></span>
+							<span class="awea_progress_bar_label"><?php echo esc_html( $label ); ?></span>
 						<?php endif; ?>
-						<span class="awea-progress-percent" aria-hidden="true"><?php echo esc_html( $initial_text ); ?></span>
+						<span class="awea_progress_bar_percent" aria-hidden="true"><?php echo esc_html( $initial_text ); ?></span>
 					</div>
-					<div class="awea-line-track">
-						<div class="awea-line-fill" style="width: 0%;"></div>
+					<div class="awea_progress_bar_line_track">
+						<div class="awea_progress_bar_line_fill" style="width: 0%;"></div>
 					</div>
 				</div>
 			<?php endif; ?>
@@ -409,21 +418,21 @@ class Widget_Awesome_Progress_Bar extends Widget_Base {
 
 		<script>
 		(function() {
-			function bindProgressBar(wrapper) {
+			function awea_progress_bar_bind(wrapper) {
 				if (!wrapper || wrapper.__aweaBound) return;
 				wrapper.__aweaBound = true;
 
-				var target       = parseInt(wrapper.getAttribute('data-target'), 10) || 0;
-				var duration     = parseInt(wrapper.getAttribute('data-duration'), 10) || 1800;
-				var suffix       = wrapper.hasAttribute('data-suffix') ? wrapper.getAttribute('data-suffix') : '%';
-				var style        = wrapper.getAttribute('data-style') || 'circle';
+				var target       = parseInt(wrapper.getAttribute('data-awea_progress_bar_target'), 10) || 0;
+				var duration     = parseInt(wrapper.getAttribute('data-awea_progress_bar_duration'), 10) || 1800;
+				var suffix       = wrapper.hasAttribute('data-awea_progress_bar_suffix') ? wrapper.getAttribute('data-awea_progress_bar_suffix') : '%';
+				var style        = wrapper.getAttribute('data-awea_progress_bar_style') || 'circle';
 				var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-				var percentEl  = wrapper.querySelector('.awea-progress-percent');
-				var fillCircle = wrapper.querySelector('.awea-progress-circle-fill');
-				var fillLine   = wrapper.querySelector('.awea-line-fill');
+				var percentEl  = wrapper.querySelector('.awea_progress_bar_percent');
+				var fillCircle = wrapper.querySelector('.awea_progress_bar_circle_fill');
+				var fillLine   = wrapper.querySelector('.awea_progress_bar_line_fill');
 
-				var circumference = fillCircle ? (parseFloat(fillCircle.getAttribute('data-circumference')) || 263.89) : 263.89;
+				var circumference = fillCircle ? (parseFloat(fillCircle.getAttribute('data-awea_progress_bar_circumference')) || 263.89) : 263.89;
 
 				function applyFinalState() {
 					if (percentEl) percentEl.textContent = target + suffix;
@@ -486,25 +495,70 @@ class Widget_Awesome_Progress_Bar extends Widget_Base {
 				}
 			}
 
-			function initById() {
-				bindProgressBar(document.getElementById('awea-progress-<?php echo esc_js( $widget_id ); ?>'));
+			function awea_progress_bar_init() {
+				awea_progress_bar_bind(document.getElementById('awea_progress_bar_<?php echo esc_js( $widget_id ); ?>'));
 			}
 
 			if (document.readyState === 'loading') {
-				document.addEventListener('DOMContentLoaded', initById);
+				document.addEventListener('DOMContentLoaded', awea_progress_bar_init);
 			} else {
-				initById();
+				awea_progress_bar_init();
 			}
 
 			if (window.elementorFrontend && window.elementorFrontend.hooks && !window.aweaProgressBarHooked) {
 				window.aweaProgressBarHooked = true;
 				window.elementorFrontend.hooks.addAction('frontend/element_ready/awesome-progress-bar.default', function($scope) {
-					var el = $scope && $scope[0] ? $scope[0].querySelector('.awea-progress-wrapper') : null;
-					bindProgressBar(el);
+					var el = $scope && $scope[0] ? $scope[0].querySelector('.awea_progress_bar_wrapper') : null;
+					awea_progress_bar_bind(el);
 				});
 			}
 		})();
 		</script>
+		<?php
+	}
+
+	/**
+	 * Instant Live Editor Preview (Backbone.js Template).
+	 */
+	protected function content_template() {
+		?>
+		<#
+		var style     = settings.awea_progress_bar_layout_style || 'circle';
+		var target    = ( settings.awea_progress_bar_percent && settings.awea_progress_bar_percent.size !== '' ) ? Math.min( 100, Math.max( 0, parseInt( settings.awea_progress_bar_percent.size, 10 ) ) ) : 0;
+		var label     = settings.awea_progress_bar_title || '';
+		var suffix    = settings.awea_progress_bar_suffix || '%';
+		var initialText = target + suffix;
+		var circ      = 263.89;
+		var offset    = circ - ( ( target / 100 ) * circ );
+		#>
+		<div class="awea_progress_bar_wrapper awea_progress_bar_style_{{ style }}" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ target }}">
+			<# if ( 'circle' === style ) { #>
+				<div class="awea_progress_bar_radial_container">
+					<svg class="awea_progress_bar_svg" viewBox="0 0 100 100" aria-hidden="true">
+						<circle class="awea_progress_bar_track" cx="50" cy="50" r="42" fill="none"></circle>
+						<circle class="awea_progress_bar_circle_fill" cx="50" cy="50" r="42" fill="none" stroke-dasharray="{{ circ }}" stroke-dashoffset="{{ offset }}"></circle>
+					</svg>
+					<div class="awea_progress_bar_radial_content">
+						<span class="awea_progress_bar_percent" aria-hidden="true">{{{ initialText }}}</span>
+						<# if ( label ) { #>
+							<span class="awea_progress_bar_label">{{{ label }}}</span>
+						<# } #>
+					</div>
+				</div>
+			<# } else { #>
+				<div class="awea_progress_bar_linear_container">
+					<div class="awea_progress_bar_linear_meta">
+						<# if ( label ) { #>
+							<span class="awea_progress_bar_label">{{{ label }}}</span>
+						<# } #>
+						<span class="awea_progress_bar_percent" aria-hidden="true">{{{ initialText }}}</span>
+					</div>
+					<div class="awea_progress_bar_line_track">
+						<div class="awea_progress_bar_line_fill" style="width: {{ target }}%;"></div>
+					</div>
+				</div>
+			<# } #>
+		</div>
 		<?php
 	}
 }

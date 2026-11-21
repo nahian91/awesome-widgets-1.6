@@ -1,26 +1,26 @@
 /* ==========================================================================
-   Awesome Post Grid Widget
+   Awesome Post Grid Widget (v2.0.0)
    ========================================================================== */
 
-.awea-post-grid-wrap {
-	--awea-pg-primary: var(--e-global-color-primary, #4f46e5);
-	--awea-pg-heading: #0f172a;
-	--awea-pg-text: #475569;
-	--awea-pg-muted: #64748b;
-	--awea-pg-border: #e2e8f0;
+.awea_post_grid_wrap {
+	--awea_post_grid_primary: var(--e-global-color-primary, #4f46e5);
+	--awea_post_grid_heading: #0f172a;
+	--awea_post_grid_text: #475569;
+	--awea_post_grid_muted: #64748b;
+	--awea_post_grid_border: #e2e8f0;
 
 	width: 100%;
 	position: relative;
 	box-sizing: border-box;
 }
 
-.awea-post-grid-wrap *,
-.awea-post-grid-wrap *::before,
-.awea-post-grid-wrap *::after {
+.awea_post_grid_wrap *,
+.awea_post_grid_wrap *::before,
+.awea_post_grid_wrap *::after {
 	box-sizing: border-box;
 }
 
-.awea-grid-row {
+.awea_post_grid_row {
 	display: grid;
 	grid-template-columns: repeat(3, minmax(0, 1fr));
 	gap: 24px;
@@ -28,7 +28,7 @@
 	align-items: stretch;
 }
 
-.awea-grid-item {
+.awea_post_grid_item {
 	display: flex;
 	flex-direction: column;
 	min-width: 0;
@@ -37,9 +37,9 @@
 /* --------------------------------------------------------------------------
    Blog Card Shell
    -------------------------------------------------------------------------- */
-.awea-blog-card {
+.awea_post_grid_card {
 	background-color: #ffffff;
-	border: 1px solid var(--awea-pg-border);
+	border: 1px solid var(--awea_post_grid_border);
 	border-radius: 24px;
 	padding: 24px;
 	display: flex;
@@ -52,15 +52,15 @@
 		box-shadow 0.25s ease;
 }
 
-.awea-blog-card:hover {
+.awea_post_grid_card:hover {
 	background-color: #f8fafc;
-	border-color: var(--awea-pg-primary);
+	border-color: var(--awea_post_grid_primary);
 }
 
 /* --------------------------------------------------------------------------
    Featured Image Frame
    -------------------------------------------------------------------------- */
-.awea-blog-img-wrap {
+.awea_post_grid_img_wrap {
 	position: relative;
 	width: 100%;
 	aspect-ratio: 16 / 10;
@@ -70,18 +70,18 @@
 	margin-bottom: 18px;
 }
 
-.awea-blog-img-link {
+.awea_post_grid_img_link {
 	display: block;
 	width: 100%;
 	height: 100%;
 }
 
-.awea-blog-img-link:focus-visible {
-	outline: 2px solid var(--awea-pg-primary);
+.awea_post_grid_img_link:focus-visible {
+	outline: 2px solid var(--awea_post_grid_primary);
 	outline-offset: -2px;
 }
 
-.awea-blog-img {
+.awea_post_grid_img {
 	width: 100%;
 	height: 100%;
 	object-fit: cover;
@@ -89,18 +89,18 @@
 	transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.awea-blog-card:hover .awea-blog-img {
+.awea_post_grid_card:hover .awea_post_grid_img {
 	transform: scale(1.03);
 }
 
-.awea-blog-badge {
+.awea_post_grid_badge {
 	position: absolute;
 	top: 12px;
 	inset-inline-start: 12px;
 	z-index: 2;
 	padding: 5px 12px;
 	border-radius: 100px;
-	background-color: var(--awea-pg-primary);
+	background-color: var(--awea_post_grid_primary);
 	border: 1px solid rgba(255, 255, 255, 0.16);
 	color: #ffffff;
 	text-decoration: none;
@@ -113,39 +113,39 @@
 	line-height: 1.2;
 }
 
-.awea-blog-badge:hover,
-.awea-blog-badge:focus-visible {
+.awea_post_grid_badge:hover,
+.awea_post_grid_badge:focus-visible {
 	opacity: 0.92;
 }
 
 /* --------------------------------------------------------------------------
    Card Body & Typography
    -------------------------------------------------------------------------- */
-.awea-blog-body {
+.awea_post_grid_body {
 	display: flex;
 	flex-direction: column;
 	flex-grow: 1;
 }
 
-.awea-blog-meta {
+.awea_post_grid_meta {
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
 	gap: 8px;
 	font-size: 0.76rem;
 	font-weight: 700;
-	color: var(--awea-pg-muted);
+	color: var(--awea_post_grid_muted);
 	text-transform: uppercase;
 	letter-spacing: 0.06em;
 	margin-bottom: 10px;
 	line-height: 1.2;
 }
 
-.awea-meta-dot {
+.awea_post_grid_meta_dot {
 	opacity: 0.4;
 }
 
-.awea-blog-title {
+.awea_post_grid_title {
 	margin-top: 0;
 	margin-bottom: 12px;
 	line-height: 1.3;
@@ -153,27 +153,27 @@
 	word-break: break-word;
 }
 
-.awea-blog-title a {
+.awea_post_grid_title a {
 	text-decoration: none;
-	color: var(--awea-pg-heading);
+	color: var(--awea_post_grid_heading);
 	transition: color 0.25s ease;
 }
 
-.awea-blog-title a:focus-visible {
-	outline: 2px solid var(--awea-pg-primary);
+.awea_post_grid_title a:focus-visible {
+	outline: 2px solid var(--awea_post_grid_primary);
 	outline-offset: 2px;
 	border-radius: 4px;
 }
 
-.awea-blog-card:hover .awea-blog-title a,
-.awea-blog-title a:hover {
-	color: var(--awea-pg-primary);
+.awea_post_grid_card:hover .awea_post_grid_title a,
+.awea_post_grid_title a:hover {
+	color: var(--awea_post_grid_primary);
 }
 
-.awea-blog-desc {
+.awea_post_grid_desc {
 	font-size: 0.94rem;
 	line-height: 1.62;
-	color: var(--awea-pg-text);
+	color: var(--awea_post_grid_text);
 	margin-top: 0;
 	margin-bottom: 20px;
 	word-break: break-word;
@@ -182,7 +182,7 @@
 /* --------------------------------------------------------------------------
    Card Footer Lockup
    -------------------------------------------------------------------------- */
-.awea-blog-footer {
+.awea_post_grid_footer {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
@@ -192,7 +192,7 @@
 	gap: 12px;
 }
 
-.awea-blog-link {
+.awea_post_grid_link {
 	display: inline-flex;
 	align-items: center;
 	gap: 7px;
@@ -202,7 +202,7 @@
 	padding: 8px 16px;
 	border-radius: 100px;
 	background-color: #f1f5f9;
-	color: var(--awea-pg-heading);
+	color: var(--awea_post_grid_heading);
 	border: 1px solid transparent;
 	transition:
 		background-color 0.25s ease,
@@ -210,29 +210,37 @@
 	line-height: 1;
 }
 
-.awea-blog-link:focus-visible {
-	outline: 2px solid var(--awea-pg-primary);
+.awea_post_grid_link:focus-visible {
+	outline: 2px solid var(--awea_post_grid_primary);
 	outline-offset: 2px;
 }
 
-.awea-blog-link svg {
+.awea_post_grid_link svg {
 	width: 13px;
 	height: 13px;
 	transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.awea-blog-card:hover .awea-blog-link,
-.awea-blog-link:hover,
-.awea-blog-link:focus-visible {
-	background-color: var(--awea-pg-primary);
+[dir="rtl"] .awea_post_grid_link svg {
+	transform: scaleX(-1);
+}
+
+.awea_post_grid_card:hover .awea_post_grid_link,
+.awea_post_grid_link:hover,
+.awea_post_grid_link:focus-visible {
+	background-color: var(--awea_post_grid_primary);
 	color: #ffffff;
 }
 
-.awea-blog-card:hover .awea-blog-link svg {
+.awea_post_grid_card:hover .awea_post_grid_link svg {
 	transform: translateX(3px);
 }
 
-.awea-post-num {
+[dir="rtl"] .awea_post_grid_card:hover .awea_post_grid_link svg {
+	transform: scaleX(-1) translateX(3px);
+}
+
+.awea_post_grid_num {
 	font-size: 1.1rem;
 	font-weight: 900;
 	color: #cbd5e1;
@@ -242,31 +250,70 @@
 }
 
 /* --------------------------------------------------------------------------
+   Pagination
+   -------------------------------------------------------------------------- */
+.awea_post_grid_pagination {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	margin-top: 36px;
+}
+
+.awea_post_grid_pagination .page-numbers {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 40px;
+	height: 40px;
+	padding: 0 14px;
+	border-radius: 12px;
+	background-color: #ffffff;
+	border: 1px solid var(--awea_post_grid_border);
+	color: var(--awea_post_grid_heading);
+	font-size: 0.88rem;
+	font-weight: 700;
+	text-decoration: none;
+	transition:
+		background-color 0.2s ease,
+		border-color 0.2s ease,
+		color 0.2s ease;
+}
+
+.awea_post_grid_pagination .page-numbers.current,
+.awea_post_grid_pagination .page-numbers:hover {
+	background-color: var(--awea_post_grid_primary);
+	border-color: var(--awea_post_grid_primary);
+	color: #ffffff;
+}
+
+/* --------------------------------------------------------------------------
    Accessibility & Responsive
    -------------------------------------------------------------------------- */
 @media (prefers-reduced-motion: reduce) {
-	.awea-blog-card,
-	.awea-blog-img,
-	.awea-blog-link,
-	.awea-blog-link svg {
+	.awea_post_grid_card,
+	.awea_post_grid_img,
+	.awea_post_grid_link,
+	.awea_post_grid_link svg {
 		transition: none !important;
 		transform: none !important;
 	}
 }
 
 @media (max-width: 640px) {
-	.awea-blog-card {
+	.awea_post_grid_card {
 		padding: 18px;
 		border-radius: 18px;
 	}
 
-	.awea-blog-footer {
+	.awea_post_grid_footer {
 		flex-direction: row;
 		align-items: center;
 		gap: 12px;
 	}
 
-	.awea-blog-link {
+	.awea_post_grid_link {
 		width: auto;
 		flex-grow: 1;
 		justify-content: center;

@@ -1,16 +1,16 @@
 /* ==========================================================================
-   AWEA Site Logo — Zero-Shadow Architectural Branding
+   Awesome Site Logo — Zero-Shadow Architectural Branding (v2.0.0)
    ========================================================================== */
 
-.awea-site-logo-outer {
-	--awea-logo-align: flex-start;
+.awea_site_logo_outer {
+	--awea_site_logo_align: flex-start;
 
 	width: 100%;
 	position: relative;
 	box-sizing: border-box;
 }
 
-.awea-site-logo-wrap {
+.awea_site_logo_wrap {
 	display: inline-flex;
 	vertical-align: middle;
 	position: relative;
@@ -18,29 +18,29 @@
 	transition: opacity 0.25s ease;
 }
 
-.awea-site-logo-wrap .awe-logo-link {
+.awea_site_logo_wrap .awea_site_logo_link {
 	display: inline-flex;
 	align-items: center;
 	text-decoration: none;
 	transform: none !important;
 }
 
-.awea-site-logo-wrap a.awe-logo-link:focus-visible {
+.awea_site_logo_wrap a.awea_site_logo_link:focus-visible {
 	outline: 2px solid var(--e-global-color-primary, #4f46e5);
 	outline-offset: 4px;
 	border-radius: 6px;
 }
 
 /* Image Framing & Zero Lift */
-.awea-site-logo-wrap .awe-image-logo-group {
+.awea_site_logo_wrap .awea_site_logo_image_group {
 	display: inline-flex;
 	align-items: center;
 	position: relative;
 	overflow: visible;
 }
 
-.awea-site-logo-wrap img,
-.awea-site-logo-wrap svg {
+.awea_site_logo_wrap img,
+.awea_site_logo_wrap svg {
 	display: block;
 	height: auto;
 	max-width: 100%;
@@ -48,12 +48,12 @@
 	transition: opacity 0.25s ease, filter 0.25s ease;
 }
 
-/* Dual Hover & Sticky Logo Swap Mechanism */
-.awea-site-logo-wrap .has-hover-logo .awe-hover-logo,
-.awea-site-logo-wrap .has-sticky-logo .awe-sticky-logo {
+/* Dual Hover & Sticky Logo Swap Mechanism (RTL Safe) */
+.awea_site_logo_wrap .awea_site_logo_has_hover .awea_site_logo_hover,
+.awea_site_logo_wrap .awea_site_logo_has_sticky .awea_site_logo_sticky {
 	position: absolute;
 	top: 0;
-	left: 0;
+	inset-inline-start: 0;
 	width: 100%;
 	height: 100%;
 	object-fit: contain;
@@ -62,39 +62,39 @@
 	transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.awea-site-logo-wrap .has-hover-logo:hover .awe-primary-logo,
-.awea-site-logo-wrap .awe-logo-link:focus-visible .has-hover-logo .awe-primary-logo {
+.awea_site_logo_wrap .awea_site_logo_has_hover:hover .awea_site_logo_primary,
+.awea_site_logo_wrap .awea_site_logo_link:focus-visible .awea_site_logo_has_hover .awea_site_logo_primary {
 	opacity: 0;
 }
 
-.awea-site-logo-wrap .has-hover-logo:hover .awe-hover-logo,
-.awea-site-logo-wrap .awe-logo-link:focus-visible .has-hover-logo .awe-hover-logo {
+.awea_site_logo_wrap .awea_site_logo_has_hover:hover .awea_site_logo_hover,
+.awea_site_logo_wrap .awea_site_logo_link:focus-visible .awea_site_logo_has_hover .awea_site_logo_hover {
 	opacity: 1;
 }
 
 /* Sticky Header Automatic Swap */
-.elementor-sticky--active .awea-site-logo-wrap .has-sticky-logo .awe-primary-logo,
-.is-sticky .awea-site-logo-wrap .has-sticky-logo .awe-primary-logo,
-.sticky-active .awea-site-logo-wrap .has-sticky-logo .awe-primary-logo,
-.header-scrolled .awea-site-logo-wrap .has-sticky-logo .awe-primary-logo {
+.elementor-sticky--active .awea_site_logo_wrap .awea_site_logo_has_sticky .awea_site_logo_primary,
+.is-sticky .awea_site_logo_wrap .awea_site_logo_has_sticky .awea_site_logo_primary,
+.sticky-active .awea_site_logo_wrap .awea_site_logo_has_sticky .awea_site_logo_primary,
+.header-scrolled .awea_site_logo_wrap .awea_site_logo_has_sticky .awea_site_logo_primary {
 	opacity: 0;
 }
 
-.elementor-sticky--active .awea-site-logo-wrap .has-sticky-logo .awe-sticky-logo,
-.is-sticky .awea-site-logo-wrap .has-sticky-logo .awe-sticky-logo,
-.sticky-active .awea-site-logo-wrap .has-sticky-logo .awe-sticky-logo,
-.header-scrolled .awea-site-logo-wrap .has-sticky-logo .awe-sticky-logo {
+.elementor-sticky--active .awea_site_logo_wrap .awea_site_logo_has_sticky .awea_site_logo_sticky,
+.is-sticky .awea_site_logo_wrap .awea_site_logo_has_sticky .awea_site_logo_sticky,
+.sticky-active .awea_site_logo_wrap .awea_site_logo_has_sticky .awea_site_logo_sticky,
+.header-scrolled .awea_site_logo_wrap .awea_site_logo_has_sticky .awea_site_logo_sticky {
 	opacity: 1;
 }
 
 /* Text Logo, Brand Icon & Tagline Styles */
-.awea-site-logo-wrap .awea-brand-lockup {
+.awea_site_logo_wrap .awea_site_logo_brand_lockup {
 	display: inline-flex;
 	align-items: center;
 	gap: 10px;
 }
 
-.awea-site-logo-wrap .awea-logo-brand-ico {
+.awea_site_logo_wrap .awea_site_logo_brand_ico {
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
@@ -103,24 +103,24 @@
 	line-height: 1;
 }
 
-.awea-site-logo-wrap .awea-logo-brand-ico i {
+.awea_site_logo_wrap .awea_site_logo_brand_ico i {
 	font-size: 26px;
 	line-height: 1;
 }
 
-.awea-site-logo-wrap .awea-logo-brand-ico svg {
+.awea_site_logo_wrap .awea_site_logo_brand_ico svg {
 	width: 26px;
 	height: 26px;
 	fill: currentColor;
 }
 
-.awea-site-logo-wrap .awe-text-logo-group {
+.awea_site_logo_wrap .awea_site_logo_text_group {
 	display: flex;
 	flex-direction: column;
-	align-items: var(--awea-logo-align, flex-start);
+	align-items: var(--awea_site_logo_align, flex-start);
 }
 
-.awea-site-logo-wrap .awe-logo-title {
+.awea_site_logo_wrap .awea_site_logo_title {
 	margin: 0;
 	font-size: 1.5rem;
 	font-weight: 800;
@@ -130,7 +130,7 @@
 	transition: color 0.2s ease;
 }
 
-.awea-site-logo-wrap .awe-logo-tagline {
+.awea_site_logo_wrap .awea_site_logo_tagline {
 	font-size: 0.85rem;
 	font-weight: 500;
 	color: #64748b;
@@ -138,10 +138,10 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-	.awea-site-logo-wrap,
-	.awea-site-logo-wrap img,
-	.awea-site-logo-wrap svg,
-	.awea-site-logo-wrap .awe-logo-title {
+	.awea_site_logo_wrap,
+	.awea_site_logo_wrap img,
+	.awea_site_logo_wrap svg,
+	.awea_site_logo_wrap .awea_site_logo_title {
 		transition: none !important;
 	}
 }

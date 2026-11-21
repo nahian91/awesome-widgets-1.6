@@ -45,32 +45,40 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 	}
 
 	protected function register_controls() {
+		$this->register_content_controls();
+		$this->register_style_controls();
+	}
+
+	/**
+	 * Content Tab Controls
+	 */
+	protected function register_content_controls() {
 
 		/* ==========================================================================
 		   CONTENT: 1. ITEMS
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_section_items',
+			'awea_team_carousel_section_items',
 			[
-				'label' => esc_html__( 'Items', 'awesome-widgets-elementor' ),
+				'label' => esc_html__( 'Team Members', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
 			]
 		);
 
 		$repeater = new Repeater();
 
-		$repeater->start_controls_tabs( 'awea_member_tabs' );
+		$repeater->start_controls_tabs( 'awea_team_carousel_member_tabs' );
 
 		// --- TAB 1: PROFILE ---
 		$repeater->start_controls_tab(
-			'awea_tab_profile',
+			'awea_team_carousel_tab_profile',
 			[ 'label' => esc_html__( 'Profile', 'awesome-widgets-elementor' ) ]
 		);
 
 		$repeater->add_control(
-			'awea_image',
+			'awea_team_carousel_image',
 			[
-				'label'   => esc_html__( 'Image', 'awesome-widgets-elementor' ),
+				'label'   => esc_html__( 'Photo', 'awesome-widgets-elementor' ),
 				'type'    => Controls_Manager::MEDIA,
 				'dynamic' => [ 'active' => true ],
 				'default' => [
@@ -80,7 +88,7 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 		);
 
 		$repeater->add_control(
-			'awea_name',
+			'awea_team_carousel_name',
 			[
 				'label'       => esc_html__( 'Name', 'awesome-widgets-elementor' ),
 				'type'        => Controls_Manager::TEXT,
@@ -91,7 +99,7 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 		);
 
 		$repeater->add_control(
-			'awea_role',
+			'awea_team_carousel_role',
 			[
 				'label'       => esc_html__( 'Role', 'awesome-widgets-elementor' ),
 				'type'        => Controls_Manager::TEXT,
@@ -102,7 +110,7 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 		);
 
 		$repeater->add_control(
-			'awea_bio',
+			'awea_team_carousel_bio',
 			[
 				'label'   => esc_html__( 'Bio', 'awesome-widgets-elementor' ),
 				'type'    => Controls_Manager::TEXTAREA,
@@ -116,14 +124,14 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 
 		// --- TAB 2: SOCIALS ---
 		$repeater->start_controls_tab(
-			'awea_tab_socials',
+			'awea_team_carousel_tab_socials',
 			[ 'label' => esc_html__( 'Socials', 'awesome-widgets-elementor' ) ]
 		);
 
 		$repeater->add_control(
-			'awea_ln_url',
+			'awea_team_carousel_ln_url',
 			[
-				'label'       => esc_html__( 'LinkedIn', 'awesome-widgets-elementor' ),
+				'label'       => esc_html__( 'LinkedIn URL', 'awesome-widgets-elementor' ),
 				'type'        => Controls_Manager::URL,
 				'dynamic'     => [ 'active' => true ],
 				'placeholder' => 'https://linkedin.com/in/username',
@@ -132,9 +140,9 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 		);
 
 		$repeater->add_control(
-			'awea_tw_url',
+			'awea_team_carousel_tw_url',
 			[
-				'label'       => esc_html__( 'X', 'awesome-widgets-elementor' ),
+				'label'       => esc_html__( 'X (Twitter) URL', 'awesome-widgets-elementor' ),
 				'type'        => Controls_Manager::URL,
 				'dynamic'     => [ 'active' => true ],
 				'placeholder' => 'https://x.com/username',
@@ -143,9 +151,9 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 		);
 
 		$repeater->add_control(
-			'awea_fb_url',
+			'awea_team_carousel_fb_url',
 			[
-				'label'       => esc_html__( 'Facebook', 'awesome-widgets-elementor' ),
+				'label'       => esc_html__( 'Facebook URL', 'awesome-widgets-elementor' ),
 				'type'        => Controls_Manager::URL,
 				'dynamic'     => [ 'active' => true ],
 				'placeholder' => 'https://facebook.com/username',
@@ -154,9 +162,9 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 		);
 
 		$repeater->add_control(
-			'awea_insta_url',
+			'awea_team_carousel_insta_url',
 			[
-				'label'       => esc_html__( 'Instagram', 'awesome-widgets-elementor' ),
+				'label'       => esc_html__( 'Instagram URL', 'awesome-widgets-elementor' ),
 				'type'        => Controls_Manager::URL,
 				'dynamic'     => [ 'active' => true ],
 				'placeholder' => 'https://instagram.com/username',
@@ -168,44 +176,44 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 		$repeater->end_controls_tabs();
 
 		$this->add_control(
-			'awea_members',
+			'awea_team_carousel_members',
 			[
-				'label'       => esc_html__( 'List', 'awesome-widgets-elementor' ),
+				'label'       => esc_html__( 'Members List', 'awesome-widgets-elementor' ),
 				'type'        => Controls_Manager::REPEATER,
 				'fields'      => $repeater->get_controls(),
-				'title_field' => '{{{ awea_name }}} — {{{ awea_role }}}',
+				'title_field' => '{{{ awea_team_carousel_name }}} — {{{ awea_team_carousel_role }}}',
 				'default'     => [
 					[
-						'awea_name'      => esc_html__( 'Alexander Vance', 'awesome-widgets-elementor' ),
-						'awea_role'      => esc_html__( 'Lead Design Architect', 'awesome-widgets-elementor' ),
-						'awea_bio'       => esc_html__( 'Pioneering clean architectural design systems and kinetic interfaces.', 'awesome-widgets-elementor' ),
-						'awea_ln_url'    => [ 'url' => '#' ],
-						'awea_tw_url'    => [ 'url' => '#' ],
-						'awea_fb_url'    => [ 'url' => '#' ],
+						'awea_team_carousel_name'    => esc_html__( 'Alexander Vance', 'awesome-widgets-elementor' ),
+						'awea_team_carousel_role'    => esc_html__( 'Lead Design Architect', 'awesome-widgets-elementor' ),
+						'awea_team_carousel_bio'     => esc_html__( 'Pioneering clean architectural design systems and kinetic interfaces.', 'awesome-widgets-elementor' ),
+						'awea_team_carousel_ln_url'  => [ 'url' => '#' ],
+						'awea_team_carousel_tw_url'  => [ 'url' => '#' ],
+						'awea_team_carousel_fb_url'  => [ 'url' => '#' ],
 					],
 					[
-						'awea_name'      => esc_html__( 'Elena Rostova', 'awesome-widgets-elementor' ),
-						'awea_role'      => esc_html__( 'Senior Product Designer', 'awesome-widgets-elementor' ),
-						'awea_bio'       => esc_html__( 'Specializing in design tokens, accessible color theory, and user journeys.', 'awesome-widgets-elementor' ),
-						'awea_ln_url'    => [ 'url' => '#' ],
-						'awea_tw_url'    => [ 'url' => '#' ],
-						'awea_insta_url' => [ 'url' => '#' ],
+						'awea_team_carousel_name'      => esc_html__( 'Elena Rostova', 'awesome-widgets-elementor' ),
+						'awea_team_carousel_role'      => esc_html__( 'Senior Product Designer', 'awesome-widgets-elementor' ),
+						'awea_team_carousel_bio'       => esc_html__( 'Specializing in design tokens, accessible color theory, and user journeys.', 'awesome-widgets-elementor' ),
+						'awea_team_carousel_ln_url'    => [ 'url' => '#' ],
+						'awea_team_carousel_tw_url'    => [ 'url' => '#' ],
+						'awea_team_carousel_insta_url' => [ 'url' => '#' ],
 					],
 					[
-						'awea_name'      => esc_html__( 'Julian Szekeres', 'awesome-widgets-elementor' ),
-						'awea_role'      => esc_html__( 'Core Systems Engineer', 'awesome-widgets-elementor' ),
-						'awea_bio'       => esc_html__( 'Optimizing micro-service pipelines and real-time state hydration routines.', 'awesome-widgets-elementor' ),
-						'awea_ln_url'    => [ 'url' => '#' ],
-						'awea_tw_url'    => [ 'url' => '#' ],
-						'awea_fb_url'    => [ 'url' => '#' ],
+						'awea_team_carousel_name'    => esc_html__( 'Julian Szekeres', 'awesome-widgets-elementor' ),
+						'awea_team_carousel_role'    => esc_html__( 'Core Systems Engineer', 'awesome-widgets-elementor' ),
+						'awea_team_carousel_bio'     => esc_html__( 'Optimizing micro-service pipelines and real-time state hydration routines.', 'awesome-widgets-elementor' ),
+						'awea_team_carousel_ln_url'  => [ 'url' => '#' ],
+						'awea_team_carousel_tw_url'  => [ 'url' => '#' ],
+						'awea_team_carousel_fb_url'  => [ 'url' => '#' ],
 					],
 					[
-						'awea_name'      => esc_html__( 'Clara Lindqvist', 'awesome-widgets-elementor' ),
-						'awea_role'      => esc_html__( 'Head of Brand Strategy', 'awesome-widgets-elementor' ),
-						'awea_bio'       => esc_html__( 'Crafting cohesive visual identities and editorial storytelling across platforms.', 'awesome-widgets-elementor' ),
-						'awea_ln_url'    => [ 'url' => '#' ],
-						'awea_insta_url' => [ 'url' => '#' ],
-						'awea_fb_url'    => [ 'url' => '#' ],
+						'awea_team_carousel_name'      => esc_html__( 'Clara Lindqvist', 'awesome-widgets-elementor' ),
+						'awea_team_carousel_role'      => esc_html__( 'Head of Brand Strategy', 'awesome-widgets-elementor' ),
+						'awea_team_carousel_bio'       => esc_html__( 'Crafting cohesive visual identities and editorial storytelling across platforms.', 'awesome-widgets-elementor' ),
+						'awea_team_carousel_ln_url'    => [ 'url' => '#' ],
+						'awea_team_carousel_insta_url' => [ 'url' => '#' ],
+						'awea_team_carousel_fb_url'    => [ 'url' => '#' ],
 					],
 				],
 			]
@@ -217,7 +225,7 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 		   CONTENT: 2. SETTINGS
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_section_settings',
+			'awea_team_carousel_section_settings',
 			[
 				'label' => esc_html__( 'Settings', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
@@ -227,15 +235,15 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Image_Size::get_type(),
 			[
-				'name'    => 'awea_img_size',
+				'name'    => 'awea_team_carousel_img_size',
 				'default' => 'large',
 			]
 		);
 
 		$this->add_control(
-			'awea_name_tag',
+			'awea_team_carousel_name_tag',
 			[
-				'label'   => esc_html__( 'Tag', 'awesome-widgets-elementor' ),
+				'label'   => esc_html__( 'Title HTML Tag', 'awesome-widgets-elementor' ),
 				'type'    => Controls_Manager::SELECT,
 				'default' => 'h3',
 				'options' => [
@@ -253,9 +261,9 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 		);
 
 		$this->add_control(
-			'awea_social_always_visible',
+			'awea_team_carousel_social_visible',
 			[
-				'label'        => esc_html__( 'Socials', 'awesome-widgets-elementor' ),
+				'label'        => esc_html__( 'Always Show Social Dock', 'awesome-widgets-elementor' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'label_on'     => esc_html__( 'Yes', 'awesome-widgets-elementor' ),
 				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
@@ -270,17 +278,17 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 		   CONTENT: 3. SLIDER
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_section_slider',
+			'awea_team_carousel_section_slider',
 			[
-				'label' => esc_html__( 'Slider', 'awesome-widgets-elementor' ),
+				'label' => esc_html__( 'Slider Settings', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
 			]
 		);
 
 		$this->add_responsive_control(
-			'awea_slides_to_show',
+			'awea_team_carousel_slides_to_show',
 			[
-				'label'          => esc_html__( 'Slides', 'awesome-widgets-elementor' ),
+				'label'          => esc_html__( 'Slides Per View', 'awesome-widgets-elementor' ),
 				'type'           => Controls_Manager::SELECT,
 				'default'        => '3',
 				'tablet_default' => '2',
@@ -296,9 +304,9 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 		);
 
 		$this->add_responsive_control(
-			'awea_slide_gap',
+			'awea_team_carousel_slide_gap',
 			[
-				'label'      => esc_html__( 'Gap', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Slide Gap', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [ 'px' => [ 'min' => 0, 'max' => 60 ] ],
@@ -307,9 +315,9 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 		);
 
 		$this->add_control(
-			'awea_loop',
+			'awea_team_carousel_loop',
 			[
-				'label'        => esc_html__( 'Loop', 'awesome-widgets-elementor' ),
+				'label'        => esc_html__( 'Infinite Loop', 'awesome-widgets-elementor' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'label_on'     => esc_html__( 'Yes', 'awesome-widgets-elementor' ),
 				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
@@ -320,7 +328,7 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 		);
 
 		$this->add_control(
-			'awea_autoplay',
+			'awea_team_carousel_autoplay',
 			[
 				'label'        => esc_html__( 'Autoplay', 'awesome-widgets-elementor' ),
 				'type'         => Controls_Manager::SWITCHER,
@@ -332,34 +340,34 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 		);
 
 		$this->add_control(
-			'awea_pause_on_hover',
+			'awea_team_carousel_pause_on_hover',
 			[
-				'label'        => esc_html__( 'Pause', 'awesome-widgets-elementor' ),
+				'label'        => esc_html__( 'Pause on Hover', 'awesome-widgets-elementor' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'label_on'     => esc_html__( 'Yes', 'awesome-widgets-elementor' ),
 				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
 				'return_value' => 'yes',
 				'default'      => 'yes',
-				'condition'    => [ 'awea_autoplay' => 'yes' ],
+				'condition'    => [ 'awea_team_carousel_autoplay' => 'yes' ],
 			]
 		);
 
 		$this->add_control(
-			'awea_autoplay_speed',
+			'awea_team_carousel_autoplay_speed',
 			[
-				'label'     => esc_html__( 'Interval', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Autoplay Interval (ms)', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::NUMBER,
 				'default'   => 5000,
 				'min'       => 1000,
 				'max'       => 15000,
-				'condition' => [ 'awea_autoplay' => 'yes' ],
+				'condition' => [ 'awea_team_carousel_autoplay' => 'yes' ],
 			]
 		);
 
 		$this->add_control(
-			'awea_animation_speed',
+			'awea_team_carousel_animation_speed',
 			[
-				'label'   => esc_html__( 'Speed', 'awesome-widgets-elementor' ),
+				'label'   => esc_html__( 'Transition Speed (ms)', 'awesome-widgets-elementor' ),
 				'type'    => Controls_Manager::NUMBER,
 				'default' => 450,
 				'min'     => 100,
@@ -373,7 +381,7 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 		   CONTENT: 4. NAVIGATION
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_section_navigation',
+			'awea_team_carousel_section_navigation',
 			[
 				'label' => esc_html__( 'Navigation', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
@@ -381,9 +389,9 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 		);
 
 		$this->add_control(
-			'awea_show_arrows',
+			'awea_team_carousel_show_arrows',
 			[
-				'label'        => esc_html__( 'Arrows', 'awesome-widgets-elementor' ),
+				'label'        => esc_html__( 'Show Arrows', 'awesome-widgets-elementor' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'label_on'     => esc_html__( 'Yes', 'awesome-widgets-elementor' ),
 				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
@@ -393,9 +401,9 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 		);
 
 		$this->add_control(
-			'awea_show_dots',
+			'awea_team_carousel_show_dots',
 			[
-				'label'        => esc_html__( 'Dots', 'awesome-widgets-elementor' ),
+				'label'        => esc_html__( 'Show Dots', 'awesome-widgets-elementor' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'label_on'     => esc_html__( 'Yes', 'awesome-widgets-elementor' ),
 				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
@@ -410,7 +418,7 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 		   STYLE: 1. CARD
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_style_card',
+			'awea_team_carousel_style_card',
 			[
 				'label' => esc_html__( 'Card', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
@@ -418,46 +426,46 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 		);
 
 		$this->add_responsive_control(
-			'awea_card_padding',
+			'awea_team_carousel_card_padding',
 			[
 				'label'      => esc_html__( 'Padding', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', 'em', 'rem' ],
 				'default'    => [ 'top' => '12', 'right' => '12', 'bottom' => '12', 'left' => '12', 'unit' => 'px', 'isLinked' => true ],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-team-master-card' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .awea_team_carousel_master_card' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
 		);
 
 		$this->add_responsive_control(
-			'awea_card_radius',
+			'awea_team_carousel_card_radius',
 			[
-				'label'      => esc_html__( 'Radius', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Border Radius', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'default'    => [ 'top' => '28', 'right' => '28', 'bottom' => '28', 'left' => '28', 'unit' => 'px', 'isLinked' => true ],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-team-master-card' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .awea_team_carousel_master_card' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
 		);
 
-		$this->start_controls_tabs( 'awea_card_tabs' );
+		$this->start_controls_tabs( 'awea_team_carousel_card_tabs' );
 
 		$this->start_controls_tab(
-			'awea_card_normal',
+			'awea_team_carousel_card_normal',
 			[ 'label' => esc_html__( 'Normal', 'awesome-widgets-elementor' ) ]
 		);
 
 		$this->add_control(
-			'awea_card_bg',
+			'awea_team_carousel_card_bg',
 			[
 				'label'     => esc_html__( 'Background', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#090d16',
 				'selectors' => [
-					'{{WRAPPER}} .awea-team-master-card' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .awea_team_carousel_master_card' => 'background-color: {{VALUE}};',
 				],
 			]
 		);
@@ -465,9 +473,9 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Border::get_type(),
 			[
-				'name'           => 'awea_card_border',
+				'name'           => 'awea_team_carousel_card_border',
 				'label'          => esc_html__( 'Border', 'awesome-widgets-elementor' ),
-				'selector'       => '{{WRAPPER}} .awea-team-master-card',
+				'selector'       => '{{WRAPPER}} .awea_team_carousel_master_card',
 				'fields_options' => [
 					'border' => [ 'default' => 'solid' ],
 					'width'  => [
@@ -481,31 +489,31 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 		$this->end_controls_tab();
 
 		$this->start_controls_tab(
-			'awea_card_hover',
+			'awea_team_carousel_card_hover',
 			[ 'label' => esc_html__( 'Hover', 'awesome-widgets-elementor' ) ]
 		);
 
 		$this->add_control(
-			'awea_card_bg_hover',
+			'awea_team_carousel_card_bg_hover',
 			[
 				'label'     => esc_html__( 'Background', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}} .awea-team-master-card:hover' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .awea_team_carousel_master_card:hover' => 'background-color: {{VALUE}};',
 				],
 			]
 		);
 
 		$this->add_control(
-			'awea_card_border_hover',
+			'awea_team_carousel_card_border_hover',
 			[
-				'label'     => esc_html__( 'Border', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Border Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [
 					'default' => Global_Colors::COLOR_PRIMARY,
 				],
 				'selectors' => [
-					'{{WRAPPER}} .awea-team-master-card:hover' => 'border-color: {{VALUE}};',
+					'{{WRAPPER}} .awea_team_carousel_master_card:hover' => 'border-color: {{VALUE}};',
 				],
 			]
 		);
@@ -519,7 +527,7 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 		   STYLE: 2. IMAGE
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_style_image',
+			'awea_team_carousel_style_image',
 			[
 				'label' => esc_html__( 'Image', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
@@ -527,9 +535,9 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 		);
 
 		$this->add_responsive_control(
-			'awea_aspect_ratio',
+			'awea_team_carousel_aspect_ratio',
 			[
-				'label'     => esc_html__( 'Ratio', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Aspect Ratio', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::SELECT,
 				'default'   => '4/5',
 				'options'   => [
@@ -539,20 +547,20 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 					'16/9' => '16:9',
 				],
 				'selectors' => [
-					'{{WRAPPER}} .awea-team-img-container' => 'aspect-ratio: {{VALUE}};',
+					'{{WRAPPER}} .awea_team_carousel_img_container' => 'aspect-ratio: {{VALUE}};',
 				],
 			]
 		);
 
 		$this->add_responsive_control(
-			'awea_photo_radius',
+			'awea_team_carousel_photo_radius',
 			[
-				'label'      => esc_html__( 'Radius', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Border Radius', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'default'    => [ 'top' => '18', 'right' => '18', 'bottom' => '18', 'left' => '18', 'unit' => 'px', 'isLinked' => true ],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-team-img-container' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .awea_team_carousel_img_container' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
 		);
@@ -563,21 +571,21 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 		   STYLE: 3. DOCK
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_style_dock',
+			'awea_team_carousel_style_dock',
 			[
-				'label' => esc_html__( 'Dock', 'awesome-widgets-elementor' ),
+				'label' => esc_html__( 'Content Dock', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
 
 		$this->add_control(
-			'awea_dock_bg',
+			'awea_team_carousel_dock_bg',
 			[
 				'label'     => esc_html__( 'Background', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => 'rgba(15, 23, 42, 0.76)',
 				'selectors' => [
-					'{{WRAPPER}} .awea-team-info-panel' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .awea_team_carousel_info_panel' => 'background-color: {{VALUE}};',
 				],
 			]
 		);
@@ -585,9 +593,9 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Border::get_type(),
 			[
-				'name'           => 'awea_dock_border',
+				'name'           => 'awea_team_carousel_dock_border',
 				'label'          => esc_html__( 'Border', 'awesome-widgets-elementor' ),
-				'selector'       => '{{WRAPPER}} .awea-team-info-panel',
+				'selector'       => '{{WRAPPER}} .awea_team_carousel_info_panel',
 				'fields_options' => [
 					'border' => [ 'default' => 'solid' ],
 					'width'  => [
@@ -599,27 +607,27 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 		);
 
 		$this->add_responsive_control(
-			'awea_dock_padding',
+			'awea_team_carousel_dock_padding',
 			[
 				'label'      => esc_html__( 'Padding', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px' ],
 				'default'    => [ 'top' => '18', 'right' => '18', 'bottom' => '18', 'left' => '18', 'unit' => 'px', 'isLinked' => true ],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-team-info-panel' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .awea_team_carousel_info_panel' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
 		);
 
 		$this->add_responsive_control(
-			'awea_dock_radius',
+			'awea_team_carousel_dock_radius',
 			[
-				'label'      => esc_html__( 'Radius', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Border Radius', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'default'    => [ 'top' => '20', 'right' => '20', 'bottom' => '20', 'left' => '20', 'unit' => 'px', 'isLinked' => true ],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-team-info-panel' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .awea_team_carousel_info_panel' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
 		);
@@ -630,21 +638,21 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 		   STYLE: 4. TITLE
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_style_title',
+			'awea_team_carousel_style_title',
 			[
-				'label' => esc_html__( 'Title', 'awesome-widgets-elementor' ),
+				'label' => esc_html__( 'Name', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
 
 		$this->add_control(
-			'awea_name_color',
+			'awea_team_carousel_name_color',
 			[
 				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#ffffff',
 				'selectors' => [
-					'{{WRAPPER}} .awea-team-name' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea_team_carousel_name' => 'color: {{VALUE}};',
 				],
 			]
 		);
@@ -652,9 +660,9 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Typography::get_type(),
 			[
-				'name'     => 'awea_name_typo',
+				'name'     => 'awea_team_carousel_name_typo',
 				'label'    => esc_html__( 'Typography', 'awesome-widgets-elementor' ),
-				'selector' => '{{WRAPPER}} .awea-team-name',
+				'selector' => '{{WRAPPER}} .awea_team_carousel_name',
 				'global'   => [ 'default' => Global_Typography::TYPOGRAPHY_PRIMARY ],
 			]
 		);
@@ -665,7 +673,7 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 		   STYLE: 5. ROLE
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_style_role',
+			'awea_team_carousel_style_role',
 			[
 				'label' => esc_html__( 'Role', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
@@ -673,13 +681,13 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 		);
 
 		$this->add_control(
-			'awea_role_color',
+			'awea_team_carousel_role_color',
 			[
 				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [ 'default' => Global_Colors::COLOR_ACCENT ],
 				'selectors' => [
-					'{{WRAPPER}} .awea-team-role' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea_team_carousel_role' => 'color: {{VALUE}};',
 				],
 			]
 		);
@@ -687,9 +695,9 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Typography::get_type(),
 			[
-				'name'     => 'awea_role_typo',
+				'name'     => 'awea_team_carousel_role_typo',
 				'label'    => esc_html__( 'Typography', 'awesome-widgets-elementor' ),
-				'selector' => '{{WRAPPER}} .awea-team-role',
+				'selector' => '{{WRAPPER}} .awea_team_carousel_role',
 				'global'   => [ 'default' => Global_Typography::TYPOGRAPHY_SECONDARY ],
 			]
 		);
@@ -700,7 +708,7 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 		   STYLE: 6. BIO
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_style_bio',
+			'awea_team_carousel_style_bio',
 			[
 				'label' => esc_html__( 'Bio', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
@@ -708,12 +716,13 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 		);
 
 		$this->add_control(
-			'awea_bio_color',
+			'awea_team_carousel_bio_color',
 			[
 				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
+				'default'   => 'rgba(255, 255, 255, 0.75)',
 				'selectors' => [
-					'{{WRAPPER}} .awea-team-bio' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea_team_carousel_bio' => 'color: {{VALUE}};',
 				],
 			]
 		);
@@ -721,9 +730,9 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Typography::get_type(),
 			[
-				'name'     => 'awea_bio_typo',
+				'name'     => 'awea_team_carousel_bio_typo',
 				'label'    => esc_html__( 'Typography', 'awesome-widgets-elementor' ),
-				'selector' => '{{WRAPPER}} .awea-team-bio',
+				'selector' => '{{WRAPPER}} .awea_team_carousel_bio',
 				'global'   => [ 'default' => Global_Typography::TYPOGRAPHY_TEXT ],
 			]
 		);
@@ -734,7 +743,7 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 		   STYLE: 7. SOCIALS
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_style_socials',
+			'awea_team_carousel_style_socials',
 			[
 				'label' => esc_html__( 'Socials', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
@@ -742,7 +751,7 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 		);
 
 		$this->add_responsive_control(
-			'awea_soc_size',
+			'awea_team_carousel_soc_size',
 			[
 				'label'      => esc_html__( 'Size', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
@@ -750,13 +759,13 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 				'range'      => [ 'px' => [ 'min' => 28, 'max' => 54 ] ],
 				'default'    => [ 'unit' => 'px', 'size' => 36 ],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-team-social-btn' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .awea_team_carousel_social_btn' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
 
 		$this->add_responsive_control(
-			'awea_soc_icon_size',
+			'awea_team_carousel_soc_icon_size',
 			[
 				'label'      => esc_html__( 'Icon', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
@@ -764,13 +773,13 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 				'range'      => [ 'px' => [ 'min' => 10, 'max' => 26 ] ],
 				'default'    => [ 'unit' => 'px', 'size' => 14 ],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-team-social-btn svg' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .awea_team_carousel_social_btn svg' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
 
 		$this->add_responsive_control(
-			'awea_soc_gap',
+			'awea_team_carousel_soc_gap',
 			[
 				'label'      => esc_html__( 'Gap', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
@@ -778,49 +787,51 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 				'range'      => [ 'px' => [ 'min' => 4, 'max' => 20 ] ],
 				'default'    => [ 'unit' => 'px', 'size' => 8 ],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-team-social-dock' => 'gap: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .awea_team_carousel_social_dock' => 'gap: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
 
 		$this->add_responsive_control(
-			'awea_soc_radius',
+			'awea_team_carousel_soc_radius',
 			[
 				'label'      => esc_html__( 'Radius', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'default'    => [ 'top' => '10', 'right' => '10', 'bottom' => '10', 'left' => '10', 'unit' => 'px', 'isLinked' => true ],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-team-social-btn' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .awea_team_carousel_social_btn' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
 		);
 
-		$this->start_controls_tabs( 'awea_soc_tabs' );
+		$this->start_controls_tabs( 'awea_team_carousel_soc_tabs' );
 
 		$this->start_controls_tab(
-			'awea_soc_normal',
+			'awea_team_carousel_soc_normal',
 			[ 'label' => esc_html__( 'Normal', 'awesome-widgets-elementor' ) ]
 		);
 
 		$this->add_control(
-			'awea_soc_color',
+			'awea_team_carousel_soc_color',
 			[
 				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
+				'default'   => '#ffffff',
 				'selectors' => [
-					'{{WRAPPER}} .awea-team-social-btn' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea_team_carousel_social_btn' => 'color: {{VALUE}};',
 				],
 			]
 		);
 
 		$this->add_control(
-			'awea_soc_bg',
+			'awea_team_carousel_soc_bg',
 			[
 				'label'     => esc_html__( 'Background', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
+				'default'   => 'rgba(255, 255, 255, 0.1)',
 				'selectors' => [
-					'{{WRAPPER}} .awea-team-social-btn' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .awea_team_carousel_social_btn' => 'background-color: {{VALUE}};',
 				],
 			]
 		);
@@ -828,30 +839,31 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 		$this->end_controls_tab();
 
 		$this->start_controls_tab(
-			'awea_soc_hover',
+			'awea_team_carousel_soc_hover',
 			[ 'label' => esc_html__( 'Hover', 'awesome-widgets-elementor' ) ]
 		);
 
 		$this->add_control(
-			'awea_soc_color_hover',
+			'awea_team_carousel_soc_color_hover',
 			[
 				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#ffffff',
 				'selectors' => [
-					'{{WRAPPER}} .awea-team-social-btn:hover, {{WRAPPER}} .awea-team-social-btn:focus-visible'         => 'color: {{VALUE}};',
-					'{{WRAPPER}} .awea-team-social-btn:hover svg, {{WRAPPER}} .awea-team-social-btn:focus-visible svg' => 'fill: {{VALUE}};',
+					'{{WRAPPER}} .awea_team_carousel_social_btn:hover, {{WRAPPER}} .awea_team_carousel_social_btn:focus-visible'         => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea_team_carousel_social_btn:hover svg, {{WRAPPER}} .awea_team_carousel_social_btn:focus-visible svg' => 'fill: {{VALUE}};',
 				],
 			]
 		);
 
 		$this->add_control(
-			'awea_soc_bg_hover',
+			'awea_team_carousel_soc_bg_hover',
 			[
 				'label'     => esc_html__( 'Background', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
+				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
 				'selectors' => [
-					'{{WRAPPER}} .awea-team-social-btn:hover, {{WRAPPER}} .awea-team-social-btn:focus-visible' => 'background-color: {{VALUE}} !important; border-color: {{VALUE}} !important;',
+					'{{WRAPPER}} .awea_team_carousel_social_btn:hover, {{WRAPPER}} .awea_team_carousel_social_btn:focus-visible' => 'background-color: var(--awea_team_carousel_social_brand, {{VALUE}}) !important; border-color: transparent !important;',
 				],
 			]
 		);
@@ -865,55 +877,55 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 		   STYLE: 8. ARROWS
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_style_arrows',
+			'awea_team_carousel_style_arrows',
 			[
 				'label'     => esc_html__( 'Arrows', 'awesome-widgets-elementor' ),
 				'tab'       => Controls_Manager::TAB_STYLE,
-				'condition' => [ 'awea_show_arrows' => 'yes' ],
+				'condition' => [ 'awea_team_carousel_show_arrows' => 'yes' ],
 			]
 		);
 
 		$this->add_responsive_control(
-			'awea_arrow_size',
+			'awea_team_carousel_arrow_size',
 			[
-				'label'      => esc_html__( 'Box', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Size', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [ 'px' => [ 'min' => 32, 'max' => 64 ] ],
 				'default'    => [ 'unit' => 'px', 'size' => 44 ],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-carousel-arrow-border' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .awea_team_carousel_arrow_border' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
 
-		$this->start_controls_tabs( 'awea_arrow_tabs' );
+		$this->start_controls_tabs( 'awea_team_carousel_arrow_tabs' );
 
 		$this->start_controls_tab(
-			'awea_arrow_normal',
+			'awea_team_carousel_arrow_normal',
 			[ 'label' => esc_html__( 'Normal', 'awesome-widgets-elementor' ) ]
 		);
 
 		$this->add_control(
-			'awea_arrow_color',
+			'awea_team_carousel_arrow_color',
 			[
 				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#0f172a',
 				'selectors' => [
-					'{{WRAPPER}} .awea-carousel-arrow-border' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea_team_carousel_arrow_border' => 'color: {{VALUE}};',
 				],
 			]
 		);
 
 		$this->add_control(
-			'awea_arrow_bg',
+			'awea_team_carousel_arrow_bg',
 			[
 				'label'     => esc_html__( 'Background', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#ffffff',
 				'selectors' => [
-					'{{WRAPPER}} .awea-carousel-arrow-border' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .awea_team_carousel_arrow_border' => 'background-color: {{VALUE}};',
 				],
 			]
 		);
@@ -921,30 +933,30 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 		$this->end_controls_tab();
 
 		$this->start_controls_tab(
-			'awea_arrow_hover',
+			'awea_team_carousel_arrow_hover',
 			[ 'label' => esc_html__( 'Hover', 'awesome-widgets-elementor' ) ]
 		);
 
 		$this->add_control(
-			'awea_arrow_color_hover',
+			'awea_team_carousel_arrow_color_hover',
 			[
 				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#ffffff',
 				'selectors' => [
-					'{{WRAPPER}} .awea-carousel-arrow-border:hover, {{WRAPPER}} .owl-nav button:focus-visible .awea-carousel-arrow-border' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea_team_carousel_arrow_border:hover, {{WRAPPER}} .owl-nav button:focus-visible .awea_team_carousel_arrow_border' => 'color: {{VALUE}};',
 				],
 			]
 		);
 
 		$this->add_control(
-			'awea_arrow_bg_hover',
+			'awea_team_carousel_arrow_bg_hover',
 			[
 				'label'     => esc_html__( 'Background', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
 				'selectors' => [
-					'{{WRAPPER}} .awea-carousel-arrow-border:hover, {{WRAPPER}} .owl-nav button:focus-visible .awea-carousel-arrow-border' => 'background-color: {{VALUE}}; border-color: {{VALUE}};',
+					'{{WRAPPER}} .awea_team_carousel_arrow_border:hover, {{WRAPPER}} .owl-nav button:focus-visible .awea_team_carousel_arrow_border' => 'background-color: {{VALUE}}; border-color: {{VALUE}};',
 				],
 			]
 		);
@@ -955,9 +967,9 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Border::get_type(),
 			[
-				'name'           => 'awea_arrow_border',
+				'name'           => 'awea_team_carousel_arrow_border',
 				'label'          => esc_html__( 'Border', 'awesome-widgets-elementor' ),
-				'selector'       => '{{WRAPPER}} .awea-carousel-arrow-border',
+				'selector'       => '{{WRAPPER}} .awea_team_carousel_arrow_border',
 				'separator'      => 'before',
 				'fields_options' => [
 					'border' => [ 'default' => 'solid' ],
@@ -975,28 +987,28 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 		   STYLE: 9. DOTS
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_style_dots',
+			'awea_team_carousel_style_dots',
 			[
 				'label'     => esc_html__( 'Dots', 'awesome-widgets-elementor' ),
 				'tab'       => Controls_Manager::TAB_STYLE,
-				'condition' => [ 'awea_show_dots' => 'yes' ],
+				'condition' => [ 'awea_team_carousel_show_dots' => 'yes' ],
 			]
 		);
 
 		$this->add_control(
-			'awea_dots_color',
+			'awea_team_carousel_dots_color',
 			[
 				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#cbd5e1',
 				'selectors' => [
-					'{{WRAPPER}} .awea-team-carousel .owl-dots button.owl-dot' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .awea_team_carousel .owl-dots button.owl-dot' => 'background-color: {{VALUE}};',
 				],
 			]
 		);
 
 		$this->add_control(
-			'awea_dots_active_color',
+			'awea_team_carousel_dots_active_color',
 			[
 				'label'     => esc_html__( 'Active', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
@@ -1004,7 +1016,7 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 					'default' => Global_Colors::COLOR_PRIMARY,
 				],
 				'selectors' => [
-					'{{WRAPPER}} .awea-team-carousel .owl-dots button.owl-dot.active' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .awea_team_carousel .owl-dots button.owl-dot.active' => 'background-color: {{VALUE}};',
 				],
 			]
 		);
@@ -1031,68 +1043,69 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 
 	protected function render() {
 		$settings      = $this->get_settings_for_display();
-		$members       = $settings['awea_members'] ?? [];
-		$items_desktop = ! empty( $settings['awea_slides_to_show'] ) ? (int) $settings['awea_slides_to_show'] : 3;
-		$items_tablet  = ! empty( $settings['awea_slides_to_show_tablet'] ) ? (int) $settings['awea_slides_to_show_tablet'] : 2;
-		$items_mobile  = ! empty( $settings['awea_slides_to_show_mobile'] ) ? (int) $settings['awea_slides_to_show_mobile'] : 1;
+		$members       = $settings['awea_team_carousel_members'] ?? [];
+		$items_desktop = ! empty( $settings['awea_team_carousel_slides_to_show'] ) ? (int) $settings['awea_team_carousel_slides_to_show'] : 3;
+		$items_tablet  = ! empty( $settings['awea_team_carousel_slides_to_show_tablet'] ) ? (int) $settings['awea_team_carousel_slides_to_show_tablet'] : 2;
+		$items_mobile  = ! empty( $settings['awea_team_carousel_slides_to_show_mobile'] ) ? (int) $settings['awea_team_carousel_slides_to_show_mobile'] : 1;
 
-		$gap_desktop = isset( $settings['awea_slide_gap']['size'] ) && '' !== $settings['awea_slide_gap']['size'] ? (int) $settings['awea_slide_gap']['size'] : 24;
-		$gap_tablet  = isset( $settings['awea_slide_gap_tablet']['size'] ) && '' !== $settings['awea_slide_gap_tablet']['size'] ? (int) $settings['awea_slide_gap_tablet']['size'] : 20;
-		$gap_mobile  = isset( $settings['awea_slide_gap_mobile']['size'] ) && '' !== $settings['awea_slide_gap_mobile']['size'] ? (int) $settings['awea_slide_gap_mobile']['size'] : 16;
+		$gap_desktop = isset( $settings['awea_team_carousel_slide_gap']['size'] ) && '' !== $settings['awea_team_carousel_slide_gap']['size'] ? (int) $settings['awea_team_carousel_slide_gap']['size'] : 24;
+		$gap_tablet  = isset( $settings['awea_team_carousel_slide_gap_tablet']['size'] ) && '' !== $settings['awea_team_carousel_slide_gap_tablet']['size'] ? (int) $settings['awea_team_carousel_slide_gap_tablet']['size'] : 20;
+		$gap_mobile  = isset( $settings['awea_team_carousel_slide_gap_mobile']['size'] ) && '' !== $settings['awea_team_carousel_slide_gap_mobile']['size'] ? (int) $settings['awea_team_carousel_slide_gap_mobile']['size'] : 16;
 
-		$show_arrows = ( 'yes' === ( $settings['awea_show_arrows'] ?? 'no' ) ) ? 'yes' : 'no';
-		$show_dots   = ( 'yes' === ( $settings['awea_show_dots'] ?? 'no' ) ) ? 'yes' : 'no';
-		$loop        = ( 'yes' === ( $settings['awea_loop'] ?? 'no' ) ) ? 'yes' : 'no';
-		$autoplay    = ( 'yes' === ( $settings['awea_autoplay'] ?? 'no' ) ) ? 'yes' : 'no';
-		$pause       = ( 'yes' === ( $settings['awea_pause_on_hover'] ?? 'no' ) ) ? 'yes' : 'no';
-		$auto_speed  = ! empty( $settings['awea_autoplay_speed'] ) ? (int) $settings['awea_autoplay_speed'] : 5000;
-		$anim_speed  = ! empty( $settings['awea_animation_speed'] ) ? (int) $settings['awea_animation_speed'] : 450;
+		$show_arrows = ( 'yes' === ( $settings['awea_team_carousel_show_arrows'] ?? 'no' ) ) ? 'yes' : 'no';
+		$show_dots   = ( 'yes' === ( $settings['awea_team_carousel_show_dots'] ?? 'no' ) ) ? 'yes' : 'no';
+		$loop        = ( 'yes' === ( $settings['awea_team_carousel_loop'] ?? 'no' ) ) ? 'yes' : 'no';
+		$autoplay    = ( 'yes' === ( $settings['awea_team_carousel_autoplay'] ?? 'no' ) ) ? 'yes' : 'no';
+		$pause       = ( 'yes' === ( $settings['awea_team_carousel_pause_on_hover'] ?? 'no' ) ) ? 'yes' : 'no';
+		$auto_speed  = ! empty( $settings['awea_team_carousel_autoplay_speed'] ) ? (int) $settings['awea_team_carousel_autoplay_speed'] : 5000;
+		$anim_speed  = ! empty( $settings['awea_team_carousel_animation_speed'] ) ? (int) $settings['awea_team_carousel_animation_speed'] : 450;
 
-		$always_visible = ( 'yes' === ( $settings['awea_social_always_visible'] ?? 'no' ) );
-		$name_tag       = Utils::validate_html_tag( $settings['awea_name_tag'] ?? 'h3' );
+		$always_visible = ( 'yes' === ( $settings['awea_team_carousel_social_visible'] ?? 'no' ) );
+		$name_tag       = Utils::validate_html_tag( $settings['awea_team_carousel_name_tag'] ?? 'h3' );
 		$widget_id      = $this->get_id();
 
 		if ( empty( $members ) ) {
 			return;
 		}
 
-		$card_classes = [ 'awea-team-master-card' ];
+		$card_classes = [ 'awea_team_carousel_master_card' ];
 		if ( $always_visible ) {
-			$card_classes[] = 'awea-social-always-visible';
+			$card_classes[] = 'awea_team_carousel_social_always_visible';
 		}
 		?>
-		<div class="awea-team-carousel-wrapper" id="awea-tc-<?php echo esc_attr( $widget_id ); ?>">
-			<div class="awea-team-carousel owl-carousel"
-				 data-items-desktop="<?php echo esc_attr( (string) $items_desktop ); ?>"
-				 data-items-tablet="<?php echo esc_attr( (string) $items_tablet ); ?>"
-				 data-items-mobile="<?php echo esc_attr( (string) $items_mobile ); ?>"
-				 data-gap-desktop="<?php echo esc_attr( (string) $gap_desktop ); ?>"
-				 data-gap-tablet="<?php echo esc_attr( (string) $gap_tablet ); ?>"
-				 data-gap-mobile="<?php echo esc_attr( (string) $gap_mobile ); ?>"
-				 data-arrows="<?php echo esc_attr( $show_arrows ); ?>"
-				 data-dots="<?php echo esc_attr( $show_dots ); ?>"
-				 data-loop="<?php echo esc_attr( $loop ); ?>"
-				 data-autoplay="<?php echo esc_attr( $autoplay ); ?>"
-				 data-pause="<?php echo esc_attr( $pause ); ?>"
-				 data-speed="<?php echo esc_attr( (string) $anim_speed ); ?>"
-				 data-timeout="<?php echo esc_attr( (string) $auto_speed ); ?>">
+		<div class="awea_team_carousel_wrapper" id="awea_team_carousel_wrap_<?php echo esc_attr( $widget_id ); ?>">
+			<div class="awea_team_carousel owl-carousel"
+				 id="awea_team_carousel_<?php echo esc_attr( $widget_id ); ?>"
+				 data-awea_team_carousel_items_desktop="<?php echo esc_attr( (string) $items_desktop ); ?>"
+				 data-awea_team_carousel_items_tablet="<?php echo esc_attr( (string) $items_tablet ); ?>"
+				 data-awea_team_carousel_items_mobile="<?php echo esc_attr( (string) $items_mobile ); ?>"
+				 data-awea_team_carousel_gap_desktop="<?php echo esc_attr( (string) $gap_desktop ); ?>"
+				 data-awea_team_carousel_gap_tablet="<?php echo esc_attr( (string) $gap_tablet ); ?>"
+				 data-awea_team_carousel_gap_mobile="<?php echo esc_attr( (string) $gap_mobile ); ?>"
+				 data-awea_team_carousel_arrows="<?php echo esc_attr( $show_arrows ); ?>"
+				 data-awea_team_carousel_dots="<?php echo esc_attr( $show_dots ); ?>"
+				 data-awea_team_carousel_loop="<?php echo esc_attr( $loop ); ?>"
+				 data-awea_team_carousel_autoplay="<?php echo esc_attr( $autoplay ); ?>"
+				 data-awea_team_carousel_pause="<?php echo esc_attr( $pause ); ?>"
+				 data-awea_team_carousel_speed="<?php echo esc_attr( (string) $anim_speed ); ?>"
+				 data-awea_team_carousel_timeout="<?php echo esc_attr( (string) $auto_speed ); ?>">
 
 				<?php foreach ( $members as $index => $member ) :
 					$id        = ! empty( $member['_id'] ) ? sanitize_html_class( $member['_id'] ) : $index;
-					$img_item  = $member['awea_image'] ?? [];
+					$img_item  = $member['awea_team_carousel_image'] ?? [];
 					$image_url = ! empty( $img_item['url'] ) ? $img_item['url'] : Utils::get_placeholder_image_src();
-					$name      = $member['awea_name'] ?? '';
-					$role      = $member['awea_role'] ?? '';
-					$bio       = $member['awea_bio'] ?? '';
+					$name      = $member['awea_team_carousel_name'] ?? '';
+					$role      = $member['awea_team_carousel_role'] ?? '';
+					$bio       = $member['awea_team_carousel_bio'] ?? '';
 
 					$img_data = [
-						'awea_image'                     => $img_item,
-						'awea_img_size_size'             => $settings['awea_img_size_size'] ?? 'large',
-						'awea_img_size_custom_dimension' => $settings['awea_img_size_custom_dimension'] ?? [],
+						'awea_team_carousel_image'            => $img_item,
+						'awea_team_carousel_img_size_size'    => $settings['awea_team_carousel_img_size_size'] ?? 'large',
+						'awea_team_carousel_img_size_custom_dimension' => $settings['awea_team_carousel_img_size_custom_dimension'] ?? [],
 					];
 
 					$img_html = ! empty( $img_item['id'] )
-						? Group_Control_Image_Size::get_attachment_image_html( $img_data, 'awea_img_size', 'awea_image' )
+						? Group_Control_Image_Size::get_attachment_image_html( $img_data, 'awea_team_carousel_img_size', 'awea_team_carousel_image' )
 						: sprintf( '<img src="%s" alt="%s" loading="lazy" />', esc_url( $image_url ), esc_attr( $name ) );
 
 					$socials = [];
@@ -1103,14 +1116,14 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 						'insta' => [ 'title' => 'Instagram', 'brand' => '#e4405f' ],
 					];
 					foreach ( $brands as $soc_key => $meta ) {
-						$url_data = $member[ 'awea_' . $soc_key . '_url' ] ?? [];
+						$url_data = $member[ 'awea_team_carousel_' . $soc_key . '_url' ] ?? [];
 						if ( ! empty( $url_data['url'] ) ) {
-							$soc_key_id = 'soc_' . $id . '_' . $soc_key;
+							$soc_key_id = 'awea_team_carousel_soc_' . $id . '_' . $soc_key;
 							$this->remove_render_attribute( $soc_key_id );
 							$this->add_link_attributes( $soc_key_id, $url_data );
-							$this->add_render_attribute( $soc_key_id, 'class', 'awea-team-social-btn' );
+							$this->add_render_attribute( $soc_key_id, 'class', 'awea_team_carousel_social_btn' );
 							$this->add_render_attribute( $soc_key_id, 'aria-label', esc_attr( trim( $name . ' — ' . $meta['title'], ' —' ) ) );
-							$this->add_render_attribute( $soc_key_id, 'style', '--awea-social-brand: ' . esc_attr( $meta['brand'] ) . ';' );
+							$this->add_render_attribute( $soc_key_id, 'style', '--awea_team_carousel_social_brand: ' . esc_attr( $meta['brand'] ) . ';' );
 
 							$socials[] = [
 								'key' => $soc_key_id,
@@ -1120,28 +1133,28 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 					}
 					?>
 					<article class="<?php echo esc_attr( implode( ' ', $card_classes ) ); ?> elementor-repeater-item-<?php echo esc_attr( $id ); ?>">
-						<div class="awea-team-img-container">
+						<div class="awea_team_carousel_img_container">
 							<?php echo $img_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-							<div class="awea-team-scrim" aria-hidden="true"></div>
+							<div class="awea_team_carousel_scrim" aria-hidden="true"></div>
 						</div>
 
-						<div class="awea-team-info-panel">
+						<div class="awea_team_carousel_info_panel">
 							<?php if ( ! empty( $name ) ) : ?>
-								<<?php Utils::print_validated_html_tag( $name_tag ); ?> class="awea-team-name">
+								<<?php Utils::print_validated_html_tag( $name_tag ); ?> class="awea_team_carousel_name">
 									<?php echo esc_html( $name ); ?>
 								</<?php Utils::print_validated_html_tag( $name_tag ); ?>>
 							<?php endif; ?>
 
 							<?php if ( ! empty( $role ) ) : ?>
-								<span class="awea-team-role"><?php echo esc_html( $role ); ?></span>
+								<span class="awea_team_carousel_role"><?php echo esc_html( $role ); ?></span>
 							<?php endif; ?>
 
 							<?php if ( ! empty( $bio ) ) : ?>
-								<p class="awea-team-bio"><?php echo esc_html( $bio ); ?></p>
+								<p class="awea_team_carousel_bio"><?php echo esc_html( $bio ); ?></p>
 							<?php endif; ?>
 
 							<?php if ( ! empty( $socials ) ) : ?>
-								<div class="awea-team-social-dock">
+								<div class="awea_team_carousel_social_dock">
 									<?php foreach ( $socials as $soc ) : ?>
 										<a <?php $this->print_render_attribute_string( $soc['key'] ); ?>>
 											<?php echo $soc['svg']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
@@ -1158,9 +1171,9 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 
 		<script>
 		(function($) {
-			function mountTeamCarousel(wrapper) {
+			function awea_team_carousel_mount(wrapper) {
 				if (!wrapper || !$) return;
-				var $carousel = $(wrapper).find('.awea-team-carousel');
+				var $carousel = $(wrapper).find('.awea_team_carousel');
 				if (!$carousel.length || typeof $carousel.owlCarousel !== 'function') return;
 
 				if ($carousel.hasClass('owl-loaded')) {
@@ -1169,32 +1182,33 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 					$carousel.find('.owl-item').children().unwrap();
 				}
 
-				var itemsDesktop = parseInt($carousel.attr('data-items-desktop'), 10) || 3;
-				var itemsTablet  = parseInt($carousel.attr('data-items-tablet'), 10) || 2;
-				var itemsMobile  = parseInt($carousel.attr('data-items-mobile'), 10) || 1;
-				var gapDesktop   = parseInt($carousel.attr('data-gap-desktop'), 10);
-				var gapTablet    = parseInt($carousel.attr('data-gap-tablet'), 10);
-				var gapMobile    = parseInt($carousel.attr('data-gap-mobile'), 10);
+				var itemsDesktop = parseInt($carousel.attr('data-awea_team_carousel_items_desktop'), 10) || 3;
+				var itemsTablet  = parseInt($carousel.attr('data-awea_team_carousel_items_tablet'), 10) || 2;
+				var itemsMobile  = parseInt($carousel.attr('data-awea_team_carousel_items_mobile'), 10) || 1;
+				var gapDesktop   = parseInt($carousel.attr('data-awea_team_carousel_gap_desktop'), 10);
+				var gapTablet    = parseInt($carousel.attr('data-awea_team_carousel_gap_tablet'), 10);
+				var gapMobile    = parseInt($carousel.attr('data-awea_team_carousel_gap_mobile'), 10);
 
 				if (isNaN(gapDesktop)) gapDesktop = 24;
 				if (isNaN(gapTablet)) gapTablet = 20;
 				if (isNaN(gapMobile)) gapMobile = 16;
 
 				var slideCount = $carousel.children('article').length;
-				var loop       = $carousel.attr('data-loop') === 'yes';
+				var loop       = $carousel.attr('data-awea_team_carousel_loop') === 'yes';
 				var allowLoop  = loop && (slideCount > itemsDesktop);
 
 				$carousel.owlCarousel({
-					nav: $carousel.attr('data-arrows') === 'yes',
-					dots: $carousel.attr('data-dots') === 'yes',
+					rtl: document.dir === 'rtl',
+					nav: $carousel.attr('data-awea_team_carousel_arrows') === 'yes',
+					dots: $carousel.attr('data-awea_team_carousel_dots') === 'yes',
 					loop: allowLoop,
-					autoplay: $carousel.attr('data-autoplay') === 'yes',
-					autoplayTimeout: parseInt($carousel.attr('data-timeout'), 10) || 5000,
-					smartSpeed: parseInt($carousel.attr('data-speed'), 10) || 450,
-					autoplayHoverPause: $carousel.attr('data-pause') === 'yes',
+					autoplay: $carousel.attr('data-awea_team_carousel_autoplay') === 'yes',
+					autoplayTimeout: parseInt($carousel.attr('data-awea_team_carousel_timeout'), 10) || 5000,
+					smartSpeed: parseInt($carousel.attr('data-awea_team_carousel_speed'), 10) || 450,
+					autoplayHoverPause: $carousel.attr('data-awea_team_carousel_pause') === 'yes',
 					navText: [
-						'<button type="button" class="awea-carousel-arrow-border" aria-label="<?php echo esc_js( __( 'Previous', 'awesome-widgets-elementor' ) ); ?>"><span aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg></span></button>',
-						'<button type="button" class="awea-carousel-arrow-border" aria-label="<?php echo esc_js( __( 'Next', 'awesome-widgets-elementor' ) ); ?>"><span aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg></span></button>'
+						'<button type="button" class="awea_team_carousel_arrow_border" aria-label="<?php echo esc_js( __( 'Previous', 'awesome-widgets-elementor' ) ); ?>"><span aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg></span></button>',
+						'<button type="button" class="awea_team_carousel_arrow_border" aria-label="<?php echo esc_js( __( 'Next', 'awesome-widgets-elementor' ) ); ?>"><span aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg></span></button>'
 					],
 					responsive: {
 						0: { items: itemsMobile, margin: gapMobile },
@@ -1205,23 +1219,103 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 			}
 
 			$(function() {
-				var el = document.getElementById('awea-tc-<?php echo esc_js( $widget_id ); ?>');
-				mountTeamCarousel(el);
+				var el = document.getElementById('awea_team_carousel_wrap_<?php echo esc_js( $widget_id ); ?>');
+				awea_team_carousel_mount(el);
 			});
 
-			if (!window.aweaTeamCarouselHooked) {
-				window.aweaTeamCarouselHooked = true;
+			if (!window.awea_team_carousel_hooked) {
+				window.awea_team_carousel_hooked = true;
 				$(window).on('elementor/frontend/init', function() {
 					if (window.elementorFrontend && window.elementorFrontend.hooks) {
 						window.elementorFrontend.hooks.addAction('frontend/element_ready/awesome-team-carousel.default', function($scope) {
-							var el = $scope && $scope[0] ? $scope[0].querySelector('.awea-team-carousel-wrapper') : null;
-							mountTeamCarousel(el);
+							var el = $scope && $scope[0] ? $scope[0].querySelector('.awea_team_carousel_wrapper') : null;
+							awea_team_carousel_mount(el);
 						});
 					}
 				});
 			}
 		})(jQuery);
 		</script>
+		<?php
+	}
+
+	/**
+	 * Instant Live Editor Preview (Backbone.js Template).
+	 */
+	protected function content_template() {
+		?>
+		<#
+		if ( ! settings.awea_team_carousel_members || ! settings.awea_team_carousel_members.length ) {
+			return;
+		}
+		var nameTag   = elementor.helpers.validateHTMLTag( settings.awea_team_carousel_name_tag || 'h3' );
+		var alwaysVis = 'yes' === settings.awea_team_carousel_social_visible;
+		var cardClass = 'awea_team_carousel_master_card' + ( alwaysVis ? ' awea_team_carousel_social_always_visible' : '' );
+		#>
+		<div class="awea_team_carousel_wrapper">
+			<div class="awea_team_carousel owl-carousel">
+				<# _.each( settings.awea_team_carousel_members, function( member, index ) {
+					var id    = member._id || index;
+					var name  = member.awea_team_carousel_name || '';
+					var role  = member.awea_team_carousel_role || '';
+					var bio   = member.awea_team_carousel_bio || '';
+
+					var imageObj = {
+						id: member.awea_team_carousel_image ? member.awea_team_carousel_image.id : '',
+						url: member.awea_team_carousel_image ? member.awea_team_carousel_image.url : '',
+						size: settings.awea_team_carousel_img_size_size,
+						dimension: settings.awea_team_carousel_img_size_custom_dimension,
+						model: view.getEditModel()
+					};
+					var imageUrl = elementor.imagesManager.getImageUrl( imageObj ) || '<?php echo esc_url( Utils::get_placeholder_image_src() ); ?>';
+
+					var socials = [];
+					var brands  = {
+						'ln': '#0a66c2',
+						'tw': '#000000',
+						'fb': '#1877f2',
+						'insta': '#e4405f'
+					};
+					_.each( brands, function( hex, key ) {
+						var urlObj = member[ 'awea_team_carousel_' + key + '_url' ];
+						if ( urlObj && urlObj.url ) {
+							socials.push( { href: urlObj.url, brand: hex } );
+						}
+					} );
+				#>
+					<article class="{{ cardClass }} elementor-repeater-item-{{ id }}">
+						<div class="awea_team_carousel_img_container">
+							<img src="{{ imageUrl }}" alt="{{ name }}" />
+							<div class="awea_team_carousel_scrim" aria-hidden="true"></div>
+						</div>
+
+						<div class="awea_team_carousel_info_panel">
+							<# if ( name ) { #>
+								<{{{ nameTag }}} class="awea_team_carousel_name">{{{ name }}}</{{{ nameTag }}}>
+							<# } #>
+
+							<# if ( role ) { #>
+								<span class="awea_team_carousel_role">{{{ role }}}</span>
+							<# } #>
+
+							<# if ( bio ) { #>
+								<p class="awea_team_carousel_bio">{{{ bio }}}</p>
+							<# } #>
+
+							<# if ( socials.length ) { #>
+								<div class="awea_team_carousel_social_dock">
+									<# _.each( socials, function( soc ) { #>
+										<a href="{{ soc.href }}" class="awea_team_carousel_social_btn" style="--awea_team_carousel_social_brand: {{ soc.brand }};">
+											<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14z"/></svg>
+										</a>
+									<# } ); #>
+								</div>
+							<# } #>
+						</div>
+					</article>
+				<# } ); #>
+			</div>
+		</div>
 		<?php
 	}
 }

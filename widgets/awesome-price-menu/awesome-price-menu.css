@@ -1,12 +1,12 @@
 /* ==========================================================================
-   Awesome Price Menu Widget
+   Awesome Price Menu Widget (v2.0.0)
    ========================================================================== */
 
-.awea-price-menu-list {
-	--awea-pm-primary: var(--e-global-color-primary, #4f46e5);
-	--awea-pm-heading: #0f172a;
-	--awea-pm-text: #475569;
-	--awea-pm-border: #e2e8f0;
+.awea_price_menu_list {
+	--awea_price_menu_primary: var(--e-global-color-primary, #4f46e5);
+	--awea_price_menu_heading: #0f172a;
+	--awea_price_menu_text: #475569;
+	--awea_price_menu_border: #e2e8f0;
 
 	list-style: none;
 	padding: 36px;
@@ -14,7 +14,7 @@
 	width: 100%;
 	box-sizing: border-box;
 	background-color: #ffffff;
-	border: 1px solid var(--awea-pm-border);
+	border: 1px solid var(--awea_price_menu_border);
 	border-radius: 28px;
 	transition:
 		background-color 0.25s ease,
@@ -22,29 +22,36 @@
 		box-shadow 0.25s ease;
 }
 
-.awea-price-menu-list *,
-.awea-price-menu-list *::before,
-.awea-price-menu-list *::after {
+.awea_price_menu_list *,
+.awea_price_menu_list *::before,
+.awea_price_menu_list *::after {
 	box-sizing: border-box;
 }
 
-.awea-price-menu-list:hover {
-	border-color: var(--awea-pm-primary);
+.awea_price_menu_list:hover {
+	border-color: var(--awea_price_menu_primary);
 }
 
 /* --------------------------------------------------------------------------
    1. Menu Row Item
    -------------------------------------------------------------------------- */
-.awea-price-menu {
+.awea_price_menu_item {
 	display: flex;
 	gap: 20px;
 	align-items: flex-start;
 	margin-bottom: 24px;
 	padding-bottom: 24px;
 	border-bottom: 1px solid #f1f5f9;
+	border-radius: 12px;
+	transition: background-color 0.2s ease, transform 0.2s ease;
 }
 
-.awea-price-menu:last-child {
+.awea_price_menu_item:hover {
+	background-color: rgba(248, 250, 252, 0.6);
+	transform: translateY(-1px);
+}
+
+.awea_price_menu_item:last-child {
 	margin-bottom: 0 !important;
 	padding-bottom: 0 !important;
 	border-bottom: none !important;
@@ -53,17 +60,17 @@
 /* --------------------------------------------------------------------------
    2. Thumbnail Image
    -------------------------------------------------------------------------- */
-.awea-price-menu-thumb {
+.awea_price_menu_thumb {
 	width: 76px;
 	height: 76px;
 	border-radius: 16px;
 	overflow: hidden;
 	background-color: #f1f5f9;
 	flex-shrink: 0;
-	border: 1px solid var(--awea-pm-border);
+	border: 1px solid var(--awea_price_menu_border);
 }
 
-.awea-price-menu-thumb img {
+.awea_price_menu_thumb img {
 	width: 100%;
 	height: 100%;
 	object-fit: cover;
@@ -71,57 +78,64 @@
 	transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.awea-price-menu:hover .awea-price-menu-thumb img {
+.awea_price_menu_item:hover .awea_price_menu_thumb img {
 	transform: scale(1.04);
 }
 
 /* --------------------------------------------------------------------------
-   3. Details & Fluid Dotted Leader Header
+   3. Details & Fluid Dotted Leader Header (RTL Safe)
    -------------------------------------------------------------------------- */
-.awea-price-menu-details {
+.awea_price_menu_details {
 	flex-grow: 1;
 	min-width: 0;
 }
 
-.awea-price-menu-header {
+.awea_price_menu_header {
+	position: relative;
 	display: flex;
 	align-items: baseline;
-	gap: 10px;
-	position: relative;
+	justify-content: space-between;
+	gap: 16px;
 	width: 100%;
 }
 
-.awea-price-menu-title {
-	order: 1;
-	flex-shrink: 1;
-	min-width: 0;
+.awea_price_menu_title {
+	position: relative;
+	z-index: 2;
 	margin: 0;
+	padding-inline-end: 10px;
+	background-color: #ffffff;
 	font-size: 1.15rem;
 	font-weight: 800;
 	letter-spacing: -0.015em;
-	color: var(--awea-pm-heading);
+	color: var(--awea_price_menu_heading);
 	line-height: 1.3;
 	word-break: break-word;
 	transition: color 0.25s ease;
 }
 
-.awea-price-menu-title a {
+.awea_price_menu_list:hover .awea_price_menu_item:hover .awea_price_menu_title,
+.awea_price_menu_list:hover .awea_price_menu_item:hover .awea_price_menu_title a {
+	background-color: rgba(248, 250, 252, 0.6);
+}
+
+.awea_price_menu_title a {
 	color: inherit;
 	text-decoration: none;
 }
 
-.awea-price-menu-title a:focus-visible {
-	outline: 2px solid var(--awea-pm-primary);
+.awea_price_menu_title a:focus-visible {
+	outline: 2px solid var(--awea_price_menu_primary);
 	outline-offset: 2px;
 	border-radius: 4px;
 }
 
-.awea-price-menu:hover .awea-price-menu-title,
-.awea-price-menu:hover .awea-price-menu-title a {
-	color: var(--awea-pm-primary);
+.awea_price_menu_item:hover .awea_price_menu_title,
+.awea_price_menu_item:hover .awea_price_menu_title a {
+	color: var(--awea_price_menu_primary);
 }
 
-.awea-price-menu-badge {
+.awea_price_menu_badge {
 	display: inline-flex;
 	align-items: center;
 	vertical-align: middle;
@@ -129,7 +143,7 @@
 	padding: 2px 8px;
 	border-radius: 100px;
 	background-color: rgba(79, 70, 229, 0.08);
-	color: var(--awea-pm-primary);
+	color: var(--awea_price_menu_primary);
 	font-size: 0.68rem;
 	font-weight: 700;
 	letter-spacing: 0.05em;
@@ -137,32 +151,41 @@
 	line-height: 1.4;
 }
 
-.awea-price-menu-header::after {
+.awea_price_menu_header::after {
 	content: "";
-	order: 2;
-	flex: 1 1 auto;
+	position: absolute;
+	bottom: 5px;
+	left: 0;
+	right: 0;
+	z-index: 1;
 	border-bottom-style: dotted;
 	border-bottom-width: 2px;
 	border-bottom-color: rgba(15, 23, 42, 0.16);
-	margin: 0 4px;
-	min-width: 16px;
+	pointer-events: none;
 }
 
-.awea-price {
-	order: 3;
-	flex-shrink: 0;
+.awea_price_menu_price {
+	position: relative;
+	z-index: 2;
+	padding-inline-start: 10px;
+	background-color: #ffffff;
 	font-size: 1.15rem;
 	font-weight: 800;
-	color: var(--awea-pm-primary);
+	color: var(--awea_price_menu_primary);
 	font-variant-numeric: tabular-nums;
 	line-height: 1.3;
+	flex-shrink: 0;
 }
 
-.awea-description {
+.awea_price_menu_item:hover .awea_price_menu_price {
+	background-color: rgba(248, 250, 252, 0.6);
+}
+
+.awea_price_menu_description {
 	margin: 6px 0 0 0;
 	font-size: 0.94rem;
 	line-height: 1.6;
-	color: var(--awea-pm-text);
+	color: var(--awea_price_menu_text);
 	word-break: break-word;
 }
 
@@ -170,36 +193,37 @@
    4. Accessibility & Responsive
    -------------------------------------------------------------------------- */
 @media (prefers-reduced-motion: reduce) {
-	.awea-price-menu-list,
-	.awea-price-menu-thumb img,
-	.awea-price-menu-title {
+	.awea_price_menu_list,
+	.awea_price_menu_thumb img,
+	.awea_price_menu_title,
+	.awea_price_menu_item {
 		transition: none !important;
 		transform: none !important;
 	}
 }
 
 @media (max-width: 640px) {
-	.awea-price-menu-list {
+	.awea_price_menu_list {
 		padding: 24px 18px;
 		border-radius: 20px;
 	}
 
-	.awea-price-menu {
+	.awea_price_menu_item {
 		gap: 14px;
 	}
 
-	.awea-price-menu-thumb {
+	.awea_price_menu_thumb {
 		width: 60px;
 		height: 60px;
 		border-radius: 12px;
 	}
 
-	.awea-price-menu-header {
+	.awea_price_menu_header {
 		gap: 8px;
 	}
 
-	.awea-price-menu-title,
-	.awea-price {
+	.awea_price_menu_title,
+	.awea_price_menu_price {
 		font-size: 1.05rem;
 	}
 }

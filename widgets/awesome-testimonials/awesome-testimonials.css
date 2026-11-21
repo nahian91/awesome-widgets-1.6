@@ -1,15 +1,15 @@
 /* ==========================================================================
-   AWEA Testimonials — Zero-Shadow Architectural Repeater Grid
+   Awesome Testimonials Studio Widget (v2.0.0)
    ========================================================================== */
 
-@property --awea-tm-angle {
+@property --awea_testimonials_angle {
 	syntax: "<angle>";
 	initial-value: 0deg;
 	inherits: false;
 }
 
-.awea-tm-grid {
-	--awea-tm-global-beam: var(--e-global-color-primary, #4f46e5);
+.awea_testimonials_grid {
+	--awea_testimonials_global_beam: var(--e-global-color-primary, #4f46e5);
 
 	display: grid;
 	grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -19,8 +19,8 @@
 	align-items: stretch;
 }
 
-.awea-tm-card {
-	--awea-tm-beam: var(--awea-tm-item-beam, var(--awea-tm-global-beam));
+.awea_testimonials_card {
+	--awea_testimonials_beam: var(--awea_testimonials_item_beam, var(--awea_testimonials_global_beam));
 
 	position: relative;
 	display: flex;
@@ -39,19 +39,19 @@
 		border-color 0.25s ease;
 }
 
-.awea-tm-card:hover {
-	border-color: var(--awea-tm-beam);
+.awea_testimonials_card:hover {
+	border-color: var(--awea_testimonials_beam);
 	box-shadow: none;
 }
 
 /* Kinetic Border Beam (Zero Shadow) */
-.awea-tm-beam-yes .awea-tm-card::after {
+.awea_testimonials_beam_yes .awea_testimonials_card::after {
 	content: "";
 	position: absolute;
 	inset: 0;
 	border-radius: inherit;
 	padding: 1.5px;
-	background: conic-gradient(from var(--awea-tm-angle), transparent 70%, var(--awea-tm-beam), transparent);
+	background: conic-gradient(from var(--awea_testimonials_angle), transparent 70%, var(--awea_testimonials_beam), transparent);
 	-webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
 	mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
 	-webkit-mask-composite: xor;
@@ -61,37 +61,37 @@
 	pointer-events: none;
 }
 
-@keyframes aweaTmSpin {
+@keyframes awea_testimonials_spin {
 	to {
-		--awea-tm-angle: 360deg;
+		--awea_testimonials_angle: 360deg;
 	}
 }
 
-.awea-tm-beam-yes .awea-tm-card:hover::after {
+.awea_testimonials_beam_yes .awea_testimonials_card:hover::after {
 	opacity: 1;
-	animation: aweaTmSpin 3.5s linear infinite;
+	animation: awea_testimonials_spin 3.5s linear infinite;
 }
 
-/* Quote Watermark */
-.awea-tm-quote-mark {
+/* Quote Watermark (RTL Safe) */
+.awea_testimonials_quote_mark {
 	position: absolute;
 	top: 24px;
-	right: 24px;
+	inset-inline-end: 24px;
 	width: 40px;
 	height: 40px;
 	opacity: 0.08;
-	color: var(--awea-tm-beam);
+	color: var(--awea_testimonials_beam);
 	z-index: 1;
 	pointer-events: none;
 	transition: opacity 0.3s ease;
 }
 
-.awea-tm-card:hover .awea-tm-quote-mark {
+.awea_testimonials_card:hover .awea_testimonials_quote_mark {
 	opacity: 0.16;
 }
 
 /* Rating Stars */
-.awea-tm-stars {
+.awea_testimonials_stars {
 	display: flex;
 	align-items: center;
 	gap: 5px;
@@ -100,23 +100,23 @@
 	margin-bottom: 18px;
 }
 
-.awea-tm-stars svg {
+.awea_testimonials_stars svg {
 	width: 14px;
 	height: 14px;
 	display: block;
 	flex-shrink: 0;
 }
 
-.awea-star-on {
+.awea_testimonials_star_on {
 	color: #f59e0b;
 }
 
-.awea-star-off {
+.awea_testimonials_star_off {
 	color: #e2e8f0;
 }
 
 /* Review Speech */
-.awea-tm-text {
+.awea_testimonials_text {
 	margin: 0 0 24px 0;
 	position: relative;
 	z-index: 2;
@@ -128,7 +128,7 @@
 }
 
 /* Author Footer (Bottom-Anchored Across Equal-Height Cards) */
-.awea-tm-footer {
+.awea_testimonials_footer {
 	display: flex;
 	align-items: center;
 	gap: 14px;
@@ -139,7 +139,7 @@
 	z-index: 2;
 }
 
-.awea-tm-avatar {
+.awea_testimonials_avatar {
 	width: 48px;
 	height: 48px;
 	border-radius: 100%;
@@ -148,14 +148,14 @@
 	border: 1px solid rgba(15, 23, 42, 0.08);
 }
 
-.awea-tm-meta {
+.awea_testimonials_meta {
 	display: flex;
 	flex-direction: column;
 	gap: 2px;
 	min-width: 0;
 }
 
-.awea-tm-name {
+.awea_testimonials_name {
 	margin: 0;
 	font-size: 1rem;
 	font-weight: 800;
@@ -164,7 +164,7 @@
 	word-break: break-word;
 }
 
-.awea-tm-role {
+.awea_testimonials_role {
 	font-style: normal;
 	font-size: 0.84rem;
 	line-height: 1.3;
@@ -173,9 +173,9 @@
 	word-break: break-word;
 }
 
-/* Verified Badge */
-.awea-tm-verify {
-	margin-left: auto;
+/* Verified Badge (RTL Safe) */
+.awea_testimonials_verify {
+	margin-inline-start: auto;
 	width: 24px;
 	height: 24px;
 	border-radius: 50%;
@@ -187,38 +187,38 @@
 	flex-shrink: 0;
 }
 
-.awea-tm-verify svg {
+.awea_testimonials_verify svg {
 	width: 12px;
 	height: 12px;
 }
 
 /* Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
-	.awea-tm-beam-yes .awea-tm-card:hover::after {
+	.awea_testimonials_beam_yes .awea_testimonials_card:hover::after {
 		animation: none !important;
 	}
 
-	.awea-tm-card,
-	.awea-tm-quote-mark {
+	.awea_testimonials_card,
+	.awea_testimonials_quote_mark {
 		transition: none !important;
 	}
 }
 
 /* Mobile (<= 767px) */
 @media (max-width: 767px) {
-	:where(.awea-tm-card) {
+	:where(.awea_testimonials_card) {
 		padding: 24px 20px;
 		border-radius: 18px;
 	}
 
-	:where(.awea-tm-quote-mark) {
+	:where(.awea_testimonials_quote_mark) {
 		top: 18px;
-		right: 18px;
+		inset-inline-end: 18px;
 		width: 32px;
 		height: 32px;
 	}
 
-	.awea-tm-footer {
+	.awea_testimonials_footer {
 		gap: 12px;
 	}
 }

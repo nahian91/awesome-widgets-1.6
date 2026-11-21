@@ -45,12 +45,19 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 	}
 
 	protected function register_controls() {
+		$this->register_content_controls();$this->register_style_controls();
+	}
+
+	/**
+	 * Content Tab Controls
+	 */
+	protected function register_content_controls() {
 
 		/* ==========================================================================
 		   CONTENT: 1. QUERY
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_section_query',
+			'awea_post_grid_section_query',
 			[
 				'label' => esc_html__( 'Query', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
@@ -58,9 +65,9 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 		);
 
 		$this->add_control(
-			'awea_post_count',
+			'awea_post_grid_post_count',
 			[
-				'label'   => esc_html__( 'Count', 'awesome-widgets-elementor' ),
+				'label'   => esc_html__( 'Posts Per Page', 'awesome-widgets-elementor' ),
 				'type'    => Controls_Manager::NUMBER,
 				'default' => 6,
 				'min'     => 1,
@@ -68,16 +75,14 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 			]
 		);
 
-		$cat_options = [];
-		$categories  = get_categories( [ 'hide_empty' => false ] );
+		$cat_options = [];$categories  = get_categories( [ 'hide_empty' => false ] );
 		if ( ! empty( $categories ) && ! is_wp_error( $categories ) ) {
-			foreach ( $categories as $cat ) {
-				$cat_options[ $cat->term_id ] = $cat->name;
+			foreach ( $categories as $cat ) {$cat_options[ $cat->term_id ] =$cat->name;
 			}
 		}
 
 		$this->add_control(
-			'awea_category_select',
+			'awea_post_grid_category_select',
 			[
 				'label'       => esc_html__( 'Categories', 'awesome-widgets-elementor' ),
 				'type'        => Controls_Manager::SELECT2,
@@ -88,9 +93,9 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 		);
 
 		$this->add_control(
-			'awea_orderby',
+			'awea_post_grid_orderby',
 			[
-				'label'   => esc_html__( 'Sort', 'awesome-widgets-elementor' ),
+				'label'   => esc_html__( 'Sort By', 'awesome-widgets-elementor' ),
 				'type'    => Controls_Manager::SELECT,
 				'default' => 'date',
 				'options' => [
@@ -104,7 +109,7 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 		);
 
 		$this->add_control(
-			'awea_order',
+			'awea_post_grid_order',
 			[
 				'label'   => esc_html__( 'Order', 'awesome-widgets-elementor' ),
 				'type'    => Controls_Manager::SELECT,
@@ -117,20 +122,33 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 		);
 
 		$this->add_control(
-			'awea_post_offset',
+			'awea_post_grid_post_offset',
 			[
-				'label'   => esc_html__( 'Offset', 'awesome-widgets-elementor' ),
-				'type'    => Controls_Manager::NUMBER,
-				'default' => 0,
-				'min'     => 0,
-				'max'     => 50,
+				'label'     => esc_html__( 'Offset', 'awesome-widgets-elementor' ),
+				'type'      => Controls_Manager::NUMBER,
+				'default'   => 0,
+				'min'       => 0,
+				'max'       => 50,
+				'condition' => [ 'awea_post_grid_pagination!' => 'yes' ],
 			]
 		);
 
 		$this->add_control(
-			'awea_exclude_current',
+			'awea_post_grid_exclude_current',
 			[
-				'label'        => esc_html__( 'Exclude', 'awesome-widgets-elementor' ),
+				'label'        => esc_html__( 'Exclude Current Post', 'awesome-widgets-elementor' ),
+				'type'         => Controls_Manager::SWITCHER,
+				'label_on'     => esc_html__( 'Yes', 'awesome-widgets-elementor' ),
+				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
+				'return_value' => 'yes',
+				'default'      => 'no',
+			]
+		);
+
+		$this->add_control(
+			'awea_post_grid_pagination',
+			[
+				'label'        => esc_html__( 'Enable Pagination', 'awesome-widgets-elementor' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'label_on'     => esc_html__( 'Yes', 'awesome-widgets-elementor' ),
 				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
@@ -145,7 +163,7 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 		   CONTENT: 2. ELEMENTS
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_section_elements',
+			'awea_post_grid_section_elements',
 			[
 				'label' => esc_html__( 'Elements', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
@@ -153,9 +171,9 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 		);
 
 		$this->add_control(
-			'awea_show_category',
+			'awea_post_grid_show_category',
 			[
-				'label'        => esc_html__( 'Badge', 'awesome-widgets-elementor' ),
+				'label'        => esc_html__( 'Category Badge', 'awesome-widgets-elementor' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'label_on'     => esc_html__( 'Yes', 'awesome-widgets-elementor' ),
 				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
@@ -165,9 +183,21 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 		);
 
 		$this->add_control(
-			'awea_show_date',
+			'awea_post_grid_show_author',
 			[
-				'label'        => esc_html__( 'Date', 'awesome-widgets-elementor' ),
+				'label'        => esc_html__( 'Author Name', 'awesome-widgets-elementor' ),
+				'type'         => Controls_Manager::SWITCHER,
+				'label_on'     => esc_html__( 'Yes', 'awesome-widgets-elementor' ),
+				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
+				'return_value' => 'yes',
+				'default'      => 'no',
+			]
+		);
+
+		$this->add_control(
+			'awea_post_grid_show_date',
+			[
+				'label'        => esc_html__( 'Publish Date', 'awesome-widgets-elementor' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'label_on'     => esc_html__( 'Yes', 'awesome-widgets-elementor' ),
 				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
@@ -177,9 +207,9 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 		);
 
 		$this->add_control(
-			'awea_show_reading_time',
+			'awea_post_grid_show_reading_time',
 			[
-				'label'        => esc_html__( 'Time', 'awesome-widgets-elementor' ),
+				'label'        => esc_html__( 'Reading Time', 'awesome-widgets-elementor' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'label_on'     => esc_html__( 'Yes', 'awesome-widgets-elementor' ),
 				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
@@ -189,9 +219,9 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 		);
 
 		$this->add_control(
-			'awea_show_counter',
+			'awea_post_grid_show_counter',
 			[
-				'label'        => esc_html__( 'Counter', 'awesome-widgets-elementor' ),
+				'label'        => esc_html__( 'Index Number (01, 02...)', 'awesome-widgets-elementor' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'label_on'     => esc_html__( 'Yes', 'awesome-widgets-elementor' ),
 				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
@@ -201,9 +231,9 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 		);
 
 		$this->add_control(
-			'awea_title_tag',
+			'awea_post_grid_title_tag',
 			[
-				'label'   => esc_html__( 'Tag', 'awesome-widgets-elementor' ),
+				'label'   => esc_html__( 'Title HTML Tag', 'awesome-widgets-elementor' ),
 				'type'    => Controls_Manager::SELECT,
 				'default' => 'h3',
 				'options' => [
@@ -226,7 +256,7 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 		   CONTENT: 3. EXCERPT
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_section_excerpt',
+			'awea_post_grid_section_excerpt',
 			[
 				'label' => esc_html__( 'Excerpt', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
@@ -234,9 +264,9 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 		);
 
 		$this->add_control(
-			'awea_show_excerpt',
+			'awea_post_grid_show_excerpt',
 			[
-				'label'        => esc_html__( 'Display', 'awesome-widgets-elementor' ),
+				'label'        => esc_html__( 'Display Excerpt', 'awesome-widgets-elementor' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'label_on'     => esc_html__( 'Yes', 'awesome-widgets-elementor' ),
 				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
@@ -246,14 +276,14 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 		);
 
 		$this->add_control(
-			'awea_excerpt_length',
+			'awea_post_grid_excerpt_length',
 			[
-				'label'     => esc_html__( 'Length', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Word Length', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::NUMBER,
 				'default'   => 15,
 				'min'       => 5,
 				'max'       => 100,
-				'condition' => [ 'awea_show_excerpt' => 'yes' ],
+				'condition' => [ 'awea_post_grid_show_excerpt' => 'yes' ],
 			]
 		);
 
@@ -263,7 +293,7 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 		   CONTENT: 4. BUTTON
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_section_button',
+			'awea_post_grid_section_button',
 			[
 				'label' => esc_html__( 'Button', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
@@ -271,9 +301,9 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 		);
 
 		$this->add_control(
-			'awea_show_button',
+			'awea_post_grid_show_button',
 			[
-				'label'        => esc_html__( 'Display', 'awesome-widgets-elementor' ),
+				'label'        => esc_html__( 'Display Button', 'awesome-widgets-elementor' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'label_on'     => esc_html__( 'Yes', 'awesome-widgets-elementor' ),
 				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
@@ -283,13 +313,13 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 		);
 
 		$this->add_control(
-			'awea_button_text',
+			'awea_post_grid_button_text',
 			[
 				'label'     => esc_html__( 'Label', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::TEXT,
 				'default'   => esc_html__( 'Read Insight', 'awesome-widgets-elementor' ),
 				'dynamic'   => [ 'active' => true ],
-				'condition' => [ 'awea_show_button' => 'yes' ],
+				'condition' => [ 'awea_post_grid_show_button' => 'yes' ],
 			]
 		);
 
@@ -299,15 +329,15 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 		   CONTENT: 5. GRID
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_section_layout',
+			'awea_post_grid_section_layout',
 			[
-				'label' => esc_html__( 'Grid', 'awesome-widgets-elementor' ),
+				'label' => esc_html__( 'Grid Layout', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
 			]
 		);
 
 		$this->add_responsive_control(
-			'awea_columns',
+			'awea_post_grid_columns',
 			[
 				'label'          => esc_html__( 'Columns', 'awesome-widgets-elementor' ),
 				'type'           => Controls_Manager::SELECT,
@@ -321,18 +351,24 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 					'4' => '4',
 				],
 				'selectors'      => [
-					'{{WRAPPER}} .awea-grid-row' => 'grid-template-columns: repeat({{VALUE}}, minmax(0, 1fr));',
+					'{{WRAPPER}} .awea_post_grid_row' => 'grid-template-columns: repeat({{VALUE}}, minmax(0, 1fr));',
 				],
 			]
 		);
 
 		$this->end_controls_section();
+	}
+
+	/**
+	 * Style Tab Controls
+	 */
+	protected function register_style_controls() {
 
 		/* ==========================================================================
 		   STYLE: 1. CARD
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_style_card',
+			'awea_post_grid_style_card',
 			[
 				'label' => esc_html__( 'Card', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
@@ -340,21 +376,21 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 		);
 
 		$this->add_responsive_control(
-			'awea_grid_gap',
+			'awea_post_grid_gap',
 			[
-				'label'      => esc_html__( 'Gap', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Grid Gap', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px', 'rem' ],
 				'range'      => [ 'px' => [ 'min' => 0, 'max' => 60 ] ],
 				'default'    => [ 'unit' => 'px', 'size' => 24 ],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-grid-row' => 'gap: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .awea_post_grid_row' => 'gap: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
 
 		$this->add_responsive_control(
-			'awea_card_padding',
+			'awea_post_grid_card_padding',
 			[
 				'label'      => esc_html__( 'Padding', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
@@ -368,15 +404,15 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 					'isLinked' => true,
 				],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-blog-card' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .awea_post_grid_card' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
 		);
 
 		$this->add_responsive_control(
-			'awea_card_radius',
+			'awea_post_grid_card_radius',
 			[
-				'label'      => esc_html__( 'Radius', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Border Radius', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'default'    => [
@@ -388,26 +424,38 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 					'isLinked' => true,
 				],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-blog-card' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .awea_post_grid_card' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
 		);
 
-		$this->start_controls_tabs( 'awea_card_tabs' );
+		$this->add_control(
+			'awea_post_grid_footer_divider',
+			[
+				'label'     => esc_html__( 'Footer Divider Color', 'awesome-widgets-elementor' ),
+				'type'      => Controls_Manager::COLOR,
+				'default'   => '#f1f5f9',
+				'selectors' => [
+					'{{WRAPPER}} .awea_post_grid_footer' => 'border-top-color: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->start_controls_tabs( 'awea_post_grid_card_tabs' );
 
 		$this->start_controls_tab(
-			'awea_card_normal',
+			'awea_post_grid_card_normal',
 			[ 'label' => esc_html__( 'Normal', 'awesome-widgets-elementor' ) ]
 		);
 
 		$this->add_control(
-			'awea_card_bg',
+			'awea_post_grid_card_bg',
 			[
 				'label'     => esc_html__( 'Background', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#ffffff',
 				'selectors' => [
-					'{{WRAPPER}} .awea-blog-card' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .awea_post_grid_card' => 'background-color: {{VALUE}};',
 				],
 			]
 		);
@@ -415,9 +463,8 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Border::get_type(),
 			[
-				'name'           => 'awea_card_border',
-				'label'          => esc_html__( 'Border', 'awesome-widgets-elementor' ),
-				'selector'       => '{{WRAPPER}} .awea-blog-card',
+				'name'           => 'awea_post_grid_card_border',
+				'selector'       => '{{WRAPPER}} .awea_post_grid_card',
 				'fields_options' => [
 					'border' => [ 'default' => 'solid' ],
 					'width'  => [
@@ -437,39 +484,38 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Box_Shadow::get_type(),
 			[
-				'name'     => 'awea_card_shadow',
-				'label'    => esc_html__( 'Shadow', 'awesome-widgets-elementor' ),
-				'selector' => '{{WRAPPER}} .awea-blog-card',
+				'name'     => 'awea_post_grid_card_shadow',
+				'selector' => '{{WRAPPER}} .awea_post_grid_card',
 			]
 		);
 
 		$this->end_controls_tab();
 
 		$this->start_controls_tab(
-			'awea_card_hover',
+			'awea_post_grid_card_hover',
 			[ 'label' => esc_html__( 'Hover', 'awesome-widgets-elementor' ) ]
 		);
 
 		$this->add_control(
-			'awea_card_bg_hover',
+			'awea_post_grid_card_bg_hover',
 			[
 				'label'     => esc_html__( 'Background', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#f8fafc',
 				'selectors' => [
-					'{{WRAPPER}} .awea-blog-card:hover' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .awea_post_grid_card:hover' => 'background-color: {{VALUE}};',
 				],
 			]
 		);
 
 		$this->add_control(
-			'awea_card_border_hover',
+			'awea_post_grid_card_border_hover',
 			[
-				'label'     => esc_html__( 'Border', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Border Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
 				'selectors' => [
-					'{{WRAPPER}} .awea-blog-card:hover' => 'border-color: {{VALUE}};',
+					'{{WRAPPER}} .awea_post_grid_card:hover' => 'border-color: {{VALUE}};',
 				],
 			]
 		);
@@ -477,9 +523,8 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Box_Shadow::get_type(),
 			[
-				'name'     => 'awea_card_shadow_hover',
-				'label'    => esc_html__( 'Shadow', 'awesome-widgets-elementor' ),
-				'selector' => '{{WRAPPER}} .awea-blog-card:hover',
+				'name'     => 'awea_post_grid_card_shadow_hover',
+				'selector' => '{{WRAPPER}} .awea_post_grid_card:hover',
 			]
 		);
 
@@ -492,7 +537,7 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 		   STYLE: 2. IMAGE
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_style_image',
+			'awea_post_grid_style_image',
 			[
 				'label' => esc_html__( 'Image', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
@@ -502,15 +547,15 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Image_Size::get_type(),
 			[
-				'name'    => 'awea_image_size',
+				'name'    => 'awea_post_grid_image_size',
 				'default' => 'large',
 			]
 		);
 
 		$this->add_responsive_control(
-			'awea_image_aspect_ratio',
+			'awea_post_grid_image_aspect_ratio',
 			[
-				'label'     => esc_html__( 'Ratio', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Aspect Ratio', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::SELECT,
 				'default'   => '16/10',
 				'options'   => [
@@ -520,15 +565,15 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 					'1/1'   => '1:1',
 				],
 				'selectors' => [
-					'{{WRAPPER}} .awea-blog-img-wrap' => 'aspect-ratio: {{VALUE}};',
+					'{{WRAPPER}} .awea_post_grid_img_wrap' => 'aspect-ratio: {{VALUE}};',
 				],
 			]
 		);
 
 		$this->add_responsive_control(
-			'awea_image_radius',
+			'awea_post_grid_image_radius',
 			[
-				'label'      => esc_html__( 'Radius', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Border Radius', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'default'    => [
@@ -540,21 +585,21 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 					'isLinked' => true,
 				],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-blog-img-wrap' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .awea_post_grid_img_wrap' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
 		);
 
 		$this->add_responsive_control(
-			'awea_image_space',
+			'awea_post_grid_image_space',
 			[
-				'label'      => esc_html__( 'Spacing', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Bottom Spacing', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [ 'px' => [ 'min' => 0, 'max' => 40 ] ],
 				'default'    => [ 'unit' => 'px', 'size' => 18 ],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-blog-img-wrap' => 'margin-bottom: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .awea_post_grid_img_wrap' => 'margin-bottom: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
@@ -562,31 +607,31 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   STYLE: 3. BADGE
+		   STYLE: 3. BADGE & META
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_style_badge',
+			'awea_post_grid_style_badge',
 			[
-				'label'     => esc_html__( 'Badge', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Category Badge', 'awesome-widgets-elementor' ),
 				'tab'       => Controls_Manager::TAB_STYLE,
-				'condition' => [ 'awea_show_category' => 'yes' ],
+				'condition' => [ 'awea_post_grid_show_category' => 'yes' ],
 			]
 		);
 
 		$this->add_control(
-			'awea_cat_color',
+			'awea_post_grid_cat_color',
 			[
 				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#ffffff',
 				'selectors' => [
-					'{{WRAPPER}} .awea-blog-badge' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea_post_grid_badge' => 'color: {{VALUE}};',
 				],
 			]
 		);
 
 		$this->add_control(
-			'awea_cat_bg',
+			'awea_post_grid_cat_bg',
 			[
 				'label'     => esc_html__( 'Background', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
@@ -594,7 +639,7 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 					'default' => Global_Colors::COLOR_PRIMARY,
 				],
 				'selectors' => [
-					'{{WRAPPER}} .awea-blog-badge' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .awea_post_grid_badge' => 'background-color: {{VALUE}};',
 				],
 			]
 		);
@@ -602,36 +647,44 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Typography::get_type(),
 			[
-				'name'     => 'awea_cat_typo',
-				'label'    => esc_html__( 'Typography', 'awesome-widgets-elementor' ),
-				'selector' => '{{WRAPPER}} .awea-blog-badge',
+				'name'     => 'awea_post_grid_cat_typo',
+				'selector' => '{{WRAPPER}} .awea_post_grid_badge',
 				'global'   => [
 					'default' => Global_Typography::TYPOGRAPHY_SECONDARY,
 				],
 			]
 		);
 
+		$this->add_responsive_control(
+			'awea_post_grid_badge_padding',
+			[
+				'label'      => esc_html__( 'Padding', 'awesome-widgets-elementor' ),
+				'type'       => Controls_Manager::DIMENSIONS,
+				'size_units' => [ 'px' ],
+				'selectors'  => [
+					'{{WRAPPER}} .awea_post_grid_badge' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				],
+			]
+		);
+
 		$this->end_controls_section();
 
-		/* ==========================================================================
-		   STYLE: 4. META
-		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_style_meta',
+			'awea_post_grid_style_meta',
 			[
-				'label' => esc_html__( 'Meta', 'awesome-widgets-elementor' ),
+				'label' => esc_html__( 'Post Meta', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
 
 		$this->add_control(
-			'awea_meta_color',
+			'awea_post_grid_meta_color',
 			[
 				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#64748b',
 				'selectors' => [
-					'{{WRAPPER}} .awea-blog-meta' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea_post_grid_meta' => 'color: {{VALUE}};',
 				],
 			]
 		);
@@ -639,9 +692,8 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Typography::get_type(),
 			[
-				'name'     => 'awea_meta_typo',
-				'label'    => esc_html__( 'Typography', 'awesome-widgets-elementor' ),
-				'selector' => '{{WRAPPER}} .awea-blog-meta',
+				'name'     => 'awea_post_grid_meta_typo',
+				'selector' => '{{WRAPPER}} .awea_post_grid_meta',
 				'global'   => [ 'default' => Global_Typography::TYPOGRAPHY_SECONDARY ],
 			]
 		);
@@ -649,10 +701,10 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   STYLE: 5. TITLE
+		   STYLE: 4. TITLE & EXCERPT
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_style_title',
+			'awea_post_grid_style_title',
 			[
 				'label' => esc_html__( 'Title', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
@@ -662,30 +714,29 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Typography::get_type(),
 			[
-				'name'     => 'awea_title_typo',
-				'label'    => esc_html__( 'Typography', 'awesome-widgets-elementor' ),
-				'selector' => '{{WRAPPER}} .awea-blog-title a',
+				'name'     => 'awea_post_grid_title_typo',
+				'selector' => '{{WRAPPER}} .awea_post_grid_title a',
 				'global'   => [
 					'default' => Global_Typography::TYPOGRAPHY_PRIMARY,
 				],
 			]
 		);
 
-		$this->start_controls_tabs( 'awea_title_tabs' );
+		$this->start_controls_tabs( 'awea_post_grid_title_tabs' );
 
 		$this->start_controls_tab(
-			'awea_title_normal',
+			'awea_post_grid_title_normal',
 			[ 'label' => esc_html__( 'Normal', 'awesome-widgets-elementor' ) ]
 		);
 
 		$this->add_control(
-			'awea_title_color',
+			'awea_post_grid_title_color',
 			[
 				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#0f172a',
 				'selectors' => [
-					'{{WRAPPER}} .awea-blog-title a' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea_post_grid_title a' => 'color: {{VALUE}};',
 				],
 			]
 		);
@@ -693,18 +744,18 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 		$this->end_controls_tab();
 
 		$this->start_controls_tab(
-			'awea_title_hover_tab',
+			'awea_post_grid_title_hover_tab',
 			[ 'label' => esc_html__( 'Hover', 'awesome-widgets-elementor' ) ]
 		);
 
 		$this->add_control(
-			'awea_title_hover',
+			'awea_post_grid_title_hover',
 			[
 				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
 				'selectors' => [
-					'{{WRAPPER}} .awea-blog-card:hover .awea-blog-title a, {{WRAPPER}} .awea-blog-title a:focus-visible' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea_post_grid_card:hover .awea_post_grid_title a, {{WRAPPER}} .awea_post_grid_title a:focus-visible' => 'color: {{VALUE}};',
 				],
 			]
 		);
@@ -714,26 +765,23 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 
 		$this->end_controls_section();
 
-		/* ==========================================================================
-		   STYLE: 6. EXCERPT
-		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_style_excerpt',
+			'awea_post_grid_style_excerpt',
 			[
 				'label'     => esc_html__( 'Excerpt', 'awesome-widgets-elementor' ),
 				'tab'       => Controls_Manager::TAB_STYLE,
-				'condition' => [ 'awea_show_excerpt' => 'yes' ],
+				'condition' => [ 'awea_post_grid_show_excerpt' => 'yes' ],
 			]
 		);
 
 		$this->add_control(
-			'awea_desc_color',
+			'awea_post_grid_desc_color',
 			[
 				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#475569',
 				'selectors' => [
-					'{{WRAPPER}} .awea-blog-desc' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea_post_grid_desc' => 'color: {{VALUE}};',
 				],
 			]
 		);
@@ -741,9 +789,8 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Typography::get_type(),
 			[
-				'name'     => 'awea_desc_typo',
-				'label'    => esc_html__( 'Typography', 'awesome-widgets-elementor' ),
-				'selector' => '{{WRAPPER}} .awea-blog-desc',
+				'name'     => 'awea_post_grid_desc_typo',
+				'selector' => '{{WRAPPER}} .awea_post_grid_desc',
 				'global'   => [
 					'default' => Global_Typography::TYPOGRAPHY_TEXT,
 				],
@@ -753,54 +800,53 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   STYLE: 7. BUTTON
+		   STYLE: 5. BUTTON & COUNTER
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_style_button',
+			'awea_post_grid_style_button',
 			[
 				'label'     => esc_html__( 'Button', 'awesome-widgets-elementor' ),
 				'tab'       => Controls_Manager::TAB_STYLE,
-				'condition' => [ 'awea_show_button' => 'yes' ],
+				'condition' => [ 'awea_post_grid_show_button' => 'yes' ],
 			]
 		);
 
 		$this->add_group_control(
 			Group_Control_Typography::get_type(),
 			[
-				'name'     => 'awea_btn_typo',
-				'label'    => esc_html__( 'Typography', 'awesome-widgets-elementor' ),
-				'selector' => '{{WRAPPER}} .awea-blog-link',
+				'name'     => 'awea_post_grid_btn_typo',
+				'selector' => '{{WRAPPER}} .awea_post_grid_link',
 				'global'   => [ 'default' => Global_Typography::TYPOGRAPHY_ACCENT ],
 			]
 		);
 
-		$this->start_controls_tabs( 'awea_btn_tabs' );
+		$this->start_controls_tabs( 'awea_post_grid_btn_tabs' );
 
 		$this->start_controls_tab(
-			'awea_btn_normal',
+			'awea_post_grid_btn_normal',
 			[ 'label' => esc_html__( 'Normal', 'awesome-widgets-elementor' ) ]
 		);
 
 		$this->add_control(
-			'awea_btn_color',
+			'awea_post_grid_btn_color',
 			[
 				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#0f172a',
 				'selectors' => [
-					'{{WRAPPER}} .awea-blog-link' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea_post_grid_link' => 'color: {{VALUE}};',
 				],
 			]
 		);
 
 		$this->add_control(
-			'awea_btn_bg',
+			'awea_post_grid_btn_bg',
 			[
 				'label'     => esc_html__( 'Background', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#f1f5f9',
 				'selectors' => [
-					'{{WRAPPER}} .awea-blog-link' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .awea_post_grid_link' => 'background-color: {{VALUE}};',
 				],
 			]
 		);
@@ -808,24 +854,24 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 		$this->end_controls_tab();
 
 		$this->start_controls_tab(
-			'awea_btn_hover',
+			'awea_post_grid_btn_hover',
 			[ 'label' => esc_html__( 'Hover', 'awesome-widgets-elementor' ) ]
 		);
 
 		$this->add_control(
-			'awea_btn_hover_color',
+			'awea_post_grid_btn_hover_color',
 			[
 				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#ffffff',
 				'selectors' => [
-					'{{WRAPPER}} .awea-blog-card:hover .awea-blog-link, {{WRAPPER}} .awea-blog-link:focus-visible' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea_post_grid_card:hover .awea_post_grid_link, {{WRAPPER}} .awea_post_grid_link:focus-visible' => 'color: {{VALUE}};',
 				],
 			]
 		);
 
 		$this->add_control(
-			'awea_btn_hover_bg',
+			'awea_post_grid_btn_hover_bg',
 			[
 				'label'     => esc_html__( 'Background', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
@@ -833,7 +879,7 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 					'default' => Global_Colors::COLOR_PRIMARY,
 				],
 				'selectors' => [
-					'{{WRAPPER}} .awea-blog-card:hover .awea-blog-link, {{WRAPPER}} .awea-blog-link:focus-visible' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .awea_post_grid_card:hover .awea_post_grid_link, {{WRAPPER}} .awea_post_grid_link:focus-visible' => 'background-color: {{VALUE}};',
 				],
 			]
 		);
@@ -843,26 +889,75 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 
 		$this->end_controls_section();
 
-		/* ==========================================================================
-		   STYLE: 8. COUNTER
-		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_style_counter',
+			'awea_post_grid_style_counter',
 			[
-				'label'     => esc_html__( 'Counter', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Index Number', 'awesome-widgets-elementor' ),
 				'tab'       => Controls_Manager::TAB_STYLE,
-				'condition' => [ 'awea_show_counter' => 'yes' ],
+				'condition' => [ 'awea_post_grid_show_counter' => 'yes' ],
 			]
 		);
 
 		$this->add_control(
-			'awea_counter_color',
+			'awea_post_grid_counter_color',
 			[
 				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#cbd5e1',
 				'selectors' => [
-					'{{WRAPPER}} .awea-post-num' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea_post_grid_num' => 'color: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->end_controls_section();
+
+		/* ==========================================================================
+		   STYLE: 6. PAGINATION
+		   ========================================================================== */
+		$this->start_controls_section(
+			'awea_post_grid_style_pagination',
+			[
+				'label'     => esc_html__( 'Pagination', 'awesome-widgets-elementor' ),
+				'tab'       => Controls_Manager::TAB_STYLE,
+				'condition' => [ 'awea_post_grid_pagination' => 'yes' ],
+			]
+		);
+
+		$this->add_responsive_control(
+			'awea_post_grid_pag_space',
+			[
+				'label'      => esc_html__( 'Top Spacing', 'awesome-widgets-elementor' ),
+				'type'       => Controls_Manager::SLIDER,
+				'size_units' => [ 'px' ],
+				'range'      => [ 'px' => [ 'min' => 12, 'max' => 80 ] ],
+				'default'    => [ 'unit' => 'px', 'size' => 36 ],
+				'selectors'  => [
+					'{{WRAPPER}} .awea_post_grid_pagination' => 'margin-top: {{SIZE}}{{UNIT}};',
+				],
+			]
+		);
+
+		$this->add_control(
+			'awea_post_grid_pag_color',
+			[
+				'label'     => esc_html__( 'Text Color', 'awesome-widgets-elementor' ),
+				'type'      => Controls_Manager::COLOR,
+				'default'   => '#0f172a',
+				'selectors' => [
+					'{{WRAPPER}} .awea_post_grid_pagination .page-numbers' => 'color: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->add_control(
+			'awea_post_grid_pag_active_bg',
+			[
+				'label'     => esc_html__( 'Active / Hover Background', 'awesome-widgets-elementor' ),
+				'type'      => Controls_Manager::COLOR,
+				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
+				'selectors' => [
+					'{{WRAPPER}} .awea_post_grid_pagination .page-numbers.current, {{WRAPPER}} .awea_post_grid_pagination .page-numbers:hover' => 'background-color: {{VALUE}}; border-color: {{VALUE}}; color: #ffffff;',
 				],
 			]
 		);
@@ -872,22 +967,26 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 
 	protected function render() {
 		$settings     = $this->get_settings_for_display();
-		$num_posts    = ! empty( $settings['awea_post_count'] ) ? absint( $settings['awea_post_count'] ) : 6;
-		$order        = in_array( $settings['awea_order'] ?? 'DESC', [ 'ASC', 'DESC' ], true ) ? $settings['awea_order'] : 'DESC';
-		$orderby      = $settings['awea_orderby'] ?? 'date';
-		$categories   = $settings['awea_category_select'] ?? [];
-		$offset       = absint( $settings['awea_post_offset'] ?? 0 );
-		$exclude_curr = 'yes' === ( $settings['awea_exclude_current'] ?? 'no' );
-		$show_cat     = 'yes' === ( $settings['awea_show_category'] ?? 'no' );
-		$show_date    = 'yes' === ( $settings['awea_show_date'] ?? 'no' );
-		$show_read    = 'yes' === ( $settings['awea_show_reading_time'] ?? 'no' );
-		$show_exc     = 'yes' === ( $settings['awea_show_excerpt'] ?? 'no' );
-		$exc_len      = ! empty( $settings['awea_excerpt_length'] ) ? absint( $settings['awea_excerpt_length'] ) : 15;
-		$show_btn     = 'yes' === ( $settings['awea_show_button'] ?? 'no' );
-		$btn_text     = $settings['awea_button_text'] ?? esc_html__( 'Read Insight', 'awesome-widgets-elementor' );
-		$show_counter = 'yes' === ( $settings['awea_show_counter'] ?? 'no' );
-		$title_tag    = Utils::validate_html_tag( $settings['awea_title_tag'] ?? 'h3' );
-		$thumb_size   = $settings['awea_image_size_size'] ?? 'large';
+		$num_posts    = ! empty( $settings['awea_post_grid_post_count'] ) ? absint( $settings['awea_post_grid_post_count'] ) : 6;
+		$order        = in_array( $settings['awea_post_grid_order'] ?? 'DESC', [ 'ASC', 'DESC' ], true ) ? $settings['awea_post_grid_order'] : 'DESC';
+		$orderby      = $settings['awea_post_grid_orderby'] ?? 'date';
+		$categories   = $settings['awea_post_grid_category_select'] ?? [];
+		$offset       = absint( $settings['awea_post_grid_post_offset'] ?? 0 );
+		$exclude_curr = 'yes' === ( $settings['awea_post_grid_exclude_current'] ?? 'no' );
+		$pagination   = 'yes' === ( $settings['awea_post_grid_pagination'] ?? 'no' );
+		$show_cat     = 'yes' === ( $settings['awea_post_grid_show_category'] ?? 'no' );
+		$show_author  = 'yes' === ( $settings['awea_post_grid_show_author'] ?? 'no' );
+		$show_date    = 'yes' === ( $settings['awea_post_grid_show_date'] ?? 'no' );
+		$show_read    = 'yes' === ( $settings['awea_post_grid_show_reading_time'] ?? 'no' );
+		$show_exc     = 'yes' === ( $settings['awea_post_grid_show_excerpt'] ?? 'no' );
+		$exc_len      = ! empty( $settings['awea_post_grid_excerpt_length'] ) ? absint( $settings['awea_post_grid_excerpt_length'] ) : 15;
+		$show_btn     = 'yes' === ( $settings['awea_post_grid_show_button'] ?? 'no' );
+		$btn_text     = $settings['awea_post_grid_button_text'] ?? esc_html__( 'Read Insight', 'awesome-widgets-elementor' );
+		$show_counter = 'yes' === ( $settings['awea_post_grid_show_counter'] ?? 'no' );
+		$title_tag    = Utils::validate_html_tag( $settings['awea_post_grid_title_tag'] ?? 'h3' );
+		$thumb_size   = $settings['awea_post_grid_image_size_size'] ?? 'large';
+
+		$paged = max( 1, (int) get_query_var( 'paged' ), (int) get_query_var( 'page' ) );
 
 		$args = [
 			'posts_per_page'      => $num_posts,
@@ -896,10 +995,12 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 			'order'               => $order,
 			'orderby'             => $orderby,
 			'ignore_sticky_posts' => 1,
-			'no_found_rows'       => true,
+			'no_found_rows'       => ! $pagination,
 		];
 
-		if ( $offset > 0 ) {
+		if ( $pagination ) {
+			$args['paged'] = $paged;
+		} elseif ( $offset > 0 ) {
 			$args['offset'] = $offset;
 		}
 
@@ -918,14 +1019,14 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 		$query = new \WP_Query( $args );
 
 		if ( ! $query->have_posts() ) {
-			echo '<p class="awea-no-posts">' . esc_html__( 'No posts found matching your criteria.', 'awesome-widgets-elementor' ) . '</p>';
+			echo '<p class="awea_post_grid_no_posts">' . esc_html__( 'No posts found matching your criteria.', 'awesome-widgets-elementor' ) . '</p>';
 			return;
 		}
 		?>
-		<div class="awea-post-grid-wrap">
-			<div class="awea-grid-row">
+		<div class="awea_post_grid_wrap">
+			<div class="awea_post_grid_row">
 				<?php
-				$counter = 1;
+				$counter = $pagination ? ( ( $paged - 1 ) * $num_posts ) + 1 : 1;
 				while ( $query->have_posts() ) :
 					$query->the_post();
 					$post_id      = get_the_ID();
@@ -936,34 +1037,42 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 					$post_cats    = get_the_category( $post_id );
 					$permalink    = get_the_permalink( $post_id );
 					?>
-					<div class="awea-grid-item">
-						<article class="awea-blog-card">
+					<div class="awea_post_grid_item">
+						<article class="awea_post_grid_card">
 
-							<div class="awea-blog-img-wrap">
+							<div class="awea_post_grid_img_wrap">
 								<?php if ( $show_cat && ! empty( $post_cats ) ) : ?>
-									<a href="<?php echo esc_url( get_category_link( $post_cats[0]->term_id ) ); ?>" class="awea-blog-badge">
+									<a href="<?php echo esc_url( get_category_link( $post_cats[0]->term_id ) ); ?>" class="awea_post_grid_badge">
 										<?php echo esc_html( $post_cats[0]->name ); ?>
 									</a>
 								<?php endif; ?>
 
-								<a href="<?php echo esc_url( $permalink ); ?>" class="awea-blog-img-link" aria-label="<?php the_title_attribute(); ?>">
+								<a href="<?php echo esc_url( $permalink ); ?>" class="awea_post_grid_img_link" aria-label="<?php the_title_attribute(); ?>">
 									<?php if ( has_post_thumbnail( $post_id ) ) : ?>
-										<?php echo get_the_post_thumbnail( $post_id, $thumb_size, [ 'class' => 'awea-blog-img', 'loading' => 'lazy' ] ); ?>
+										<?php echo get_the_post_thumbnail( $post_id, $thumb_size, [ 'class' => 'awea_post_grid_img', 'loading' => 'lazy' ] ); ?>
 									<?php else : ?>
-										<img src="<?php echo esc_url( Utils::get_placeholder_image_src() ); ?>" class="awea-blog-img" alt="<?php the_title_attribute(); ?>" loading="lazy" />
+										<img src="<?php echo esc_url( Utils::get_placeholder_image_src() ); ?>" class="awea_post_grid_img" alt="<?php the_title_attribute(); ?>" loading="lazy" />
 									<?php endif; ?>
 								</a>
 							</div>
 
-							<div class="awea-blog-body">
-								<?php if ( $show_date || $show_read ) : ?>
-									<div class="awea-blog-meta">
+							<div class="awea_post_grid_body">
+								<?php if ( $show_author || $show_date || $show_read ) : ?>
+									<div class="awea_post_grid_meta">
+										<?php if ( $show_author ) : ?>
+											<span><?php echo esc_html( get_the_author() ); ?></span>
+										<?php endif; ?>
+
+										<?php if ( $show_author && ( $show_date || $show_read ) ) : ?>
+											<span class="awea_post_grid_meta_dot" aria-hidden="true">•</span>
+										<?php endif; ?>
+
 										<?php if ( $show_date ) : ?>
 											<time datetime="<?php echo esc_attr( get_the_date( DATE_W3C, $post_id ) ); ?>"><?php echo esc_html( get_the_date( '', $post_id ) ); ?></time>
 										<?php endif; ?>
 
 										<?php if ( $show_date && $show_read ) : ?>
-											<span class="awea-meta-dot" aria-hidden="true">•</span>
+											<span class="awea_post_grid_meta_dot" aria-hidden="true">•</span>
 										<?php endif; ?>
 
 										<?php if ( $show_read ) : ?>
@@ -977,28 +1086,28 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 									</div>
 								<?php endif; ?>
 
-								<<?php Utils::print_validated_html_tag( $title_tag ); ?> class="awea-blog-title">
+								<<?php Utils::print_validated_html_tag( $title_tag ); ?> class="awea_post_grid_title">
 									<a href="<?php echo esc_url( $permalink ); ?>"><?php the_title(); ?></a>
 								</<?php Utils::print_validated_html_tag( $title_tag ); ?>>
 
 								<?php if ( $show_exc ) : ?>
-									<p class="awea-blog-desc">
+									<p class="awea_post_grid_desc">
 										<?php echo esc_html( wp_trim_words( get_the_excerpt( $post_id ), $exc_len, '...' ) ); ?>
 									</p>
 								<?php endif; ?>
 							</div>
 
 							<?php if ( ( $show_btn && ! empty( $btn_text ) ) || $show_counter ) : ?>
-								<div class="awea-blog-footer">
+								<div class="awea_post_grid_footer">
 									<?php if ( $show_btn && ! empty( $btn_text ) ) : ?>
-										<a href="<?php echo esc_url( $permalink ); ?>" class="awea-blog-link">
+										<a href="<?php echo esc_url( $permalink ); ?>" class="awea_post_grid_link">
 											<span><?php echo esc_html( $btn_text ); ?></span>
 											<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
 										</a>
 									<?php endif; ?>
 
 									<?php if ( $show_counter ) : ?>
-										<span class="awea-post-num" aria-hidden="true"><?php echo esc_html( sprintf( '%02d', $counter ) ); ?></span>
+										<span class="awea_post_grid_num" aria-hidden="true"><?php echo esc_html( sprintf( '%02d', $counter ) ); ?></span>
 									<?php endif; ?>
 								</div>
 							<?php endif; ?>
@@ -1011,6 +1120,23 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 				wp_reset_postdata();
 				?>
 			</div>
+
+			<?php if ( $pagination && $query->max_num_pages > 1 ) :
+				$pag_links = paginate_links(
+					[
+						'total'     => $query->max_num_pages,
+						'current'   => $paged,
+						'prev_text' => esc_html__( '&larr;', 'awesome-widgets-elementor' ),
+						'next_text' => esc_html__( '&rarr;', 'awesome-widgets-elementor' ),
+					]
+				);
+				if ( $pag_links ) :
+					?>
+					<nav class="awea_post_grid_pagination" aria-label="<?php esc_attr_e( 'Posts Pagination', 'awesome-widgets-elementor' ); ?>">
+						<?php echo wp_kses_post( $pag_links ); ?>
+					</nav>
+				<?php endif; ?>
+			<?php endif; ?>
 		</div>
 		<?php
 	}

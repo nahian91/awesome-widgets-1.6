@@ -46,14 +46,22 @@ class Widget_Awesome_Step_Flow extends Widget_Base {
 	}
 
 	protected function register_controls() {
+		$this->register_content_controls();
+		$this->register_style_controls();
+	}
+
+	/**
+	 * Content Tab Controls
+	 */
+	protected function register_content_controls() {
 
 		/* ==========================================================================
 		   CONTENT: 1. STEPS
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_section_steps',
+			'awea_step_flow_section_steps',
 			[
-				'label' => esc_html__( 'Steps', 'awesome-widgets-elementor' ),
+				'label' => esc_html__( 'Steps List', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
 			]
 		);
@@ -61,11 +69,13 @@ class Widget_Awesome_Step_Flow extends Widget_Base {
 		$repeater = new Repeater();
 
 		$repeater->add_control(
-			'awea_icon',
+			'awea_step_flow_icon',
 			[
-				'label'   => esc_html__( 'Icon', 'awesome-widgets-elementor' ),
-				'type'    => Controls_Manager::ICONS,
-				'default' => [
+				'label'       => esc_html__( 'Icon', 'awesome-widgets-elementor' ),
+				'type'        => Controls_Manager::ICONS,
+				'skin'        => 'inline',
+				'label_block' => false,
+				'default'     => [
 					'value'   => 'fas fa-cube',
 					'library' => 'fa-solid',
 				],
@@ -73,9 +83,9 @@ class Widget_Awesome_Step_Flow extends Widget_Base {
 		);
 
 		$repeater->add_control(
-			'awea_badge',
+			'awea_step_flow_badge',
 			[
-				'label'       => esc_html__( 'Badge', 'awesome-widgets-elementor' ),
+				'label'       => esc_html__( 'Badge Number', 'awesome-widgets-elementor' ),
 				'type'        => Controls_Manager::TEXT,
 				'default'     => '01',
 				'dynamic'     => [ 'active' => true ],
@@ -84,7 +94,7 @@ class Widget_Awesome_Step_Flow extends Widget_Base {
 		);
 
 		$repeater->add_control(
-			'awea_title',
+			'awea_step_flow_title',
 			[
 				'label'       => esc_html__( 'Title', 'awesome-widgets-elementor' ),
 				'type'        => Controls_Manager::TEXT,
@@ -95,7 +105,7 @@ class Widget_Awesome_Step_Flow extends Widget_Base {
 		);
 
 		$repeater->add_control(
-			'awea_desc',
+			'awea_step_flow_desc',
 			[
 				'label'   => esc_html__( 'Description', 'awesome-widgets-elementor' ),
 				'type'    => Controls_Manager::TEXTAREA,
@@ -106,7 +116,7 @@ class Widget_Awesome_Step_Flow extends Widget_Base {
 		);
 
 		$repeater->add_control(
-			'awea_link',
+			'awea_step_flow_link',
 			[
 				'label'       => esc_html__( 'Link', 'awesome-widgets-elementor' ),
 				'type'        => Controls_Manager::URL,
@@ -116,30 +126,30 @@ class Widget_Awesome_Step_Flow extends Widget_Base {
 		);
 
 		$this->add_control(
-			'awea_steps',
+			'awea_step_flow_steps',
 			[
-				'label'       => esc_html__( 'List', 'awesome-widgets-elementor' ),
+				'label'       => esc_html__( 'Steps', 'awesome-widgets-elementor' ),
 				'type'        => Controls_Manager::REPEATER,
 				'fields'      => $repeater->get_controls(),
-				'title_field' => '{{{ awea_badge }}} — {{{ awea_title }}}',
+				'title_field' => '{{{ awea_step_flow_badge }}} — {{{ awea_step_flow_title }}}',
 				'default'     => [
 					[
-						'awea_badge' => '01',
-						'awea_title' => esc_html__( 'Discovery', 'awesome-widgets-elementor' ),
-						'awea_desc'  => esc_html__( 'Analyze core objectives and map user pathways across your product.', 'awesome-widgets-elementor' ),
-						'awea_icon'  => [ 'value' => 'fas fa-cube', 'library' => 'fa-solid' ],
+						'awea_step_flow_badge' => '01',
+						'awea_step_flow_title' => esc_html__( 'Discovery', 'awesome-widgets-elementor' ),
+						'awea_step_flow_desc'  => esc_html__( 'Analyze core objectives and map user pathways across your product.', 'awesome-widgets-elementor' ),
+						'awea_step_flow_icon'  => [ 'value' => 'fas fa-cube', 'library' => 'fa-solid' ],
 					],
 					[
-						'awea_badge' => '02',
-						'awea_title' => esc_html__( 'Architecture', 'awesome-widgets-elementor' ),
-						'awea_desc'  => esc_html__( 'Design modular workflows, state pipelines, and clean component systems.', 'awesome-widgets-elementor' ),
-						'awea_icon'  => [ 'value' => 'fas fa-layer-group', 'library' => 'fa-solid' ],
+						'awea_step_flow_badge' => '02',
+						'awea_step_flow_title' => esc_html__( 'Architecture', 'awesome-widgets-elementor' ),
+						'awea_step_flow_desc'  => esc_html__( 'Design modular workflows, state pipelines, and clean component systems.', 'awesome-widgets-elementor' ),
+						'awea_step_flow_icon'  => [ 'value' => 'fas fa-layer-group', 'library' => 'fa-solid' ],
 					],
 					[
-						'awea_badge' => '03',
-						'awea_title' => esc_html__( 'Deployment', 'awesome-widgets-elementor' ),
-						'awea_desc'  => esc_html__( 'Ship to production with automated checks and real-time observability.', 'awesome-widgets-elementor' ),
-						'awea_icon'  => [ 'value' => 'fas fa-rocket', 'library' => 'fa-solid' ],
+						'awea_step_flow_badge' => '03',
+						'awea_step_flow_title' => esc_html__( 'Deployment', 'awesome-widgets-elementor' ),
+						'awea_step_flow_desc'  => esc_html__( 'Ship to production with automated checks and real-time observability.', 'awesome-widgets-elementor' ),
+						'awea_step_flow_icon'  => [ 'value' => 'fas fa-rocket', 'library' => 'fa-solid' ],
 					],
 				],
 			]
@@ -151,7 +161,7 @@ class Widget_Awesome_Step_Flow extends Widget_Base {
 		   CONTENT: 2. LAYOUT
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_section_layout',
+			'awea_step_flow_section_layout',
 			[
 				'label' => esc_html__( 'Layout', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
@@ -159,7 +169,7 @@ class Widget_Awesome_Step_Flow extends Widget_Base {
 		);
 
 		$this->add_control(
-			'awea_direction',
+			'awea_step_flow_direction',
 			[
 				'label'        => esc_html__( 'Direction', 'awesome-widgets-elementor' ),
 				'type'         => Controls_Manager::CHOOSE,
@@ -175,43 +185,43 @@ class Widget_Awesome_Step_Flow extends Widget_Base {
 						'icon'  => 'eicon-v-align-stretch',
 					],
 				],
-				'prefix_class' => 'awea-sf-dir-',
+				'prefix_class' => 'awea_step_flow_dir_',
 			]
 		);
 
 		$this->add_control(
-			'awea_line_style',
+			'awea_step_flow_line_style',
 			[
-				'label'        => esc_html__( 'Connector', 'awesome-widgets-elementor' ),
+				'label'        => esc_html__( 'Connector Style', 'awesome-widgets-elementor' ),
 				'type'         => Controls_Manager::SELECT,
 				'default'      => 'beam',
 				'options'      => [
-					'beam'   => esc_html__( 'Beam', 'awesome-widgets-elementor' ),
-					'solid'  => esc_html__( 'Solid', 'awesome-widgets-elementor' ),
-					'dashed' => esc_html__( 'Dashed', 'awesome-widgets-elementor' ),
+					'beam'   => esc_html__( 'Animated Beam', 'awesome-widgets-elementor' ),
+					'solid'  => esc_html__( 'Solid Line', 'awesome-widgets-elementor' ),
+					'dashed' => esc_html__( 'Dashed Line', 'awesome-widgets-elementor' ),
 					'none'   => esc_html__( 'None', 'awesome-widgets-elementor' ),
 				],
-				'prefix_class' => 'awea-sf-line-',
+				'prefix_class' => 'awea_step_flow_line_',
 			]
 		);
 
 		$this->add_control(
-			'awea_card_mode',
+			'awea_step_flow_card_mode',
 			[
-				'label'        => esc_html__( 'Container', 'awesome-widgets-elementor' ),
+				'label'        => esc_html__( 'Container Card Mode', 'awesome-widgets-elementor' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'label_on'     => esc_html__( 'Yes', 'awesome-widgets-elementor' ),
 				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
 				'return_value' => 'yes',
 				'default'      => 'no',
-				'prefix_class' => 'awea-sf-card-',
+				'prefix_class' => 'awea_step_flow_card_',
 			]
 		);
 
 		$this->add_control(
-			'awea_title_tag',
+			'awea_step_flow_title_tag',
 			[
-				'label'   => esc_html__( 'Tag', 'awesome-widgets-elementor' ),
+				'label'   => esc_html__( 'Title HTML Tag', 'awesome-widgets-elementor' ),
 				'type'    => Controls_Manager::SELECT,
 				'default' => 'h3',
 				'options' => [
@@ -229,22 +239,28 @@ class Widget_Awesome_Step_Flow extends Widget_Base {
 		);
 
 		$this->end_controls_section();
+	}
+
+	/**
+	 * Style Tab Controls
+	 */
+	protected function register_style_controls() {
 
 		/* ==========================================================================
 		   STYLE: 1. CARD
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_style_layout',
+			'awea_step_flow_style_card',
 			[
-				'label' => esc_html__( 'Card', 'awesome-widgets-elementor' ),
+				'label' => esc_html__( 'Card Container', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
 
 		$this->add_responsive_control(
-			'awea_max_width',
+			'awea_step_flow_max_width',
 			[
-				'label'      => esc_html__( 'Width', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Max Width', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px', '%', 'vw' ],
 				'range'      => [
@@ -253,13 +269,13 @@ class Widget_Awesome_Step_Flow extends Widget_Base {
 				],
 				'default'    => [ 'unit' => 'px', 'size' => 1140 ],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-sf-wrap' => 'max-width: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .awea_step_flow_wrap' => 'max-width: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
 
 		$this->add_responsive_control(
-			'awea_card_padding',
+			'awea_step_flow_card_padding',
 			[
 				'label'      => esc_html__( 'Padding', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
@@ -272,17 +288,17 @@ class Widget_Awesome_Step_Flow extends Widget_Base {
 					'unit'     => 'px',
 					'isLinked' => false,
 				],
-				'condition'  => [ 'awea_card_mode' => 'yes' ],
+				'condition'  => [ 'awea_step_flow_card_mode' => 'yes' ],
 				'selectors'  => [
-					'{{WRAPPER}}.awea-sf-card-yes .awea-sf-item' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}}.awea_step_flow_card_yes .awea_step_flow_item' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
 		);
 
 		$this->add_responsive_control(
-			'awea_card_radius',
+			'awea_step_flow_card_radius',
 			[
-				'label'      => esc_html__( 'Radius', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Border Radius', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'default'    => [
@@ -293,61 +309,61 @@ class Widget_Awesome_Step_Flow extends Widget_Base {
 					'unit'     => 'px',
 					'isLinked' => true,
 				],
-				'condition'  => [ 'awea_card_mode' => 'yes' ],
+				'condition'  => [ 'awea_step_flow_card_mode' => 'yes' ],
 				'selectors'  => [
-					'{{WRAPPER}}.awea-sf-card-yes .awea-sf-item' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}}.awea_step_flow_card_yes .awea_step_flow_item' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
 		);
 
 		$this->add_control(
-			'awea_card_bg',
+			'awea_step_flow_card_bg',
 			[
 				'label'     => esc_html__( 'Background', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#ffffff',
-				'condition' => [ 'awea_card_mode' => 'yes' ],
+				'condition' => [ 'awea_step_flow_card_mode' => 'yes' ],
 				'selectors' => [
-					'{{WRAPPER}}.awea-sf-card-yes .awea-sf-item' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}}.awea_step_flow_card_yes .awea_step_flow_item' => 'background-color: {{VALUE}};',
 				],
 			]
 		);
 
 		$this->add_control(
-			'awea_card_bg_hover',
+			'awea_step_flow_card_bg_hover',
 			[
-				'label'     => esc_html__( 'Hover', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Hover Background', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#f8fafc',
-				'condition' => [ 'awea_card_mode' => 'yes' ],
+				'condition' => [ 'awea_step_flow_card_mode' => 'yes' ],
 				'selectors' => [
-					'{{WRAPPER}}.awea-sf-card-yes .awea-sf-item:hover' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}}.awea_step_flow_card_yes .awea_step_flow_item:hover' => 'background-color: {{VALUE}};',
 				],
 			]
 		);
 
 		$this->add_control(
-			'awea_card_border',
+			'awea_step_flow_card_border',
 			[
-				'label'     => esc_html__( 'Border', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Border Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#e2e8f0',
-				'condition' => [ 'awea_card_mode' => 'yes' ],
+				'condition' => [ 'awea_step_flow_card_mode' => 'yes' ],
 				'selectors' => [
-					'{{WRAPPER}}.awea-sf-card-yes .awea-sf-item' => 'border-color: {{VALUE}};',
+					'{{WRAPPER}}.awea_step_flow_card_yes .awea_step_flow_item' => 'border-color: {{VALUE}};',
 				],
 			]
 		);
 
 		$this->add_control(
-			'awea_card_border_hover',
+			'awea_step_flow_card_border_hover',
 			[
 				'label'     => esc_html__( 'Border Hover', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
-				'condition' => [ 'awea_card_mode' => 'yes' ],
+				'condition' => [ 'awea_step_flow_card_mode' => 'yes' ],
 				'selectors' => [
-					'{{WRAPPER}}.awea-sf-card-yes .awea-sf-item:hover' => 'border-color: {{VALUE}};',
+					'{{WRAPPER}}.awea_step_flow_card_yes .awea_step_flow_item:hover' => 'border-color: {{VALUE}};',
 				],
 			]
 		);
@@ -355,10 +371,10 @@ class Widget_Awesome_Step_Flow extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Box_Shadow::get_type(),
 			[
-				'name'      => 'awea_card_shadow',
+				'name'      => 'awea_step_flow_card_shadow',
 				'label'     => esc_html__( 'Shadow', 'awesome-widgets-elementor' ),
-				'selector'  => '{{WRAPPER}}.awea-sf-card-yes .awea-sf-item',
-				'condition' => [ 'awea_card_mode' => 'yes' ],
+				'selector'  => '{{WRAPPER}}.awea_step_flow_card_yes .awea_step_flow_item',
+				'condition' => [ 'awea_step_flow_card_mode' => 'yes' ],
 			]
 		);
 
@@ -368,41 +384,41 @@ class Widget_Awesome_Step_Flow extends Widget_Base {
 		   STYLE: 2. CONNECTOR
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_style_line',
+			'awea_step_flow_style_line',
 			[
-				'label'     => esc_html__( 'Connector', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Connector Line', 'awesome-widgets-elementor' ),
 				'tab'       => Controls_Manager::TAB_STYLE,
-				'condition' => [ 'awea_line_style!' => 'none' ],
+				'condition' => [ 'awea_step_flow_line_style!' => 'none' ],
 			]
 		);
 
 		$this->add_control(
-			'awea_track_color',
+			'awea_step_flow_track_color',
 			[
-				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Track Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#e2e8f0',
 				'selectors' => [
-					'{{WRAPPER}} .awea-sf-line' => 'background-color: {{VALUE}}; border-color: {{VALUE}};',
+					'{{WRAPPER}} .awea_step_flow_line' => 'background-color: {{VALUE}}; border-color: {{VALUE}};',
 				],
 			]
 		);
 
 		$this->add_control(
-			'awea_beam_color',
+			'awea_step_flow_beam_color',
 			[
-				'label'     => esc_html__( 'Beam', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Beam Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
-				'condition' => [ 'awea_line_style' => 'beam' ],
+				'condition' => [ 'awea_step_flow_line_style' => 'beam' ],
 				'selectors' => [
-					'{{WRAPPER}} .awea-sf-beam' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .awea_step_flow_beam' => 'background-color: {{VALUE}};',
 				],
 			]
 		);
 
 		$this->add_responsive_control(
-			'awea_line_size',
+			'awea_step_flow_line_size',
 			[
 				'label'      => esc_html__( 'Thickness', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
@@ -410,22 +426,22 @@ class Widget_Awesome_Step_Flow extends Widget_Base {
 				'range'      => [ 'px' => [ 'min' => 1, 'max' => 6 ] ],
 				'default'    => [ 'unit' => 'px', 'size' => 2 ],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-sf-wrap' => '--awea-sf-line-size: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .awea_step_flow_wrap' => '--awea_step_flow_line_size: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
 
 		$this->add_control(
-			'awea_beam_speed',
+			'awea_step_flow_beam_speed',
 			[
-				'label'      => esc_html__( 'Speed', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Beam Speed', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 's' ],
 				'range'      => [ 's' => [ 'min' => 1, 'max' => 8, 'step' => 0.5 ] ],
 				'default'    => [ 'unit' => 's', 'size' => 3 ],
-				'condition'  => [ 'awea_line_style' => 'beam' ],
+				'condition'  => [ 'awea_step_flow_line_style' => 'beam' ],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-sf-beam' => 'animation-duration: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .awea_step_flow_beam' => 'animation-duration: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
@@ -436,32 +452,32 @@ class Widget_Awesome_Step_Flow extends Widget_Base {
 		   STYLE: 3. ICON
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_style_icon',
+			'awea_step_flow_style_icon',
 			[
-				'label' => esc_html__( 'Icon', 'awesome-widgets-elementor' ),
+				'label' => esc_html__( 'Icon & Badge', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
 
 		$this->add_responsive_control(
-			'awea_box_size',
+			'awea_step_flow_box_size',
 			[
-				'label'      => esc_html__( 'Box', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Icon Box Size', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [ 'px' => [ 'min' => 48, 'max' => 130 ] ],
 				'default'    => [ 'unit' => 'px', 'size' => 76 ],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-sf-box'                       => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}};',
-					'{{WRAPPER}}.awea-sf-dir-horizontal .awea-sf-line' => 'margin-top: calc({{SIZE}}{{UNIT}} / 2);',
+					'{{WRAPPER}} .awea_step_flow_box' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}}.awea_step_flow_dir_horizontal .awea_step_flow_line' => 'margin-top: calc({{SIZE}}{{UNIT}} / 2);',
 				],
 			]
 		);
 
 		$this->add_responsive_control(
-			'awea_box_radius',
+			'awea_step_flow_box_radius',
 			[
-				'label'      => esc_html__( 'Radius', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Border Radius', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'default'    => [
@@ -473,55 +489,55 @@ class Widget_Awesome_Step_Flow extends Widget_Base {
 					'isLinked' => true,
 				],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-sf-box' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .awea_step_flow_box' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
 		);
 
 		$this->add_responsive_control(
-			'awea_icon_size',
+			'awea_step_flow_icon_size',
 			[
-				'label'      => esc_html__( 'Size', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Icon Size', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [ 'px' => [ 'min' => 14, 'max' => 48 ] ],
 				'default'    => [ 'unit' => 'px', 'size' => 24 ],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-sf-box i'   => 'font-size: {{SIZE}}{{UNIT}};',
-					'{{WRAPPER}} .awea-sf-box svg' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .awea_step_flow_box i'   => 'font-size: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .awea_step_flow_box svg' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
 
-		$this->start_controls_tabs( 'awea_icon_tabs' );
+		$this->start_controls_tabs( 'awea_step_flow_icon_tabs' );
 
 		$this->start_controls_tab(
-			'awea_icon_normal',
+			'awea_step_flow_icon_normal',
 			[ 'label' => esc_html__( 'Normal', 'awesome-widgets-elementor' ) ]
 		);
 
 		$this->add_control(
-			'awea_icon_color',
+			'awea_step_flow_icon_color',
 			[
-				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Icon Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
 				'selectors' => [
-					'{{WRAPPER}} .awea-sf-box i'   => 'color: {{VALUE}};',
-					'{{WRAPPER}} .awea-sf-box svg' => 'fill: {{VALUE}};',
-					'{{WRAPPER}} .awea-sf-box'       => 'border-color: {{VALUE}};',
+					'{{WRAPPER}} .awea_step_flow_box i'   => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea_step_flow_box svg' => 'fill: {{VALUE}};',
+					'{{WRAPPER}} .awea_step_flow_box'     => 'border-color: {{VALUE}};',
 				],
 			]
 		);
 
 		$this->add_control(
-			'awea_icon_bg',
+			'awea_step_flow_icon_bg',
 			[
 				'label'     => esc_html__( 'Background', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#ffffff',
 				'selectors' => [
-					'{{WRAPPER}} .awea-sf-box' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .awea_step_flow_box' => 'background-color: {{VALUE}};',
 				],
 			]
 		);
@@ -529,9 +545,9 @@ class Widget_Awesome_Step_Flow extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Border::get_type(),
 			[
-				'name'           => 'awea_box_border',
+				'name'           => 'awea_step_flow_box_border',
 				'label'          => esc_html__( 'Border', 'awesome-widgets-elementor' ),
-				'selector'       => '{{WRAPPER}} .awea-sf-box',
+				'selector'       => '{{WRAPPER}} .awea_step_flow_box',
 				'fields_options' => [
 					'border' => [ 'default' => 'solid' ],
 					'width'  => [
@@ -551,43 +567,43 @@ class Widget_Awesome_Step_Flow extends Widget_Base {
 		$this->end_controls_tab();
 
 		$this->start_controls_tab(
-			'awea_icon_hover',
+			'awea_step_flow_icon_hover',
 			[ 'label' => esc_html__( 'Hover', 'awesome-widgets-elementor' ) ]
 		);
 
 		$this->add_control(
-			'awea_icon_color_hover',
+			'awea_step_flow_icon_color_hover',
 			[
-				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Icon Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#ffffff',
 				'selectors' => [
-					'{{WRAPPER}} .awea-sf-item:hover .awea-sf-box i, {{WRAPPER}} a.awea-sf-item:focus-visible .awea-sf-box i'     => 'color: {{VALUE}};',
-					'{{WRAPPER}} .awea-sf-item:hover .awea-sf-box svg, {{WRAPPER}} a.awea-sf-item:focus-visible .awea-sf-box svg' => 'fill: {{VALUE}};',
+					'{{WRAPPER}} .awea_step_flow_item:hover .awea_step_flow_box i, {{WRAPPER}} a.awea_step_flow_item:focus-visible .awea_step_flow_box i'     => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea_step_flow_item:hover .awea_step_flow_box svg, {{WRAPPER}} a.awea_step_flow_item:focus-visible .awea_step_flow_box svg' => 'fill: {{VALUE}};',
 				],
 			]
 		);
 
 		$this->add_control(
-			'awea_icon_bg_hover',
+			'awea_step_flow_icon_bg_hover',
 			[
 				'label'     => esc_html__( 'Background', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
 				'selectors' => [
-					'{{WRAPPER}} .awea-sf-item:hover .awea-sf-box, {{WRAPPER}} a.awea-sf-item:focus-visible .awea-sf-box' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .awea_step_flow_item:hover .awea_step_flow_box, {{WRAPPER}} a.awea_step_flow_item:focus-visible .awea_step_flow_box' => 'background-color: {{VALUE}};',
 				],
 			]
 		);
 
 		$this->add_control(
-			'awea_icon_border_hover',
+			'awea_step_flow_icon_border_hover',
 			[
-				'label'     => esc_html__( 'Border', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Border Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
 				'selectors' => [
-					'{{WRAPPER}} .awea-sf-item:hover .awea-sf-box, {{WRAPPER}} a.awea-sf-item:focus-visible .awea-sf-box' => 'border-color: {{VALUE}};',
+					'{{WRAPPER}} .awea_step_flow_item:hover .awea_step_flow_box, {{WRAPPER}} a.awea_step_flow_item:focus-visible .awea_step_flow_box' => 'border-color: {{VALUE}};',
 				],
 			]
 		);
@@ -596,16 +612,16 @@ class Widget_Awesome_Step_Flow extends Widget_Base {
 		$this->end_controls_tabs();
 
 		$this->add_control(
-			'awea_badge_heading',
+			'awea_step_flow_badge_heading',
 			[
-				'label'     => esc_html__( 'Badge', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Badge Number', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::HEADING,
 				'separator' => 'before',
 			]
 		);
 
 		$this->add_responsive_control(
-			'awea_badge_size',
+			'awea_step_flow_badge_size',
 			[
 				'label'      => esc_html__( 'Size', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
@@ -613,43 +629,43 @@ class Widget_Awesome_Step_Flow extends Widget_Base {
 				'range'      => [ 'px' => [ 'min' => 20, 'max' => 46 ] ],
 				'default'    => [ 'unit' => 'px', 'size' => 28 ],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-sf-num' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .awea_step_flow_num' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
 
 		$this->add_control(
-			'awea_badge_color',
+			'awea_step_flow_badge_color',
 			[
 				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#ffffff',
 				'selectors' => [
-					'{{WRAPPER}} .awea-sf-num' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea_step_flow_num' => 'color: {{VALUE}};',
 				],
 			]
 		);
 
 		$this->add_control(
-			'awea_badge_bg',
+			'awea_step_flow_badge_bg',
 			[
 				'label'     => esc_html__( 'Background', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#0f172a',
 				'selectors' => [
-					'{{WRAPPER}} .awea-sf-num' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .awea_step_flow_num' => 'background-color: {{VALUE}};',
 				],
 			]
 		);
 
 		$this->add_control(
-			'awea_badge_bg_hover',
+			'awea_step_flow_badge_bg_hover',
 			[
-				'label'     => esc_html__( 'Hover', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Hover Background', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
 				'selectors' => [
-					'{{WRAPPER}} .awea-sf-item:hover .awea-sf-num, {{WRAPPER}} a.awea-sf-item:focus-visible .awea-sf-num' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .awea_step_flow_item:hover .awea_step_flow_num, {{WRAPPER}} a.awea_step_flow_item:focus-visible .awea_step_flow_num' => 'background-color: {{VALUE}};',
 				],
 			]
 		);
@@ -657,17 +673,16 @@ class Widget_Awesome_Step_Flow extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Typography::get_type(),
 			[
-				'name'     => 'awea_badge_typo',
-				'label'    => esc_html__( 'Typography', 'awesome-widgets-elementor' ),
-				'selector' => '{{WRAPPER}} .awea-sf-num',
+				'name'     => 'awea_step_flow_badge_typo',
+				'selector' => '{{WRAPPER}} .awea_step_flow_num',
 				'global'   => [ 'default' => Global_Typography::TYPOGRAPHY_SECONDARY ],
 			]
 		);
 
 		$this->add_responsive_control(
-			'awea_badge_radius',
+			'awea_step_flow_badge_radius',
 			[
-				'label'      => esc_html__( 'Radius', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Border Radius', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'default'    => [
@@ -679,7 +694,7 @@ class Widget_Awesome_Step_Flow extends Widget_Base {
 					'isLinked' => true,
 				],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-sf-num' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .awea_step_flow_num' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
 		);
@@ -690,7 +705,7 @@ class Widget_Awesome_Step_Flow extends Widget_Base {
 		   STYLE: 4. TEXT
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_style_text',
+			'awea_step_flow_style_text',
 			[
 				'label' => esc_html__( 'Text', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
@@ -698,22 +713,22 @@ class Widget_Awesome_Step_Flow extends Widget_Base {
 		);
 
 		$this->add_responsive_control(
-			'awea_text_space',
+			'awea_step_flow_text_space',
 			[
-				'label'      => esc_html__( 'Spacing', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Icon Spacing', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [ 'px' => [ 'min' => 8, 'max' => 48 ] ],
 				'default'    => [ 'unit' => 'px', 'size' => 20 ],
-				'condition'  => [ 'awea_direction' => 'horizontal' ],
+				'condition'  => [ 'awea_step_flow_direction' => 'horizontal' ],
 				'selectors'  => [
-					'{{WRAPPER}}.awea-sf-dir-horizontal .awea-sf-body' => 'margin-top: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}}.awea_step_flow_dir_horizontal .awea_step_flow_body' => 'margin-top: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
 
 		$this->add_control(
-			'awea_title_heading',
+			'awea_step_flow_title_heading',
 			[
 				'label' => esc_html__( 'Title', 'awesome-widgets-elementor' ),
 				'type'  => Controls_Manager::HEADING,
@@ -721,25 +736,25 @@ class Widget_Awesome_Step_Flow extends Widget_Base {
 		);
 
 		$this->add_control(
-			'awea_title_color',
+			'awea_step_flow_title_color',
 			[
 				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#0f172a',
 				'selectors' => [
-					'{{WRAPPER}} .awea-sf-title, {{WRAPPER}} .awea-sf-title a' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea_step_flow_title, {{WRAPPER}} .awea_step_flow_title a' => 'color: {{VALUE}};',
 				],
 			]
 		);
 
 		$this->add_control(
-			'awea_title_hover',
+			'awea_step_flow_title_hover',
 			[
-				'label'     => esc_html__( 'Hover', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Hover Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
 				'selectors' => [
-					'{{WRAPPER}} .awea-sf-item:hover .awea-sf-title, {{WRAPPER}} .awea-sf-item:hover .awea-sf-title a, {{WRAPPER}} a.awea-sf-item:focus-visible .awea-sf-title' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea_step_flow_item:hover .awea_step_flow_title, {{WRAPPER}} .awea_step_flow_item:hover .awea_step_flow_title a, {{WRAPPER}} a.awea_step_flow_item:focus-visible .awea_step_flow_title' => 'color: {{VALUE}};',
 				],
 			]
 		);
@@ -747,29 +762,28 @@ class Widget_Awesome_Step_Flow extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Typography::get_type(),
 			[
-				'name'     => 'awea_title_typo',
-				'label'    => esc_html__( 'Typography', 'awesome-widgets-elementor' ),
-				'selector' => '{{WRAPPER}} .awea-sf-title',
+				'name'     => 'awea_step_flow_title_typo',
+				'selector' => '{{WRAPPER}} .awea_step_flow_title',
 				'global'   => [ 'default' => Global_Typography::TYPOGRAPHY_PRIMARY ],
 			]
 		);
 
 		$this->add_responsive_control(
-			'awea_title_space',
+			'awea_step_flow_title_space',
 			[
-				'label'      => esc_html__( 'Spacing', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Bottom Spacing', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [ 'px' => [ 'min' => 0, 'max' => 30 ] ],
 				'default'    => [ 'unit' => 'px', 'size' => 8 ],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-sf-title' => 'margin-bottom: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .awea_step_flow_title' => 'margin-bottom: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
 
 		$this->add_control(
-			'awea_desc_heading',
+			'awea_step_flow_desc_heading',
 			[
 				'label'     => esc_html__( 'Description', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::HEADING,
@@ -778,13 +792,13 @@ class Widget_Awesome_Step_Flow extends Widget_Base {
 		);
 
 		$this->add_control(
-			'awea_desc_color',
+			'awea_step_flow_desc_color',
 			[
 				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#475569',
 				'selectors' => [
-					'{{WRAPPER}} .awea-sf-desc' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea_step_flow_desc' => 'color: {{VALUE}};',
 				],
 			]
 		);
@@ -792,9 +806,8 @@ class Widget_Awesome_Step_Flow extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Typography::get_type(),
 			[
-				'name'     => 'awea_desc_typo',
-				'label'    => esc_html__( 'Typography', 'awesome-widgets-elementor' ),
-				'selector' => '{{WRAPPER}} .awea-sf-desc',
+				'name'     => 'awea_step_flow_desc_typo',
+				'selector' => '{{WRAPPER}} .awea_step_flow_desc',
 				'global'   => [ 'default' => Global_Typography::TYPOGRAPHY_TEXT ],
 			]
 		);
@@ -804,9 +817,9 @@ class Widget_Awesome_Step_Flow extends Widget_Base {
 
 	protected function render() {
 		$settings   = $this->get_settings_for_display();
-		$steps      = $settings['awea_steps'] ?? [];
-		$title_tag  = Utils::validate_html_tag( $settings['awea_title_tag'] ?? 'h3' );
-		$line_style = $settings['awea_line_style'] ?? 'beam';
+		$steps      = $settings['awea_step_flow_steps'] ?? [];
+		$title_tag  = Utils::validate_html_tag( $settings['awea_step_flow_title_tag'] ?? 'h3' );
+		$line_style = $settings['awea_step_flow_line_style'] ?? 'beam';
 
 		if ( empty( $steps ) ) {
 			return;
@@ -814,51 +827,51 @@ class Widget_Awesome_Step_Flow extends Widget_Base {
 
 		$total_steps = count( $steps );
 		?>
-		<div class="awea-sf-wrap">
+		<div class="awea_step_flow_wrap">
 			<?php foreach ( $steps as $index => $item ) :
 				$id       = ! empty( $item['_id'] ) ? sanitize_html_class( $item['_id'] ) : $index;
-				$title    = $item['awea_title'] ?? '';
-				$badge    = $item['awea_badge'] ?? '';
-				$desc     = $item['awea_desc'] ?? '';
-				$has_url  = ! empty( $item['awea_link']['url'] );
-				$link_key = 'link_' . $id;
+				$title    = $item['awea_step_flow_title'] ?? '';
+				$badge    = $item['awea_step_flow_badge'] ?? '';
+				$desc     = $item['awea_step_flow_desc'] ?? '';
+				$has_url  = ! empty( $item['awea_step_flow_link']['url'] );
+				$link_key = 'awea_step_flow_link_' . $id;
 				$tag      = $has_url ? 'a' : 'div';
 
 				$this->remove_render_attribute( $link_key );
 				if ( $has_url ) {
-					$this->add_link_attributes( $link_key, $item['awea_link'] );
+					$this->add_link_attributes( $link_key, $item['awea_step_flow_link'] );
 				}
-				$this->add_render_attribute( $link_key, 'class', [ 'awea-sf-item', 'elementor-repeater-item-' . $id ] );
+				$this->add_render_attribute( $link_key, 'class', [ 'awea_step_flow_item', 'elementor-repeater-item-' . $id ] );
 				?>
 				<<?php Utils::print_validated_html_tag( $tag ); ?> <?php $this->print_render_attribute_string( $link_key ); ?>>
-					<div class="awea-sf-box" aria-hidden="true">
+					<div class="awea_step_flow_box" aria-hidden="true">
 						<?php
-						if ( ! empty( $item['awea_icon']['value'] ) ) {
-							Icons_Manager::render_icon( $item['awea_icon'], [ 'aria-hidden' => 'true' ] );
+						if ( ! empty( $item['awea_step_flow_icon']['value'] ) ) {
+							Icons_Manager::render_icon( $item['awea_step_flow_icon'], [ 'aria-hidden' => 'true' ] );
 						}
 						?>
 						<?php if ( ! empty( $badge ) ) : ?>
-							<span class="awea-sf-num"><?php echo esc_html( $badge ); ?></span>
+							<span class="awea_step_flow_num"><?php echo esc_html( $badge ); ?></span>
 						<?php endif; ?>
 					</div>
 
-					<div class="awea-sf-body">
+					<div class="awea_step_flow_body">
 						<?php if ( ! empty( $title ) ) : ?>
-							<<?php Utils::print_validated_html_tag( $title_tag ); ?> class="awea-sf-title">
+							<<?php Utils::print_validated_html_tag( $title_tag ); ?> class="awea_step_flow_title">
 								<?php echo esc_html( $title ); ?>
 							</<?php Utils::print_validated_html_tag( $title_tag ); ?>>
 						<?php endif; ?>
 
 						<?php if ( ! empty( $desc ) ) : ?>
-							<p class="awea-sf-desc"><?php echo wp_kses_post( $desc ); ?></p>
+							<p class="awea_step_flow_desc"><?php echo wp_kses_post( $desc ); ?></p>
 						<?php endif; ?>
 					</div>
 				</<?php Utils::print_validated_html_tag( $tag ); ?>>
 
 				<?php if ( 'none' !== $line_style && $index !== $total_steps - 1 ) : ?>
-					<div class="awea-sf-line" aria-hidden="true">
+					<div class="awea_step_flow_line" aria-hidden="true">
 						<?php if ( 'beam' === $line_style ) : ?>
-							<div class="awea-sf-beam"></div>
+							<div class="awea_step_flow_beam"></div>
 						<?php endif; ?>
 					</div>
 				<?php endif; ?>
@@ -874,47 +887,47 @@ class Widget_Awesome_Step_Flow extends Widget_Base {
 	protected function content_template() {
 		?>
 		<#
-		var steps = settings.awea_steps || [];
+		var steps = settings.awea_step_flow_steps || [];
 		if ( ! steps.length ) {
 			return;
 		}
-		var tag       = elementor.helpers.validateHTMLTag( settings.awea_title_tag || 'h3' );
-		var lineStyle = settings.awea_line_style || 'beam';
+		var tag       = elementor.helpers.validateHTMLTag( settings.awea_step_flow_title_tag || 'h3' );
+		var lineStyle = settings.awea_step_flow_line_style || 'beam';
 		#>
-		<div class="awea-sf-wrap">
+		<div class="awea_step_flow_wrap">
 			<# _.each( steps, function( item, index ) {
 				var id       = item._id || index;
-				var iconHTML = elementor.helpers.renderIcon( view, item.awea_icon, { 'aria-hidden': true }, 'i' , 'object' );
-				var url      = ( item.awea_link && item.awea_link.url ) ? item.awea_link.url : '';
+				var iconHTML = elementor.helpers.renderIcon( view, item.awea_step_flow_icon, { 'aria-hidden': true }, 'i' , 'object' );
+				var url      = ( item.awea_step_flow_link && item.awea_step_flow_link.url ) ? item.awea_step_flow_link.url : '';
 				var hasUrl   = !! url;
 				var tag      = hasUrl ? 'a' : 'div';
 				var hrefAttr = hasUrl ? ' href="' + _.escape( url ) + '"' : '';
 			#>
-				<{{{ tag }}}{{ hrefAttr }} class="awea-sf-item elementor-repeater-item-{{ id }}">
-					<div class="awea-sf-box" aria-hidden="true">
+				<{{{ tag }}}{{ hrefAttr }} class="awea_step_flow_item elementor-repeater-item-{{ id }}">
+					<div class="awea_step_flow_box" aria-hidden="true">
 						<# if ( iconHTML && iconHTML.rendered ) { #>
 							{{{ iconHTML.value }}}
 						<# } #>
-						<# if ( item.awea_badge ) { #>
-							<span class="awea-sf-num">{{{ item.awea_badge }}}</span>
+						<# if ( item.awea_step_flow_badge ) { #>
+							<span class="awea_step_flow_num">{{{ item.awea_step_flow_badge }}}</span>
 						<# } #>
 					</div>
 
-					<div class="awea-sf-body">
-						<# if ( item.awea_title ) { #>
-							<{{{ tag }}} class="awea-sf-title">{{{ item.awea_title }}}</{{{ tag }}}>
+					<div class="awea_step_flow_body">
+						<# if ( item.awea_step_flow_title ) { #>
+							<{{{ tag }}} class="awea_step_flow_title">{{{ item.awea_step_flow_title }}}</{{{ tag }}}>
 						<# } #>
 
-						<# if ( item.awea_desc ) { #>
-							<p class="awea-sf-desc">{{{ item.awea_desc }}}</p>
+						<# if ( item.awea_step_flow_desc ) { #>
+							<p class="awea_step_flow_desc">{{{ item.awea_step_flow_desc }}}</p>
 						<# } #>
 					</div>
 				</{{{ tag }}}>
 
 				<# if ( 'none' !== lineStyle && index !== steps.length - 1 ) { #>
-					<div class="awea-sf-line" aria-hidden="true">
+					<div class="awea_step_flow_line" aria-hidden="true">
 						<# if ( 'beam' === lineStyle ) { #>
-							<div class="awea-sf-beam"></div>
+							<div class="awea_step_flow_beam"></div>
 						<# } #>
 					</div>
 				<# } #>

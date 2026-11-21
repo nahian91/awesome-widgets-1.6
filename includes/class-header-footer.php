@@ -3,7 +3,7 @@
  * Professional Header & Footer Builder Engine.
  *
  * @package AwesomeWidgetsElementor
- * @since   1.0.0
+ * @since   1.6.1
  */
 
 namespace Elementor;
@@ -15,15 +15,24 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Class AWEA_Header_Footer
  *
- * Manages custom post type registration, conditional template resolution, theme hook replacements,
- * shortcode parsing, Block Theme (FSE) compatibility, and quick-create modals.
+ * Manages custom post type registration, conditional template resolution, transient caching,
+ * theme hook replacements, Block Theme (FSE) compatibility, and quick-create/edit modals.
  */
 class AWEA_Header_Footer {
 
 	/**
 	 * Post type slug.
+	 *
+	 * @var string
 	 */
 	const POST_TYPE = 'awea_hf_template';
+
+	/**
+	 * Transient cache group key.
+	 *
+	 * @var string
+	 */
+	const CACHE_GROUP = 'awea_hf_resolution';
 
 	/**
 	 * Active header template ID.
@@ -43,33 +52,39 @@ class AWEA_Header_Footer {
 	 * Constructor.
 	 */
 	public function __construct() {
-		// Post type registration & Elementor compatibility
+		// Post type registration & Elementor compatibility.
 		add_action( 'init', array( $this, 'register_post_type' ), 5 );
 		add_action( 'elementor/init', array( $this, 'add_elementor_support' ) );
 
-		// Canvas template loader for Elementor editor preview
+		// Canvas template loader for Elementor editor preview.
 		add_filter( 'template_include', array( $this, 'template_include_canvas' ), 99 );
 
-		// Admin UI & Quick Create Modal
+		// Admin UI & Quick Create/Edit Modal.
 		add_action( 'add_meta_boxes', array( $this, 'register_meta_boxes' ) );
 		add_action( 'save_post_' . self::POST_TYPE, array( $this, 'save_meta_boxes' ) );
+		add_action( 'save_post_' . self::POST_TYPE, array( $this, 'flush_resolution_cache' ) );
+		add_action( 'deleted_post', array( $this, 'flush_resolution_cache' ) );
 		add_action( 'admin_footer', array( $this, 'render_admin_quick_create_modal' ) );
 		add_action( 'admin_init', array( $this, 'handle_quick_create_submission' ) );
 
-		// Custom admin columns
+		// AJAX handlers for status toggle & live modal save.
+		add_action( 'wp_ajax_awea_toggle_template_status', array( $this, 'ajax_toggle_template_status' ) );
+		add_action( 'wp_ajax_awea_ajax_save_template', array( $this, 'ajax_save_template' ) );
+
+		// Custom admin columns.
 		add_filter( 'manage_' . self::POST_TYPE . '_posts_columns', array( $this, 'register_admin_columns' ) );
 		add_action( 'manage_' . self::POST_TYPE . '_posts_custom_column', array( $this, 'render_admin_column_content' ), 10, 2 );
 
-		// Shortcode support: [awea_template id="123"]
+		// Shortcode support: [awea_template id="123"].
 		add_shortcode( 'awea_template', array( $this, 'render_template_shortcode' ) );
 
-		// Frontend template detection
+		// Frontend template detection.
 		add_action( 'wp', array( $this, 'setup_active_templates' ) );
 
-		// Block Theme (FSE) Compatibility: Replace core/template-part blocks
+		// Block Theme (FSE) Compatibility: Replace core/template-part blocks.
 		add_filter( 'render_block', array( $this, 'filter_block_template_parts' ), 10, 2 );
 
-		// Classic Theme Replacement Hooks
+		// Classic Theme Replacement Hooks.
 		add_action( 'wp_body_open', array( $this, 'render_header' ), 1 );
 		add_action( 'wp_footer', array( $this, 'render_footer' ), 50 );
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_frontend_assets' ) );
@@ -82,17 +97,17 @@ class AWEA_Header_Footer {
 	 */
 	public function register_post_type() {
 		$labels = array(
-			'name'                  => esc_html__( 'Header & Footer Templates', 'awesome-widgets-elementor' ),
-			'singular_name'         => esc_html__( 'Template', 'awesome-widgets-elementor' ),
-			'add_new'               => esc_html__( 'Add New Template', 'awesome-widgets-elementor' ),
-			'add_new_item'          => esc_html__( 'Add New Template', 'awesome-widgets-elementor' ),
-			'edit_item'             => esc_html__( 'Edit Template', 'awesome-widgets-elementor' ),
-			'new_item'              => esc_html__( 'New Template', 'awesome-widgets-elementor' ),
-			'view_item'             => esc_html__( 'View Template', 'awesome-widgets-elementor' ),
-			'search_items'          => esc_html__( 'Search Templates', 'awesome-widgets-elementor' ),
-			'not_found'             => esc_html__( 'No templates found', 'awesome-widgets-elementor' ),
-			'not_found_in_trash'    => esc_html__( 'No templates found in Trash', 'awesome-widgets-elementor' ),
-			'menu_name'             => esc_html__( 'AWEA Templates', 'awesome-widgets-elementor' ),
+			'name'               => esc_html__( 'Header & Footer Templates', 'awesome-widgets-elementor' ),
+			'singular_name'      => esc_html__( 'Template', 'awesome-widgets-elementor' ),
+			'add_new'            => esc_html__( 'Add New Template', 'awesome-widgets-elementor' ),
+			'add_new_item'       => esc_html__( 'Add New Template', 'awesome-widgets-elementor' ),
+			'edit_item'          => esc_html__( 'Edit Template', 'awesome-widgets-elementor' ),
+			'new_item'           => esc_html__( 'New Template', 'awesome-widgets-elementor' ),
+			'view_item'          => esc_html__( 'View Template', 'awesome-widgets-elementor' ),
+			'search_items'       => esc_html__( 'Search Templates', 'awesome-widgets-elementor' ),
+			'not_found'          => esc_html__( 'No templates found', 'awesome-widgets-elementor' ),
+			'not_found_in_trash' => esc_html__( 'No templates found in Trash', 'awesome-widgets-elementor' ),
+			'menu_name'          => esc_html__( 'AWEA Templates', 'awesome-widgets-elementor' ),
 		);
 
 		$args = array(
@@ -192,7 +207,7 @@ class AWEA_Header_Footer {
 				break;
 
 			case 'awea_roles':
-				$roles      = get_post_meta( $post_id, '_awea_hf_visibility', true );
+				$roles       = get_post_meta( $post_id, '_awea_hf_visibility', true );
 				$role_labels = array(
 					'all'        => esc_html__( 'Public', 'awesome-widgets-elementor' ),
 					'logged_in'  => esc_html__( 'Logged In', 'awesome-widgets-elementor' ),
@@ -238,9 +253,9 @@ class AWEA_Header_Footer {
 		$sticky_header = get_post_meta( $post->ID, '_awea_header_sticky', true );
 		$shrink_header = get_post_meta( $post->ID, '_awea_header_shrink', true );
 
-		$type          = ! empty( $type ) ? $type : 'header';
-		$condition     = ! empty( $condition ) ? $condition : 'entire_site';
-		$visibility    = ! empty( $visibility ) ? $visibility : 'all';
+		$type       = ! empty( $type ) ? $type : 'header';
+		$condition  = ! empty( $condition ) ? $condition : 'entire_site';
+		$visibility = ! empty( $visibility ) ? $visibility : 'all';
 		?>
 		<div class="awea-metabox-wrapper" style="padding:10px 0; box-sizing:border-box;">
 			<table class="form-table">
@@ -351,6 +366,123 @@ class AWEA_Header_Footer {
 	}
 
 	/**
+	 * Flush resolution cache when a template post is saved or deleted.
+	 *
+	 * @return void
+	 */
+	public function flush_resolution_cache() {
+		if ( function_exists( 'wp_cache_flush_group' ) ) {
+			wp_cache_flush_group( self::CACHE_GROUP );
+		} else {
+			wp_cache_flush();
+		}
+	}
+
+	/**
+	 * AJAX handler for toggling template active status without error.
+	 *
+	 * @return void
+	 */
+	public function ajax_toggle_template_status() {
+		check_ajax_referer( 'awea_template_toggle_nonce', 'security' );
+
+		if ( ! current_user_can( 'edit_posts' ) ) {
+			wp_send_json_error( array( 'message' => esc_html__( 'Permission denied.', 'awesome-widgets-elementor' ) ) );
+		}
+
+		$post_id = isset( $_POST['post_id'] ) ? absint( $_POST['post_id'] ) : 0;
+		$status  = isset( $_POST['status'] ) ? sanitize_key( $_POST['status'] ) : '1';
+
+		if ( ! $post_id || self::POST_TYPE !== get_post_type( $post_id ) ) {
+			wp_send_json_error( array( 'message' => esc_html__( 'Invalid template ID.', 'awesome-widgets-elementor' ) ) );
+		}
+
+		// Save status metadata ('1' for active, '0' for disabled).
+		update_post_meta( $post_id, '_awea_template_status', $status );
+		$this->flush_resolution_cache();
+
+		wp_send_json_success( array( 'message' => esc_html__( 'Status updated successfully.', 'awesome-widgets-elementor' ) ) );
+	}
+
+	/**
+	 * AJAX handler for saving template settings via modal without page reload.
+	 *
+	 * @return void
+	 */
+	public function ajax_save_template() {
+		check_ajax_referer( 'awea_quick_create_nonce', 'security' );
+
+		if ( ! current_user_can( 'edit_posts' ) ) {
+			wp_send_json_error( array( 'message' => esc_html__( 'Permission denied.', 'awesome-widgets-elementor' ) ) );
+		}
+
+		$post_id    = isset( $_POST['post_id'] ) ? absint( $_POST['post_id'] ) : 0;
+		$title      = ! empty( $_POST['title'] ) ? sanitize_text_field( $_POST['title'] ) : esc_html__( 'New Template', 'awesome-widgets-elementor' );
+		$type       = ! empty( $_POST['type'] ) ? sanitize_key( $_POST['type'] ) : 'header';
+		$condition  = ! empty( $_POST['condition'] ) ? sanitize_key( $_POST['condition'] ) : 'entire_site';
+		$visibility = ! empty( $_POST['visibility'] ) ? sanitize_key( $_POST['visibility'] ) : 'all';
+		$sticky     = ! empty( $_POST['sticky'] ) ? '1' : '0';
+		$shrink     = ! empty( $_POST['shrink'] ) ? '1' : '0';
+
+		$condition_labels = array(
+			'entire_site'   => esc_html__( 'Entire Website', 'awesome-widgets-elementor' ),
+			'front_page'    => esc_html__( 'Homepage Only', 'awesome-widgets-elementor' ),
+			'singular_page' => esc_html__( 'All Pages', 'awesome-widgets-elementor' ),
+			'singular_post' => esc_html__( 'All Posts', 'awesome-widgets-elementor' ),
+			'archive'       => esc_html__( 'All Archives', 'awesome-widgets-elementor' ),
+			'not_found_404' => esc_html__( '404 Page', 'awesome-widgets-elementor' ),
+		);
+
+		if ( $post_id && self::POST_TYPE === get_post_type( $post_id ) ) {
+			wp_update_post(
+				array(
+					'ID'         => $post_id,
+					'post_title' => $title,
+				)
+			);
+		} else {
+			$post_id = wp_insert_post(
+				array(
+					'post_title'  => $title,
+					'post_type'   => self::POST_TYPE,
+					'post_status' => 'publish',
+				)
+			);
+
+			if ( is_wp_error( $post_id ) ) {
+				wp_send_json_error( array( 'message' => $post_id->get_error_message() ) );
+			}
+
+			update_post_meta( $post_id, '_elementor_edit_mode', 'builder' );
+			update_post_meta( $post_id, '_wp_page_template', 'elementor_canvas' );
+		}
+
+		update_post_meta( $post_id, '_awea_hf_type', $type );
+		update_post_meta( $post_id, '_awea_hf_condition', $condition );
+		update_post_meta( $post_id, '_awea_hf_visibility', $visibility );
+		update_post_meta( $post_id, '_awea_header_sticky', $sticky );
+		update_post_meta( $post_id, '_awea_header_shrink', $shrink );
+
+		$this->flush_resolution_cache();
+
+		$type_label   = ucfirst( $type );
+		$cond_label   = isset( $condition_labels[ $condition ] ) ? $condition_labels[ $condition ] : $condition_labels['entire_site'];
+		$edit_url     = admin_url( 'post.php?post=' . $post_id . '&action=elementor' );
+
+		wp_send_json_success(
+			array(
+				'message'       => esc_html__( 'Template saved successfully.', 'awesome-widgets-elementor' ),
+				'id'            => $post_id,
+				'title'         => $title,
+				'type'          => $type,
+				'type_label'    => $type_label,
+				'condition_lbl' => $cond_label,
+				'edit_url'      => $edit_url,
+			)
+		);
+	}
+
+	/**
 	 * Setup Active Template IDs based on conditions and user roles.
 	 *
 	 * @return void
@@ -363,7 +495,7 @@ class AWEA_Header_Footer {
 		self::$active_header_id = $this->resolve_template_id( 'header' );
 		self::$active_footer_id = $this->resolve_template_id( 'footer' );
 
-		// Remove header/footer actions on standard themes that support action hooks
+		// Remove header/footer actions on standard themes that support action hooks.
 		if ( self::$active_header_id ) {
 			add_action( 'astra_header', '__return_empty_string', 1 );
 			add_action( 'generate_header', '__return_empty_string', 1 );
@@ -478,64 +610,85 @@ class AWEA_Header_Footer {
 	}
 
 	/**
-	 * Resolve template ID matching display rules and visibility.
+	 * Resolve template ID matching display rules and visibility with object cache.
 	 *
 	 * @param string $type Template type.
 	 * @return int Template ID or 0.
 	 */
 	private function resolve_template_id( $type ) {
+		$auth_state = is_user_logged_in() ? 'in' : 'out';
+		$uri        = isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
+		$cache_key  = 'awea_res_' . $type . '_' . $auth_state . '_' . md5( $uri );
+		
+		$cached_id = wp_cache_get( $cache_key, self::CACHE_GROUP );
+		if ( false !== $cached_id ) {
+			return (int) $cached_id;
+		}
+
 		$posts = get_posts(
-    array(
-        'post_type'   => self::POST_TYPE,
-        'post_status' => 'publish',
-        'numberposts' => -1,
-        // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
-        'meta_query'  => array(
-            array(
-                'key'   => '_awea_hf_type',
-                'value' => $type,
-            ),
-        ),
-    )
-);
+			array(
+				'post_type'   => self::POST_TYPE,
+				'post_status' => 'publish',
+				'numberposts' => -1,
+				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
+				'meta_query'  => array(
+					array(
+						'key'   => '_awea_hf_type',
+						'value' => $type,
+					),
+				),
+			)
+		);
 
-		if ( empty( $posts ) ) {
-			return 0;
+		$resolved_id = 0;
+
+		if ( ! empty( $posts ) ) {
+			foreach ( $posts as $post ) {
+				$status_meta = get_post_meta( $post->ID, '_awea_template_status', true );
+				if ( '0' === $status_meta ) {
+					continue;
+				}
+
+				$visibility = get_post_meta( $post->ID, '_awea_hf_visibility', true );
+
+				if ( 'logged_in' === $visibility && ! is_user_logged_in() ) {
+					continue;
+				}
+				if ( 'logged_out' === $visibility && is_user_logged_in() ) {
+					continue;
+				}
+
+				$cond = get_post_meta( $post->ID, '_awea_hf_condition', true );
+
+				if ( 'front_page' === $cond && is_front_page() ) {
+					$resolved_id = $post->ID;
+					break;
+				}
+				if ( 'singular_page' === $cond && is_page() ) {
+					$resolved_id = $post->ID;
+					break;
+				}
+				if ( 'singular_post' === $cond && is_single() ) {
+					$resolved_id = $post->ID;
+					break;
+				}
+				if ( 'archive' === $cond && ( is_archive() || is_category() || is_tag() ) ) {
+					$resolved_id = $post->ID;
+					break;
+				}
+				if ( 'not_found_404' === $cond && is_404() ) {
+					$resolved_id = $post->ID;
+					break;
+				}
+				if ( 'entire_site' === $cond ) {
+					$resolved_id = $post->ID;
+					break;
+				}
+			}
 		}
 
-		foreach ( $posts as $post ) {
-			$visibility = get_post_meta( $post->ID, '_awea_hf_visibility', true );
-
-			if ( 'logged_in' === $visibility && ! is_user_logged_in() ) {
-				continue;
-			}
-			if ( 'logged_out' === $visibility && is_user_logged_in() ) {
-				continue;
-			}
-
-			$cond = get_post_meta( $post->ID, '_awea_hf_condition', true );
-
-			if ( 'front_page' === $cond && is_front_page() ) {
-				return $post->ID;
-			}
-			if ( 'singular_page' === $cond && is_page() ) {
-				return $post->ID;
-			}
-			if ( 'singular_post' === $cond && is_single() ) {
-				return $post->ID;
-			}
-			if ( 'archive' === $cond && ( is_archive() || is_category() || is_tag() ) ) {
-				return $post->ID;
-			}
-			if ( 'not_found_404' === $cond && is_404() ) {
-				return $post->ID;
-			}
-			if ( 'entire_site' === $cond ) {
-				return $post->ID;
-			}
-		}
-
-		return 0;
+		wp_cache_set( $cache_key, $resolved_id, self::CACHE_GROUP, 3600 );
+		return (int) $resolved_id;
 	}
 
 	/**
@@ -589,7 +742,7 @@ class AWEA_Header_Footer {
 			}
 		}
 
-		wp_register_style( 'awea-hf-style', false, array(), defined( 'AWEA_VERSION' ) ? AWEA_VERSION : '1.0.0' );
+		wp_register_style( 'awea-hf-style', false, array(), defined( 'AWEA_VERSION' ) ? AWEA_VERSION : '1.6.1' );
 		wp_enqueue_style( 'awea-hf-style' );
 		wp_add_inline_style( 'awea-hf-style', $css );
 
@@ -605,7 +758,7 @@ class AWEA_Header_Footer {
 				}
 			});
 		";
-		wp_register_script( 'awea-hf-script', '', array(), defined( 'AWEA_VERSION' ) ? AWEA_VERSION : '1.0.0', true );
+		wp_register_script( 'awea-hf-script', '', array(), defined( 'AWEA_VERSION' ) ? AWEA_VERSION : '1.6.1', true );
 		wp_enqueue_script( 'awea-hf-script' );
 		wp_add_inline_script( 'awea-hf-script', $js );
 	}
@@ -634,7 +787,231 @@ class AWEA_Header_Footer {
 	}
 
 	/**
-	 * Modern Studio Quick-Create Modal with Raycast/Linear UI & Micro-Interactions.
+	 * Render Header & Footer Builder Page with Active Status Switches.
+	 *
+	 * @return void
+	 */
+	public function render_header_footer_page() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
+
+		$templates = get_posts(
+			array(
+				'post_type'      => self::POST_TYPE,
+				'post_status'    => array( 'publish', 'draft' ),
+				'posts_per_page' => -1,
+				'orderby'        => 'date',
+				'order'          => 'DESC',
+			)
+		);
+
+		$headers_count = 0;
+		$footers_count = 0;
+
+		foreach ( $templates as $t ) {
+			$type = get_post_meta( $t->ID, '_awea_hf_type', true );
+			if ( 'footer' === $type ) {
+				$footers_count++;
+			} else {
+				$headers_count++;
+			}
+		}
+
+		$total_count = count( $templates );
+		$ajax_nonce  = wp_create_nonce( 'awea_template_toggle_nonce' );
+		$save_ajax_nonce = wp_create_nonce( 'awea_quick_create_nonce' );
+		?>
+		<div class="wrap awea-dashboard">
+			<div class="awea-hero">
+				<div class="awea-hero-content">
+					<h1><?php esc_html_e( 'Header & Footer Builder', 'awesome-widgets-elementor' ); ?></h1>
+					<p><?php esc_html_e( 'Design custom headers and footers with Elementor canvas and toggle them active/inactive instantly.', 'awesome-widgets-elementor' ); ?></p>
+				</div>
+				<button type="button" class="awea-btn-action" onclick="aweaOpenQuickModal(null)">
+					<span class="dashicons dashicons-plus-alt2"></span>
+					<?php esc_html_e( 'Add New Template', 'awesome-widgets-elementor' ); ?>
+				</button>
+			</div>
+
+			<!-- Counters -->
+			<div class="awea-stats-strip">
+				<div class="awea-stat-card">
+					<div class="awea-stat-head">
+						<span class="awea-stat-caption"><?php esc_html_e( 'HEADERS', 'awesome-widgets-elementor' ); ?></span>
+					</div>
+					<div class="awea-stat-value" style="color: var(--awea-primary);"><?php echo esc_html( (string) $headers_count ); ?></div>
+				</div>
+				<div class="awea-stat-card">
+					<div class="awea-stat-head">
+						<span class="awea-stat-caption"><?php esc_html_e( 'FOOTERS', 'awesome-widgets-elementor' ); ?></span>
+					</div>
+					<div class="awea-stat-value" style="color: var(--awea-accent);"><?php echo esc_html( (string) $footers_count ); ?></div>
+				</div>
+				<div class="awea-stat-card">
+					<div class="awea-stat-head">
+						<span class="awea-stat-caption"><?php esc_html_e( 'TOTAL TEMPLATES', 'awesome-widgets-elementor' ); ?></span>
+					</div>
+					<div class="awea-stat-value" style="color: var(--awea-success);"><?php echo esc_html( (string) $total_count ); ?></div>
+				</div>
+			</div>
+
+			<!-- Template Table with Switch Column -->
+			<div class="awea-card">
+				<?php if ( ! empty( $templates ) ) : ?>
+					<div style="overflow-x: auto; box-sizing: border-box;">
+						<table class="awea-templates-table">
+							<thead>
+								<tr>
+									<th style="width: 70px;"><?php esc_html_e( 'Status', 'awesome-widgets-elementor' ); ?></th>
+									<th><?php esc_html_e( 'Template Title', 'awesome-widgets-elementor' ); ?></th>
+									<th><?php esc_html_e( 'Type', 'awesome-widgets-elementor' ); ?></th>
+									<th><?php esc_html_e( 'Display Rule', 'awesome-widgets-elementor' ); ?></th>
+									<th><?php esc_html_e( 'Shortcode', 'awesome-widgets-elementor' ); ?></th>
+									<th style="text-align: right;"><?php esc_html_e( 'Actions', 'awesome-widgets-elementor' ); ?></th>
+								</tr>
+							</thead>
+							<tbody id="awea_templates_rows">
+								<?php foreach ( $templates as $template ) : ?>
+									<?php
+									$type          = get_post_meta( $template->ID, '_awea_hf_type', true );
+									$type          = ! empty( $type ) ? $type : 'header';
+									$condition     = get_post_meta( $template->ID, '_awea_hf_condition', true );
+									$visibility    = get_post_meta( $template->ID, '_awea_hf_visibility', true );
+									$sticky_header = get_post_meta( $template->ID, '_awea_header_sticky', true );
+									$shrink_header = get_post_meta( $template->ID, '_awea_header_shrink', true );
+
+									$status_meta = get_post_meta( $template->ID, '_awea_template_status', true );
+									$is_active   = '0' !== $status_meta;
+
+									$condition_labels = array(
+										'entire_site'   => esc_html__( 'Entire Website', 'awesome-widgets-elementor' ),
+										'front_page'    => esc_html__( 'Homepage Only', 'awesome-widgets-elementor' ),
+										'singular_page' => esc_html__( 'All Pages', 'awesome-widgets-elementor' ),
+										'singular_post' => esc_html__( 'All Blog Posts', 'awesome-widgets-elementor' ),
+										'archive'       => esc_html__( 'All Archives', 'awesome-widgets-elementor' ),
+										'not_found_404' => esc_html__( '404 Error Page', 'awesome-widgets-elementor' ),
+									);
+
+									$edit_url   = admin_url( 'post.php?post=' . $template->ID . '&action=elementor' );
+									$delete_url = wp_nonce_url(
+										admin_url( 'admin.php?page=awesome-widgets-header-footer&action=awea_delete_template&post_id=' . $template->ID ),
+										'awea_delete_template_nonce'
+									);
+
+									// Prepare JSON payload for the edit popup trigger
+									$edit_json = wp_json_encode( array(
+										'id'         => $template->ID,
+										'title'      => $template->post_title,
+										'type'       => $type,
+										'condition'  => $condition ? $condition : 'entire_site',
+										'visibility' => $visibility ? $visibility : 'all',
+										'sticky'     => $sticky_header,
+										'shrink'     => $shrink_header,
+									) );
+									?>
+									<tr class="awea-template-row <?php echo $is_active ? '' : 'is-disabled'; ?>" data-type="<?php echo esc_attr( $type ); ?>" id="awea-row-<?php echo esc_attr( (string) $template->ID ); ?>">
+										<td class="awea-col-switch">
+											<label class="awea-table-switch" title="<?php esc_attr_e( 'Enable or Disable this template', 'awesome-widgets-elementor' ); ?>">
+												<input type="checkbox" 
+													onchange="aweaToggleStatus(<?php echo esc_attr( (string) $template->ID ); ?>, this)" 
+													<?php checked( $is_active, true ); ?> 
+												/>
+												<span class="awea-table-slider"></span>
+											</label>
+										</td>
+
+										<td class="awea-col-title">
+											<strong><a href="<?php echo esc_url( $edit_url ); ?>" class="awea-row-title-text"><?php echo esc_html( $template->post_title ); ?></a></strong>
+											<?php if ( 'draft' === $template->post_status ) : ?>
+												<span style="color:#eab308; font-size:11px; margin-left:6px;">— <?php esc_html_e( 'Draft', 'awesome-widgets-elementor' ); ?></span>
+											<?php endif; ?>
+										</td>
+
+										<td class="awea-col-type">
+											<span class="awea-type-pill <?php echo esc_attr( $type ); ?>">
+												<?php echo esc_html( ucfirst( $type ) ); ?>
+											</span>
+										</td>
+
+										<td class="awea-col-condition">
+											<span class="awea-rule-badge">
+												<?php echo esc_html( isset( $condition_labels[ $condition ] ) ? $condition_labels[ $condition ] : $condition_labels['entire_site'] ); ?>
+											</span>
+										</td>
+
+										<td>
+											<span class="awea-code-tag">[awea_template id="<?php echo esc_attr( (string) $template->ID ); ?>"]</span>
+										</td>
+
+										<td style="text-align: right;">
+											<div class="awea-row-actions" style="justify-content: flex-end;">
+												<button type="button" class="awea-btn-edit" style="border:none; cursor:pointer;" onclick="aweaOpenQuickModal(<?php echo esc_attr( $edit_json ); ?>)">
+													<span class="dashicons dashicons-edit"></span>
+													<?php esc_html_e( 'Edit', 'awesome-widgets-elementor' ); ?>
+												</button>
+												<a href="<?php echo esc_url( $edit_url ); ?>" class="awea-btn-edit" style="background:#0284c7;" title="<?php esc_attr_e( 'Open Elementor Visual Editor', 'awesome-widgets-elementor' ); ?>">
+													<span class="dashicons dashicons-admin-customizer"></span>
+													<?php esc_html_e( 'Canvas', 'awesome-widgets-elementor' ); ?>
+												</a>
+												<a href="<?php echo esc_url( $delete_url ); ?>" class="awea-btn-del" onclick="return confirm('<?php esc_attr_e( 'Are you sure you want to delete this template?', 'awesome-widgets-elementor' ); ?>')">
+													<?php esc_html_e( 'Delete', 'awesome-widgets-elementor' ); ?>
+												</a>
+											</div>
+										</td>
+									</tr>
+								<?php endforeach; ?>
+							</tbody>
+						</table>
+					</div>
+				<?php else : ?>
+					<p><?php esc_html_e( 'No templates found.', 'awesome-widgets-elementor' ); ?></p>
+				<?php endif; ?>
+			</div>
+		</div>
+
+		<!-- Live AJAX Switch Script -->
+		<script>
+			function aweaToggleStatus(postId, checkbox) {
+				var row = document.getElementById('awea-row-' + postId);
+				var isChecked = checkbox.checked ? '1' : '0';
+
+				if (row) {
+					if (checkbox.checked) {
+						row.classList.remove('is-disabled');
+					} else {
+						row.classList.add('is-disabled');
+					}
+				}
+
+				var data = new FormData();
+				data.append('action', 'awea_toggle_template_status');
+				data.append('post_id', postId);
+				data.append('status', isChecked);
+				data.append('security', '<?php echo esc_js( $ajax_nonce ); ?>');
+
+				fetch(ajaxurl, {
+					method: 'POST',
+					body: data
+				})
+				.then(function(res) { return res.json(); })
+				.then(function(res) {
+					if (!res.success) {
+						alert(res.data && res.data.message ? res.data.message : 'Error updating status.');
+						checkbox.checked = !checkbox.checked;
+					}
+				})
+				.catch(function(err) {
+					alert('Network error while updating status.');
+					checkbox.checked = !checkbox.checked;
+				});
+			}
+		</script>
+		<?php
+	}
+
+	/**
+	 * Modern Studio Quick-Create & Edit Modal with Raycast/Linear UI.
 	 *
 	 * @return void
 	 */
@@ -650,9 +1027,10 @@ class AWEA_Header_Footer {
 		if ( ! $is_template_screen && ! $is_plugin_screen ) {
 			return;
 		}
+		$save_ajax_nonce = wp_create_nonce( 'awea_quick_create_nonce' );
 		?>
-		<!-- AWEA Modern Studio Quick-Create Modal -->
-		<div id="awea-quick-create-modal" class="awea-studio-backdrop" style="display:none;" role="dialog" aria-modal="true">
+		<!-- AWEA Modern Studio Quick-Create / Edit Modal -->
+		<div id="awea-quick-create-modal" class="awea-studio-backdrop" style="display:none;" role="dialog" aria-modal="true" aria-labelledby="awea-modal-title">
 			<div class="awea-studio-card">
 				
 				<!-- Specular Header -->
@@ -662,18 +1040,19 @@ class AWEA_Header_Footer {
 						<?php esc_html_e( 'Canvas Studio &bull; Builder Engine', 'awesome-widgets-elementor' ); ?>
 					</div>
 					<button type="button" class="awea-studio-close-btn" onclick="aweaCloseQuickModal()" aria-label="<?php esc_attr_e( 'Close', 'awesome-widgets-elementor' ); ?>">
-						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
 					</button>
 				</div>
 
 				<div class="awea-studio-intro">
-					<h2><?php esc_html_e( 'Create New Template', 'awesome-widgets-elementor' ); ?></h2>
-					<p><?php esc_html_e( 'Configure layout architecture and launch directly into Elementor Canvas with zero bloat.', 'awesome-widgets-elementor' ); ?></p>
+					<h2 id="awea-modal-title"><?php esc_html_e( 'Template Configuration', 'awesome-widgets-elementor' ); ?></h2>
+					<p><?php esc_html_e( 'Configure layout architecture and choose whether to save directly or open the Elementor canvas editor.', 'awesome-widgets-elementor' ); ?></p>
 				</div>
 
 				<form method="post" id="awea_quick_modal_form" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
 					<?php wp_nonce_field( 'awea_quick_create_action', 'awea_quick_create_nonce' ); ?>
-					<input type="hidden" name="action" value="awea_quick_create_template" />
+					<input type="hidden" name="action" id="awea_form_action_input" value="awea_quick_create_template" />
+					<input type="hidden" name="awea_edit_post_id" id="awea_edit_post_id" value="" />
 
 					<!-- Segmented Visual Type Picker -->
 					<div class="awea-input-block">
@@ -682,10 +1061,10 @@ class AWEA_Header_Footer {
 							
 							<!-- Header Option -->
 							<label class="awea-segment-item">
-								<input type="radio" name="awea_new_type" value="header" checked onchange="aweaTypeSelected(this.value)" />
+								<input type="radio" name="awea_new_type" value="header" id="awea_type_header" checked onchange="aweaTypeSelected(this.value)" />
 								<div class="awea-segment-box">
 									<div class="awea-segment-icon">
-										<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+										<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
 									</div>
 									<div class="awea-segment-text">
 										<strong><?php esc_html_e( 'Header Layout', 'awesome-widgets-elementor' ); ?></strong>
@@ -697,10 +1076,10 @@ class AWEA_Header_Footer {
 
 							<!-- Footer Option -->
 							<label class="awea-segment-item">
-								<input type="radio" name="awea_new_type" value="footer" onchange="aweaTypeSelected(this.value)" />
+								<input type="radio" name="awea_new_type" value="footer" id="awea_type_footer" onchange="aweaTypeSelected(this.value)" />
 								<div class="awea-segment-box">
 									<div class="awea-segment-icon">
-										<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="15" x2="21" y2="15"></line></svg>
+										<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="15" x2="21" y2="15"></line></svg>
 									</div>
 									<div class="awea-segment-text">
 										<strong><?php esc_html_e( 'Footer Layout', 'awesome-widgets-elementor' ); ?></strong>
@@ -752,12 +1131,12 @@ class AWEA_Header_Footer {
 					<!-- Header Feature Expansion Drawer -->
 					<div id="awea_modal_header_expansion" class="awea-feature-drawer">
 						<div class="awea-feature-drawer-head">
-							<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+							<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
 							<strong><?php esc_html_e( 'Header Physics & Docking', 'awesome-widgets-elementor' ); ?></strong>
 						</div>
 						<div class="awea-toggles-list">
 							<label class="awea-toggle-row">
-								<input type="checkbox" name="awea_header_sticky" value="1" />
+								<input type="checkbox" id="awea_header_sticky" name="awea_header_sticky" value="1" />
 								<div class="awea-toggle-switch"></div>
 								<div class="awea-toggle-label">
 									<strong><?php esc_html_e( 'Sticky Header Docking', 'awesome-widgets-elementor' ); ?></strong>
@@ -765,7 +1144,7 @@ class AWEA_Header_Footer {
 								</div>
 							</label>
 							<label class="awea-toggle-row">
-								<input type="checkbox" name="awea_header_shrink" value="1" />
+								<input type="checkbox" id="awea_header_shrink" name="awea_header_shrink" value="1" />
 								<div class="awea-toggle-switch"></div>
 								<div class="awea-toggle-label">
 									<strong><?php esc_html_e( 'Smooth Shrink Animation', 'awesome-widgets-elementor' ); ?></strong>
@@ -775,16 +1154,19 @@ class AWEA_Header_Footer {
 						</div>
 					</div>
 
-					<!-- Footer Actions -->
+					<!-- Footer Actions (Dual Save vs Open Canvas) -->
 					<div class="awea-studio-footer">
 						<div class="awea-footer-meta">
 							<span class="awea-kbd-badge"><kbd>&crarr;</kbd> <?php esc_html_e( 'to confirm', 'awesome-widgets-elementor' ); ?></span>
 						</div>
 						<div class="awea-action-buttons">
 							<button type="button" onclick="aweaCloseQuickModal()" class="awea-btn-dismiss"><?php esc_html_e( 'Cancel', 'awesome-widgets-elementor' ); ?></button>
-							<button type="submit" class="awea-btn-launch">
+							<button type="button" onclick="aweaSubmitQuickModal('save')" class="awea-btn-secondary-save">
+								<?php esc_html_e( 'Save Only', 'awesome-widgets-elementor' ); ?>
+							</button>
+							<button type="button" onclick="aweaSubmitQuickModal('canvas')" class="awea-btn-launch">
 								<?php esc_html_e( 'Create & Open Canvas', 'awesome-widgets-elementor' ); ?>
-								<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+								<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
 							</button>
 						</div>
 					</div>
@@ -1035,7 +1417,7 @@ class AWEA_Header_Footer {
 			}
 			.awea-kbd-hint {
 				position: absolute;
-				right: 12px;
+				inset-inline-end: 12px;
 				top: 50%;
 				transform: translateY(-50%);
 				pointer-events: none;
@@ -1117,7 +1499,7 @@ class AWEA_Header_Footer {
 				border-radius: 50%;
 				background: #ffffff;
 				top: 3px;
-				left: 3px;
+				inset-inline-start: 3px;
 				transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 				box-shadow: 0 1px 3px rgba(0,0,0,0.15);
 			}
@@ -1126,6 +1508,9 @@ class AWEA_Header_Footer {
 			}
 			.awea-toggle-row input:checked + .awea-toggle-switch::after {
 				transform: translateX(16px);
+			}
+			[dir="rtl"] .awea-toggle-row input:checked + .awea-toggle-switch::after {
+				transform: translateX(-16px);
 			}
 			.awea-toggle-label {
 				display: flex;
@@ -1146,7 +1531,7 @@ class AWEA_Header_Footer {
 				word-break: break-word;
 			}
 
-			/* Footer Controls (Zero Hover Lift) */
+			/* Footer Controls */
 			.awea-studio-footer {
 				display: flex;
 				justify-content: space-between;
@@ -1166,6 +1551,7 @@ class AWEA_Header_Footer {
 				display: flex;
 				gap: 10px;
 				box-sizing: border-box;
+				align-items: center;
 			}
 			.awea-btn-dismiss {
 				background: transparent;
@@ -1184,6 +1570,23 @@ class AWEA_Header_Footer {
 				border-color: #cbd5e1;
 				color: #0f172a;
 			}
+			.awea-btn-secondary-save {
+				background: #f1f5f9;
+				border: 1px solid #cbd5e1;
+				color: #0f172a;
+				padding: 11px 18px;
+				border-radius: 12px;
+				font-size: 13.5px;
+				font-weight: 700;
+				cursor: pointer;
+				transition: background 0.2s ease, border-color 0.2s ease;
+				outline: none;
+				line-height: 1.2;
+			}
+			.awea-btn-secondary-save:hover {
+				background: #e2e8f0;
+				border-color: #94a3b8;
+			}
 			.awea-btn-launch {
 				background: #4f46e5;
 				border: none;
@@ -1197,7 +1600,6 @@ class AWEA_Header_Footer {
 				gap: 8px;
 				cursor: pointer;
 				box-shadow: 0 4px 16px rgba(79, 70, 229, 0.3);
-				transform: none;
 				transition: background 0.25s ease, box-shadow 0.25s ease;
 				outline: none;
 				line-height: 1.2;
@@ -1206,12 +1608,9 @@ class AWEA_Header_Footer {
 				width: 16px;
 				height: 16px;
 				display: block;
-				transform: none;
-				transition: none;
 			}
 			.awea-btn-launch:hover {
 				background: #4338ca;
-				transform: none;
 				box-shadow: 0 6px 20px rgba(79, 70, 229, 0.4);
 			}
 
@@ -1233,6 +1632,7 @@ class AWEA_Header_Footer {
 					flex-direction: column;
 				}
 				.awea-btn-dismiss,
+				.awea-btn-secondary-save,
 				.awea-btn-launch {
 					width: 100%;
 					justify-content: center;
@@ -1240,13 +1640,52 @@ class AWEA_Header_Footer {
 			}
 		</style>
 
-		<!-- Controller Logic -->
+		<!-- Controller Logic & AJAX Live Submission -->
 		<script>
-			function aweaOpenQuickModal() {
+			function aweaOpenQuickModal(editData) {
 				var modal = document.getElementById('awea-quick-create-modal');
 				if (modal) {
 					modal.style.display = 'flex';
+					
 					var titleInput = document.getElementById('awea_new_title');
+					var postIdInput = document.getElementById('awea_edit_post_id');
+					var modalTitle = document.getElementById('awea-modal-title');
+					var typeHeader = document.getElementById('awea_type_header');
+					var typeFooter = document.getElementById('awea_type_footer');
+					var conditionSelect = document.getElementById('awea_new_condition');
+					var visibilitySelect = document.getElementById('awea_new_visibility');
+					var stickyBox = document.getElementById('awea_header_sticky');
+					var shrinkBox = document.getElementById('awea_header_shrink');
+
+					if (editData && editData.id) {
+						if (modalTitle) modalTitle.textContent = '<?php esc_html_e( 'Edit Template Settings', 'awesome-widgets-elementor' ); ?>';
+						if (postIdInput) postIdInput.value = editData.id;
+						if (titleInput) titleInput.value = editData.title || '';
+						
+						if (editData.type === 'footer') {
+							if (typeFooter) typeFooter.checked = true;
+							aweaTypeSelected('footer');
+						} else {
+							if (typeHeader) typeHeader.checked = true;
+							aweaTypeSelected('header');
+						}
+
+						if (conditionSelect) conditionSelect.value = editData.condition || 'entire_site';
+						if (visibilitySelect) visibilitySelect.value = editData.visibility || 'all';
+						if (stickyBox) stickyBox.checked = (editData.sticky === '1');
+						if (shrinkBox) shrinkBox.checked = (editData.shrink === '1');
+					} else {
+						if (modalTitle) modalTitle.textContent = '<?php esc_html_e( 'Create New Template', 'awesome-widgets-elementor' ); ?>';
+						if (postIdInput) postIdInput.value = '';
+						if (titleInput) titleInput.value = '';
+						if (typeHeader) typeHeader.checked = true;
+						aweaTypeSelected('header');
+						if (conditionSelect) conditionSelect.value = 'entire_site';
+						if (visibilitySelect) visibilitySelect.value = 'all';
+						if (stickyBox) stickyBox.checked = false;
+						if (shrinkBox) shrinkBox.checked = false;
+					}
+
 					if (titleInput) {
 						setTimeout(function() {
 							titleInput.focus();
@@ -1269,17 +1708,69 @@ class AWEA_Header_Footer {
 				}
 			}
 
+			function aweaSubmitQuickModal(mode) {
+				var titleInput = document.getElementById('awea_new_title');
+				if (titleInput && !titleInput.value.trim()) {
+					titleInput.reportValidity();
+					return;
+				}
+
+				var postId = document.getElementById('awea_edit_post_id').value;
+				var title = titleInput.value;
+				var type = document.getElementById('awea_type_footer').checked ? 'footer' : 'header';
+				var condition = document.getElementById('awea_new_condition').value;
+				var visibility = document.getElementById('awea_new_visibility').value;
+				var sticky = document.getElementById('awea_header_sticky').checked ? '1' : '0';
+				var shrink = document.getElementById('awea_header_shrink').checked ? '1' : '0';
+
+				if (mode === 'save') {
+					// Process via AJAX for live updates without page reload
+					var data = new FormData();
+					data.append('action', 'awea_ajax_save_template');
+					data.append('security', '<?php echo esc_js( $save_ajax_nonce ); ?>');
+					data.append('post_id', postId);
+					data.append('title', title);
+					data.append('type', type);
+					data.append('condition', condition);
+					data.append('visibility', visibility);
+					data.append('sticky', sticky);
+					data.append('shrink', shrink);
+
+					fetch(ajaxurl, {
+						method: 'POST',
+						body: data
+					})
+					.then(function(res) { return res.json(); })
+					.then(function(res) {
+						if (res.success) {
+							aweaCloseQuickModal();
+							// Live update table row or reload table
+							window.location.reload();
+						} else {
+							alert(res.data && res.data.message ? res.data.message : 'Error saving template.');
+						}
+					})
+					.catch(function(err) {
+						alert('Network error while saving template.');
+					});
+				} else {
+					// Fallback to traditional form submission for Canvas editor redirection
+					var actionInput = document.getElementById('awea_form_action_input');
+					if (actionInput) actionInput.value = 'awea_quick_create_template';
+					var form = document.getElementById('awea_quick_modal_form');
+					if (form) form.submit();
+				}
+			}
+
 			document.addEventListener('DOMContentLoaded', function() {
-				// Intercept standard Add New buttons
 				var addBtns = document.querySelectorAll('.page-title-action, .awea-btn-action, a[href*="post-new.php?post_type=awea_hf_template"]');
 				addBtns.forEach(function(btn) {
 					btn.addEventListener('click', function(e) {
 						e.preventDefault();
-						aweaOpenQuickModal();
+						aweaOpenQuickModal(null);
 					});
 				});
 
-				// Dismiss on backdrop click
 				var modal = document.getElementById('awea-quick-create-modal');
 				if (modal) {
 					modal.addEventListener('click', function(e) {
@@ -1289,7 +1780,6 @@ class AWEA_Header_Footer {
 					});
 				}
 
-				// Keyboard controls
 				document.addEventListener('keydown', function(e) {
 					if (!modal || modal.style.display !== 'flex') return;
 
@@ -1297,8 +1787,7 @@ class AWEA_Header_Footer {
 						aweaCloseQuickModal();
 					}
 					if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
-						var form = document.getElementById('awea_quick_modal_form');
-						if (form) form.submit();
+						aweaSubmitQuickModal('save');
 					}
 				});
 			});
@@ -1307,7 +1796,7 @@ class AWEA_Header_Footer {
 	}
 
 	/**
-	 * Handle Quick-Create Form Submission and Redirect to Elementor Editor.
+	 * Handle Quick-Create & Quick-Edit Form Submission and Redirect.
 	 *
 	 * @return void
 	 */
@@ -1324,42 +1813,55 @@ class AWEA_Header_Footer {
 			wp_die( esc_html__( 'Unauthorized access.', 'awesome-widgets-elementor' ) );
 		}
 
-		$title      = ! empty( $_POST['awea_new_title'] ) ? sanitize_text_field( $_POST['awea_new_title'] ) : esc_html__( 'New Template', 'awesome-widgets-elementor' );
-		$type       = ! empty( $_POST['awea_new_type'] ) ? sanitize_key( $_POST['awea_new_type'] ) : 'header';
-		$condition  = ! empty( $_POST['awea_new_condition'] ) ? sanitize_key( $_POST['awea_new_condition'] ) : 'entire_site';
-		$visibility = ! empty( $_POST['awea_new_visibility'] ) ? sanitize_key( $_POST['awea_new_visibility'] ) : 'all';
+		$edit_post_id = isset( $_POST['awea_edit_post_id'] ) ? absint( $_POST['awea_edit_post_id'] ) : 0;
+		$title        = ! empty( $_POST['awea_new_title'] ) ? sanitize_text_field( $_POST['awea_new_title'] ) : esc_html__( 'New Template', 'awesome-widgets-elementor' );
+		$type         = ! empty( $_POST['awea_new_type'] ) ? sanitize_key( $_POST['awea_new_type'] ) : 'header';
+		$condition    = ! empty( $_POST['awea_new_condition'] ) ? sanitize_key( $_POST['awea_new_condition'] ) : 'entire_site';
+		$visibility   = ! empty( $_POST['awea_new_visibility'] ) ? sanitize_key( $_POST['awea_new_visibility'] ) : 'all';
 
-		$post_id = wp_insert_post(
-			array(
-				'post_title'  => $title,
-				'post_type'   => self::POST_TYPE,
-				'post_status' => 'publish',
-			)
-		);
+		if ( $edit_post_id && self::POST_TYPE === get_post_type( $edit_post_id ) ) {
+			$post_id = $edit_post_id;
+			wp_update_post(
+				array(
+					'ID'         => $post_id,
+					'post_title' => $title,
+				)
+			);
+		} else {
+			$post_id = wp_insert_post(
+				array(
+					'post_title'  => $title,
+					'post_type'   => self::POST_TYPE,
+					'post_status' => 'publish',
+				)
+			);
 
-		if ( is_wp_error( $post_id ) ) {
-			wp_die( esc_html( $post_id->get_error_message() ) );
+			if ( is_wp_error( $post_id ) ) {
+				wp_die( esc_html( $post_id->get_error_message() ) );
+			}
+
+			// Prime Elementor Canvas Mode on creation.
+			update_post_meta( $post_id, '_elementor_edit_mode', 'builder' );
+			update_post_meta( $post_id, '_wp_page_template', 'elementor_canvas' );
 		}
 
-		// Core Meta
+		// Core Meta.
 		update_post_meta( $post_id, '_awea_hf_type', $type );
 		update_post_meta( $post_id, '_awea_hf_condition', $condition );
 		update_post_meta( $post_id, '_awea_hf_visibility', $visibility );
 
-		// Header Physics Settings
+		// Header Physics Settings.
 		update_post_meta( $post_id, '_awea_header_sticky', isset( $_POST['awea_header_sticky'] ) ? '1' : '0' );
 		update_post_meta( $post_id, '_awea_header_shrink', isset( $_POST['awea_header_shrink'] ) ? '1' : '0' );
 
-		// Prime Elementor Canvas Mode
-		update_post_meta( $post_id, '_elementor_edit_mode', 'builder' );
-		update_post_meta( $post_id, '_wp_page_template', 'elementor_canvas' );
+		// Flush resolution cache.
+		$this->flush_resolution_cache();
 
-		// Flush rewrites once for the new post
+		// Flush rewrites once.
 		flush_rewrite_rules( false );
 
-		// Direct redirect to Elementor Editor
-		$elementor_url = admin_url( 'post.php?post=' . $post_id . '&action=elementor' );
-		wp_safe_redirect( $elementor_url );
+		$redirect_url = admin_url( 'post.php?post=' . $post_id . '&action=elementor' );
+		wp_safe_redirect( $redirect_url );
 		exit;
 	}
 }

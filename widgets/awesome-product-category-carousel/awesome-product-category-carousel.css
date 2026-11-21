@@ -1,26 +1,26 @@
 /* ==========================================================================
-   Awesome Product Category Carousel Widget
+   Awesome Product Category Carousel Widget (v2.0.0)
    ========================================================================== */
 
-.awea-product-category-carousel-wrap {
+.awea_product_cat_carousel_wrap {
 	width: 100%;
 	position: relative;
 	box-sizing: border-box;
 }
 
-.awea-product-category-carousel-wrap *,
-.awea-product-category-carousel-wrap *::before,
-.awea-product-category-carousel-wrap *::after {
+.awea_product_cat_carousel_wrap *,
+.awea_product_cat_carousel_wrap *::before,
+.awea_product_cat_carousel_wrap *::after {
 	box-sizing: border-box;
 }
 
-.awea-product-category-carousel {
+.awea_product_cat_carousel {
 	width: 100%;
 	position: relative;
 }
 
 /* Category Card Shell */
-.awea-product-category {
+.awea_product_cat_carousel_card {
 	position: relative;
 	width: 100%;
 	aspect-ratio: 4 / 5;
@@ -31,26 +31,28 @@
 	transition:
 		background-color 0.25s ease,
 		border-color 0.25s ease,
-		box-shadow 0.25s ease;
+		box-shadow 0.25s ease,
+		transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.awea-product-category:hover {
+.awea_product_cat_carousel_card:hover {
 	border-color: var(--e-global-color-primary, #4f46e5);
+	transform: translateY(-4px);
 }
 
 /* Thumbnail Image Canvas */
-.awea-product-category-img-link {
+.awea_product_cat_carousel_img_link {
 	display: block;
 	width: 100%;
 	height: 100%;
 }
 
-.awea-product-category-img-link:focus-visible {
+.awea_product_cat_carousel_img_link:focus-visible {
 	outline: 2px solid var(--e-global-color-primary, #4f46e5);
 	outline-offset: -2px;
 }
 
-.awea-product-category-img-link img {
+.awea_product_cat_carousel_img_link img {
 	width: 100%;
 	height: 100%;
 	object-fit: cover;
@@ -58,12 +60,12 @@
 	transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.awea-product-category:hover .awea-product-category-img-link img {
+.awea_product_cat_carousel_card:hover .awea_product_cat_carousel_img_link img {
 	transform: scale(1.03);
 }
 
 /* Frosted Floating Info Dock */
-.awea-product-category-content {
+.awea_product_cat_carousel_content {
 	position: absolute;
 	inset-inline-start: 12px;
 	inset-inline-end: 12px;
@@ -82,7 +84,7 @@
 	transition: background-color 0.3s ease;
 }
 
-.awea-product-category-link {
+.awea_product_cat_carousel_link {
 	text-decoration: none;
 	font-size: 1.05rem;
 	font-weight: 800;
@@ -93,17 +95,17 @@
 	word-break: break-word;
 }
 
-.awea-product-category-link:focus-visible {
+.awea_product_cat_carousel_link:focus-visible {
 	outline: 2px solid #ffffff;
 	outline-offset: 2px;
 	border-radius: 4px;
 }
 
-.awea-product-category-link:hover {
+.awea_product_cat_carousel_link:hover {
 	color: var(--e-global-color-accent, #38bdf8);
 }
 
-.awea-category-count {
+.awea_product_cat_carousel_count {
 	font-size: 0.88rem;
 	font-weight: 700;
 	color: #94a3b8;
@@ -112,16 +114,16 @@
 }
 
 /* Owl Carousel Navigation & Pagination Dots */
-.awea-product-category-carousel.owl-carousel .owl-stage-outer {
+.awea_product_cat_carousel.owl-carousel .owl-stage-outer {
 	padding: 8px 0;
 }
 
-.awea-product-category-carousel .owl-nav {
+.awea_product_cat_carousel .owl-nav {
 	position: static;
 }
 
-.awea-product-category-carousel .owl-nav button.owl-prev,
-.awea-product-category-carousel .owl-nav button.owl-next {
+.awea_product_cat_carousel .owl-nav button.owl-prev,
+.awea_product_cat_carousel .owl-nav button.owl-next {
 	position: absolute;
 	top: 50%;
 	transform: translateY(-50%);
@@ -133,15 +135,15 @@
 	outline: none;
 }
 
-.awea-product-category-carousel .owl-nav button.owl-prev {
+.awea_product_cat_carousel .owl-nav button.owl-prev {
 	inset-inline-start: -20px;
 }
 
-.awea-product-category-carousel .owl-nav button.owl-next {
+.awea_product_cat_carousel .owl-nav button.owl-next {
 	inset-inline-end: -20px;
 }
 
-.awea-carousel-arrow-border {
+.awea_product_cat_carousel_arrow_border {
 	width: 42px;
 	height: 42px;
 	border-radius: 50%;
@@ -158,26 +160,26 @@
 		box-shadow 0.25s ease;
 }
 
-.awea-carousel-arrow-border:focus-visible {
+.awea_product_cat_carousel_arrow_border:focus-visible {
 	outline: 2px solid var(--e-global-color-primary, #4f46e5);
 	outline-offset: 2px;
 }
 
-.awea-carousel-arrow-border:hover,
-.awea-carousel-arrow-border:focus-visible {
+.awea_product_cat_carousel_arrow_border:hover,
+.awea_product_cat_carousel_arrow_border:focus-visible {
 	background-color: var(--e-global-color-primary, #4f46e5);
 	border-color: var(--e-global-color-primary, #4f46e5);
 	color: #ffffff;
 }
 
-.awea-product-category-carousel .owl-dots {
+.awea_product_cat_carousel .owl-dots {
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	margin-top: 24px;
 }
 
-.awea-product-category-carousel .owl-dots button.owl-dot {
+.awea_product_cat_carousel .owl-dots button.owl-dot {
 	width: 8px;
 	height: 8px;
 	border-radius: 50%;
@@ -190,49 +192,49 @@
 	transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
-.awea-product-category-carousel .owl-dots button.owl-dot:focus-visible {
+.awea_product_cat_carousel .owl-dots button.owl-dot:focus-visible {
 	outline: 2px solid var(--e-global-color-primary, #4f46e5);
 	outline-offset: 2px;
 }
 
-.awea-product-category-carousel .owl-dots button.owl-dot.active {
+.awea_product_cat_carousel .owl-dots button.owl-dot.active {
 	background-color: var(--e-global-color-primary, #4f46e5);
 	transform: scale(1.25);
 }
 
 /* Accessibility & Responsive */
 @media (prefers-reduced-motion: reduce) {
-	.awea-product-category,
-	.awea-product-category-img-link img,
-	.awea-carousel-arrow-border,
-	.awea-product-category-carousel .owl-dots button.owl-dot {
+	.awea_product_cat_carousel_card,
+	.awea_product_cat_carousel_img_link img,
+	.awea_product_cat_carousel_arrow_border,
+	.awea_product_cat_carousel .owl-dots button.owl-dot {
 		transition: none !important;
 		transform: none !important;
 	}
 }
 
 @media (max-width: 768px) {
-	.awea-product-category-carousel .owl-nav button.owl-prev {
+	.awea_product_cat_carousel .owl-nav button.owl-prev {
 		inset-inline-start: -6px;
 	}
-	.awea-product-category-carousel .owl-nav button.owl-next {
+	.awea_product_cat_carousel .owl-nav button.owl-next {
 		inset-inline-end: -6px;
 	}
-	.awea-carousel-arrow-border {
+	.awea_product_cat_carousel_arrow_border {
 		width: 36px;
 		height: 36px;
 	}
-	.awea-product-category {
+	.awea_product_cat_carousel_card {
 		border-radius: 18px;
 	}
-	.awea-product-category-content {
+	.awea_product_cat_carousel_content {
 		inset-inline-start: 8px;
 		inset-inline-end: 8px;
 		bottom: 8px;
 		padding: 10px 14px;
 		border-radius: 12px;
 	}
-	.awea-product-category-link {
+	.awea_product_cat_carousel_link {
 		font-size: 0.95rem;
 	}
 }
