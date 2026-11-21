@@ -137,7 +137,7 @@ class Widget_Awesome_Product_Grid extends Widget_Base {
 		$this->add_control(
 			'awea_product_orderby',
 			[
-				'label'     => esc_html__( 'Order By', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Sort', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::SELECT,
 				'default'   => 'date',
 				'options'   => [
@@ -153,7 +153,7 @@ class Widget_Awesome_Product_Grid extends Widget_Base {
 		$this->add_control(
 			'awea_product_order',
 			[
-				'label'     => esc_html__( 'Direction', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Order', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::SELECT,
 				'default'   => 'DESC',
 				'options'   => [
@@ -180,7 +180,7 @@ class Widget_Awesome_Product_Grid extends Widget_Base {
 		$this->add_control(
 			'awea_show_sale_badge',
 			[
-				'label'        => esc_html__( 'Sale Badge', 'awesome-widgets-elementor' ),
+				'label'        => esc_html__( 'Badge', 'awesome-widgets-elementor' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'label_on'     => esc_html__( 'Yes', 'awesome-widgets-elementor' ),
 				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
@@ -204,7 +204,7 @@ class Widget_Awesome_Product_Grid extends Widget_Base {
 		$this->add_control(
 			'awea_title_tag',
 			[
-				'label'     => esc_html__( 'Title Tag', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Tag', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::SELECT,
 				'default'   => 'h3',
 				'options'   => [
@@ -318,6 +318,7 @@ class Widget_Awesome_Product_Grid extends Widget_Base {
 			Group_Control_Border::get_type(),
 			[
 				'name'           => 'awea_card_border',
+				'label'          => esc_html__( 'Border', 'awesome-widgets-elementor' ),
 				'selector'       => '{{WRAPPER}} .awea-card',
 				'fields_options' => [
 					'border' => [ 'default' => 'solid' ],
@@ -339,6 +340,7 @@ class Widget_Awesome_Product_Grid extends Widget_Base {
 			Group_Control_Box_Shadow::get_type(),
 			[
 				'name'     => 'awea_card_shadow',
+				'label'    => esc_html__( 'Shadow', 'awesome-widgets-elementor' ),
 				'selector' => '{{WRAPPER}} .awea-card',
 			]
 		);
@@ -365,7 +367,7 @@ class Widget_Awesome_Product_Grid extends Widget_Base {
 		$this->add_control(
 			'awea_card_border_hover',
 			[
-				'label'     => esc_html__( 'Border Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Border', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [
 					'default' => Global_Colors::COLOR_PRIMARY,
@@ -380,6 +382,7 @@ class Widget_Awesome_Product_Grid extends Widget_Base {
 			Group_Control_Box_Shadow::get_type(),
 			[
 				'name'     => 'awea_card_shadow_hover',
+				'label'    => esc_html__( 'Shadow', 'awesome-widgets-elementor' ),
 				'selector' => '{{WRAPPER}} .awea-card:hover',
 			]
 		);
@@ -427,7 +430,7 @@ class Widget_Awesome_Product_Grid extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_beam_speed',
 			[
-				'label'      => esc_html__( 'Speed (s)', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Speed', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 's' ],
 				'range'      => [ 's' => [ 'min' => 1, 'max' => 8, 'step' => 0.5 ] ],
@@ -442,12 +445,12 @@ class Widget_Awesome_Product_Grid extends Widget_Base {
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   STYLE: 2. PHOTO
+		   STYLE: 2. IMAGE
 		   ========================================================================== */
 		$this->start_controls_section(
 			'awea_style_image',
 			[
-				'label' => esc_html__( 'Photo', 'awesome-widgets-elementor' ),
+				'label' => esc_html__( 'Image', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -524,6 +527,7 @@ class Widget_Awesome_Product_Grid extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'awea_sale_typo',
+				'label'    => esc_html__( 'Typography', 'awesome-widgets-elementor' ),
 				'selector' => '{{WRAPPER}} .awea-badge-sale',
 				'global'   => [
 					'default' => Global_Typography::TYPOGRAPHY_SECONDARY,
@@ -534,12 +538,12 @@ class Widget_Awesome_Product_Grid extends Widget_Base {
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   STYLE: 4. TEXT
+		   STYLE: 4. TITLE
 		   ========================================================================== */
 		$this->start_controls_section(
 			'awea_style_text',
 			[
-				'label' => esc_html__( 'Text', 'awesome-widgets-elementor' ),
+				'label' => esc_html__( 'Title', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -573,6 +577,7 @@ class Widget_Awesome_Product_Grid extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'      => 'awea_brand_typo',
+				'label'     => esc_html__( 'Typography', 'awesome-widgets-elementor' ),
 				'selector'  => '{{WRAPPER}} .awea-brand',
 				'global'    => [
 					'default' => Global_Typography::TYPOGRAPHY_SECONDARY,
@@ -638,6 +643,7 @@ class Widget_Awesome_Product_Grid extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'awea_title_typo',
+				'label'    => esc_html__( 'Typography', 'awesome-widgets-elementor' ),
 				'selector' => '{{WRAPPER}} .awea-product-name a',
 				'global'   => [
 					'default' => Global_Typography::TYPOGRAPHY_PRIMARY,
@@ -648,12 +654,12 @@ class Widget_Awesome_Product_Grid extends Widget_Base {
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   STYLE: 5. BUTTON
+		   STYLE: 5. PRICE
 		   ========================================================================== */
 		$this->start_controls_section(
 			'awea_style_button',
 			[
-				'label' => esc_html__( 'Button', 'awesome-widgets-elementor' ),
+				'label' => esc_html__( 'Price', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -661,7 +667,7 @@ class Widget_Awesome_Product_Grid extends Widget_Base {
 		$this->add_control(
 			'awea_current_price_color',
 			[
-				'label'     => esc_html__( 'Price Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [
 					'default' => Global_Colors::COLOR_PRIMARY,
@@ -676,6 +682,7 @@ class Widget_Awesome_Product_Grid extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'awea_price_typo',
+				'label'    => esc_html__( 'Typography', 'awesome-widgets-elementor' ),
 				'selector' => '{{WRAPPER}} .awea-current-price',
 				'global'   => [
 					'default' => Global_Typography::TYPOGRAPHY_PRIMARY,
@@ -781,15 +788,15 @@ class Widget_Awesome_Product_Grid extends Widget_Base {
 			$args['orderby']        = $settings['awea_product_orderby'] ?? 'date';
 
 			if ( 'category' === $query_type && ! empty( $settings['awea_product_categories'] ) ) {
-    // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
-    $args['tax_query'] = [
-        [
-            'taxonomy' => 'product_cat',
-            'field'    => 'slug',
-            'terms'    => $settings['awea_product_categories'],
-        ],
-    ];
-}
+				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
+				$args['tax_query'] = [
+					[
+						'taxonomy' => 'product_cat',
+						'field'    => 'slug',
+						'terms'    => $settings['awea_product_categories'],
+					],
+				];
+			}
 		}
 
 		$query = new \WP_Query( $args );

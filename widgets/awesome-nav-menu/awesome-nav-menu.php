@@ -144,7 +144,7 @@ class Widget_Awesome_Nav_Menu extends Widget_Base {
 		$this->add_control(
 			'awea_selected_menu',
 			[
-				'label'       => esc_html__( 'Select Menu', 'awesome-widgets-elementor' ),
+				'label'       => esc_html__( 'Menu', 'awesome-widgets-elementor' ),
 				'type'        => Controls_Manager::SELECT,
 				'options'     => $menu_options,
 				'default'     => ! empty( $menu_options ) ? array_key_first( $menu_options ) : '',
@@ -152,10 +152,36 @@ class Widget_Awesome_Nav_Menu extends Widget_Base {
 			]
 		);
 
+		$this->add_control(
+			'awea_show_submenu_indicator',
+			[
+				'label'        => esc_html__( 'Indicator', 'awesome-widgets-elementor' ),
+				'type'         => Controls_Manager::SWITCHER,
+				'label_on'     => esc_html__( 'Yes', 'awesome-widgets-elementor' ),
+				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
+				'return_value' => 'yes',
+				'default'      => 'yes',
+				'prefix_class' => 'awea-has-indicator-',
+			]
+		);
+
+		$this->end_controls_section();
+
+		/* ==========================================================================
+		   CONTENT TAB: 2. LAYOUT
+		   ========================================================================== */
+		$this->start_controls_section(
+			'awea_section_nav_layout',
+			[
+				'label' => esc_html__( 'Layout', 'awesome-widgets-elementor' ),
+				'tab'   => Controls_Manager::TAB_CONTENT,
+			]
+		);
+
 		$this->add_responsive_control(
 			'awea_menu_layout',
 			[
-				'label'                => esc_html__( 'Layout', 'awesome-widgets-elementor' ),
+				'label'                => esc_html__( 'Direction', 'awesome-widgets-elementor' ),
 				'type'                 => Controls_Manager::CHOOSE,
 				'options'              => [
 					'row'    => [
@@ -209,28 +235,15 @@ class Widget_Awesome_Nav_Menu extends Widget_Base {
 			]
 		);
 
-		$this->add_control(
-			'awea_show_submenu_indicator',
-			[
-				'label'        => esc_html__( 'Submenu Indicator', 'awesome-widgets-elementor' ),
-				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => esc_html__( 'Yes', 'awesome-widgets-elementor' ),
-				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
-				'return_value' => 'yes',
-				'default'      => 'yes',
-				'prefix_class' => 'awea-has-indicator-',
-			]
-		);
-
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   CONTENT TAB: 2. MOBILE TOGGLE
+		   CONTENT TAB: 3. MOBILE
 		   ========================================================================== */
 		$this->start_controls_section(
 			'awea_section_mobile_menu',
 			[
-				'label' => esc_html__( 'Mobile Toggle', 'awesome-widgets-elementor' ),
+				'label' => esc_html__( 'Mobile', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
 			]
 		);
@@ -243,8 +256,8 @@ class Widget_Awesome_Nav_Menu extends Widget_Base {
 				'default'      => 'mobile',
 				'options'      => [
 					'none'   => esc_html__( 'None', 'awesome-widgets-elementor' ),
-					'tablet' => esc_html__( 'Tablet (991px)', 'awesome-widgets-elementor' ),
-					'mobile' => esc_html__( 'Mobile (767px)', 'awesome-widgets-elementor' ),
+					'tablet' => esc_html__( 'Tablet', 'awesome-widgets-elementor' ),
+					'mobile' => esc_html__( 'Mobile', 'awesome-widgets-elementor' ),
 				],
 				'prefix_class' => 'awea-nav-breakpoint-',
 			]
@@ -253,7 +266,7 @@ class Widget_Awesome_Nav_Menu extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_mobile_toggle_align',
 			[
-				'label'     => esc_html__( 'Toggle Alignment', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Alignment', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::CHOOSE,
 				'options'   => [
 					'flex-start' => [
@@ -282,12 +295,12 @@ class Widget_Awesome_Nav_Menu extends Widget_Base {
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   STYLE TAB: 1. MAIN MENU
+		   STYLE TAB: 1. MENU
 		   ========================================================================== */
 		$this->start_controls_section(
 			'awea_section_style_main_items',
 			[
-				'label' => esc_html__( 'Main Menu', 'awesome-widgets-elementor' ),
+				'label' => esc_html__( 'Menu', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -296,6 +309,7 @@ class Widget_Awesome_Nav_Menu extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'awea_menu_typography',
+				'label'    => esc_html__( 'Typography', 'awesome-widgets-elementor' ),
 				'global'   => [ 'default' => Global_Typography::TYPOGRAPHY_PRIMARY ],
 				'selector' => '{{WRAPPER}} .awea-nav-menu-list > li > a',
 			]
@@ -304,7 +318,7 @@ class Widget_Awesome_Nav_Menu extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_menu_item_spacing',
 			[
-				'label'      => esc_html__( 'Item Spacing', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Gap', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px', 'em' ],
 				'range'      => [
@@ -343,7 +357,7 @@ class Widget_Awesome_Nav_Menu extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_item_radius',
 			[
-				'label'      => esc_html__( 'Border Radius', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Radius', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', 'rem', '%' ],
 				'selectors'  => [
@@ -451,12 +465,12 @@ class Widget_Awesome_Nav_Menu extends Widget_Base {
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   STYLE TAB: 2. SUBMENU ICON (CONDITIONAL)
+		   STYLE TAB: 2. INDICATOR
 		   ========================================================================== */
 		$this->start_controls_section(
 			'awea_section_style_indicator',
 			[
-				'label'     => esc_html__( 'Submenu Indicator', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Indicator', 'awesome-widgets-elementor' ),
 				'tab'       => Controls_Manager::TAB_STYLE,
 				'condition' => [
 					'awea_show_submenu_indicator' => 'yes',
@@ -484,7 +498,7 @@ class Widget_Awesome_Nav_Menu extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_indicator_gap',
 			[
-				'label'      => esc_html__( 'Spacing', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Gap', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [
@@ -511,7 +525,7 @@ class Widget_Awesome_Nav_Menu extends Widget_Base {
 		$this->add_control(
 			'awea_indicator_hover_color',
 			[
-				'label'     => esc_html__( 'Hover / Active Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Hover', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .awea-nav-menu-list li:hover > a .awea-sub-indicator, {{WRAPPER}} .awea-nav-menu-list li > a:focus-visible .awea-sub-indicator, {{WRAPPER}} .awea-nav-menu-list li.current-menu-item > a .awea-sub-indicator, {{WRAPPER}} .awea-nav-menu-list li.current-menu-ancestor > a .awea-sub-indicator' => 'color: {{VALUE}};',
@@ -535,7 +549,7 @@ class Widget_Awesome_Nav_Menu extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_submenu_width',
 			[
-				'label'      => esc_html__( 'Min Width', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Width', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px', 'rem' ],
 				'range'      => [
@@ -605,7 +619,7 @@ class Widget_Awesome_Nav_Menu extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_submenu_radius',
 			[
-				'label'      => esc_html__( 'Border Radius', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Radius', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', 'rem' ],
 				'default'    => [
@@ -626,6 +640,7 @@ class Widget_Awesome_Nav_Menu extends Widget_Base {
 			Group_Control_Border::get_type(),
 			[
 				'name'     => 'awea_submenu_border',
+				'label'    => esc_html__( 'Border', 'awesome-widgets-elementor' ),
 				'selector' => '{{WRAPPER}} .awea-nav-menu-list ul.sub-menu',
 			]
 		);
@@ -634,16 +649,21 @@ class Widget_Awesome_Nav_Menu extends Widget_Base {
 			Group_Control_Box_Shadow::get_type(),
 			[
 				'name'     => 'awea_submenu_shadow',
+				'label'    => esc_html__( 'Shadow', 'awesome-widgets-elementor' ),
 				'selector' => '{{WRAPPER}} .awea-nav-menu-list ul.sub-menu',
 			]
 		);
 
-		$this->add_control(
-			'awea_submenu_items_heading',
+		$this->end_controls_section();
+
+		/* ==========================================================================
+		   STYLE TAB: 4. SUBMENU
+		   ========================================================================== */
+		$this->start_controls_section(
+			'awea_section_style_submenu_links',
 			[
-				'label'     => esc_html__( 'Dropdown Links', 'awesome-widgets-elementor' ),
-				'type'      => Controls_Manager::HEADING,
-				'separator' => 'before',
+				'label' => esc_html__( 'Submenu', 'awesome-widgets-elementor' ),
+				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
 
@@ -651,6 +671,7 @@ class Widget_Awesome_Nav_Menu extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'awea_submenu_typography',
+				'label'    => esc_html__( 'Typography', 'awesome-widgets-elementor' ),
 				'global'   => [ 'default' => Global_Typography::TYPOGRAPHY_TEXT ],
 				'selector' => '{{WRAPPER}} .awea-nav-menu-list ul.sub-menu li a',
 			]
@@ -679,7 +700,7 @@ class Widget_Awesome_Nav_Menu extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_subitem_radius',
 			[
-				'label'      => esc_html__( 'Border Radius', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Radius', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', 'rem' ],
 				'default'    => [
@@ -793,12 +814,12 @@ class Widget_Awesome_Nav_Menu extends Widget_Base {
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   STYLE TAB: 4. MOBILE TOGGLE (CONDITIONAL)
+		   STYLE TAB: 5. TOGGLE
 		   ========================================================================== */
 		$this->start_controls_section(
 			'awea_section_style_toggle',
 			[
-				'label'     => esc_html__( 'Mobile Toggle', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Toggle', 'awesome-widgets-elementor' ),
 				'tab'       => Controls_Manager::TAB_STYLE,
 				'condition' => [
 					'awea_enable_mobile_breakpoint!' => 'none',
@@ -809,7 +830,7 @@ class Widget_Awesome_Nav_Menu extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_toggle_box_size',
 			[
-				'label'      => esc_html__( 'Box Size', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Box', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [
@@ -825,7 +846,7 @@ class Widget_Awesome_Nav_Menu extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_toggle_icon_size',
 			[
-				'label'      => esc_html__( 'Icon Size', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Icon', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [
@@ -841,7 +862,7 @@ class Widget_Awesome_Nav_Menu extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_toggle_radius',
 			[
-				'label'      => esc_html__( 'Border Radius', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Radius', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'default'    => [
@@ -926,12 +947,12 @@ class Widget_Awesome_Nav_Menu extends Widget_Base {
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   STYLE TAB: 5. MOBILE DRAWER (CONDITIONAL)
+		   STYLE TAB: 6. DRAWER
 		   ========================================================================== */
 		$this->start_controls_section(
 			'awea_section_style_mobile_drawer',
 			[
-				'label'     => esc_html__( 'Mobile Drawer', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Drawer', 'awesome-widgets-elementor' ),
 				'tab'       => Controls_Manager::TAB_STYLE,
 				'condition' => [
 					'awea_enable_mobile_breakpoint!' => 'none',
@@ -990,7 +1011,7 @@ class Widget_Awesome_Nav_Menu extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_drawer_radius',
 			[
-				'label'      => esc_html__( 'Border Radius', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Radius', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', 'rem' ],
 				'default'    => [
@@ -1010,7 +1031,7 @@ class Widget_Awesome_Nav_Menu extends Widget_Base {
 		$this->add_control(
 			'awea_drawer_border_color',
 			[
-				'label'     => esc_html__( 'Border Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Border', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => 'rgba(15, 23, 42, 0.08)',
 				'selectors' => [

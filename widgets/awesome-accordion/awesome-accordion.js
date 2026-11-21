@@ -1,41 +1,71 @@
-(function ($) {
-    'use strict';
+(function () {
+	'use strict';
 
-    $(window).on('elementor/frontend/init', function () {
+	function awea_accordion_init(root) {
+		if (!root || root.dataset.aweaAccordionBound === '1') {
+			return;
+		}
+		root.dataset.aweaAccordionBound = '1';
 
-        // accordion Widget
-        elementorFrontend.hooks.addAction(
-            'frontend/element_ready/awesome-accordion.default',
-            function ($scope) {
+		var isMultiple = root.getAttribute('data-awea_accordion_multiple') === 'true';
+		var headers = root.querySelectorAll('.awea_accordion_header');
 
-                var $accordion = $scope.find('.awea-accordion');
+		headers.forEach(function (header) {
+			header.addEventListener('click', function () {
+				var item = header.closest('.awea_accordion_item');
+				var panel = item ? item.querySelector('.awea_accordion_collapse') : null;
+				var isActive = item.classList.contains('awea_accordion_is_active');
 
-                if (!$accordion.length) return;
+				if (isActive) {
+					item.classList.remove('awea_accordion_is_active');
+					header.setAttribute('aria-expanded', 'false');
+					if (panel) {
+						panel.setAttribute('aria-hidden', 'true');
+						panel.setAttribute('inert', '');
+					}
+				} else {
+					if (!isMultiple) {
+						root.querySelectorAll('.awea_accordion_item').forEach(function (other) {
+							other.classList.remove('awea_accordion_is_active');
+							var otherBtn = other.querySelector('.awea_accordion_header');
+							var otherPanel = other.querySelector('.awea_accordion_collapse');
+							if (otherBtn) {
+								otherBtn.setAttribute('aria-expanded', 'false');
+							}
+							if (otherPanel) {
+								otherPanel.setAttribute('aria-hidden', 'true');
+								otherPanel.setAttribute('inert', '');
+							}
+						});
+					}
+					item.classList.add('awea_accordion_is_active');
+					header.setAttribute('aria-expanded', 'true');
+					if (panel) {
+						panel.setAttribute('aria-hidden', 'false');
+						panel.removeAttribute('inert');
+					}
+				}
+			});
+		});
+	}
 
-                // Open first accordion item
-                $accordion.find('> li:eq(0) span').addClass('active').next().slideDown();
+	function awea_accordion_init_all() {
+		document.querySelectorAll('.awea_accordion_wrap').forEach(awea_accordion_init);
+	}
 
-                // Handle click
-                $accordion.find('span').on('click', function (e) {
-                    var $this = $(this);
-                    var dropDown = $this.closest('li').find('p');
+	if (document.readyState === 'loading') {
+		document.addEventListener('DOMContentLoaded', awea_accordion_init_all);
+	} else {
+		awea_accordion_init_all();
+	}
 
-                    // Close others
-                    $accordion.find('p').not(dropDown).slideUp();
-
-                    if ($this.hasClass('active')) {
-                        $this.removeClass('active');
-                    } else {
-                        $accordion.find('span.active').removeClass('active');
-                        $this.addClass('active');
-                    }
-
-                    dropDown.stop(true, true).slideToggle();
-                    e.preventDefault();
-                });
-            }
-        );
-
-    });
-
-})(jQuery);
+	if (window.elementorFrontend && window.elementorFrontend.hooks) {
+		window.elementorFrontend.hooks.addAction(
+			'frontend/element_ready/awesome-accordion.default',
+			function ($scope) {
+				var el = $scope && $scope[0] ? $scope[0].querySelector('.awea_accordion_wrap') : null;
+				awea_accordion_init(el);
+			}
+		);
+	}
+})();

@@ -75,7 +75,7 @@ class Widget_Awesome_Step_Flow extends Widget_Base {
 		$repeater->add_control(
 			'awea_badge',
 			[
-				'label'       => esc_html__( 'Step Badge', 'awesome-widgets-elementor' ),
+				'label'       => esc_html__( 'Badge', 'awesome-widgets-elementor' ),
 				'type'        => Controls_Manager::TEXT,
 				'default'     => '01',
 				'dynamic'     => [ 'active' => true ],
@@ -118,7 +118,7 @@ class Widget_Awesome_Step_Flow extends Widget_Base {
 		$this->add_control(
 			'awea_steps',
 			[
-				'label'       => esc_html__( 'Steps List', 'awesome-widgets-elementor' ),
+				'label'       => esc_html__( 'List', 'awesome-widgets-elementor' ),
 				'type'        => Controls_Manager::REPEATER,
 				'fields'      => $repeater->get_controls(),
 				'title_field' => '{{{ awea_badge }}} — {{{ awea_title }}}',
@@ -182,13 +182,13 @@ class Widget_Awesome_Step_Flow extends Widget_Base {
 		$this->add_control(
 			'awea_line_style',
 			[
-				'label'        => esc_html__( 'Connector Style', 'awesome-widgets-elementor' ),
+				'label'        => esc_html__( 'Connector', 'awesome-widgets-elementor' ),
 				'type'         => Controls_Manager::SELECT,
 				'default'      => 'beam',
 				'options'      => [
-					'beam'   => esc_html__( 'Flowing Beam', 'awesome-widgets-elementor' ),
-					'solid'  => esc_html__( 'Solid Line', 'awesome-widgets-elementor' ),
-					'dashed' => esc_html__( 'Dashed Line', 'awesome-widgets-elementor' ),
+					'beam'   => esc_html__( 'Beam', 'awesome-widgets-elementor' ),
+					'solid'  => esc_html__( 'Solid', 'awesome-widgets-elementor' ),
+					'dashed' => esc_html__( 'Dashed', 'awesome-widgets-elementor' ),
 					'none'   => esc_html__( 'None', 'awesome-widgets-elementor' ),
 				],
 				'prefix_class' => 'awea-sf-line-',
@@ -198,7 +198,7 @@ class Widget_Awesome_Step_Flow extends Widget_Base {
 		$this->add_control(
 			'awea_card_mode',
 			[
-				'label'        => esc_html__( 'Card Container', 'awesome-widgets-elementor' ),
+				'label'        => esc_html__( 'Container', 'awesome-widgets-elementor' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'label_on'     => esc_html__( 'Yes', 'awesome-widgets-elementor' ),
 				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
@@ -211,7 +211,7 @@ class Widget_Awesome_Step_Flow extends Widget_Base {
 		$this->add_control(
 			'awea_title_tag',
 			[
-				'label'   => esc_html__( 'Title HTML Tag', 'awesome-widgets-elementor' ),
+				'label'   => esc_html__( 'Tag', 'awesome-widgets-elementor' ),
 				'type'    => Controls_Manager::SELECT,
 				'default' => 'h3',
 				'options' => [
@@ -231,12 +231,12 @@ class Widget_Awesome_Step_Flow extends Widget_Base {
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   STYLE: 1. LAYOUT & CARD
+		   STYLE: 1. CARD
 		   ========================================================================== */
 		$this->start_controls_section(
 			'awea_style_layout',
 			[
-				'label' => esc_html__( 'Layout & Card', 'awesome-widgets-elementor' ),
+				'label' => esc_html__( 'Card', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -244,7 +244,7 @@ class Widget_Awesome_Step_Flow extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_max_width',
 			[
-				'label'      => esc_html__( 'Max Width', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Width', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px', '%', 'vw' ],
 				'range'      => [
@@ -261,7 +261,7 @@ class Widget_Awesome_Step_Flow extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_card_padding',
 			[
-				'label'      => esc_html__( 'Card Padding', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Padding', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', 'rem' ],
 				'default'    => [
@@ -282,7 +282,7 @@ class Widget_Awesome_Step_Flow extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_card_radius',
 			[
-				'label'      => esc_html__( 'Card Radius', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Radius', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'default'    => [
@@ -303,7 +303,7 @@ class Widget_Awesome_Step_Flow extends Widget_Base {
 		$this->add_control(
 			'awea_card_bg',
 			[
-				'label'     => esc_html__( 'Card Background', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Background', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#ffffff',
 				'condition' => [ 'awea_card_mode' => 'yes' ],
@@ -316,7 +316,7 @@ class Widget_Awesome_Step_Flow extends Widget_Base {
 		$this->add_control(
 			'awea_card_bg_hover',
 			[
-				'label'     => esc_html__( 'Card Hover Background', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Hover', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#f8fafc',
 				'condition' => [ 'awea_card_mode' => 'yes' ],
@@ -329,7 +329,7 @@ class Widget_Awesome_Step_Flow extends Widget_Base {
 		$this->add_control(
 			'awea_card_border',
 			[
-				'label'     => esc_html__( 'Card Border Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Border', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#e2e8f0',
 				'condition' => [ 'awea_card_mode' => 'yes' ],
@@ -342,7 +342,7 @@ class Widget_Awesome_Step_Flow extends Widget_Base {
 		$this->add_control(
 			'awea_card_border_hover',
 			[
-				'label'     => esc_html__( 'Card Hover Border', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Border Hover', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
 				'condition' => [ 'awea_card_mode' => 'yes' ],
@@ -356,6 +356,7 @@ class Widget_Awesome_Step_Flow extends Widget_Base {
 			Group_Control_Box_Shadow::get_type(),
 			[
 				'name'      => 'awea_card_shadow',
+				'label'     => esc_html__( 'Shadow', 'awesome-widgets-elementor' ),
 				'selector'  => '{{WRAPPER}}.awea-sf-card-yes .awea-sf-item',
 				'condition' => [ 'awea_card_mode' => 'yes' ],
 			]
@@ -364,12 +365,12 @@ class Widget_Awesome_Step_Flow extends Widget_Base {
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   STYLE: 2. LINE
+		   STYLE: 2. CONNECTOR
 		   ========================================================================== */
 		$this->start_controls_section(
 			'awea_style_line',
 			[
-				'label'     => esc_html__( 'Connector Line', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Connector', 'awesome-widgets-elementor' ),
 				'tab'       => Controls_Manager::TAB_STYLE,
 				'condition' => [ 'awea_line_style!' => 'none' ],
 			]
@@ -378,7 +379,7 @@ class Widget_Awesome_Step_Flow extends Widget_Base {
 		$this->add_control(
 			'awea_track_color',
 			[
-				'label'     => esc_html__( 'Line / Track Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#e2e8f0',
 				'selectors' => [
@@ -390,7 +391,7 @@ class Widget_Awesome_Step_Flow extends Widget_Base {
 		$this->add_control(
 			'awea_beam_color',
 			[
-				'label'     => esc_html__( 'Beam Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Beam', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
 				'condition' => [ 'awea_line_style' => 'beam' ],
@@ -417,7 +418,7 @@ class Widget_Awesome_Step_Flow extends Widget_Base {
 		$this->add_control(
 			'awea_beam_speed',
 			[
-				'label'      => esc_html__( 'Flow Duration (s)', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Speed', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 's' ],
 				'range'      => [ 's' => [ 'min' => 1, 'max' => 8, 'step' => 0.5 ] ],
@@ -432,12 +433,12 @@ class Widget_Awesome_Step_Flow extends Widget_Base {
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   STYLE: 3. ICON BOX & BADGE
+		   STYLE: 3. ICON
 		   ========================================================================== */
 		$this->start_controls_section(
 			'awea_style_icon',
 			[
-				'label' => esc_html__( 'Icon Box & Badge', 'awesome-widgets-elementor' ),
+				'label' => esc_html__( 'Icon', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -445,7 +446,7 @@ class Widget_Awesome_Step_Flow extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_box_size',
 			[
-				'label'      => esc_html__( 'Box Size', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Box', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [ 'px' => [ 'min' => 48, 'max' => 130 ] ],
@@ -460,7 +461,7 @@ class Widget_Awesome_Step_Flow extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_box_radius',
 			[
-				'label'      => esc_html__( 'Border Radius', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Radius', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'default'    => [
@@ -480,7 +481,7 @@ class Widget_Awesome_Step_Flow extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_icon_size',
 			[
-				'label'      => esc_html__( 'Icon Size', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Size', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [ 'px' => [ 'min' => 14, 'max' => 48 ] ],
@@ -506,8 +507,8 @@ class Widget_Awesome_Step_Flow extends Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
 				'selectors' => [
-					'{{WRAPPER}} .awea-sf-box i'     => 'color: {{VALUE}};',
-					'{{WRAPPER}} .awea-sf-box svg'   => 'fill: {{VALUE}};',
+					'{{WRAPPER}} .awea-sf-box i'   => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-sf-box svg' => 'fill: {{VALUE}};',
 					'{{WRAPPER}} .awea-sf-box'       => 'border-color: {{VALUE}};',
 				],
 			]
@@ -529,6 +530,7 @@ class Widget_Awesome_Step_Flow extends Widget_Base {
 			Group_Control_Border::get_type(),
 			[
 				'name'           => 'awea_box_border',
+				'label'          => esc_html__( 'Border', 'awesome-widgets-elementor' ),
 				'selector'       => '{{WRAPPER}} .awea-sf-box',
 				'fields_options' => [
 					'border' => [ 'default' => 'solid' ],
@@ -581,7 +583,7 @@ class Widget_Awesome_Step_Flow extends Widget_Base {
 		$this->add_control(
 			'awea_icon_border_hover',
 			[
-				'label'     => esc_html__( 'Border Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Border', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
 				'selectors' => [
@@ -596,7 +598,7 @@ class Widget_Awesome_Step_Flow extends Widget_Base {
 		$this->add_control(
 			'awea_badge_heading',
 			[
-				'label'     => esc_html__( 'Step Badge', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Badge', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::HEADING,
 				'separator' => 'before',
 			]
@@ -643,7 +645,7 @@ class Widget_Awesome_Step_Flow extends Widget_Base {
 		$this->add_control(
 			'awea_badge_bg_hover',
 			[
-				'label'     => esc_html__( 'Hover Background', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Hover', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
 				'selectors' => [
@@ -656,6 +658,7 @@ class Widget_Awesome_Step_Flow extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'awea_badge_typo',
+				'label'    => esc_html__( 'Typography', 'awesome-widgets-elementor' ),
 				'selector' => '{{WRAPPER}} .awea-sf-num',
 				'global'   => [ 'default' => Global_Typography::TYPOGRAPHY_SECONDARY ],
 			]
@@ -664,7 +667,7 @@ class Widget_Awesome_Step_Flow extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_badge_radius',
 			[
-				'label'      => esc_html__( 'Border Radius', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Radius', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'default'    => [
@@ -689,7 +692,7 @@ class Widget_Awesome_Step_Flow extends Widget_Base {
 		$this->start_controls_section(
 			'awea_style_text',
 			[
-				'label' => esc_html__( 'Typography', 'awesome-widgets-elementor' ),
+				'label' => esc_html__( 'Text', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -697,7 +700,7 @@ class Widget_Awesome_Step_Flow extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_text_space',
 			[
-				'label'      => esc_html__( 'Top Spacing', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Spacing', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [ 'px' => [ 'min' => 8, 'max' => 48 ] ],
@@ -732,7 +735,7 @@ class Widget_Awesome_Step_Flow extends Widget_Base {
 		$this->add_control(
 			'awea_title_hover',
 			[
-				'label'     => esc_html__( 'Hover Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Hover', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
 				'selectors' => [
@@ -745,6 +748,7 @@ class Widget_Awesome_Step_Flow extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'awea_title_typo',
+				'label'    => esc_html__( 'Typography', 'awesome-widgets-elementor' ),
 				'selector' => '{{WRAPPER}} .awea-sf-title',
 				'global'   => [ 'default' => Global_Typography::TYPOGRAPHY_PRIMARY ],
 			]
@@ -753,7 +757,7 @@ class Widget_Awesome_Step_Flow extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_title_space',
 			[
-				'label'      => esc_html__( 'Bottom Spacing', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Spacing', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [ 'px' => [ 'min' => 0, 'max' => 30 ] ],
@@ -789,6 +793,7 @@ class Widget_Awesome_Step_Flow extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'awea_desc_typo',
+				'label'    => esc_html__( 'Typography', 'awesome-widgets-elementor' ),
 				'selector' => '{{WRAPPER}} .awea-sf-desc',
 				'global'   => [ 'default' => Global_Typography::TYPOGRAPHY_TEXT ],
 			]

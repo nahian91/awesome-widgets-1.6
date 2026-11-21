@@ -1,15 +1,15 @@
 /* ==========================================================================
-   Awesome About Widget
+   Awesome About Widget (v2.0.0)
    ========================================================================== */
 
-.awea-about-grid {
-	--awea-about-primary: var(--e-global-color-primary, #4f46e5);
-	--awea-about-accent: var(--e-global-color-accent, #38bdf8);
-	--awea-about-heading: #0f172a;
-	--awea-about-text: #475569;
-	--awea-about-muted: #64748b;
-	--awea-phone-ico-color: var(--awea-about-primary);
-	--awea-phone-ico-bg: #f1f5f9;
+.awea_about_grid {
+	--awea_about_primary: var(--e-global-color-primary, #4f46e5);
+	--awea_about_accent: var(--e-global-color-accent, #38bdf8);
+	--awea_about_heading: #0f172a;
+	--awea_about_text: #475569;
+	--awea_about_muted: #64748b;
+	--awea_about_phone_ico_color: var(--awea_about_primary);
+	--awea_about_phone_ico_bg: #f1f5f9;
 
 	width: 100%;
 	display: grid;
@@ -19,78 +19,80 @@
 	box-sizing: border-box;
 }
 
-.awea-about-grid *,
-.awea-about-grid *::before,
-.awea-about-grid *::after {
+.awea_about_grid *,
+.awea_about_grid *::before,
+.awea_about_grid *::after {
 	box-sizing: border-box;
 }
 
 /* Media Right Alignment Swap */
-.awea-about-pos-right .awea-about-visual {
+.awea_about_pos_right .awea_about_visual {
 	order: 2;
 }
 
-.awea-about-pos-right .awea-about-content {
+.awea_about_pos_right .awea_about_content {
 	order: 1;
 }
 
-.awea-about-pos-right .awea-about-main-img {
-	margin-left: auto;
+.awea_about_pos_right .awea_about_main_img {
+	margin-inline-start: auto;
 }
 
-.awea-about-pos-right .awea-about-float-img {
-	right: auto;
-	left: 0;
+.awea_about_pos_right .awea_about_float_img {
+	inset-inline-end: auto;
+	inset-inline-start: 0;
 }
 
-.awea-about-pos-right .awea-about-badge {
-	left: auto;
-	right: -12px;
+.awea_about_pos_right .awea_about_badge {
+	inset-inline-start: auto;
+	inset-inline-end: -12px;
 }
 
 /* --------------------------------------------------------------------------
-1. Visual Column
+   1. Visual Column
    -------------------------------------------------------------------------- */
-.awea-about-visual {
+.awea_about_visual {
 	position: relative;
 	width: 100%;
 }
 
-.awea-about-main-img {
+.awea_about_main_img {
 	width: 92%;
 	aspect-ratio: 4 / 5;
 	border-radius: 64px 20px 20px 64px;
 	overflow: hidden;
 	background-color: #e2e8f0;
+	box-shadow: 0 20px 40px -15px rgba(15, 23, 42, 0.12);
 }
 
-.awea-about-main-img img {
+.awea_about_main_img img {
 	width: 100%;
 	max-width: none;
 	height: 100%;
 	object-fit: cover;
 	display: block;
-	transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+	transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.awea-about-visual:hover .awea-about-main-img img {
-	transform: scale(1.03);
+.awea_about_visual:hover .awea_about_main_img img {
+	transform: scale(1.035);
 }
 
-.awea-about-float-img {
+.awea_about_float_img {
 	position: absolute;
 	width: 38%;
 	aspect-ratio: 1 / 1;
-	right: 0;
+	inset-inline-end: 0;
 	bottom: 10%;
 	z-index: 2;
 	border-radius: 50%;
 	border: 8px solid #ffffff;
 	overflow: hidden;
 	background-color: #cbd5e1;
+	box-shadow: 0 18px 36px -10px rgba(15, 23, 42, 0.18);
 }
 
-.awea-about-float-img img {
+.awea_about_float_img img {
 	width: 100%;
 	max-width: none;
 	height: 100%;
@@ -98,32 +100,50 @@
 	display: block;
 }
 
-.awea-about-badge {
+.awea_about_badge {
 	position: absolute;
 	top: 8%;
-	left: -12px;
+	inset-inline-start: -12px;
 	z-index: 3;
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
 	padding: 12px 22px;
 	border-radius: 100px;
-	background-color: var(--awea-about-primary);
+	background-color: var(--awea_about_primary);
 	color: #ffffff;
 	font-size: 0.8125rem;
 	font-weight: 700;
 	line-height: 1.2;
 	text-transform: uppercase;
 	letter-spacing: 0.08em;
+	box-shadow: 0 12px 24px -6px rgba(15, 23, 42, 0.22);
+}
+
+.awea_about_badge_icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 1em;
+	line-height: 1;
+}
+
+.awea_about_badge_icon svg {
+	width: 1em;
+	height: 1em;
+	fill: currentColor;
 }
 
 /* --------------------------------------------------------------------------
-2. Editorial Content Column
+   2. Editorial Content Column
    -------------------------------------------------------------------------- */
-.awea-about-content {
+.awea_about_content {
 	display: flex;
 	flex-direction: column;
 	align-items: flex-start;
 }
 
-.awea-about-sub {
+.awea_about_sub {
 	display: inline-flex;
 	align-items: center;
 	gap: 12px;
@@ -133,10 +153,10 @@
 	text-transform: uppercase;
 	letter-spacing: 0.14em;
 	line-height: 1.3;
-	color: var(--awea-about-accent);
+	color: var(--awea_about_accent);
 }
 
-.awea-about-line {
+.awea_about_line {
 	width: 28px;
 	height: 2px;
 	border-radius: 2px;
@@ -144,36 +164,40 @@
 	flex-shrink: 0;
 }
 
-.awea-about-title {
+.awea_about_title {
 	margin: 0 0 20px 0;
 	font-size: clamp(1.875rem, 3.8vw, 3rem);
 	font-weight: 800;
 	line-height: 1.15;
 	letter-spacing: -0.025em;
-	color: var(--awea-about-heading);
+	color: var(--awea_about_heading);
 	word-break: break-word;
 }
 
-.awea-about-desc {
+.awea_about_title span {
+	color: var(--awea_about_primary);
+}
+
+.awea_about_desc {
 	margin: 0 0 28px 0;
 	font-size: 1.03125rem;
 	line-height: 1.72;
-	color: var(--awea-about-text);
+	color: var(--awea_about_text);
 	word-break: break-word;
 }
 
-.awea-about-desc p {
+.awea_about_desc p {
 	margin: 0 0 1em 0;
 }
 
-.awea-about-desc p:last-child {
+.awea_about_desc p:last-child {
 	margin-bottom: 0;
 }
 
 /* --------------------------------------------------------------------------
-3. Highlights / Features Matrix
+   3. Highlights / Features Matrix
    -------------------------------------------------------------------------- */
-.awea-about-feats {
+.awea_about_feats {
 	width: 100%;
 	list-style: none;
 	margin: 0 0 36px 0;
@@ -183,29 +207,29 @@
 	gap: 14px 20px;
 }
 
-.awea-about-feat {
+.awea_about_feat {
 	display: flex;
 	align-items: flex-start;
 	gap: 10px;
 	font-size: 0.9375rem;
 	font-weight: 600;
 	line-height: 1.45;
-	color: var(--awea-about-heading);
+	color: var(--awea_about_heading);
 	word-break: break-word;
 }
 
-.awea-about-feat-icon {
+.awea_about_feat_icon {
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
 	margin-top: 2px;
 	font-size: 18px;
 	line-height: 1;
-	color: var(--awea-about-primary);
+	color: var(--awea_about_primary);
 	flex-shrink: 0;
 }
 
-.awea-about-feat-icon svg {
+.awea_about_feat_icon svg {
 	width: 18px;
 	height: 18px;
 	fill: currentColor;
@@ -213,16 +237,16 @@
 }
 
 /* --------------------------------------------------------------------------
-4. Call to Action & Direct Phone
+   4. Call to Action & Direct Contact
    -------------------------------------------------------------------------- */
-.awea-about-actions {
+.awea_about_actions {
 	display: flex;
 	align-items: center;
 	gap: 28px;
 	flex-wrap: wrap;
 }
 
-.awea-about-btn {
+.awea_about_btn {
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
@@ -230,54 +254,61 @@
 	padding: 15px 30px;
 	border: 1px solid transparent;
 	border-radius: 12px;
-	background-color: var(--awea-about-primary);
+	background-color: var(--awea_about_primary);
 	color: #ffffff;
 	font-size: 0.9375rem;
 	font-weight: 700;
 	line-height: 1.2;
 	text-decoration: none;
 	cursor: pointer;
-	transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease, transform 0.2s ease;
+	transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease, transform 0.2s ease, box-shadow 0.25s ease;
 }
 
-.awea-about-btn:hover,
-.awea-about-btn:focus-visible {
-	background-color: var(--awea-about-heading);
+.awea_about_btn:hover,
+.awea_about_btn:focus-visible {
+	background-color: var(--awea_about_heading);
 	color: #ffffff;
 	transform: translateY(-2px);
+	box-shadow: 0 10px 20px -6px rgba(15, 23, 42, 0.25);
 }
 
-.awea-about-btn-icon {
+.awea_about_btn:focus-visible,
+.awea_about_phone_link:focus-visible {
+	outline: 2px solid var(--awea_about_primary);
+	outline-offset: 3px;
+}
+
+.awea_about_btn_icon {
 	display: inline-flex;
 	align-items: center;
 	transition: transform 0.25s ease;
 }
 
-.awea-about-btn-icon svg {
+.awea_about_btn_icon svg {
 	width: 14px;
 	height: 14px;
 	fill: currentColor;
 }
 
-.awea-about-btn:hover .awea-about-btn-icon {
+.awea_about_btn:hover .awea_about_btn_icon {
 	transform: translateX(3px);
 }
 
+[dir="rtl"] .awea_about_btn:hover .awea_about_btn_icon {
+	transform: translateX(-3px);
+}
+
 /* Direct Contact Link */
-.awea-about-phone-link {
+.awea_about_phone_link {
 	display: inline-flex;
 	align-items: center;
 	gap: 14px;
 	text-decoration: none;
 	color: inherit;
-	transition: opacity 0.2s ease;
+	border-radius: 12px;
 }
 
-.awea-about-phone-link:hover {
-	opacity: 0.85;
-}
-
-.awea-about-phone-ico {
+.awea_about_phone_ico {
 	position: relative;
 	width: 46px;
 	height: 46px;
@@ -285,121 +316,128 @@
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
-	color: var(--awea-phone-ico-color, var(--awea-about-primary));
-	background-color: var(--awea-phone-ico-bg, #f1f5f9);
+	color: var(--awea_about_phone_ico_color, var(--awea_about_primary));
+	background-color: var(--awea_about_phone_ico_bg, #f1f5f9);
 	border: 1px solid #e2e8f0;
 	flex-shrink: 0;
 	transition: transform 0.25s ease, background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease;
 }
 
-.awea-about-phone-ico i {
-	font-size: 18px;
+.awea_about_phone_ico i {
+	font-size: 17px;
 	line-height: 1;
 }
 
-.awea-about-phone-ico svg {
-	width: 18px;
-	height: 18px;
+.awea_about_phone_ico svg {
+	width: 17px;
+	height: 17px;
 	fill: currentColor;
 }
 
-.awea-about-phone-link:hover .awea-about-phone-ico {
-	background-color: var(--awea-about-primary);
-	border-color: var(--awea-about-primary);
+.awea_about_phone_link:hover .awea_about_phone_ico,
+.awea_about_phone_link:focus-visible .awea_about_phone_ico {
+	background-color: var(--awea_about_primary);
+	border-color: var(--awea_about_primary);
 	color: #ffffff;
-	transform: scale(1.05);
+	transform: scale(1.06);
 }
 
-.awea-about-phone-meta {
+.awea_about_phone_meta {
 	display: flex;
 	flex-direction: column;
 	gap: 2px;
 }
 
-.awea-about-phone-lbl {
+.awea_about_phone_lbl {
 	font-size: 0.75rem;
 	font-weight: 700;
 	text-transform: uppercase;
 	letter-spacing: 0.08em;
 	line-height: 1.2;
-	color: var(--awea-about-muted);
+	color: var(--awea_about_muted);
 }
 
-.awea-about-phone-num {
+.awea_about_phone_num {
 	font-size: 1.0625rem;
 	font-weight: 800;
 	line-height: 1.3;
 	letter-spacing: -0.01em;
-	color: var(--awea-about-heading);
+	color: var(--awea_about_heading);
+	transition: color 0.2s ease;
+}
+
+.awea_about_phone_link:hover .awea_about_phone_num {
+	color: var(--awea_about_primary);
 }
 
 /* --------------------------------------------------------------------------
-5. Accessibility & Responsive Breakpoints
+   5. Accessibility & Responsive Breakpoints
    -------------------------------------------------------------------------- */
 @media (prefers-reduced-motion: reduce) {
-	.awea-about-main-img img,
-	.awea-about-btn,
-	.awea-about-btn-icon,
-	.awea-about-phone-link,
-	.awea-about-phone-ico {
+	.awea_about_main_img img,
+	.awea_about_btn,
+	.awea_about_btn_icon,
+	.awea_about_phone_link,
+	.awea_about_phone_ico,
+	.awea_about_phone_num {
 		transition: none !important;
 		transform: none !important;
 	}
 }
 
 @media (max-width: 1024px) {
-	.awea-about-grid {
+	.awea_about_grid {
 		grid-template-columns: 1fr;
 		gap: 44px;
 	}
 
-	.awea-about-pos-right .awea-about-visual,
-	.awea-about-pos-right .awea-about-content {
+	.awea_about_pos_right .awea_about_visual,
+	.awea_about_pos_right .awea_about_content {
 		order: initial;
 	}
 
-	.awea-about-visual {
+	.awea_about_visual {
 		max-width: 580px;
 		margin: 0 auto;
 	}
 
-	.awea-about-badge,
-	.awea-about-pos-right .awea-about-badge {
-		left: 12px;
-		right: auto;
+	.awea_about_badge,
+	.awea_about_pos_right .awea_about_badge {
+		inset-inline-start: 12px;
+		inset-inline-end: auto;
 	}
 }
 
 @media (max-width: 640px) {
-	:where(.awea-about-main-img) {
+	:where(.awea_about_main_img) {
 		width: 100%;
 		border-radius: 28px;
 	}
 
-	:where(.awea-about-float-img, .awea-about-pos-right .awea-about-float-img) {
+	:where(.awea_about_float_img, .awea_about_pos_right .awea_about_float_img) {
 		width: 34%;
-		right: 12px;
-		left: auto;
+		inset-inline-end: 12px;
+		inset-inline-start: auto;
 		bottom: 12px;
 		border-width: 5px;
 	}
 
-	:where(.awea-about-badge, .awea-about-pos-right .awea-about-badge) {
+	:where(.awea_about_badge, .awea_about_pos_right .awea_about_badge) {
 		top: 12px;
-		left: 12px;
-		right: auto;
+		inset-inline-start: 12px;
+		inset-inline-end: auto;
 		padding: 8px 14px;
 		font-size: 0.72rem;
 	}
 
-	.awea-about-actions {
+	.awea_about_actions {
 		flex-direction: column;
 		align-items: stretch;
 		width: 100%;
 		gap: 18px;
 	}
 
-	.awea-about-btn {
+	.awea_about_btn {
 		width: 100%;
 	}
 }

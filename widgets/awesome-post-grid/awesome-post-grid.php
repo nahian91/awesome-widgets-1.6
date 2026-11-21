@@ -60,7 +60,7 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 		$this->add_control(
 			'awea_post_count',
 			[
-				'label'   => esc_html__( 'Posts Per Page', 'awesome-widgets-elementor' ),
+				'label'   => esc_html__( 'Count', 'awesome-widgets-elementor' ),
 				'type'    => Controls_Manager::NUMBER,
 				'default' => 6,
 				'min'     => 1,
@@ -90,7 +90,7 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 		$this->add_control(
 			'awea_orderby',
 			[
-				'label'   => esc_html__( 'Order By', 'awesome-widgets-elementor' ),
+				'label'   => esc_html__( 'Sort', 'awesome-widgets-elementor' ),
 				'type'    => Controls_Manager::SELECT,
 				'default' => 'date',
 				'options' => [
@@ -130,7 +130,7 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 		$this->add_control(
 			'awea_exclude_current',
 			[
-				'label'        => esc_html__( 'Exclude Current Post', 'awesome-widgets-elementor' ),
+				'label'        => esc_html__( 'Exclude', 'awesome-widgets-elementor' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'label_on'     => esc_html__( 'Yes', 'awesome-widgets-elementor' ),
 				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
@@ -155,7 +155,7 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 		$this->add_control(
 			'awea_show_category',
 			[
-				'label'        => esc_html__( 'Category Badge', 'awesome-widgets-elementor' ),
+				'label'        => esc_html__( 'Badge', 'awesome-widgets-elementor' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'label_on'     => esc_html__( 'Yes', 'awesome-widgets-elementor' ),
 				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
@@ -179,81 +179,31 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 		$this->add_control(
 			'awea_show_reading_time',
 			[
-				'label'        => esc_html__( 'Read Time', 'awesome-widgets-elementor' ),
+				'label'        => esc_html__( 'Time', 'awesome-widgets-elementor' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'label_on'     => esc_html__( 'Yes', 'awesome-widgets-elementor' ),
 				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
 				'return_value' => 'yes',
 				'default'      => 'yes',
-			]
-		);
-
-		$this->add_control(
-			'awea_show_excerpt',
-			[
-				'label'        => esc_html__( 'Excerpt', 'awesome-widgets-elementor' ),
-				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => esc_html__( 'Yes', 'awesome-widgets-elementor' ),
-				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
-				'return_value' => 'yes',
-				'default'      => 'yes',
-				'separator'    => 'before',
-			]
-		);
-
-		$this->add_control(
-			'awea_excerpt_length',
-			[
-				'label'     => esc_html__( 'Excerpt Words', 'awesome-widgets-elementor' ),
-				'type'      => Controls_Manager::NUMBER,
-				'default'   => 15,
-				'min'       => 5,
-				'max'       => 100,
-				'condition' => [ 'awea_show_excerpt' => 'yes' ],
-			]
-		);
-
-		$this->add_control(
-			'awea_show_button',
-			[
-				'label'        => esc_html__( 'Read More Button', 'awesome-widgets-elementor' ),
-				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => esc_html__( 'Yes', 'awesome-widgets-elementor' ),
-				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
-				'return_value' => 'yes',
-				'default'      => 'yes',
-				'separator'    => 'before',
-			]
-		);
-
-		$this->add_control(
-			'awea_button_text',
-			[
-				'label'     => esc_html__( 'Button Label', 'awesome-widgets-elementor' ),
-				'type'      => Controls_Manager::TEXT,
-				'default'   => esc_html__( 'Read Insight', 'awesome-widgets-elementor' ),
-				'dynamic'   => [ 'active' => true ],
-				'condition' => [ 'awea_show_button' => 'yes' ],
 			]
 		);
 
 		$this->add_control(
 			'awea_show_counter',
 			[
-				'label'        => esc_html__( 'Index Counter', 'awesome-widgets-elementor' ),
+				'label'        => esc_html__( 'Counter', 'awesome-widgets-elementor' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'label_on'     => esc_html__( 'Yes', 'awesome-widgets-elementor' ),
 				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
 				'return_value' => 'yes',
 				'default'      => 'yes',
-				'separator'    => 'before',
 			]
 		);
 
 		$this->add_control(
 			'awea_title_tag',
 			[
-				'label'   => esc_html__( 'Title HTML Tag', 'awesome-widgets-elementor' ),
+				'label'   => esc_html__( 'Tag', 'awesome-widgets-elementor' ),
 				'type'    => Controls_Manager::SELECT,
 				'default' => 'h3',
 				'options' => [
@@ -273,12 +223,85 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   CONTENT: 3. LAYOUT
+		   CONTENT: 3. EXCERPT
+		   ========================================================================== */
+		$this->start_controls_section(
+			'awea_section_excerpt',
+			[
+				'label' => esc_html__( 'Excerpt', 'awesome-widgets-elementor' ),
+				'tab'   => Controls_Manager::TAB_CONTENT,
+			]
+		);
+
+		$this->add_control(
+			'awea_show_excerpt',
+			[
+				'label'        => esc_html__( 'Display', 'awesome-widgets-elementor' ),
+				'type'         => Controls_Manager::SWITCHER,
+				'label_on'     => esc_html__( 'Yes', 'awesome-widgets-elementor' ),
+				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
+				'return_value' => 'yes',
+				'default'      => 'yes',
+			]
+		);
+
+		$this->add_control(
+			'awea_excerpt_length',
+			[
+				'label'     => esc_html__( 'Length', 'awesome-widgets-elementor' ),
+				'type'      => Controls_Manager::NUMBER,
+				'default'   => 15,
+				'min'       => 5,
+				'max'       => 100,
+				'condition' => [ 'awea_show_excerpt' => 'yes' ],
+			]
+		);
+
+		$this->end_controls_section();
+
+		/* ==========================================================================
+		   CONTENT: 4. BUTTON
+		   ========================================================================== */
+		$this->start_controls_section(
+			'awea_section_button',
+			[
+				'label' => esc_html__( 'Button', 'awesome-widgets-elementor' ),
+				'tab'   => Controls_Manager::TAB_CONTENT,
+			]
+		);
+
+		$this->add_control(
+			'awea_show_button',
+			[
+				'label'        => esc_html__( 'Display', 'awesome-widgets-elementor' ),
+				'type'         => Controls_Manager::SWITCHER,
+				'label_on'     => esc_html__( 'Yes', 'awesome-widgets-elementor' ),
+				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
+				'return_value' => 'yes',
+				'default'      => 'yes',
+			]
+		);
+
+		$this->add_control(
+			'awea_button_text',
+			[
+				'label'     => esc_html__( 'Label', 'awesome-widgets-elementor' ),
+				'type'      => Controls_Manager::TEXT,
+				'default'   => esc_html__( 'Read Insight', 'awesome-widgets-elementor' ),
+				'dynamic'   => [ 'active' => true ],
+				'condition' => [ 'awea_show_button' => 'yes' ],
+			]
+		);
+
+		$this->end_controls_section();
+
+		/* ==========================================================================
+		   CONTENT: 5. GRID
 		   ========================================================================== */
 		$this->start_controls_section(
 			'awea_section_layout',
 			[
-				'label' => esc_html__( 'Layout', 'awesome-widgets-elementor' ),
+				'label' => esc_html__( 'Grid', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
 			]
 		);
@@ -353,7 +376,7 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_card_radius',
 			[
-				'label'      => esc_html__( 'Border Radius', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Radius', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'default'    => [
@@ -393,6 +416,7 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 			Group_Control_Border::get_type(),
 			[
 				'name'           => 'awea_card_border',
+				'label'          => esc_html__( 'Border', 'awesome-widgets-elementor' ),
 				'selector'       => '{{WRAPPER}} .awea-blog-card',
 				'fields_options' => [
 					'border' => [ 'default' => 'solid' ],
@@ -414,6 +438,7 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 			Group_Control_Box_Shadow::get_type(),
 			[
 				'name'     => 'awea_card_shadow',
+				'label'    => esc_html__( 'Shadow', 'awesome-widgets-elementor' ),
 				'selector' => '{{WRAPPER}} .awea-blog-card',
 			]
 		);
@@ -440,7 +465,7 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 		$this->add_control(
 			'awea_card_border_hover',
 			[
-				'label'     => esc_html__( 'Border Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Border', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
 				'selectors' => [
@@ -453,6 +478,7 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 			Group_Control_Box_Shadow::get_type(),
 			[
 				'name'     => 'awea_card_shadow_hover',
+				'label'    => esc_html__( 'Shadow', 'awesome-widgets-elementor' ),
 				'selector' => '{{WRAPPER}} .awea-blog-card:hover',
 			]
 		);
@@ -484,7 +510,7 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_image_aspect_ratio',
 			[
-				'label'     => esc_html__( 'Aspect Ratio', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Ratio', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::SELECT,
 				'default'   => '16/10',
 				'options'   => [
@@ -502,7 +528,7 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_image_radius',
 			[
-				'label'      => esc_html__( 'Border Radius', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Radius', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'default'    => [
@@ -522,7 +548,7 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_image_space',
 			[
-				'label'      => esc_html__( 'Bottom Spacing', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Spacing', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [ 'px' => [ 'min' => 0, 'max' => 40 ] ],
@@ -541,7 +567,7 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 		$this->start_controls_section(
 			'awea_style_badge',
 			[
-				'label'     => esc_html__( 'Category Badge', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Badge', 'awesome-widgets-elementor' ),
 				'tab'       => Controls_Manager::TAB_STYLE,
 				'condition' => [ 'awea_show_category' => 'yes' ],
 			]
@@ -577,6 +603,7 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'awea_cat_typo',
+				'label'    => esc_html__( 'Typography', 'awesome-widgets-elementor' ),
 				'selector' => '{{WRAPPER}} .awea-blog-badge',
 				'global'   => [
 					'default' => Global_Typography::TYPOGRAPHY_SECONDARY,
@@ -587,12 +614,12 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   STYLE: 4. TEXT
+		   STYLE: 4. META
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_style_text',
+			'awea_style_meta',
 			[
-				'label' => esc_html__( 'Typography', 'awesome-widgets-elementor' ),
+				'label' => esc_html__( 'Meta', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -600,7 +627,7 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 		$this->add_control(
 			'awea_meta_color',
 			[
-				'label'     => esc_html__( 'Meta Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#64748b',
 				'selectors' => [
@@ -613,29 +640,67 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'awea_meta_typo',
-				'label'    => esc_html__( 'Meta Typography', 'awesome-widgets-elementor' ),
+				'label'    => esc_html__( 'Typography', 'awesome-widgets-elementor' ),
 				'selector' => '{{WRAPPER}} .awea-blog-meta',
 				'global'   => [ 'default' => Global_Typography::TYPOGRAPHY_SECONDARY ],
 			]
 		);
 
+		$this->end_controls_section();
+
+		/* ==========================================================================
+		   STYLE: 5. TITLE
+		   ========================================================================== */
+		$this->start_controls_section(
+			'awea_style_title',
+			[
+				'label' => esc_html__( 'Title', 'awesome-widgets-elementor' ),
+				'tab'   => Controls_Manager::TAB_STYLE,
+			]
+		);
+
+		$this->add_group_control(
+			Group_Control_Typography::get_type(),
+			[
+				'name'     => 'awea_title_typo',
+				'label'    => esc_html__( 'Typography', 'awesome-widgets-elementor' ),
+				'selector' => '{{WRAPPER}} .awea-blog-title a',
+				'global'   => [
+					'default' => Global_Typography::TYPOGRAPHY_PRIMARY,
+				],
+			]
+		);
+
+		$this->start_controls_tabs( 'awea_title_tabs' );
+
+		$this->start_controls_tab(
+			'awea_title_normal',
+			[ 'label' => esc_html__( 'Normal', 'awesome-widgets-elementor' ) ]
+		);
+
 		$this->add_control(
 			'awea_title_color',
 			[
-				'label'     => esc_html__( 'Title Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#0f172a',
-				'separator' => 'before',
 				'selectors' => [
 					'{{WRAPPER}} .awea-blog-title a' => 'color: {{VALUE}};',
 				],
 			]
 		);
 
+		$this->end_controls_tab();
+
+		$this->start_controls_tab(
+			'awea_title_hover_tab',
+			[ 'label' => esc_html__( 'Hover', 'awesome-widgets-elementor' ) ]
+		);
+
 		$this->add_control(
 			'awea_title_hover',
 			[
-				'label'     => esc_html__( 'Title Hover', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
 				'selectors' => [
@@ -644,24 +709,29 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 			]
 		);
 
-		$this->add_group_control(
-			Group_Control_Typography::get_type(),
+		$this->end_controls_tab();
+		$this->end_controls_tabs();
+
+		$this->end_controls_section();
+
+		/* ==========================================================================
+		   STYLE: 6. EXCERPT
+		   ========================================================================== */
+		$this->start_controls_section(
+			'awea_style_excerpt',
 			[
-				'name'     => 'awea_title_typo',
-				'selector' => '{{WRAPPER}} .awea-blog-title a',
-				'global'   => [
-					'default' => Global_Typography::TYPOGRAPHY_PRIMARY,
-				],
+				'label'     => esc_html__( 'Excerpt', 'awesome-widgets-elementor' ),
+				'tab'       => Controls_Manager::TAB_STYLE,
+				'condition' => [ 'awea_show_excerpt' => 'yes' ],
 			]
 		);
 
 		$this->add_control(
 			'awea_desc_color',
 			[
-				'label'     => esc_html__( 'Excerpt Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#475569',
-				'separator' => 'before',
 				'selectors' => [
 					'{{WRAPPER}} .awea-blog-desc' => 'color: {{VALUE}};',
 				],
@@ -672,6 +742,7 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'awea_desc_typo',
+				'label'    => esc_html__( 'Typography', 'awesome-widgets-elementor' ),
 				'selector' => '{{WRAPPER}} .awea-blog-desc',
 				'global'   => [
 					'default' => Global_Typography::TYPOGRAPHY_TEXT,
@@ -682,69 +753,81 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   STYLE: 5. BUTTON & COUNTER
+		   STYLE: 7. BUTTON
 		   ========================================================================== */
 		$this->start_controls_section(
 			'awea_style_button',
 			[
-				'label' => esc_html__( 'Footer & Button', 'awesome-widgets-elementor' ),
-				'tab'   => Controls_Manager::TAB_STYLE,
+				'label'     => esc_html__( 'Button', 'awesome-widgets-elementor' ),
+				'tab'       => Controls_Manager::TAB_STYLE,
+				'condition' => [ 'awea_show_button' => 'yes' ],
 			]
 		);
 
 		$this->add_group_control(
 			Group_Control_Typography::get_type(),
 			[
-				'name'      => 'awea_btn_typo',
-				'selector'  => '{{WRAPPER}} .awea-blog-link',
-				'global'    => [ 'default' => Global_Typography::TYPOGRAPHY_ACCENT ],
-				'condition' => [ 'awea_show_button' => 'yes' ],
+				'name'     => 'awea_btn_typo',
+				'label'    => esc_html__( 'Typography', 'awesome-widgets-elementor' ),
+				'selector' => '{{WRAPPER}} .awea-blog-link',
+				'global'   => [ 'default' => Global_Typography::TYPOGRAPHY_ACCENT ],
 			]
+		);
+
+		$this->start_controls_tabs( 'awea_btn_tabs' );
+
+		$this->start_controls_tab(
+			'awea_btn_normal',
+			[ 'label' => esc_html__( 'Normal', 'awesome-widgets-elementor' ) ]
 		);
 
 		$this->add_control(
 			'awea_btn_color',
 			[
-				'label'     => esc_html__( 'Button Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#0f172a',
 				'selectors' => [
 					'{{WRAPPER}} .awea-blog-link' => 'color: {{VALUE}};',
 				],
-				'condition' => [ 'awea_show_button' => 'yes' ],
 			]
 		);
 
 		$this->add_control(
 			'awea_btn_bg',
 			[
-				'label'     => esc_html__( 'Button Background', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Background', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#f1f5f9',
 				'selectors' => [
 					'{{WRAPPER}} .awea-blog-link' => 'background-color: {{VALUE}};',
 				],
-				'condition' => [ 'awea_show_button' => 'yes' ],
 			]
+		);
+
+		$this->end_controls_tab();
+
+		$this->start_controls_tab(
+			'awea_btn_hover',
+			[ 'label' => esc_html__( 'Hover', 'awesome-widgets-elementor' ) ]
 		);
 
 		$this->add_control(
 			'awea_btn_hover_color',
 			[
-				'label'     => esc_html__( 'Button Hover Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#ffffff',
 				'selectors' => [
 					'{{WRAPPER}} .awea-blog-card:hover .awea-blog-link, {{WRAPPER}} .awea-blog-link:focus-visible' => 'color: {{VALUE}};',
 				],
-				'condition' => [ 'awea_show_button' => 'yes' ],
 			]
 		);
 
 		$this->add_control(
 			'awea_btn_hover_bg',
 			[
-				'label'     => esc_html__( 'Button Hover Background', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Background', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [
 					'default' => Global_Colors::COLOR_PRIMARY,
@@ -752,21 +835,35 @@ class Widget_Awesome_Post_Grid extends Widget_Base {
 				'selectors' => [
 					'{{WRAPPER}} .awea-blog-card:hover .awea-blog-link, {{WRAPPER}} .awea-blog-link:focus-visible' => 'background-color: {{VALUE}};',
 				],
-				'condition' => [ 'awea_show_button' => 'yes' ],
+			]
+		);
+
+		$this->end_controls_tab();
+		$this->end_controls_tabs();
+
+		$this->end_controls_section();
+
+		/* ==========================================================================
+		   STYLE: 8. COUNTER
+		   ========================================================================== */
+		$this->start_controls_section(
+			'awea_style_counter',
+			[
+				'label'     => esc_html__( 'Counter', 'awesome-widgets-elementor' ),
+				'tab'       => Controls_Manager::TAB_STYLE,
+				'condition' => [ 'awea_show_counter' => 'yes' ],
 			]
 		);
 
 		$this->add_control(
 			'awea_counter_color',
 			[
-				'label'     => esc_html__( 'Counter Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#cbd5e1',
-				'separator' => 'before',
 				'selectors' => [
 					'{{WRAPPER}} .awea-post-num' => 'color: {{VALUE}};',
 				],
-				'condition' => [ 'awea_show_counter' => 'yes' ],
 			]
 		);
 

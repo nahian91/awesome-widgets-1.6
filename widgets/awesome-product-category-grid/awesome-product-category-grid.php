@@ -97,12 +97,12 @@ class Widget_Awesome_Product_Category_Grid extends Widget_Base {
 		$this->add_control(
 			'awea_orderby',
 			[
-				'label'   => esc_html__( 'Sort By', 'awesome-widgets-elementor' ),
+				'label'   => esc_html__( 'Sort', 'awesome-widgets-elementor' ),
 				'type'    => Controls_Manager::SELECT,
 				'default' => 'name',
 				'options' => [
 					'name'  => esc_html__( 'Name', 'awesome-widgets-elementor' ),
-					'count' => esc_html__( 'Product Count', 'awesome-widgets-elementor' ),
+					'count' => esc_html__( 'Count', 'awesome-widgets-elementor' ),
 					'id'    => esc_html__( 'ID', 'awesome-widgets-elementor' ),
 					'slug'  => esc_html__( 'Slug', 'awesome-widgets-elementor' ),
 					'rand'  => esc_html__( 'Random', 'awesome-widgets-elementor' ),
@@ -113,7 +113,7 @@ class Widget_Awesome_Product_Category_Grid extends Widget_Base {
 		$this->add_control(
 			'awea_order',
 			[
-				'label'   => esc_html__( 'Direction', 'awesome-widgets-elementor' ),
+				'label'   => esc_html__( 'Order', 'awesome-widgets-elementor' ),
 				'type'    => Controls_Manager::SELECT,
 				'default' => 'ASC',
 				'options' => [
@@ -171,7 +171,7 @@ class Widget_Awesome_Product_Category_Grid extends Widget_Base {
 		$this->add_control(
 			'awea_action_text',
 			[
-				'label'       => esc_html__( 'Action Text', 'awesome-widgets-elementor' ),
+				'label'       => esc_html__( 'Action', 'awesome-widgets-elementor' ),
 				'type'        => Controls_Manager::TEXT,
 				'default'     => esc_html__( 'Explore Collection', 'awesome-widgets-elementor' ),
 				'dynamic'     => [ 'active' => true ],
@@ -253,6 +253,7 @@ class Widget_Awesome_Product_Category_Grid extends Widget_Base {
 			Group_Control_Border::get_type(),
 			[
 				'name'           => 'awea_card_border',
+				'label'          => esc_html__( 'Border', 'awesome-widgets-elementor' ),
 				'selector'       => '{{WRAPPER}} .awea-cat-card',
 				'fields_options' => [
 					'border' => [ 'default' => 'solid' ],
@@ -280,7 +281,7 @@ class Widget_Awesome_Product_Category_Grid extends Widget_Base {
 		$this->add_control(
 			'awea_card_border_hover',
 			[
-				'label'     => esc_html__( 'Border Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Border', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [
 					'default' => Global_Colors::COLOR_PRIMARY,
@@ -320,7 +321,7 @@ class Widget_Awesome_Product_Category_Grid extends Widget_Base {
 		$this->add_control(
 			'awea_glass_box_bg',
 			[
-				'label'     => esc_html__( 'Glass Background', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Background', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => 'rgba(255, 255, 255, 0.06)',
 				'selectors' => [
@@ -333,7 +334,7 @@ class Widget_Awesome_Product_Category_Grid extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_glass_padding',
 			[
-				'label'      => esc_html__( 'Glass Padding', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Padding', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', 'em' ],
 				'default'    => [
@@ -353,7 +354,7 @@ class Widget_Awesome_Product_Category_Grid extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_glass_radius',
 			[
-				'label'      => esc_html__( 'Glass Radius', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Radius', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'default'    => [
@@ -386,7 +387,7 @@ class Widget_Awesome_Product_Category_Grid extends Widget_Base {
 		$this->add_control(
 			'awea_sub_color',
 			[
-				'label'     => esc_html__( 'Subtitle Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Subtitle', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => 'rgba(255, 255, 255, 0.65)',
 				'selectors' => [
@@ -399,6 +400,7 @@ class Widget_Awesome_Product_Category_Grid extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'awea_sub_typo',
+				'label'    => esc_html__( 'Typography', 'awesome-widgets-elementor' ),
 				'selector' => '{{WRAPPER}} .awea-cat-info span',
 				'global'   => [ 'default' => Global_Typography::TYPOGRAPHY_SECONDARY ],
 			]
@@ -407,7 +409,7 @@ class Widget_Awesome_Product_Category_Grid extends Widget_Base {
 		$this->add_control(
 			'awea_title_color',
 			[
-				'label'     => esc_html__( 'Title Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Title', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#ffffff',
 				'separator' => 'before',
@@ -421,6 +423,7 @@ class Widget_Awesome_Product_Category_Grid extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'awea_title_typo',
+				'label'    => esc_html__( 'Typography', 'awesome-widgets-elementor' ),
 				'selector' => '{{WRAPPER}} .awea-cat-info h3',
 				'global'   => [ 'default' => Global_Typography::TYPOGRAPHY_PRIMARY ],
 			]
@@ -429,7 +432,7 @@ class Widget_Awesome_Product_Category_Grid extends Widget_Base {
 		$this->add_control(
 			'awea_btn_color',
 			[
-				'label'     => esc_html__( 'Action Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Action', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#ffffff',
 				'separator' => 'before',
@@ -443,6 +446,7 @@ class Widget_Awesome_Product_Category_Grid extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'awea_btn_typo',
+				'label'    => esc_html__( 'Typography', 'awesome-widgets-elementor' ),
 				'selector' => '{{WRAPPER}} .awea-view-collection',
 				'global'   => [ 'default' => Global_Typography::TYPOGRAPHY_ACCENT ],
 			]

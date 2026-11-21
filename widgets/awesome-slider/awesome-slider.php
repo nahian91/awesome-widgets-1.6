@@ -48,7 +48,7 @@ class Widget_Awesome_Slider extends Widget_Base {
 	protected function register_controls() {
 
 		/* ==========================================================================
-		   CONTENT: 1. SLIDES (REPEATER)
+		   CONTENT: 1. SLIDES
 		   ========================================================================== */
 		$this->start_controls_section(
 			'awea_section_slides',
@@ -71,7 +71,7 @@ class Widget_Awesome_Slider extends Widget_Base {
 		$repeater->add_control(
 			'awea_image',
 			[
-				'label'   => esc_html__( 'Background', 'awesome-widgets-elementor' ),
+				'label'   => esc_html__( 'Image', 'awesome-widgets-elementor' ),
 				'type'    => Controls_Manager::MEDIA,
 				'dynamic' => [ 'active' => true ],
 				'default' => [
@@ -124,7 +124,7 @@ class Widget_Awesome_Slider extends Widget_Base {
 		$repeater->add_control(
 			'awea_btn1_text',
 			[
-				'label'       => esc_html__( 'Primary Label', 'awesome-widgets-elementor' ),
+				'label'       => esc_html__( 'Primary', 'awesome-widgets-elementor' ),
 				'type'        => Controls_Manager::TEXT,
 				'default'     => esc_html__( 'Explore Work', 'awesome-widgets-elementor' ),
 				'dynamic'     => [ 'active' => true ],
@@ -135,7 +135,7 @@ class Widget_Awesome_Slider extends Widget_Base {
 		$repeater->add_control(
 			'awea_btn1_url',
 			[
-				'label'       => esc_html__( 'Primary URL', 'awesome-widgets-elementor' ),
+				'label'       => esc_html__( 'Link', 'awesome-widgets-elementor' ),
 				'type'        => Controls_Manager::URL,
 				'dynamic'     => [ 'active' => true ],
 				'default'     => [ 'url' => '#' ],
@@ -146,7 +146,7 @@ class Widget_Awesome_Slider extends Widget_Base {
 		$repeater->add_control(
 			'awea_btn2_text',
 			[
-				'label'       => esc_html__( 'Secondary Label', 'awesome-widgets-elementor' ),
+				'label'       => esc_html__( 'Secondary', 'awesome-widgets-elementor' ),
 				'type'        => Controls_Manager::TEXT,
 				'default'     => esc_html__( 'Contact Us', 'awesome-widgets-elementor' ),
 				'dynamic'     => [ 'active' => true ],
@@ -158,7 +158,7 @@ class Widget_Awesome_Slider extends Widget_Base {
 		$repeater->add_control(
 			'awea_btn2_url',
 			[
-				'label'       => esc_html__( 'Secondary URL', 'awesome-widgets-elementor' ),
+				'label'       => esc_html__( 'Link', 'awesome-widgets-elementor' ),
 				'type'        => Controls_Manager::URL,
 				'dynamic'     => [ 'active' => true ],
 				'default'     => [ 'url' => '#' ],
@@ -199,7 +199,7 @@ class Widget_Awesome_Slider extends Widget_Base {
 		$this->add_control(
 			'awea_title_tag',
 			[
-				'label'     => esc_html__( 'Title Tag', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Tag', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::SELECT,
 				'default'   => 'h2',
 				'options'   => [
@@ -293,7 +293,7 @@ class Widget_Awesome_Slider extends Widget_Base {
 		$this->add_control(
 			'awea_slider_autoplay_speed',
 			[
-				'label'     => esc_html__( 'Interval (ms)', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Interval', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::NUMBER,
 				'default'   => 8000,
 				'min'       => 1000,
@@ -306,7 +306,7 @@ class Widget_Awesome_Slider extends Widget_Base {
 		$this->add_control(
 			'awea_slider_anim_speed',
 			[
-				'label'   => esc_html__( 'Speed (ms)', 'awesome-widgets-elementor' ),
+				'label'   => esc_html__( 'Speed', 'awesome-widgets-elementor' ),
 				'type'    => Controls_Manager::NUMBER,
 				'default' => 1000,
 				'min'     => 200,
@@ -387,7 +387,7 @@ class Widget_Awesome_Slider extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_slider_align',
 			[
-				'label'     => esc_html__( 'Align', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Alignment', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::CHOOSE,
 				'options'   => [
 					'left'   => [ 'title' => esc_html__( 'Left', 'awesome-widgets-elementor' ), 'icon' => 'eicon-text-align-left' ],
@@ -441,6 +441,7 @@ class Widget_Awesome_Slider extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'awea_subtitle_typo',
+				'label'    => esc_html__( 'Typography', 'awesome-widgets-elementor' ),
 				'selector' => '{{WRAPPER}} .awea-slide-subtitle',
 				'global'   => [
 					'default' => Global_Typography::TYPOGRAPHY_SECONDARY,
@@ -474,6 +475,7 @@ class Widget_Awesome_Slider extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'awea_title_typo',
+				'label'    => esc_html__( 'Typography', 'awesome-widgets-elementor' ),
 				'selector' => '{{WRAPPER}} .awea-slide-title',
 				'global'   => [
 					'default' => Global_Typography::TYPOGRAPHY_PRIMARY,
@@ -507,6 +509,7 @@ class Widget_Awesome_Slider extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'awea_desc_typo',
+				'label'    => esc_html__( 'Typography', 'awesome-widgets-elementor' ),
 				'selector' => '{{WRAPPER}} .awea-slide-desc',
 				'global'   => [
 					'default' => Global_Typography::TYPOGRAPHY_TEXT,
@@ -530,7 +533,7 @@ class Widget_Awesome_Slider extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_btn_gap',
 			[
-				'label'      => esc_html__( 'Spacing', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Gap', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px', 'rem' ],
 				'range'      => [ 'px' => [ 'min' => 0, 'max' => 40 ] ],
@@ -545,7 +548,7 @@ class Widget_Awesome_Slider extends Widget_Base {
 		$this->add_control(
 			'awea_heading_btn1_style',
 			[
-				'label' => esc_html__( 'Primary Button', 'awesome-widgets-elementor' ),
+				'label' => esc_html__( 'Primary', 'awesome-widgets-elementor' ),
 				'type'  => Controls_Manager::HEADING,
 			]
 		);
@@ -554,6 +557,7 @@ class Widget_Awesome_Slider extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'awea_btn1_typo',
+				'label'    => esc_html__( 'Typography', 'awesome-widgets-elementor' ),
 				'selector' => '{{WRAPPER}} .awea-slide-btn-bg',
 				'global'   => [
 					'default' => Global_Typography::TYPOGRAPHY_SECONDARY,
@@ -634,7 +638,7 @@ class Widget_Awesome_Slider extends Widget_Base {
 		$this->add_control(
 			'awea_heading_btn2_style',
 			[
-				'label'     => esc_html__( 'Secondary Button', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Secondary', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::HEADING,
 				'separator' => 'before',
 			]
@@ -644,6 +648,7 @@ class Widget_Awesome_Slider extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'awea_btn2_typo',
+				'label'    => esc_html__( 'Typography', 'awesome-widgets-elementor' ),
 				'selector' => '{{WRAPPER}} .awea-slide-btn-border',
 				'global'   => [
 					'default' => Global_Typography::TYPOGRAPHY_SECONDARY,
@@ -686,6 +691,7 @@ class Widget_Awesome_Slider extends Widget_Base {
 			Group_Control_Border::get_type(),
 			[
 				'name'           => 'awea_btn2_border',
+				'label'          => esc_html__( 'Border', 'awesome-widgets-elementor' ),
 				'selector'       => '{{WRAPPER}} .awea-slide-btn-border',
 				'fields_options' => [
 					'border' => [ 'default' => 'solid' ],
@@ -731,7 +737,7 @@ class Widget_Awesome_Slider extends Widget_Base {
 		$this->add_control(
 			'awea_btn2_border_hover',
 			[
-				'label'     => esc_html__( 'Border Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Border', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#ffffff',
 				'selectors' => [

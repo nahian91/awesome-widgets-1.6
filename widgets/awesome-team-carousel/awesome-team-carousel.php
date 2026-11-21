@@ -47,7 +47,7 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 	protected function register_controls() {
 
 		/* ==========================================================================
-		   CONTENT: 1. ITEMS (REPEATER)
+		   CONTENT: 1. ITEMS
 		   ========================================================================== */
 		$this->start_controls_section(
 			'awea_section_items',
@@ -70,7 +70,7 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 		$repeater->add_control(
 			'awea_image',
 			[
-				'label'   => esc_html__( 'Photo', 'awesome-widgets-elementor' ),
+				'label'   => esc_html__( 'Image', 'awesome-widgets-elementor' ),
 				'type'    => Controls_Manager::MEDIA,
 				'dynamic' => [ 'active' => true ],
 				'default' => [
@@ -134,7 +134,7 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 		$repeater->add_control(
 			'awea_tw_url',
 			[
-				'label'       => esc_html__( 'X (Twitter)', 'awesome-widgets-elementor' ),
+				'label'       => esc_html__( 'X', 'awesome-widgets-elementor' ),
 				'type'        => Controls_Manager::URL,
 				'dynamic'     => [ 'active' => true ],
 				'placeholder' => 'https://x.com/username',
@@ -235,7 +235,7 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 		$this->add_control(
 			'awea_name_tag',
 			[
-				'label'   => esc_html__( 'Title Tag', 'awesome-widgets-elementor' ),
+				'label'   => esc_html__( 'Tag', 'awesome-widgets-elementor' ),
 				'type'    => Controls_Manager::SELECT,
 				'default' => 'h3',
 				'options' => [
@@ -255,10 +255,10 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 		$this->add_control(
 			'awea_social_always_visible',
 			[
-				'label'        => esc_html__( 'Show Socials', 'awesome-widgets-elementor' ),
+				'label'        => esc_html__( 'Socials', 'awesome-widgets-elementor' ),
 				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => esc_html__( 'Always', 'awesome-widgets-elementor' ),
-				'label_off'    => esc_html__( 'Hover', 'awesome-widgets-elementor' ),
+				'label_on'     => esc_html__( 'Yes', 'awesome-widgets-elementor' ),
+				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
 				'return_value' => 'yes',
 				'default'      => 'no',
 			]
@@ -307,31 +307,6 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 		);
 
 		$this->add_control(
-			'awea_show_arrows',
-			[
-				'label'        => esc_html__( 'Arrows', 'awesome-widgets-elementor' ),
-				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => esc_html__( 'Yes', 'awesome-widgets-elementor' ),
-				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
-				'return_value' => 'yes',
-				'default'      => 'yes',
-				'separator'    => 'before',
-			]
-		);
-
-		$this->add_control(
-			'awea_show_dots',
-			[
-				'label'        => esc_html__( 'Dots', 'awesome-widgets-elementor' ),
-				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => esc_html__( 'Yes', 'awesome-widgets-elementor' ),
-				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
-				'return_value' => 'yes',
-				'default'      => 'yes',
-			]
-		);
-
-		$this->add_control(
 			'awea_loop',
 			[
 				'label'        => esc_html__( 'Loop', 'awesome-widgets-elementor' ),
@@ -359,7 +334,7 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 		$this->add_control(
 			'awea_pause_on_hover',
 			[
-				'label'        => esc_html__( 'Pause on Hover', 'awesome-widgets-elementor' ),
+				'label'        => esc_html__( 'Pause', 'awesome-widgets-elementor' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'label_on'     => esc_html__( 'Yes', 'awesome-widgets-elementor' ),
 				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
@@ -372,7 +347,7 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 		$this->add_control(
 			'awea_autoplay_speed',
 			[
-				'label'     => esc_html__( 'Interval (ms)', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Interval', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::NUMBER,
 				'default'   => 5000,
 				'min'       => 1000,
@@ -384,11 +359,48 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 		$this->add_control(
 			'awea_animation_speed',
 			[
-				'label'   => esc_html__( 'Transition Speed (ms)', 'awesome-widgets-elementor' ),
+				'label'   => esc_html__( 'Speed', 'awesome-widgets-elementor' ),
 				'type'    => Controls_Manager::NUMBER,
 				'default' => 450,
 				'min'     => 100,
 				'max'     => 2000,
+			]
+		);
+
+		$this->end_controls_section();
+
+		/* ==========================================================================
+		   CONTENT: 4. NAVIGATION
+		   ========================================================================== */
+		$this->start_controls_section(
+			'awea_section_navigation',
+			[
+				'label' => esc_html__( 'Navigation', 'awesome-widgets-elementor' ),
+				'tab'   => Controls_Manager::TAB_CONTENT,
+			]
+		);
+
+		$this->add_control(
+			'awea_show_arrows',
+			[
+				'label'        => esc_html__( 'Arrows', 'awesome-widgets-elementor' ),
+				'type'         => Controls_Manager::SWITCHER,
+				'label_on'     => esc_html__( 'Yes', 'awesome-widgets-elementor' ),
+				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
+				'return_value' => 'yes',
+				'default'      => 'yes',
+			]
+		);
+
+		$this->add_control(
+			'awea_show_dots',
+			[
+				'label'        => esc_html__( 'Dots', 'awesome-widgets-elementor' ),
+				'type'         => Controls_Manager::SWITCHER,
+				'label_on'     => esc_html__( 'Yes', 'awesome-widgets-elementor' ),
+				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
+				'return_value' => 'yes',
+				'default'      => 'yes',
 			]
 		);
 
@@ -402,24 +414,6 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 			[
 				'label' => esc_html__( 'Card', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
-			]
-		);
-
-		$this->add_responsive_control(
-			'awea_aspect_ratio',
-			[
-				'label'     => esc_html__( 'Ratio', 'awesome-widgets-elementor' ),
-				'type'      => Controls_Manager::SELECT,
-				'default'   => '4/5',
-				'options'   => [
-					'1/1'  => '1:1',
-					'4/5'  => '4:5',
-					'3/4'  => '3:4',
-					'16/9' => '16:9',
-				],
-				'selectors' => [
-					'{{WRAPPER}} .awea-team-img-container' => 'aspect-ratio: {{VALUE}};',
-				],
 			]
 		);
 
@@ -439,25 +433,12 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_card_radius',
 			[
-				'label'      => esc_html__( 'Card Radius', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Radius', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'default'    => [ 'top' => '28', 'right' => '28', 'bottom' => '28', 'left' => '28', 'unit' => 'px', 'isLinked' => true ],
 				'selectors'  => [
 					'{{WRAPPER}} .awea-team-master-card' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
-				],
-			]
-		);
-
-		$this->add_responsive_control(
-			'awea_photo_radius',
-			[
-				'label'      => esc_html__( 'Photo Radius', 'awesome-widgets-elementor' ),
-				'type'       => Controls_Manager::DIMENSIONS,
-				'size_units' => [ 'px', '%' ],
-				'default'    => [ 'top' => '18', 'right' => '18', 'bottom' => '18', 'left' => '18', 'unit' => 'px', 'isLinked' => true ],
-				'selectors'  => [
-					'{{WRAPPER}} .awea-team-img-container' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
 		);
@@ -485,6 +466,7 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 			Group_Control_Border::get_type(),
 			[
 				'name'           => 'awea_card_border',
+				'label'          => esc_html__( 'Border', 'awesome-widgets-elementor' ),
 				'selector'       => '{{WRAPPER}} .awea-team-master-card',
 				'fields_options' => [
 					'border' => [ 'default' => 'solid' ],
@@ -517,7 +499,7 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 		$this->add_control(
 			'awea_card_border_hover',
 			[
-				'label'     => esc_html__( 'Border Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Border', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [
 					'default' => Global_Colors::COLOR_PRIMARY,
@@ -534,7 +516,51 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   STYLE: 2. DOCK
+		   STYLE: 2. IMAGE
+		   ========================================================================== */
+		$this->start_controls_section(
+			'awea_style_image',
+			[
+				'label' => esc_html__( 'Image', 'awesome-widgets-elementor' ),
+				'tab'   => Controls_Manager::TAB_STYLE,
+			]
+		);
+
+		$this->add_responsive_control(
+			'awea_aspect_ratio',
+			[
+				'label'     => esc_html__( 'Ratio', 'awesome-widgets-elementor' ),
+				'type'      => Controls_Manager::SELECT,
+				'default'   => '4/5',
+				'options'   => [
+					'1/1'  => '1:1',
+					'4/5'  => '4:5',
+					'3/4'  => '3:4',
+					'16/9' => '16:9',
+				],
+				'selectors' => [
+					'{{WRAPPER}} .awea-team-img-container' => 'aspect-ratio: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->add_responsive_control(
+			'awea_photo_radius',
+			[
+				'label'      => esc_html__( 'Radius', 'awesome-widgets-elementor' ),
+				'type'       => Controls_Manager::DIMENSIONS,
+				'size_units' => [ 'px', '%' ],
+				'default'    => [ 'top' => '18', 'right' => '18', 'bottom' => '18', 'left' => '18', 'unit' => 'px', 'isLinked' => true ],
+				'selectors'  => [
+					'{{WRAPPER}} .awea-team-img-container' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				],
+			]
+		);
+
+		$this->end_controls_section();
+
+		/* ==========================================================================
+		   STYLE: 3. DOCK
 		   ========================================================================== */
 		$this->start_controls_section(
 			'awea_style_dock',
@@ -560,6 +586,7 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 			Group_Control_Border::get_type(),
 			[
 				'name'           => 'awea_dock_border',
+				'label'          => esc_html__( 'Border', 'awesome-widgets-elementor' ),
 				'selector'       => '{{WRAPPER}} .awea-team-info-panel',
 				'fields_options' => [
 					'border' => [ 'default' => 'solid' ],
@@ -600,12 +627,12 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   STYLE: 3. TEXT
+		   STYLE: 4. TITLE
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_style_text',
+			'awea_style_title',
 			[
-				'label' => esc_html__( 'Text', 'awesome-widgets-elementor' ),
+				'label' => esc_html__( 'Title', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -613,7 +640,7 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 		$this->add_control(
 			'awea_name_color',
 			[
-				'label'     => esc_html__( 'Name Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#ffffff',
 				'selectors' => [
@@ -626,18 +653,31 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'awea_name_typo',
+				'label'    => esc_html__( 'Typography', 'awesome-widgets-elementor' ),
 				'selector' => '{{WRAPPER}} .awea-team-name',
 				'global'   => [ 'default' => Global_Typography::TYPOGRAPHY_PRIMARY ],
+			]
+		);
+
+		$this->end_controls_section();
+
+		/* ==========================================================================
+		   STYLE: 5. ROLE
+		   ========================================================================== */
+		$this->start_controls_section(
+			'awea_style_role',
+			[
+				'label' => esc_html__( 'Role', 'awesome-widgets-elementor' ),
+				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
 
 		$this->add_control(
 			'awea_role_color',
 			[
-				'label'     => esc_html__( 'Role Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [ 'default' => Global_Colors::COLOR_ACCENT ],
-				'separator' => 'before',
 				'selectors' => [
 					'{{WRAPPER}} .awea-team-role' => 'color: {{VALUE}};',
 				],
@@ -648,17 +688,30 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'awea_role_typo',
+				'label'    => esc_html__( 'Typography', 'awesome-widgets-elementor' ),
 				'selector' => '{{WRAPPER}} .awea-team-role',
 				'global'   => [ 'default' => Global_Typography::TYPOGRAPHY_SECONDARY ],
+			]
+		);
+
+		$this->end_controls_section();
+
+		/* ==========================================================================
+		   STYLE: 6. BIO
+		   ========================================================================== */
+		$this->start_controls_section(
+			'awea_style_bio',
+			[
+				'label' => esc_html__( 'Bio', 'awesome-widgets-elementor' ),
+				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
 
 		$this->add_control(
 			'awea_bio_color',
 			[
-				'label'     => esc_html__( 'Bio Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
-				'separator' => 'before',
 				'selectors' => [
 					'{{WRAPPER}} .awea-team-bio' => 'color: {{VALUE}};',
 				],
@@ -669,6 +722,7 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'awea_bio_typo',
+				'label'    => esc_html__( 'Typography', 'awesome-widgets-elementor' ),
 				'selector' => '{{WRAPPER}} .awea-team-bio',
 				'global'   => [ 'default' => Global_Typography::TYPOGRAPHY_TEXT ],
 			]
@@ -677,7 +731,7 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   STYLE: 4. SOCIALS
+		   STYLE: 7. SOCIALS
 		   ========================================================================== */
 		$this->start_controls_section(
 			'awea_style_socials',
@@ -690,7 +744,7 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_soc_size',
 			[
-				'label'      => esc_html__( 'Button Size', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Size', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [ 'px' => [ 'min' => 28, 'max' => 54 ] ],
@@ -704,7 +758,7 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_soc_icon_size',
 			[
-				'label'      => esc_html__( 'Icon Size', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Icon', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [ 'px' => [ 'min' => 10, 'max' => 26 ] ],
@@ -785,7 +839,8 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#ffffff',
 				'selectors' => [
-					'{{WRAPPER}} .awea-team-social-btn:hover, {{WRAPPER}} .awea-team-social-btn:focus-visible' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-team-social-btn:hover, {{WRAPPER}} .awea-team-social-btn:focus-visible'         => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea-team-social-btn:hover svg, {{WRAPPER}} .awea-team-social-btn:focus-visible svg' => 'fill: {{VALUE}};',
 				],
 			]
 		);
@@ -807,7 +862,7 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   STYLE: 5. ARROWS
+		   STYLE: 8. ARROWS
 		   ========================================================================== */
 		$this->start_controls_section(
 			'awea_style_arrows',
@@ -821,7 +876,7 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_arrow_size',
 			[
-				'label'      => esc_html__( 'Box Size', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Box', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [ 'px' => [ 'min' => 32, 'max' => 64 ] ],
@@ -901,6 +956,7 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 			Group_Control_Border::get_type(),
 			[
 				'name'           => 'awea_arrow_border',
+				'label'          => esc_html__( 'Border', 'awesome-widgets-elementor' ),
 				'selector'       => '{{WRAPPER}} .awea-carousel-arrow-border',
 				'separator'      => 'before',
 				'fields_options' => [
@@ -916,7 +972,7 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   STYLE: 6. DOTS
+		   STYLE: 9. DOTS
 		   ========================================================================== */
 		$this->start_controls_section(
 			'awea_style_dots',
@@ -942,7 +998,7 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 		$this->add_control(
 			'awea_dots_active_color',
 			[
-				'label'     => esc_html__( 'Active Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Active', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [
 					'default' => Global_Colors::COLOR_PRIMARY,
@@ -1042,7 +1098,7 @@ class Widget_Awesome_Team_Carousel extends Widget_Base {
 					$socials = [];
 					$brands  = [
 						'ln'    => [ 'title' => 'LinkedIn', 'brand' => '#0a66c2' ],
-						'tw'    => [ 'title' => 'X (Twitter)', 'brand' => '#000000' ],
+						'tw'    => [ 'title' => 'X', 'brand' => '#000000' ],
 						'fb'    => [ 'title' => 'Facebook', 'brand' => '#1877f2' ],
 						'insta' => [ 'title' => 'Instagram', 'brand' => '#e4405f' ],
 					];

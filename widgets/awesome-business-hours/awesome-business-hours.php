@@ -19,6 +19,7 @@ use Elementor\Group_Control_Box_Shadow;
 use Elementor\Core\Kits\Documents\Tabs\Global_Typography;
 use Elementor\Core\Kits\Documents\Tabs\Global_Colors;
 use Elementor\Widget_Base;
+use Elementor\Icons_Manager;
 use Elementor\Repeater;
 use Elementor\Utils;
 
@@ -45,22 +46,30 @@ class Widget_Awesome_Business_Hours extends Widget_Base {
 	}
 
 	protected function register_controls() {
+		$this->register_content_controls();
+		$this->register_style_controls();
+	}
+
+	/**
+	 * Content Tab Controls
+	 */
+	protected function register_content_controls() {
 
 		/* ==========================================================================
-		   CONTENT: 1. CONTENT
+		   CONTENT: 1. STATUS
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_section_content',
+			'awea_business_hours_section_status',
 			[
-				'label' => esc_html__( 'Content', 'awesome-widgets-elementor' ),
+				'label' => esc_html__( 'Live Status', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
 			]
 		);
 
 		$this->add_control(
-			'awea_show_status',
+			'awea_business_hours_show_status',
 			[
-				'label'        => esc_html__( 'Live Status Badge', 'awesome-widgets-elementor' ),
+				'label'        => esc_html__( 'Display Status Badge', 'awesome-widgets-elementor' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'label_on'     => esc_html__( 'Show', 'awesome-widgets-elementor' ),
 				'label_off'    => esc_html__( 'Hide', 'awesome-widgets-elementor' ),
@@ -70,41 +79,53 @@ class Widget_Awesome_Business_Hours extends Widget_Base {
 		);
 
 		$this->add_control(
-			'awea_open_text',
+			'awea_business_hours_open_text',
 			[
 				'label'     => esc_html__( 'Open Label', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::TEXT,
 				'default'   => esc_html__( 'Open Now', 'awesome-widgets-elementor' ),
 				'dynamic'   => [ 'active' => true ],
-				'condition' => [ 'awea_show_status' => 'yes' ],
+				'condition' => [ 'awea_business_hours_show_status' => 'yes' ],
 			]
 		);
 
 		$this->add_control(
-			'awea_closed_text',
+			'awea_business_hours_closed_text',
 			[
 				'label'     => esc_html__( 'Closed Label', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::TEXT,
 				'default'   => esc_html__( 'Closed Now', 'awesome-widgets-elementor' ),
 				'dynamic'   => [ 'active' => true ],
-				'condition' => [ 'awea_show_status' => 'yes' ],
+				'condition' => [ 'awea_business_hours_show_status' => 'yes' ],
+			]
+		);
+
+		$this->end_controls_section();
+
+		/* ==========================================================================
+		   CONTENT: 2. CONTENT
+		   ========================================================================== */
+		$this->start_controls_section(
+			'awea_business_hours_section_content',
+			[
+				'label' => esc_html__( 'Content', 'awesome-widgets-elementor' ),
+				'tab'   => Controls_Manager::TAB_CONTENT,
 			]
 		);
 
 		$this->add_control(
-			'awea_title',
+			'awea_business_hours_title',
 			[
 				'label'       => esc_html__( 'Title', 'awesome-widgets-elementor' ),
 				'type'        => Controls_Manager::TEXT,
 				'default'     => esc_html__( "We're ready to create.", 'awesome-widgets-elementor' ),
 				'dynamic'     => [ 'active' => true ],
 				'label_block' => true,
-				'separator'   => 'before',
 			]
 		);
 
 		$this->add_control(
-			'awea_title_tag',
+			'awea_business_hours_title_tag',
 			[
 				'label'   => esc_html__( 'HTML Tag', 'awesome-widgets-elementor' ),
 				'type'    => Controls_Manager::SELECT,
@@ -122,7 +143,7 @@ class Widget_Awesome_Business_Hours extends Widget_Base {
 		);
 
 		$this->add_control(
-			'awea_desc',
+			'awea_business_hours_desc',
 			[
 				'label'   => esc_html__( 'Description', 'awesome-widgets-elementor' ),
 				'type'    => Controls_Manager::TEXTAREA,
@@ -133,7 +154,7 @@ class Widget_Awesome_Business_Hours extends Widget_Base {
 		);
 
 		$this->add_control(
-			'awea_timezone_note',
+			'awea_business_hours_timezone_note',
 			[
 				'label'       => esc_html__( 'Timezone Note', 'awesome-widgets-elementor' ),
 				'type'        => Controls_Manager::TEXT,
@@ -146,20 +167,20 @@ class Widget_Awesome_Business_Hours extends Widget_Base {
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   CONTENT: 2. PHONE
+		   CONTENT: 3. CONTACT
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_section_phone',
+			'awea_business_hours_section_phone',
 			[
-				'label' => esc_html__( 'Direct Contact', 'awesome-widgets-elementor' ),
+				'label' => esc_html__( 'Contact', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
 			]
 		);
 
 		$this->add_control(
-			'awea_phone_show',
+			'awea_business_hours_phone_show',
 			[
-				'label'        => esc_html__( 'Show Contact Block', 'awesome-widgets-elementor' ),
+				'label'        => esc_html__( 'Display Contact', 'awesome-widgets-elementor' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'label_on'     => esc_html__( 'Yes', 'awesome-widgets-elementor' ),
 				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
@@ -169,46 +190,61 @@ class Widget_Awesome_Business_Hours extends Widget_Base {
 		);
 
 		$this->add_control(
-			'awea_phone_label',
+			'awea_business_hours_phone_icon',
 			[
-				'label'     => esc_html__( 'Label', 'awesome-widgets-elementor' ),
+				'label'       => esc_html__( 'Icon', 'awesome-widgets-elementor' ),
+				'type'        => Controls_Manager::ICONS,
+				'skin'        => 'inline',
+				'label_block' => false,
+				'default'     => [
+					'value'   => 'fas fa-phone-alt',
+					'library' => 'fa-solid',
+				],
+				'condition'   => [ 'awea_business_hours_phone_show' => 'yes' ],
+			]
+		);
+
+		$this->add_control(
+			'awea_business_hours_phone_label',
+			[
+				'label'     => esc_html__( 'Caption', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::TEXT,
 				'default'   => esc_html__( 'Direct Support Line', 'awesome-widgets-elementor' ),
 				'dynamic'   => [ 'active' => true ],
-				'condition' => [ 'awea_phone_show' => 'yes' ],
+				'condition' => [ 'awea_business_hours_phone_show' => 'yes' ],
 			]
 		);
 
 		$this->add_control(
-			'awea_phone_num',
+			'awea_business_hours_phone_num',
 			[
-				'label'     => esc_html__( 'Number', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Number / Text', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::TEXT,
 				'default'   => '+1 (800) 456-7890',
 				'dynamic'   => [ 'active' => true ],
-				'condition' => [ 'awea_phone_show' => 'yes' ],
+				'condition' => [ 'awea_business_hours_phone_show' => 'yes' ],
 			]
 		);
 
 		$this->add_control(
-			'awea_phone_url',
+			'awea_business_hours_phone_url',
 			[
 				'label'       => esc_html__( 'Link', 'awesome-widgets-elementor' ),
 				'type'        => Controls_Manager::URL,
 				'dynamic'     => [ 'active' => true ],
 				'placeholder' => 'tel:+18004567890',
 				'default'     => [ 'url' => 'tel:+18004567890' ],
-				'condition'   => [ 'awea_phone_show' => 'yes' ],
+				'condition'   => [ 'awea_business_hours_phone_show' => 'yes' ],
 			]
 		);
 
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   CONTENT: 3. SCHEDULE
+		   CONTENT: 4. SCHEDULE
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_section_schedule',
+			'awea_business_hours_section_schedule',
 			[
 				'label' => esc_html__( 'Schedule', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
@@ -218,7 +254,7 @@ class Widget_Awesome_Business_Hours extends Widget_Base {
 		$repeater = new Repeater();
 
 		$repeater->add_control(
-			'awea_day',
+			'awea_business_hours_day',
 			[
 				'label'   => esc_html__( 'Day', 'awesome-widgets-elementor' ),
 				'type'    => Controls_Manager::SELECT,
@@ -236,7 +272,7 @@ class Widget_Awesome_Business_Hours extends Widget_Base {
 		);
 
 		$repeater->add_control(
-			'awea_closed',
+			'awea_business_hours_closed',
 			[
 				'label'        => esc_html__( 'Closed All Day', 'awesome-widgets-elementor' ),
 				'type'         => Controls_Manager::SWITCHER,
@@ -248,67 +284,68 @@ class Widget_Awesome_Business_Hours extends Widget_Base {
 		);
 
 		$repeater->add_control(
-			'awea_hours',
+			'awea_business_hours_hours',
 			[
 				'label'       => esc_html__( 'Display Hours', 'awesome-widgets-elementor' ),
 				'type'        => Controls_Manager::TEXT,
 				'default'     => '09:00 AM — 06:00 PM',
 				'dynamic'     => [ 'active' => true ],
-				'condition'   => [ 'awea_closed!' => 'yes' ],
+				'condition'   => [ 'awea_business_hours_closed!' => 'yes' ],
 				'label_block' => true,
 			]
 		);
 
 		$repeater->add_control(
-			'awea_closed_label',
+			'awea_business_hours_closed_label',
 			[
-				'label'       => esc_html__( 'Closed Text', 'awesome-widgets-elementor' ),
+				'label'       => esc_html__( 'Closed Label', 'awesome-widgets-elementor' ),
 				'type'        => Controls_Manager::TEXT,
 				'default'     => esc_html__( 'CLOSED', 'awesome-widgets-elementor' ),
 				'dynamic'     => [ 'active' => true ],
-				'condition'   => [ 'awea_closed' => 'yes' ],
+				'condition'   => [ 'awea_business_hours_closed' => 'yes' ],
 				'label_block' => true,
 			]
 		);
 
 		$repeater->add_control(
-			'awea_open_24',
+			'awea_business_hours_open_24',
 			[
-				'label'       => esc_html__( 'Opens At (24h HH:MM)', 'awesome-widgets-elementor' ),
-				'description' => esc_html__( 'Used for live Open/Closed status detection.', 'awesome-widgets-elementor' ),
+				'label'       => esc_html__( 'Opens (24h)', 'awesome-widgets-elementor' ),
+				'description' => esc_html__( 'Used for live Open/Closed status detection (HH:MM).', 'awesome-widgets-elementor' ),
 				'type'        => Controls_Manager::TEXT,
 				'default'     => '09:00',
 				'placeholder' => '09:00',
-				'condition'   => [ 'awea_closed!' => 'yes' ],
+				'condition'   => [ 'awea_business_hours_closed!' => 'yes' ],
 			]
 		);
 
 		$repeater->add_control(
-			'awea_close_24',
+			'awea_business_hours_close_24',
 			[
-				'label'       => esc_html__( 'Closes At (24h HH:MM)', 'awesome-widgets-elementor' ),
+				'label'       => esc_html__( 'Closes (24h)', 'awesome-widgets-elementor' ),
+				'description' => esc_html__( '24h HH:MM format (supports overnight e.g. 02:00).', 'awesome-widgets-elementor' ),
 				'type'        => Controls_Manager::TEXT,
 				'default'     => '18:00',
 				'placeholder' => '18:00',
-				'condition'   => [ 'awea_closed!' => 'yes' ],
+				'condition'   => [ 'awea_business_hours_closed!' => 'yes' ],
 			]
 		);
 
 		$this->add_control(
-			'awea_schedule',
+			'awea_business_hours_schedule',
 			[
-				'label'       => esc_html__( 'Weekly Days', 'awesome-widgets-elementor' ),
+				'label'       => esc_html__( 'Days', 'awesome-widgets-elementor' ),
 				'type'        => Controls_Manager::REPEATER,
 				'fields'      => $repeater->get_controls(),
-				'title_field' => '{{{ awea_day }}} — {{{ awea_closed === "yes" ? (awea_closed_label || "CLOSED") : awea_hours }}}',
+				'title_field' => '{{{ awea_business_hours_day }}} — {{{ awea_business_hours_closed === "yes" ? (awea_business_hours_closed_label || "CLOSED") : awea_business_hours_hours }}}',
 				'default'     => [
-					[ 'awea_day' => 'Monday', 'awea_hours' => '09:00 AM — 06:00 PM', 'awea_open_24' => '09:00', 'awea_close_24' => '18:00' ],
-					[ 'awea_day' => 'Tuesday', 'awea_hours' => '09:00 AM — 06:00 PM', 'awea_open_24' => '09:00', 'awea_close_24' => '18:00' ],
-					[ 'awea_day' => 'Wednesday', 'awea_hours' => '09:00 AM — 06:00 PM', 'awea_open_24' => '09:00', 'awea_close_24' => '18:00' ],
-					[ 'awea_day' => 'Thursday', 'awea_hours' => '09:00 AM — 06:00 PM', 'awea_open_24' => '09:00', 'awea_close_24' => '18:00' ],
-					[ 'awea_day' => 'Friday', 'awea_hours' => '09:00 AM — 06:00 PM', 'awea_open_24' => '09:00', 'awea_close_24' => '18:00' ],
-					[ 'awea_day' => 'Saturday', 'awea_hours' => '10:00 AM — 04:00 PM', 'awea_open_24' => '10:00', 'awea_close_24' => '16:00' ],
-					[ 'awea_day' => 'Sunday', 'awea_closed' => 'yes', 'awea_closed_label' => 'CLOSED' ],
+					[ 'awea_business_hours_day' => 'Monday', 'awea_business_hours_hours' => '09:00 AM — 06:00 PM', 'awea_business_hours_open_24' => '09:00', 'awea_business_hours_close_24' => '18:00' ],
+					[ 'awea_business_hours_day' => 'Tuesday', 'awea_business_hours_hours' => '09:00 AM — 06:00 PM', 'awea_business_hours_open_24' => '09:00', 'awea_business_hours_close_24' => '18:00' ],
+					[ 'awea_business_hours_day' => 'Wednesday', 'awea_business_hours_hours' => '09:00 AM — 06:00 PM', 'awea_business_hours_open_24' => '09:00', 'awea_business_hours_close_24' => '18:00' ],
+					[ 'awea_business_hours_day' => 'Thursday', 'awea_business_hours_hours' => '09:00 AM — 06:00 PM', 'awea_business_hours_open_24' => '09:00', 'awea_business_hours_close_24' => '18:00' ],
+					[ 'awea_business_hours_day' => 'Friday', 'awea_business_hours_hours' => '09:00 AM — 06:00 PM', 'awea_business_hours_open_24' => '09:00', 'awea_business_hours_close_24' => '18:00' ],
+					[ 'awea_business_hours_day' => 'Saturday', 'awea_business_hours_hours' => '10:00 AM — 04:00 PM', 'awea_business_hours_open_24' => '10:00', 'awea_business_hours_close_24' => '16:00' ],
+					[ 'awea_business_hours_day' => 'Sunday', 'awea_business_hours_closed' => 'yes', 'awea_business_hours_closed_label' => 'CLOSED' ],
 				],
 			]
 		);
@@ -316,86 +353,113 @@ class Widget_Awesome_Business_Hours extends Widget_Base {
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   CONTENT: 4. LAYOUT
+		   CONTENT: 5. LAYOUT
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_section_layout',
+			'awea_business_hours_section_layout',
 			[
-				'label' => esc_html__( 'Layout', 'awesome-widgets-elementor' ),
+				'label' => esc_html__( 'Layout & Theme', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
 			]
 		);
 
 		$this->add_control(
-			'awea_layout_mode',
+			'awea_business_hours_layout_mode',
 			[
 				'label'        => esc_html__( 'Layout Mode', 'awesome-widgets-elementor' ),
 				'type'         => Controls_Manager::SELECT,
 				'default'      => 'split',
 				'options'      => [
-					'split'   => esc_html__( 'Split Card', 'awesome-widgets-elementor' ),
-					'stacked' => esc_html__( 'Stacked List', 'awesome-widgets-elementor' ),
+					'split'   => esc_html__( 'Split Columns', 'awesome-widgets-elementor' ),
+					'stacked' => esc_html__( 'Stacked', 'awesome-widgets-elementor' ),
 				],
-				'prefix_class' => 'awea-bh-mode-',
+				'prefix_class' => 'awea_business_hours_mode_',
 			]
 		);
 
 		$this->add_control(
-			'awea_surface_theme',
+			'awea_business_hours_panel_pos',
 			[
-				'label'        => esc_html__( 'Surface Scheme', 'awesome-widgets-elementor' ),
+				'label'        => esc_html__( 'Schedule Position', 'awesome-widgets-elementor' ),
+				'type'         => Controls_Manager::CHOOSE,
+				'options'      => [
+					'left'  => [
+						'title' => esc_html__( 'Left', 'awesome-widgets-elementor' ),
+						'icon'  => 'eicon-h-align-left',
+					],
+					'right' => [
+						'title' => esc_html__( 'Right', 'awesome-widgets-elementor' ),
+						'icon'  => 'eicon-h-align-right',
+					],
+				],
+				'default'      => 'right',
+				'prefix_class' => 'awea_business_hours_pos_',
+				'condition'    => [ 'awea_business_hours_layout_mode' => 'split' ],
+			]
+		);
+
+		$this->add_control(
+			'awea_business_hours_surface_theme',
+			[
+				'label'        => esc_html__( 'Surface Theme', 'awesome-widgets-elementor' ),
 				'type'         => Controls_Manager::SELECT,
 				'default'      => 'dark',
 				'options'      => [
 					'dark'  => esc_html__( 'Dark Slate', 'awesome-widgets-elementor' ),
 					'light' => esc_html__( 'Clean Light', 'awesome-widgets-elementor' ),
 				],
-				'prefix_class' => 'awea-bh-theme-',
+				'prefix_class' => 'awea_business_hours_theme_',
 			]
 		);
 
 		$this->end_controls_section();
+	}
+
+	/**
+	 * Style Tab Controls
+	 */
+	protected function register_style_controls() {
 
 		/* ==========================================================================
 		   STYLE: 1. CARD
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_style_card',
+			'awea_business_hours_style_card',
 			[
-				'label' => esc_html__( 'Card Container', 'awesome-widgets-elementor' ),
+				'label' => esc_html__( 'Card & Panels', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
 
 		$this->add_control(
-			'awea_card_bg',
+			'awea_business_hours_card_bg',
 			[
-				'label'     => esc_html__( 'Main Background', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Main Card Background', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}} .awea-bh-card' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .awea_business_hours_card' => 'background-color: {{VALUE}};',
 				],
 			]
 		);
 
 		$this->add_control(
-			'awea_right_bg',
+			'awea_business_hours_right_bg',
 			[
 				'label'     => esc_html__( 'Schedule Panel Background', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}} .awea-bh-right' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .awea_business_hours_right' => 'background-color: {{VALUE}};',
 				],
 			]
 		);
 
 		$this->add_control(
-			'awea_panel_divider_color',
+			'awea_business_hours_panel_divider_color',
 			[
 				'label'     => esc_html__( 'Panel Divider Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}} .awea-bh-right' => 'border-color: {{VALUE}};',
+					'{{WRAPPER}} .awea_business_hours_right' => 'border-color: {{VALUE}};',
 				],
 			]
 		);
@@ -403,13 +467,13 @@ class Widget_Awesome_Business_Hours extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Border::get_type(),
 			[
-				'name'     => 'awea_card_border',
-				'selector' => '{{WRAPPER}} .awea-bh-card',
+				'name'     => 'awea_business_hours_card_border',
+				'selector' => '{{WRAPPER}} .awea_business_hours_card',
 			]
 		);
 
 		$this->add_responsive_control(
-			'awea_card_radius',
+			'awea_business_hours_card_radius',
 			[
 				'label'      => esc_html__( 'Border Radius', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
@@ -423,13 +487,13 @@ class Widget_Awesome_Business_Hours extends Widget_Base {
 					'isLinked' => true,
 				],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-bh-card' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .awea_business_hours_card' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
 		);
 
 		$this->add_responsive_control(
-			'awea_card_padding',
+			'awea_business_hours_card_padding',
 			[
 				'label'      => esc_html__( 'Panel Padding', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
@@ -443,7 +507,7 @@ class Widget_Awesome_Business_Hours extends Widget_Base {
 					'isLinked' => true,
 				],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-bh-left, {{WRAPPER}} .awea-bh-right' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .awea_business_hours_left, {{WRAPPER}} .awea_business_hours_right' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
 		);
@@ -451,106 +515,128 @@ class Widget_Awesome_Business_Hours extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Box_Shadow::get_type(),
 			[
-				'name'     => 'awea_card_shadow',
-				'selector' => '{{WRAPPER}} .awea-bh-card',
+				'name'     => 'awea_business_hours_card_shadow',
+				'selector' => '{{WRAPPER}} .awea_business_hours_card',
 			]
 		);
 
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   STYLE: 2. STATUS BADGE & CONTENT
+		   STYLE: 2. STATUS BADGE
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_style_text',
+			'awea_business_hours_style_status',
 			[
-				'label' => esc_html__( 'Status & Content', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Status Badge', 'awesome-widgets-elementor' ),
+				'tab'       => Controls_Manager::TAB_STYLE,
+				'condition' => [ 'awea_business_hours_show_status' => 'yes' ],
+			]
+		);
+
+		$this->add_group_control(
+			Group_Control_Typography::get_type(),
+			[
+				'name'     => 'awea_business_hours_badge_typo',
+				'selector' => '{{WRAPPER}} .awea_business_hours_badge',
+			]
+		);
+
+		$this->add_responsive_control(
+			'awea_business_hours_badge_spacing',
+			[
+				'label'      => esc_html__( 'Bottom Spacing', 'awesome-widgets-elementor' ),
+				'type'       => Controls_Manager::SLIDER,
+				'size_units' => [ 'px' ],
+				'range'      => [ 'px' => [ 'min' => 8, 'max' => 48 ] ],
+				'default'    => [ 'unit' => 'px', 'size' => 24 ],
+				'selectors'  => [
+					'{{WRAPPER}} .awea_business_hours_badge' => 'margin-bottom: {{SIZE}}{{UNIT}};',
+				],
+			]
+		);
+
+		$this->start_controls_tabs( 'awea_business_hours_status_tabs' );
+
+		$this->start_controls_tab(
+			'awea_business_hours_status_open_tab',
+			[ 'label' => esc_html__( 'Open', 'awesome-widgets-elementor' ) ]
+		);
+
+		$this->add_control(
+			'awea_business_hours_badge_open_color',
+			[
+				'label'     => esc_html__( 'Text & Pulse Color', 'awesome-widgets-elementor' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => [
+					'{{WRAPPER}} .awea_business_hours_badge.awea_business_hours_is_open' => 'color: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->add_control(
+			'awea_business_hours_badge_open_bg',
+			[
+				'label'     => esc_html__( 'Background', 'awesome-widgets-elementor' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => [
+					'{{WRAPPER}} .awea_business_hours_badge.awea_business_hours_is_open' => 'background-color: {{VALUE}}; border-color: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->end_controls_tab();
+
+		$this->start_controls_tab(
+			'awea_business_hours_status_closed_tab',
+			[ 'label' => esc_html__( 'Closed', 'awesome-widgets-elementor' ) ]
+		);
+
+		$this->add_control(
+			'awea_business_hours_badge_closed_color',
+			[
+				'label'     => esc_html__( 'Text & Pulse Color', 'awesome-widgets-elementor' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => [
+					'{{WRAPPER}} .awea_business_hours_badge.awea_business_hours_is_closed' => 'color: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->add_control(
+			'awea_business_hours_badge_closed_bg',
+			[
+				'label'     => esc_html__( 'Background', 'awesome-widgets-elementor' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => [
+					'{{WRAPPER}} .awea_business_hours_badge.awea_business_hours_is_closed' => 'background-color: {{VALUE}}; border-color: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->end_controls_tab();
+		$this->end_controls_tabs();
+
+		$this->end_controls_section();
+
+		/* ==========================================================================
+		   STYLE: 3. TITLE & DESCRIPTION
+		   ========================================================================== */
+		$this->start_controls_section(
+			'awea_business_hours_style_title',
+			[
+				'label' => esc_html__( 'Title & Description', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
 
 		$this->add_control(
-			'awea_badge_heading',
-			[
-				'label'     => esc_html__( 'Status Badge', 'awesome-widgets-elementor' ),
-				'type'      => Controls_Manager::HEADING,
-				'condition' => [ 'awea_show_status' => 'yes' ],
-			]
-		);
-
-		$this->add_group_control(
-			Group_Control_Typography::get_type(),
-			[
-				'name'      => 'awea_badge_typo',
-				'selector'  => '{{WRAPPER}} .awea-bh-badge',
-				'condition' => [ 'awea_show_status' => 'yes' ],
-			]
-		);
-
-		$this->add_control(
-			'awea_badge_open_color',
-			[
-				'label'     => esc_html__( 'Open Text Color', 'awesome-widgets-elementor' ),
-				'type'      => Controls_Manager::COLOR,
-				'selectors' => [
-					'{{WRAPPER}} .awea-bh-badge.is-open' => 'color: {{VALUE}};',
-				],
-				'condition' => [ 'awea_show_status' => 'yes' ],
-			]
-		);
-
-		$this->add_control(
-			'awea_badge_open_bg',
-			[
-				'label'     => esc_html__( 'Open Background', 'awesome-widgets-elementor' ),
-				'type'      => Controls_Manager::COLOR,
-				'selectors' => [
-					'{{WRAPPER}} .awea-bh-badge.is-open' => 'background-color: {{VALUE}}; border-color: {{VALUE}};',
-				],
-				'condition' => [ 'awea_show_status' => 'yes' ],
-			]
-		);
-
-		$this->add_control(
-			'awea_badge_closed_color',
-			[
-				'label'     => esc_html__( 'Closed Text Color', 'awesome-widgets-elementor' ),
-				'type'      => Controls_Manager::COLOR,
-				'selectors' => [
-					'{{WRAPPER}} .awea-bh-badge.is-closed' => 'color: {{VALUE}};',
-				],
-				'condition' => [ 'awea_show_status' => 'yes' ],
-			]
-		);
-
-		$this->add_control(
-			'awea_badge_closed_bg',
-			[
-				'label'     => esc_html__( 'Closed Background', 'awesome-widgets-elementor' ),
-				'type'      => Controls_Manager::COLOR,
-				'selectors' => [
-					'{{WRAPPER}} .awea-bh-badge.is-closed' => 'background-color: {{VALUE}}; border-color: {{VALUE}};',
-				],
-				'condition' => [ 'awea_show_status' => 'yes' ],
-			]
-		);
-
-		$this->add_control(
-			'awea_title_heading',
-			[
-				'label'     => esc_html__( 'Title & Description', 'awesome-widgets-elementor' ),
-				'type'      => Controls_Manager::HEADING,
-				'separator' => 'before',
-			]
-		);
-
-		$this->add_control(
-			'awea_title_color',
+			'awea_business_hours_title_color',
 			[
 				'label'     => esc_html__( 'Title Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}} .awea-bh-title' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea_business_hours_title' => 'color: {{VALUE}};',
 				],
 			]
 		);
@@ -558,19 +644,34 @@ class Widget_Awesome_Business_Hours extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Typography::get_type(),
 			[
-				'name'     => 'awea_title_typo',
-				'selector' => '{{WRAPPER}} .awea-bh-title',
+				'name'     => 'awea_business_hours_title_typo',
+				'selector' => '{{WRAPPER}} .awea_business_hours_title',
 				'global'   => [ 'default' => Global_Typography::TYPOGRAPHY_PRIMARY ],
 			]
 		);
 
+		$this->add_responsive_control(
+			'awea_business_hours_title_spacing',
+			[
+				'label'      => esc_html__( 'Title Bottom Spacing', 'awesome-widgets-elementor' ),
+				'type'       => Controls_Manager::SLIDER,
+				'size_units' => [ 'px' ],
+				'range'      => [ 'px' => [ 'min' => 4, 'max' => 40 ] ],
+				'default'    => [ 'unit' => 'px', 'size' => 14 ],
+				'selectors'  => [
+					'{{WRAPPER}} .awea_business_hours_title' => 'margin-bottom: {{SIZE}}{{UNIT}};',
+				],
+			]
+		);
+
 		$this->add_control(
-			'awea_desc_color',
+			'awea_business_hours_desc_color',
 			[
 				'label'     => esc_html__( 'Description Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
+				'separator' => 'before',
 				'selectors' => [
-					'{{WRAPPER}} .awea-bh-desc' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea_business_hours_desc' => 'color: {{VALUE}};',
 				],
 			]
 		);
@@ -578,94 +679,149 @@ class Widget_Awesome_Business_Hours extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Typography::get_type(),
 			[
-				'name'     => 'awea_desc_typo',
-				'selector' => '{{WRAPPER}} .awea-bh-desc',
+				'name'     => 'awea_business_hours_desc_typo',
+				'selector' => '{{WRAPPER}} .awea_business_hours_desc',
 				'global'   => [ 'default' => Global_Typography::TYPOGRAPHY_TEXT ],
 			]
 		);
 
-		$this->add_control(
-			'awea_phone_heading',
+		$this->add_responsive_control(
+			'awea_business_hours_desc_spacing',
 			[
-				'label'     => esc_html__( 'Direct Contact', 'awesome-widgets-elementor' ),
-				'type'      => Controls_Manager::HEADING,
-				'separator' => 'before',
-				'condition' => [ 'awea_phone_show' => 'yes' ],
-			]
-		);
-
-		$this->add_control(
-			'awea_phone_label_color',
-			[
-				'label'     => esc_html__( 'Caption Color', 'awesome-widgets-elementor' ),
-				'type'      => Controls_Manager::COLOR,
-				'condition' => [ 'awea_phone_show' => 'yes' ],
-				'selectors' => [
-					'{{WRAPPER}} .awea-bh-phone-label' => 'color: {{VALUE}};',
+				'label'      => esc_html__( 'Description Bottom Spacing', 'awesome-widgets-elementor' ),
+				'type'       => Controls_Manager::SLIDER,
+				'size_units' => [ 'px' ],
+				'range'      => [ 'px' => [ 'min' => 8, 'max' => 60 ] ],
+				'default'    => [ 'unit' => 'px', 'size' => 32 ],
+				'selectors'  => [
+					'{{WRAPPER}} .awea_business_hours_desc' => 'margin-bottom: {{SIZE}}{{UNIT}};',
 				],
-			]
-		);
-
-		$this->add_control(
-			'awea_phone_color',
-			[
-				'label'     => esc_html__( 'Number Color', 'awesome-widgets-elementor' ),
-				'type'      => Controls_Manager::COLOR,
-				'condition' => [ 'awea_phone_show' => 'yes' ],
-				'selectors' => [
-					'{{WRAPPER}} .awea-bh-phone-num' => 'color: {{VALUE}};',
-				],
-			]
-		);
-
-		$this->add_control(
-			'awea_phone_ico_bg',
-			[
-				'label'     => esc_html__( 'Icon Box Background', 'awesome-widgets-elementor' ),
-				'type'      => Controls_Manager::COLOR,
-				'condition' => [ 'awea_phone_show' => 'yes' ],
-				'selectors' => [
-					'{{WRAPPER}} .awea-bh-phone-ico' => 'background-color: {{VALUE}}; border-color: {{VALUE}};',
-				],
-			]
-		);
-
-		$this->add_control(
-			'awea_phone_ico_color',
-			[
-				'label'     => esc_html__( 'Icon Color', 'awesome-widgets-elementor' ),
-				'type'      => Controls_Manager::COLOR,
-				'condition' => [ 'awea_phone_show' => 'yes' ],
-				'selectors' => [
-					'{{WRAPPER}} .awea-bh-phone-ico' => 'color: {{VALUE}};',
-				],
-			]
-		);
-
-		$this->add_group_control(
-			Group_Control_Typography::get_type(),
-			[
-				'name'      => 'awea_phone_typo',
-				'selector'  => '{{WRAPPER}} .awea-bh-phone-num',
-				'condition' => [ 'awea_phone_show' => 'yes' ],
 			]
 		);
 
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   STYLE: 3. SCHEDULE
+		   STYLE: 4. CONTACT
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_style_schedule',
+			'awea_business_hours_style_phone',
 			[
-				'label' => esc_html__( 'Schedule Table', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Contact', 'awesome-widgets-elementor' ),
+				'tab'       => Controls_Manager::TAB_STYLE,
+				'condition' => [ 'awea_business_hours_phone_show' => 'yes' ],
+			]
+		);
+
+		$this->add_control(
+			'awea_business_hours_phone_label_color',
+			[
+				'label'     => esc_html__( 'Caption Color', 'awesome-widgets-elementor' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => [
+					'{{WRAPPER}} .awea_business_hours_phone_label' => 'color: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->add_group_control(
+			Group_Control_Typography::get_type(),
+			[
+				'name'     => 'awea_business_hours_phone_label_typo',
+				'label'    => esc_html__( 'Caption Typography', 'awesome-widgets-elementor' ),
+				'selector' => '{{WRAPPER}} .awea_business_hours_phone_label',
+			]
+		);
+
+		$this->add_control(
+			'awea_business_hours_phone_color',
+			[
+				'label'     => esc_html__( 'Number Color', 'awesome-widgets-elementor' ),
+				'type'      => Controls_Manager::COLOR,
+				'separator' => 'before',
+				'selectors' => [
+					'{{WRAPPER}} .awea_business_hours_phone_num' => 'color: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->add_group_control(
+			Group_Control_Typography::get_type(),
+			[
+				'name'     => 'awea_business_hours_phone_typo',
+				'label'    => esc_html__( 'Number Typography', 'awesome-widgets-elementor' ),
+				'selector' => '{{WRAPPER}} .awea_business_hours_phone_num',
+			]
+		);
+
+		$this->add_responsive_control(
+			'awea_business_hours_phone_box_size',
+			[
+				'label'      => esc_html__( 'Icon Box Size', 'awesome-widgets-elementor' ),
+				'type'       => Controls_Manager::SLIDER,
+				'size_units' => [ 'px' ],
+				'range'      => [ 'px' => [ 'min' => 30, 'max' => 64 ] ],
+				'default'    => [ 'unit' => 'px', 'size' => 42 ],
+				'separator'  => 'before',
+				'selectors'  => [
+					'{{WRAPPER}} .awea_business_hours_phone_ico' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}};',
+				],
+			]
+		);
+
+		$this->add_responsive_control(
+			'awea_business_hours_phone_icon_size',
+			[
+				'label'      => esc_html__( 'Icon Size', 'awesome-widgets-elementor' ),
+				'type'       => Controls_Manager::SLIDER,
+				'size_units' => [ 'px' ],
+				'range'      => [ 'px' => [ 'min' => 12, 'max' => 28 ] ],
+				'default'    => [ 'unit' => 'px', 'size' => 16 ],
+				'selectors'  => [
+					'{{WRAPPER}} .awea_business_hours_phone_ico'     => 'font-size: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .awea_business_hours_phone_ico svg' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}};',
+				],
+			]
+		);
+
+		$this->add_control(
+			'awea_business_hours_phone_ico_color',
+			[
+				'label'     => esc_html__( 'Icon Color', 'awesome-widgets-elementor' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => [
+					'{{WRAPPER}} .awea_business_hours_phone_ico'     => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea_business_hours_phone_ico svg' => 'fill: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->add_control(
+			'awea_business_hours_phone_ico_bg',
+			[
+				'label'     => esc_html__( 'Icon Box Background', 'awesome-widgets-elementor' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => [
+					'{{WRAPPER}} .awea_business_hours_phone_ico' => 'background-color: {{VALUE}}; border-color: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->end_controls_section();
+
+		/* ==========================================================================
+		   STYLE: 5. SCHEDULE ROWS
+		   ========================================================================== */
+		$this->start_controls_section(
+			'awea_business_hours_style_schedule',
+			[
+				'label' => esc_html__( 'Schedule Rows', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
 
 		$this->add_responsive_control(
-			'awea_row_pad',
+			'awea_business_hours_row_pad',
 			[
 				'label'      => esc_html__( 'Row Vertical Padding', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
@@ -673,18 +829,18 @@ class Widget_Awesome_Business_Hours extends Widget_Base {
 				'range'      => [ 'px' => [ 'min' => 6, 'max' => 32 ] ],
 				'default'    => [ 'unit' => 'px', 'size' => 16 ],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-bh-row' => 'padding-top: {{SIZE}}{{UNIT}}; padding-bottom: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .awea_business_hours_row' => 'padding-top: {{SIZE}}{{UNIT}}; padding-bottom: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
 
 		$this->add_control(
-			'awea_line_color',
+			'awea_business_hours_line_color',
 			[
 				'label'     => esc_html__( 'Row Divider Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}} .awea-bh-row' => 'border-bottom-color: {{VALUE}};',
+					'{{WRAPPER}} .awea_business_hours_row' => 'border-bottom-color: {{VALUE}};',
 				],
 			]
 		);
@@ -692,19 +848,19 @@ class Widget_Awesome_Business_Hours extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Typography::get_type(),
 			[
-				'name'     => 'awea_day_typo',
+				'name'     => 'awea_business_hours_day_typo',
 				'label'    => esc_html__( 'Day Typography', 'awesome-widgets-elementor' ),
-				'selector' => '{{WRAPPER}} .awea-bh-day',
+				'selector' => '{{WRAPPER}} .awea_business_hours_day',
 			]
 		);
 
 		$this->add_control(
-			'awea_day_color',
+			'awea_business_hours_day_color',
 			[
 				'label'     => esc_html__( 'Day Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}} .awea-bh-day' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea_business_hours_day' => 'color: {{VALUE}};',
 				],
 			]
 		);
@@ -712,68 +868,91 @@ class Widget_Awesome_Business_Hours extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Typography::get_type(),
 			[
-				'name'     => 'awea_hours_typo',
+				'name'     => 'awea_business_hours_hours_typo',
 				'label'    => esc_html__( 'Hours Typography', 'awesome-widgets-elementor' ),
-				'selector' => '{{WRAPPER}} .awea-bh-time',
+				'selector' => '{{WRAPPER}} .awea_business_hours_time',
 			]
 		);
 
 		$this->add_control(
-			'awea_hours_color',
+			'awea_business_hours_hours_color',
 			[
 				'label'     => esc_html__( 'Hours Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}} .awea-bh-time' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea_business_hours_time' => 'color: {{VALUE}};',
 				],
 			]
 		);
 
 		$this->add_control(
-			'awea_today_color',
+			'awea_business_hours_closed_color',
 			[
-				'label'     => esc_html__( 'Current Day Accent', 'awesome-widgets-elementor' ),
-				'type'      => Controls_Manager::COLOR,
-				'global'    => [ 'default' => Global_Colors::COLOR_ACCENT ],
-				'separator' => 'before',
-				'selectors' => [
-					'{{WRAPPER}} .awea-bh-row.is-today'             => 'border-bottom-color: {{VALUE}};',
-					'{{WRAPPER}} .awea-bh-row.is-today .awea-bh-day' => 'color: {{VALUE}};',
-					'{{WRAPPER}} .awea-bh-row.is-today .awea-bh-dot' => 'background-color: {{VALUE}};',
-				],
-			]
-		);
-
-		$this->add_control(
-			'awea_today_time_color',
-			[
-				'label'     => esc_html__( 'Current Day Hours Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Closed Text Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}} .awea-bh-row.is-today .awea-bh-time' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea_business_hours_row.awea_business_hours_is_closed .awea_business_hours_time' => 'color: {{VALUE}};',
 				],
 			]
 		);
 
 		$this->add_control(
-			'awea_closed_color',
-			[
-				'label'     => esc_html__( 'Closed Label Color', 'awesome-widgets-elementor' ),
-				'type'      => Controls_Manager::COLOR,
-				'selectors' => [
-					'{{WRAPPER}} .awea-bh-row.is-closed .awea-bh-time' => 'color: {{VALUE}};',
-				],
-			]
-		);
-
-		$this->add_control(
-			'awea_tz_color',
+			'awea_business_hours_tz_color',
 			[
 				'label'     => esc_html__( 'Timezone Note Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'separator' => 'before',
 				'selectors' => [
-					'{{WRAPPER}} .awea-bh-tz' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea_business_hours_tz' => 'color: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->end_controls_section();
+
+		/* ==========================================================================
+		   STYLE: 6. TODAY HIGHLIGHT
+		   ========================================================================== */
+		$this->start_controls_section(
+			'awea_business_hours_style_today',
+			[
+				'label' => esc_html__( 'Today Highlight', 'awesome-widgets-elementor' ),
+				'tab'   => Controls_Manager::TAB_STYLE,
+			]
+		);
+
+		$this->add_control(
+			'awea_business_hours_today_color',
+			[
+				'label'     => esc_html__( 'Accent Color', 'awesome-widgets-elementor' ),
+				'type'      => Controls_Manager::COLOR,
+				'global'    => [ 'default' => Global_Colors::COLOR_ACCENT ],
+				'selectors' => [
+					'{{WRAPPER}} .awea_business_hours_row.awea_business_hours_is_today'                           => 'border-bottom-color: {{VALUE}};',
+					'{{WRAPPER}} .awea_business_hours_row.awea_business_hours_is_today .awea_business_hours_day' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea_business_hours_row.awea_business_hours_is_today .awea_business_hours_dot' => 'background-color: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->add_control(
+			'awea_business_hours_today_time_color',
+			[
+				'label'     => esc_html__( 'Hours Color', 'awesome-widgets-elementor' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => [
+					'{{WRAPPER}} .awea_business_hours_row.awea_business_hours_is_today .awea_business_hours_time' => 'color: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->add_control(
+			'awea_business_hours_today_bg',
+			[
+				'label'     => esc_html__( 'Row Background', 'awesome-widgets-elementor' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => [
+					'{{WRAPPER}} .awea_business_hours_row.awea_business_hours_is_today' => 'background-color: {{VALUE}}; padding-inline: 12px; border-radius: 10px;',
 				],
 			]
 		);
@@ -808,10 +987,10 @@ class Widget_Awesome_Business_Hours extends Widget_Base {
 
 		// 1. Check if yesterday's overnight hours carry into early morning today.
 		foreach ( $schedule_list as $item ) {
-			$day_name = trim( $item['awea_day'] ?? '' );
-			if ( 0 === strcasecmp( $day_name, $yesterday_day ) && 'yes' !== ( $item['awea_closed'] ?? '' ) ) {
-				$open_time  = $this->normalize_24h( $item['awea_open_24'] ?? '' );
-				$close_time = $this->normalize_24h( $item['awea_close_24'] ?? '' );
+			$day_name = trim( $item['awea_business_hours_day'] ?? '' );
+			if ( 0 === strcasecmp( $day_name, $yesterday_day ) && 'yes' !== ( $item['awea_business_hours_closed'] ?? '' ) ) {
+				$open_time  = $this->normalize_24h( $item['awea_business_hours_open_24'] ?? '' );
+				$close_time = $this->normalize_24h( $item['awea_business_hours_close_24'] ?? '' );
 				if ( '' !== $open_time && '' !== $close_time && $close_time < $open_time && $current_time <= $close_time ) {
 					return true;
 				}
@@ -820,13 +999,13 @@ class Widget_Awesome_Business_Hours extends Widget_Base {
 
 		// 2. Check today's operational window.
 		foreach ( $schedule_list as $item ) {
-			$day_name = trim( $item['awea_day'] ?? '' );
+			$day_name = trim( $item['awea_business_hours_day'] ?? '' );
 			if ( 0 === strcasecmp( $day_name, $current_day ) ) {
-				if ( 'yes' === ( $item['awea_closed'] ?? '' ) ) {
+				if ( 'yes' === ( $item['awea_business_hours_closed'] ?? '' ) ) {
 					return false;
 				}
-				$open_time  = $this->normalize_24h( $item['awea_open_24'] ?? '' );
-				$close_time = $this->normalize_24h( $item['awea_close_24'] ?? '' );
+				$open_time  = $this->normalize_24h( $item['awea_business_hours_open_24'] ?? '' );
+				$close_time = $this->normalize_24h( $item['awea_business_hours_close_24'] ?? '' );
 				if ( '' === $open_time || '' === $close_time ) {
 					return true;
 				}
@@ -842,111 +1021,111 @@ class Widget_Awesome_Business_Hours extends Widget_Base {
 
 	protected function render() {
 		$settings     = $this->get_settings_for_display();
-		$schedule     = $settings['awea_schedule'] ?? [];
+		$schedule     = $settings['awea_business_hours_schedule'] ?? [];
 		$current_day  = wp_date( 'l' );
 		$is_open_now  = $this->calculate_is_open_now( $schedule );
-		$show_status  = 'yes' === ( $settings['awea_show_status'] ?? 'yes' );
-		$open_label   = ! empty( $settings['awea_open_text'] ) ? $settings['awea_open_text'] : esc_html__( 'Open Now', 'awesome-widgets-elementor' );
-		$closed_label = ! empty( $settings['awea_closed_text'] ) ? $settings['awea_closed_text'] : esc_html__( 'Closed Now', 'awesome-widgets-elementor' );
-		$tz_note      = $settings['awea_timezone_note'] ?? '';
-		$show_phone   = 'yes' === ( $settings['awea_phone_show'] ?? 'no' );
-		$phone_num    = $settings['awea_phone_num'] ?? '';
-		$phone_link   = $settings['awea_phone_url'] ?? [];
-		$title_tag    = Utils::validate_html_tag( $settings['awea_title_tag'] ?? 'h2' );
+		$show_status  = 'yes' === ( $settings['awea_business_hours_show_status'] ?? 'yes' );
+		$open_label   = ! empty( $settings['awea_business_hours_open_text'] ) ? $settings['awea_business_hours_open_text'] : esc_html__( 'Open Now', 'awesome-widgets-elementor' );
+		$closed_label = ! empty( $settings['awea_business_hours_closed_text'] ) ? $settings['awea_business_hours_closed_text'] : esc_html__( 'Closed Now', 'awesome-widgets-elementor' );
+		$tz_note      = $settings['awea_business_hours_timezone_note'] ?? '';
+		$show_phone   = 'yes' === ( $settings['awea_business_hours_phone_show'] ?? 'no' );
+		$phone_num    = $settings['awea_business_hours_phone_num'] ?? '';
+		$phone_link   = $settings['awea_business_hours_phone_url'] ?? [];
+		$title_tag    = Utils::validate_html_tag( $settings['awea_business_hours_title_tag'] ?? 'h2' );
 		$widget_id    = $this->get_id();
 		$wp_timezone  = wp_timezone_string();
 		$gmt_offset   = (float) get_option( 'gmt_offset', 0 );
 
 		if ( $show_phone && ! empty( $phone_num ) ) {
-			$this->remove_render_attribute( 'awea_phone_call' );
+			$this->remove_render_attribute( 'awea_business_hours_phone_call' );
 			if ( empty( $phone_link['url'] ) ) {
 				$clean_tel         = preg_replace( '/[^0-9+]/', '', $phone_num );
 				$phone_link['url'] = $clean_tel ? 'tel:' . $clean_tel : '#';
 			}
-			$this->add_link_attributes( 'awea_phone_call', $phone_link );
+			$this->add_link_attributes( 'awea_business_hours_phone_call', $phone_link );
 		}
 		?>
-		<div class="awea-bh-root" id="awea-bh-<?php echo esc_attr( $widget_id ); ?>"
-			 data-open-label="<?php echo esc_attr( $open_label ); ?>"
-			 data-closed-label="<?php echo esc_attr( $closed_label ); ?>"
-			 data-timezone="<?php echo esc_attr( $wp_timezone ); ?>"
-			 data-gmt-offset="<?php echo esc_attr( (string) $gmt_offset ); ?>">
-			<div class="awea-bh-card">
+		<div class="awea_business_hours_root" id="awea_business_hours_<?php echo esc_attr( $widget_id ); ?>"
+			 data-awea_business_hours_open_label="<?php echo esc_attr( $open_label ); ?>"
+			 data-awea_business_hours_closed_label="<?php echo esc_attr( $closed_label ); ?>"
+			 data-awea_business_hours_timezone="<?php echo esc_attr( $wp_timezone ); ?>"
+			 data-awea_business_hours_gmt_offset="<?php echo esc_attr( (string) $gmt_offset ); ?>">
+			<div class="awea_business_hours_card">
 
 				<!-- Left Status Panel -->
-				<div class="awea-bh-left">
+				<div class="awea_business_hours_left">
 					<?php if ( $show_status ) : ?>
-						<div class="awea-bh-badge <?php echo $is_open_now ? 'is-open' : 'is-closed'; ?>">
-							<span class="awea-bh-pulse" aria-hidden="true"></span>
-							<span class="awea-bh-badge-text"><?php echo esc_html( $is_open_now ? $open_label : $closed_label ); ?></span>
+						<div class="awea_business_hours_badge <?php echo $is_open_now ? 'awea_business_hours_is_open' : 'awea_business_hours_is_closed'; ?>">
+							<span class="awea_business_hours_pulse" aria-hidden="true"></span>
+							<span class="awea_business_hours_badge_text"><?php echo esc_html( $is_open_now ? $open_label : $closed_label ); ?></span>
 						</div>
 					<?php endif; ?>
 
-					<?php if ( ! empty( $settings['awea_title'] ) ) : ?>
-						<<?php Utils::print_validated_html_tag( $title_tag ); ?> class="awea-bh-title">
-							<?php echo esc_html( $settings['awea_title'] ); ?>
+					<?php if ( ! empty( $settings['awea_business_hours_title'] ) ) : ?>
+						<<?php Utils::print_validated_html_tag( $title_tag ); ?> class="awea_business_hours_title">
+							<?php echo esc_html( $settings['awea_business_hours_title'] ); ?>
 						</<?php Utils::print_validated_html_tag( $title_tag ); ?>>
 					<?php endif; ?>
 
-					<?php if ( ! empty( $settings['awea_desc'] ) ) : ?>
-						<p class="awea-bh-desc"><?php echo esc_html( $settings['awea_desc'] ); ?></p>
+					<?php if ( ! empty( $settings['awea_business_hours_desc'] ) ) : ?>
+						<p class="awea_business_hours_desc"><?php echo esc_html( $settings['awea_business_hours_desc'] ); ?></p>
 					<?php endif; ?>
 
 					<?php if ( $show_phone && ! empty( $phone_num ) ) : ?>
-						<div class="awea-bh-phone">
-							<?php if ( ! empty( $settings['awea_phone_label'] ) ) : ?>
-								<span class="awea-bh-phone-label"><?php echo esc_html( $settings['awea_phone_label'] ); ?></span>
+						<div class="awea_business_hours_phone">
+							<?php if ( ! empty( $settings['awea_business_hours_phone_label'] ) ) : ?>
+								<span class="awea_business_hours_phone_label"><?php echo esc_html( $settings['awea_business_hours_phone_label'] ); ?></span>
 							<?php endif; ?>
 
-							<a class="awea-bh-phone-link" <?php $this->print_render_attribute_string( 'awea_phone_call' ); ?>>
-								<span class="awea-bh-phone-ico" aria-hidden="true">
-									<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-										<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
-									</svg>
-								</span>
-								<span class="awea-bh-phone-num"><?php echo esc_html( $phone_num ); ?></span>
+							<a class="awea_business_hours_phone_link" <?php $this->print_render_attribute_string( 'awea_business_hours_phone_call' ); ?>>
+								<?php if ( ! empty( $settings['awea_business_hours_phone_icon']['value'] ) ) : ?>
+									<span class="awea_business_hours_phone_ico" aria-hidden="true">
+										<?php Icons_Manager::render_icon( $settings['awea_business_hours_phone_icon'], [ 'aria-hidden' => 'true' ] ); ?>
+									</span>
+								<?php endif; ?>
+								<span class="awea_business_hours_phone_num"><?php echo esc_html( $phone_num ); ?></span>
 							</a>
 						</div>
 					<?php endif; ?>
 				</div>
 
 				<!-- Right Weekly Schedule -->
-				<div class="awea-bh-right">
+				<div class="awea_business_hours_right">
 					<?php if ( ! empty( $schedule ) ) : ?>
-						<div class="awea-bh-list">
+						<div class="awea_business_hours_list">
 							<?php foreach ( $schedule as $item ) :
-								$day_name  = trim( $item['awea_day'] ?? '' );
-								$is_closed = 'yes' === ( $item['awea_closed'] ?? '' );
+								$day_name  = trim( $item['awea_business_hours_day'] ?? '' );
+								$is_closed = 'yes' === ( $item['awea_business_hours_closed'] ?? '' );
 								$is_today  = ( 0 === strcasecmp( $day_name, $current_day ) );
 								$time_str  = $is_closed
-									? ( ! empty( $item['awea_closed_label'] ) ? $item['awea_closed_label'] : esc_html__( 'CLOSED', 'awesome-widgets-elementor' ) )
-									: ( $item['awea_hours'] ?? '' );
+									? ( ! empty( $item['awea_business_hours_closed_label'] ) ? $item['awea_business_hours_closed_label'] : esc_html__( 'CLOSED', 'awesome-widgets-elementor' ) )
+									: ( $item['awea_business_hours_hours'] ?? '' );
 
-								$row_classes = [ 'awea-bh-row' ];
+								$row_classes = [ 'awea_business_hours_row' ];
 								if ( $is_today ) {
-									$row_classes[] = 'is-today';
+									$row_classes[] = 'awea_business_hours_is_today';
 								}
 								if ( $is_closed ) {
-									$row_classes[] = 'is-closed';
+									$row_classes[] = 'awea_business_hours_is_closed';
 								}
 								?>
 								<div class="<?php echo esc_attr( implode( ' ', $row_classes ) ); ?>"
-									 data-day="<?php echo esc_attr( $day_name ); ?>"
-									 data-closed="<?php echo $is_closed ? '1' : '0'; ?>"
-									 data-open="<?php echo esc_attr( $this->normalize_24h( $item['awea_open_24'] ?? '' ) ); ?>"
-									 data-close="<?php echo esc_attr( $this->normalize_24h( $item['awea_close_24'] ?? '' ) ); ?>">
-									<div class="awea-bh-day-wrap">
-										<span class="awea-bh-dot" aria-hidden="true"></span>
-										<span class="awea-bh-day"><?php echo esc_html( $day_name ); ?></span>
+									 data-awea_business_hours_day="<?php echo esc_attr( $day_name ); ?>"
+									 data-awea_business_hours_closed="<?php echo $is_closed ? '1' : '0'; ?>"
+									 data-awea_business_hours_open="<?php echo esc_attr( $this->normalize_24h( $item['awea_business_hours_open_24'] ?? '' ) ); ?>"
+									 data-awea_business_hours_close="<?php echo esc_attr( $this->normalize_24h( $item['awea_business_hours_close_24'] ?? '' ) ); ?>">
+									<div class="awea_business_hours_day_wrap">
+										<span class="awea_business_hours_dot" aria-hidden="true"></span>
+										<span class="awea_business_hours_day"><?php echo esc_html( $day_name ); ?></span>
 									</div>
-									<span class="awea-bh-time"><?php echo esc_html( $time_str ); ?></span>
+									<span class="awea_business_hours_time"><?php echo esc_html( $time_str ); ?></span>
 								</div>
 							<?php endforeach; ?>
 						</div>
 					<?php endif; ?>
 
 					<?php if ( ! empty( $tz_note ) ) : ?>
-						<div class="awea-bh-tz"><?php echo esc_html( $tz_note ); ?></div>
+						<div class="awea_business_hours_tz"><?php echo esc_html( $tz_note ); ?></div>
 					<?php endif; ?>
 				</div>
 
@@ -957,7 +1136,7 @@ class Widget_Awesome_Business_Hours extends Widget_Base {
 		(function() {
 			var DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
-			function getSiteDateParts(tz, gmtOffset) {
+			function awea_business_hours_get_date_parts(tz, gmtOffset) {
 				var now = new Date();
 				try {
 					if (tz && tz.indexOf('/') !== -1) {
@@ -978,7 +1157,6 @@ class Widget_Awesome_Business_Hours extends Widget_Base {
 					}
 				} catch (e) {}
 
-				// Fallback to WordPress numeric GMT offset (handles manual UTC±X settings)
 				var offsetMs = (parseFloat(gmtOffset) || 0) * 3600000;
 				var shifted = new Date(now.getTime() + offsetMs);
 				var dayIdx = shifted.getUTCDay();
@@ -991,26 +1169,25 @@ class Widget_Awesome_Business_Hours extends Widget_Base {
 				};
 			}
 
-			function syncBusinessHours(root) {
+			function awea_business_hours_sync(root) {
 				if (!root) return;
 
-				var tz = root.getAttribute('data-timezone') || '';
-				var gmtOffset = root.getAttribute('data-gmt-offset') || '0';
-				var parts = getSiteDateParts(tz, gmtOffset);
+				var tz = root.getAttribute('data-awea_business_hours_timezone') || '';
+				var gmtOffset = root.getAttribute('data-awea_business_hours_gmt_offset') || '0';
+				var parts = awea_business_hours_get_date_parts(tz, gmtOffset);
 				var todayName = parts.dayName;
 				var yesterdayName = parts.dayIndex >= 0 ? DAYS[(parts.dayIndex + 6) % 7] : '';
 				var nowStr = parts.timeStr;
 
 				var isOpen = false;
-				var rows = root.querySelectorAll('.awea-bh-row');
+				var rows = root.querySelectorAll('.awea_business_hours_row');
 
 				rows.forEach(function(row) {
-					var day = (row.getAttribute('data-day') || '').trim();
-					var closed = row.getAttribute('data-closed') === '1';
-					var open24 = row.getAttribute('data-open') || '';
-					var close24 = row.getAttribute('data-close') || '';
+					var day = (row.getAttribute('data-awea_business_hours_day') || '').trim();
+					var closed = row.getAttribute('data-awea_business_hours_closed') === '1';
+					var open24 = row.getAttribute('data-awea_business_hours_open') || '';
+					var close24 = row.getAttribute('data-awea_business_hours_close') || '';
 
-					// Check yesterday's overnight spillover into early morning today
 					if (yesterdayName && day.toLowerCase() === yesterdayName.toLowerCase() && !closed) {
 						if (open24 && close24 && close24 < open24 && nowStr <= close24) {
 							isOpen = true;
@@ -1018,7 +1195,7 @@ class Widget_Awesome_Business_Hours extends Widget_Base {
 					}
 
 					if (day.toLowerCase() === todayName.toLowerCase()) {
-						row.classList.add('is-today');
+						row.classList.add('awea_business_hours_is_today');
 						if (!closed) {
 							if (!open24 || !close24) {
 								isOpen = true;
@@ -1029,37 +1206,37 @@ class Widget_Awesome_Business_Hours extends Widget_Base {
 							}
 						}
 					} else {
-						row.classList.remove('is-today');
+						row.classList.remove('awea_business_hours_is_today');
 					}
 				});
 
-				var badge = root.querySelector('.awea-bh-badge');
-				var badgeText = root.querySelector('.awea-bh-badge-text');
+				var badge = root.querySelector('.awea_business_hours_badge');
+				var badgeText = root.querySelector('.awea_business_hours_badge_text');
 				if (badge && badgeText) {
-					badge.classList.toggle('is-open', isOpen);
-					badge.classList.toggle('is-closed', !isOpen);
+					badge.classList.toggle('awea_business_hours_is_open', isOpen);
+					badge.classList.toggle('awea_business_hours_is_closed', !isOpen);
 					badgeText.textContent = isOpen
-						? root.getAttribute('data-open-label')
-						: root.getAttribute('data-closed-label');
+						? root.getAttribute('data-awea_business_hours_open_label')
+						: root.getAttribute('data-awea_business_hours_closed_label');
 				}
 			}
 
-			function initInstance() {
-				var el = document.getElementById('awea-bh-<?php echo esc_js( $widget_id ); ?>');
-				syncBusinessHours(el);
+			function awea_business_hours_init() {
+				var el = document.getElementById('awea_business_hours_<?php echo esc_js( $widget_id ); ?>');
+				awea_business_hours_sync(el);
 			}
 
 			if (document.readyState === 'loading') {
-				document.addEventListener('DOMContentLoaded', initInstance);
+				document.addEventListener('DOMContentLoaded', awea_business_hours_init);
 			} else {
-				initInstance();
+				awea_business_hours_init();
 			}
 
-			if (!window.aweaBhHookRegistered && window.elementorFrontend && window.elementorFrontend.hooks) {
-				window.aweaBhHookRegistered = true;
+			if (!window.awea_business_hours_hooked && window.elementorFrontend && window.elementorFrontend.hooks) {
+				window.awea_business_hours_hooked = true;
 				window.elementorFrontend.hooks.addAction('frontend/element_ready/awesome-business-hours.default', function($scope) {
-					var el = $scope && $scope[0] ? $scope[0].querySelector('.awea-bh-root') : null;
-					syncBusinessHours(el);
+					var el = $scope && $scope[0] ? $scope[0].querySelector('.awea_business_hours_root') : null;
+					awea_business_hours_sync(el);
 				});
 			}
 		})();

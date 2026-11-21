@@ -1,21 +1,21 @@
 /* ==========================================================================
-   Awesome Counter Widget
+   Awesome Counter Widget (v2.0.0)
    ========================================================================== */
 
-@property --awea-cnt-angle {
+@property --awea_counter_angle {
 	syntax: "<angle>";
 	initial-value: 0deg;
 	inherits: false;
 }
 
-.awea-cnt-grid {
-	--awea-cnt-primary: var(--e-global-color-primary, #4f46e5);
-	--awea-cnt-global-beam: var(--awea-cnt-primary);
-	--awea-cnt-heading: #0f172a;
-	--awea-cnt-muted: #64748b;
-	--awea-cnt-subtext: #94a3b8;
-	--awea-cnt-border: #e2e8f0;
-	--awea-cnt-stats-justify: center;
+.awea_counter_grid {
+	--awea_counter_primary: var(--e-global-color-primary, #4f46e5);
+	--awea_counter_global_beam: var(--awea_counter_primary);
+	--awea_counter_heading: #0f172a;
+	--awea_counter_muted: #64748b;
+	--awea_counter_subtext: #94a3b8;
+	--awea_counter_border: #e2e8f0;
+	--awea_counter_stats_justify: center;
 
 	display: grid;
 	grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -25,17 +25,17 @@
 	align-items: stretch;
 }
 
-.awea-cnt-grid *,
-.awea-cnt-grid *::before,
-.awea-cnt-grid *::after {
+.awea_counter_grid *,
+.awea_counter_grid *::before,
+.awea_counter_grid *::after {
 	box-sizing: border-box;
 }
 
 /* --------------------------------------------------------------------------
-1. Counter Card Shell
+   1. Counter Card Shell
    -------------------------------------------------------------------------- */
-.awea-cnt-card {
-	--awea-cnt-beam: var(--awea-cnt-item-beam, var(--awea-cnt-global-beam));
+.awea_counter_card {
+	--awea_counter_beam: var(--awea_counter_item_beam, var(--awea_counter_global_beam));
 
 	position: relative;
 	display: flex;
@@ -48,7 +48,7 @@
 	padding: 36px 28px;
 	border-radius: 24px;
 	background-color: #ffffff;
-	border: 1px solid var(--awea-cnt-border);
+	border: 1px solid var(--awea_counter_border);
 	overflow: hidden;
 	transition:
 		background-color 0.25s ease,
@@ -58,34 +58,34 @@
 }
 
 /* Horizontal Card Layout Mode */
-.awea-cnt-dir-horizontal .awea-cnt-card {
+.awea_counter_dir_horizontal .awea_counter_card {
 	flex-direction: row;
 	align-items: center;
 	justify-content: flex-start;
-	text-align: left;
+	text-align: start;
 	gap: 20px;
 }
 
-.awea-cnt-dir-horizontal .awea-cnt-icon {
+.awea_counter_dir_horizontal .awea_counter_icon {
 	margin-bottom: 0;
 }
 
-.awea-cnt-dir-horizontal .awea-cnt-stats {
+.awea_counter_dir_horizontal .awea_counter_stats {
 	justify-content: flex-start;
 }
 
-.awea-cnt-card:hover {
-	border-color: var(--awea-cnt-beam);
+.awea_counter_card:hover {
+	border-color: var(--awea_counter_beam);
 }
 
 /* Kinetic Border Beam */
-.awea-cnt-beam-yes .awea-cnt-card::after {
+.awea_counter_beam_yes .awea_counter_card::after {
 	content: "";
 	position: absolute;
 	inset: 0;
 	border-radius: inherit;
 	padding: 1.5px;
-	background: conic-gradient(from var(--awea-cnt-angle), transparent 70%, var(--awea-cnt-beam), transparent);
+	background: conic-gradient(from var(--awea_counter_angle), transparent 70%, var(--awea_counter_beam), transparent);
 	-webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
 	mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
 	-webkit-mask-composite: xor;
@@ -95,26 +95,26 @@
 	pointer-events: none;
 }
 
-@keyframes aweaCntSpin {
+@keyframes awea_counter_spin {
 	to {
-		--awea-cnt-angle: 360deg;
+		--awea_counter_angle: 360deg;
 	}
 }
 
-.awea-cnt-beam-yes .awea-cnt-card:hover::after {
+.awea_counter_beam_yes .awea_counter_card:hover::after {
 	opacity: 1;
-	animation: aweaCntSpin 3.5s linear infinite;
+	animation: awea_counter_spin 3.5s linear infinite;
 }
 
 /* --------------------------------------------------------------------------
-2. Leading Icon Box
+   2. Leading Icon Box
    -------------------------------------------------------------------------- */
-.awea-cnt-icon {
+.awea_counter_icon {
 	width: 58px;
 	height: 58px;
 	border-radius: 16px;
 	background-color: rgba(79, 70, 229, 0.08);
-	color: var(--awea-cnt-primary);
+	color: var(--awea_counter_primary);
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
@@ -126,127 +126,127 @@
 		transform 0.25s ease;
 }
 
-.awea-cnt-icon i {
+.awea_counter_icon i {
 	font-size: 22px;
 	line-height: 1;
 }
 
-.awea-cnt-icon svg {
+.awea_counter_icon svg {
 	width: 22px;
 	height: 22px;
 	display: block;
 	fill: currentColor;
 }
 
-.awea-cnt-card:hover .awea-cnt-icon {
-	background-color: var(--awea-cnt-primary);
+.awea_counter_card:hover .awea_counter_icon {
+	background-color: var(--awea_counter_primary);
 	color: #ffffff;
 }
 
-.awea-cnt-card:hover .awea-cnt-icon svg {
+.awea_counter_card:hover .awea_counter_icon svg {
 	fill: #ffffff;
 }
 
 /* --------------------------------------------------------------------------
-3. Number Metrics & Labels
+   3. Number Metrics & Labels
    -------------------------------------------------------------------------- */
-.awea-cnt-content {
+.awea_counter_content {
 	display: flex;
 	flex-direction: column;
 	min-width: 0;
 }
 
-.awea-cnt-stats {
+.awea_counter_stats {
 	display: inline-flex;
 	align-items: baseline;
-	justify-content: var(--awea-cnt-stats-justify, center);
+	justify-content: var(--awea_counter_stats_justify, center);
 	line-height: 1;
 	margin-bottom: 8px;
 	flex-wrap: wrap;
 }
 
-.awea-cnt-val {
+.awea_counter_val {
 	font-size: clamp(2.25rem, 4.2vw, 3.35rem);
 	font-weight: 800;
 	line-height: 1;
 	letter-spacing: -0.04em;
-	color: var(--awea-cnt-heading);
+	color: var(--awea_counter_heading);
 	font-variant-numeric: tabular-nums;
 	font-feature-settings: "tnum";
 }
 
-.awea-cnt-pre,
-.awea-cnt-suf {
+.awea_counter_pre,
+.awea_counter_suf {
 	font-size: clamp(1.25rem, 2.4vw, 1.75rem);
 	font-weight: 700;
-	color: var(--awea-cnt-primary);
+	color: var(--awea_counter_primary);
 	line-height: 1;
 }
 
-.awea-cnt-pre {
-	margin-right: 3px;
+.awea_counter_pre {
+	margin-inline-end: 3px;
 }
 
-.awea-cnt-suf {
-	margin-left: 3px;
+.awea_counter_suf {
+	margin-inline-start: 3px;
 }
 
-.awea-cnt-lbl {
+.awea_counter_lbl {
 	margin: 0;
 	font-size: 0.84rem;
 	font-weight: 700;
 	text-transform: uppercase;
 	letter-spacing: 0.1em;
-	color: var(--awea-cnt-muted);
+	color: var(--awea_counter_muted);
 	line-height: 1.4;
 	word-break: break-word;
 }
 
-.awea-cnt-subtext {
+.awea_counter_subtext {
 	display: block;
 	margin-top: 4px;
 	font-size: 0.8125rem;
-	color: var(--awea-cnt-subtext);
+	color: var(--awea_counter_subtext);
 	line-height: 1.4;
 }
 
 /* --------------------------------------------------------------------------
-4. Accessibility & Responsive
+   4. Accessibility & Responsive
    -------------------------------------------------------------------------- */
 @media (prefers-reduced-motion: reduce) {
-	.awea-cnt-beam-yes .awea-cnt-card:hover::after {
+	.awea_counter_beam_yes .awea_counter_card:hover::after {
 		animation: none !important;
 	}
 
-	.awea-cnt-card,
-	.awea-cnt-icon {
+	.awea_counter_card,
+	.awea_counter_icon {
 		transition: none !important;
 	}
 }
 
 @media (max-width: 768px) {
-	:where(.awea-cnt-card) {
+	:where(.awea_counter_card) {
 		padding: 28px 20px;
 		border-radius: 18px;
 	}
 
-	:where(.awea-cnt-icon) {
+	:where(.awea_counter_icon) {
 		width: 48px;
 		height: 48px;
 		margin-bottom: 16px;
 		border-radius: 14px;
 	}
 
-	:where(.awea-cnt-icon) i {
+	:where(.awea_counter_icon) i {
 		font-size: 18px;
 	}
 
-	:where(.awea-cnt-icon) svg {
+	:where(.awea_counter_icon) svg {
 		width: 18px;
 		height: 18px;
 	}
 
-	.awea-cnt-lbl {
+	.awea_counter_lbl {
 		font-size: 0.76rem;
 		letter-spacing: 0.08em;
 	}

@@ -46,7 +46,7 @@ class Widget_Awesome_Testimonials extends Widget_Base {
 	protected function register_controls() {
 
 		/* ==========================================================================
-		   CONTENT: 1. ITEMS (REPEATER)
+		   CONTENT: 1. ITEMS
 		   ========================================================================== */
 		$this->start_controls_section(
 			'awea_section_items',
@@ -106,7 +106,7 @@ class Widget_Awesome_Testimonials extends Widget_Base {
 		$repeater->add_control(
 			'awea_photo',
 			[
-				'label'   => esc_html__( 'Photo', 'awesome-widgets-elementor' ),
+				'label'   => esc_html__( 'Image', 'awesome-widgets-elementor' ),
 				'type'    => Controls_Manager::MEDIA,
 				'dynamic' => [ 'active' => true ],
 				'default' => [
@@ -160,7 +160,7 @@ class Widget_Awesome_Testimonials extends Widget_Base {
 		$repeater->add_control(
 			'awea_item_border',
 			[
-				'label'     => esc_html__( 'Card Border', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Border', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} {{CURRENT_ITEM}}' => 'border-color: {{VALUE}};',
@@ -171,7 +171,7 @@ class Widget_Awesome_Testimonials extends Widget_Base {
 		$repeater->add_control(
 			'awea_item_beam',
 			[
-				'label'     => esc_html__( 'Beam Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Beam', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} {{CURRENT_ITEM}}' => '--awea-tm-item-beam: {{VALUE}};',
@@ -186,7 +186,7 @@ class Widget_Awesome_Testimonials extends Widget_Base {
 		$this->add_control(
 			'awea_items',
 			[
-				'label'       => esc_html__( 'Reviews', 'awesome-widgets-elementor' ),
+				'label'       => esc_html__( 'List', 'awesome-widgets-elementor' ),
 				'type'        => Controls_Manager::REPEATER,
 				'fields'      => $repeater->get_controls(),
 				'title_field' => '{{{ awea_name }}} — {{{ awea_role }}}',
@@ -219,12 +219,12 @@ class Widget_Awesome_Testimonials extends Widget_Base {
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   CONTENT: 2. LAYOUT
+		   CONTENT: 2. GRID
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_section_layout',
+			'awea_section_grid',
 			[
-				'label' => esc_html__( 'Layout', 'awesome-widgets-elementor' ),
+				'label' => esc_html__( 'Grid', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
 			]
 		);
@@ -263,10 +263,23 @@ class Widget_Awesome_Testimonials extends Widget_Base {
 			]
 		);
 
+		$this->end_controls_section();
+
+		/* ==========================================================================
+		   CONTENT: 3. OPTIONS
+		   ========================================================================== */
+		$this->start_controls_section(
+			'awea_section_options',
+			[
+				'label' => esc_html__( 'Options', 'awesome-widgets-elementor' ),
+				'tab'   => Controls_Manager::TAB_CONTENT,
+			]
+		);
+
 		$this->add_control(
 			'awea_quote_icon',
 			[
-				'label'        => esc_html__( 'Quote Mark', 'awesome-widgets-elementor' ),
+				'label'        => esc_html__( 'Quote', 'awesome-widgets-elementor' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'label_on'     => esc_html__( 'Yes', 'awesome-widgets-elementor' ),
 				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
@@ -278,7 +291,7 @@ class Widget_Awesome_Testimonials extends Widget_Base {
 		$this->add_control(
 			'awea_beam_enable',
 			[
-				'label'        => esc_html__( 'Hover Beam', 'awesome-widgets-elementor' ),
+				'label'        => esc_html__( 'Beam', 'awesome-widgets-elementor' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'label_on'     => esc_html__( 'Yes', 'awesome-widgets-elementor' ),
 				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
@@ -291,7 +304,7 @@ class Widget_Awesome_Testimonials extends Widget_Base {
 		$this->add_control(
 			'awea_name_tag',
 			[
-				'label'   => esc_html__( 'Name Tag', 'awesome-widgets-elementor' ),
+				'label'   => esc_html__( 'Tag', 'awesome-widgets-elementor' ),
 				'type'    => Controls_Manager::SELECT,
 				'default' => 'h4',
 				'options' => [
@@ -349,7 +362,7 @@ class Widget_Awesome_Testimonials extends Widget_Base {
 		$this->add_control(
 			'awea_beam_color',
 			[
-				'label'     => esc_html__( 'Beam Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Beam', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
 				'condition' => [ 'awea_beam_enable' => 'yes' ],
@@ -382,6 +395,7 @@ class Widget_Awesome_Testimonials extends Widget_Base {
 			Group_Control_Border::get_type(),
 			[
 				'name'           => 'awea_card_border',
+				'label'          => esc_html__( 'Border', 'awesome-widgets-elementor' ),
 				'selector'       => '{{WRAPPER}} .awea-tm-card',
 				'fields_options' => [
 					'border' => [ 'default' => 'solid' ],
@@ -414,7 +428,7 @@ class Widget_Awesome_Testimonials extends Widget_Base {
 		$this->add_control(
 			'awea_card_border_hover',
 			[
-				'label'     => esc_html__( 'Border Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Border', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
 				'selectors' => [
@@ -429,7 +443,7 @@ class Widget_Awesome_Testimonials extends Widget_Base {
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   STYLE: 2. STARS & QUOTE MARK
+		   STYLE: 2. RATING
 		   ========================================================================== */
 		$this->start_controls_section(
 			'awea_style_stars',
@@ -442,7 +456,7 @@ class Widget_Awesome_Testimonials extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_star_size',
 			[
-				'label'      => esc_html__( 'Star Size', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Size', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [ 'px' => [ 'min' => 10, 'max' => 32 ] ],
@@ -456,7 +470,7 @@ class Widget_Awesome_Testimonials extends Widget_Base {
 		$this->add_control(
 			'awea_star_color',
 			[
-				'label'     => esc_html__( 'Star Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#f59e0b',
 				'selectors' => [
@@ -468,7 +482,7 @@ class Widget_Awesome_Testimonials extends Widget_Base {
 		$this->add_control(
 			'awea_star_empty',
 			[
-				'label'     => esc_html__( 'Empty Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Empty', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#e2e8f0',
 				'selectors' => [
@@ -480,7 +494,7 @@ class Widget_Awesome_Testimonials extends Widget_Base {
 		$this->add_control(
 			'awea_quote_color',
 			[
-				'label'     => esc_html__( 'Quote Mark', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Quote', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
 				'condition' => [ 'awea_quote_icon' => 'yes' ],
@@ -493,7 +507,7 @@ class Widget_Awesome_Testimonials extends Widget_Base {
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   STYLE: 3. QUOTE TEXT
+		   STYLE: 3. QUOTE
 		   ========================================================================== */
 		$this->start_controls_section(
 			'awea_style_quote',
@@ -519,6 +533,7 @@ class Widget_Awesome_Testimonials extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'awea_quote_typo',
+				'label'    => esc_html__( 'Typography', 'awesome-widgets-elementor' ),
 				'selector' => '{{WRAPPER}} .awea-tm-text',
 				'global'   => [ 'default' => Global_Typography::TYPOGRAPHY_TEXT ],
 			]
@@ -527,7 +542,7 @@ class Widget_Awesome_Testimonials extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_quote_space',
 			[
-				'label'      => esc_html__( 'Space Below', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Spacing', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [ 'px' => [ 'min' => 12, 'max' => 60 ] ],
@@ -554,7 +569,7 @@ class Widget_Awesome_Testimonials extends Widget_Base {
 		$this->add_control(
 			'awea_line_color',
 			[
-				'label'     => esc_html__( 'Line Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Divider', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#f1f5f9',
 				'selectors' => [
@@ -566,7 +581,7 @@ class Widget_Awesome_Testimonials extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_avatar_size',
 			[
-				'label'      => esc_html__( 'Photo Size', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Photo', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [ 'px' => [ 'min' => 32, 'max' => 84 ] ],
@@ -580,7 +595,7 @@ class Widget_Awesome_Testimonials extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_avatar_radius',
 			[
-				'label'      => esc_html__( 'Photo Radius', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Radius', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'default'    => [ 'top' => '100', 'right' => '100', 'bottom' => '100', 'left' => '100', 'unit' => '%', 'isLinked' => true ],
@@ -593,7 +608,7 @@ class Widget_Awesome_Testimonials extends Widget_Base {
 		$this->add_control(
 			'awea_name_color',
 			[
-				'label'     => esc_html__( 'Name Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Name', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#0f172a',
 				'separator' => 'before',
@@ -607,6 +622,7 @@ class Widget_Awesome_Testimonials extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'awea_name_typo',
+				'label'    => esc_html__( 'Typography', 'awesome-widgets-elementor' ),
 				'selector' => '{{WRAPPER}} .awea-tm-name',
 				'global'   => [ 'default' => Global_Typography::TYPOGRAPHY_PRIMARY ],
 			]
@@ -615,7 +631,7 @@ class Widget_Awesome_Testimonials extends Widget_Base {
 		$this->add_control(
 			'awea_role_color',
 			[
-				'label'     => esc_html__( 'Role Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Role', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#64748b',
 				'separator' => 'before',
@@ -629,6 +645,7 @@ class Widget_Awesome_Testimonials extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'awea_role_typo',
+				'label'    => esc_html__( 'Typography', 'awesome-widgets-elementor' ),
 				'selector' => '{{WRAPPER}} .awea-tm-role',
 				'global'   => [ 'default' => Global_Typography::TYPOGRAPHY_SECONDARY ],
 			]

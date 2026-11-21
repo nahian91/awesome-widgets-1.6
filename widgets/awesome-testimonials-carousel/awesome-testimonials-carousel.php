@@ -46,7 +46,7 @@ class Widget_Awesome_Testimonials_Carousel extends Widget_Base {
 	protected function register_controls() {
 
 		/* ==========================================================================
-		   CONTENT: 1. ITEMS (REPEATER)
+		   CONTENT: 1. ITEMS
 		   ========================================================================== */
 		$this->start_controls_section(
 			'awea_section_items',
@@ -105,7 +105,7 @@ class Widget_Awesome_Testimonials_Carousel extends Widget_Base {
 		$repeater->add_control(
 			'awea_image',
 			[
-				'label'   => esc_html__( 'Photo', 'awesome-widgets-elementor' ),
+				'label'   => esc_html__( 'Image', 'awesome-widgets-elementor' ),
 				'type'    => Controls_Manager::MEDIA,
 				'dynamic' => [ 'active' => true ],
 				'default' => [
@@ -159,7 +159,7 @@ class Widget_Awesome_Testimonials_Carousel extends Widget_Base {
 		$repeater->add_control(
 			'awea_item_border',
 			[
-				'label'     => esc_html__( 'Card Border', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Border', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} {{CURRENT_ITEM}}' => 'border-color: {{VALUE}};',
@@ -170,7 +170,7 @@ class Widget_Awesome_Testimonials_Carousel extends Widget_Base {
 		$repeater->add_control(
 			'awea_item_beam',
 			[
-				'label'     => esc_html__( 'Beam Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Beam', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} {{CURRENT_ITEM}}' => '--awea-beam-color: {{VALUE}};',
@@ -228,7 +228,7 @@ class Widget_Awesome_Testimonials_Carousel extends Widget_Base {
 		$this->add_control(
 			'awea_name_tag',
 			[
-				'label'   => esc_html__( 'Title Tag', 'awesome-widgets-elementor' ),
+				'label'   => esc_html__( 'Tag', 'awesome-widgets-elementor' ),
 				'type'    => Controls_Manager::SELECT,
 				'default' => 'h4',
 				'options' => [
@@ -248,7 +248,7 @@ class Widget_Awesome_Testimonials_Carousel extends Widget_Base {
 		$this->add_control(
 			'awea_show_quote_icon',
 			[
-				'label'        => esc_html__( 'Quote Mark', 'awesome-widgets-elementor' ),
+				'label'        => esc_html__( 'Quote', 'awesome-widgets-elementor' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'label_on'     => esc_html__( 'Yes', 'awesome-widgets-elementor' ),
 				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
@@ -302,31 +302,6 @@ class Widget_Awesome_Testimonials_Carousel extends Widget_Base {
 		);
 
 		$this->add_control(
-			'awea_show_arrows',
-			[
-				'label'        => esc_html__( 'Arrows', 'awesome-widgets-elementor' ),
-				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => esc_html__( 'Yes', 'awesome-widgets-elementor' ),
-				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
-				'return_value' => 'yes',
-				'default'      => 'yes',
-				'separator'    => 'before',
-			]
-		);
-
-		$this->add_control(
-			'awea_show_dots',
-			[
-				'label'        => esc_html__( 'Dots', 'awesome-widgets-elementor' ),
-				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => esc_html__( 'Yes', 'awesome-widgets-elementor' ),
-				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
-				'return_value' => 'yes',
-				'default'      => 'yes',
-			]
-		);
-
-		$this->add_control(
 			'awea_loop',
 			[
 				'label'        => esc_html__( 'Loop', 'awesome-widgets-elementor' ),
@@ -367,7 +342,7 @@ class Widget_Awesome_Testimonials_Carousel extends Widget_Base {
 		$this->add_control(
 			'awea_autoplay_speed',
 			[
-				'label'     => esc_html__( 'Interval (ms)', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Interval', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::NUMBER,
 				'default'   => 5000,
 				'min'       => 1000,
@@ -380,12 +355,49 @@ class Widget_Awesome_Testimonials_Carousel extends Widget_Base {
 		$this->add_control(
 			'awea_animation_speed',
 			[
-				'label'   => esc_html__( 'Speed (ms)', 'awesome-widgets-elementor' ),
+				'label'   => esc_html__( 'Speed', 'awesome-widgets-elementor' ),
 				'type'    => Controls_Manager::NUMBER,
 				'default' => 450,
 				'min'     => 100,
 				'max'     => 2000,
 				'step'    => 50,
+			]
+		);
+
+		$this->end_controls_section();
+
+		/* ==========================================================================
+		   CONTENT: 4. NAVIGATION
+		   ========================================================================== */
+		$this->start_controls_section(
+			'awea_section_navigation',
+			[
+				'label' => esc_html__( 'Navigation', 'awesome-widgets-elementor' ),
+				'tab'   => Controls_Manager::TAB_CONTENT,
+			]
+		);
+
+		$this->add_control(
+			'awea_show_arrows',
+			[
+				'label'        => esc_html__( 'Arrows', 'awesome-widgets-elementor' ),
+				'type'         => Controls_Manager::SWITCHER,
+				'label_on'     => esc_html__( 'Yes', 'awesome-widgets-elementor' ),
+				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
+				'return_value' => 'yes',
+				'default'      => 'yes',
+			]
+		);
+
+		$this->add_control(
+			'awea_show_dots',
+			[
+				'label'        => esc_html__( 'Dots', 'awesome-widgets-elementor' ),
+				'type'         => Controls_Manager::SWITCHER,
+				'label_on'     => esc_html__( 'Yes', 'awesome-widgets-elementor' ),
+				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
+				'return_value' => 'yes',
+				'default'      => 'yes',
 			]
 		);
 
@@ -451,6 +463,7 @@ class Widget_Awesome_Testimonials_Carousel extends Widget_Base {
 			Group_Control_Border::get_type(),
 			[
 				'name'           => 'awea_card_border',
+				'label'          => esc_html__( 'Border', 'awesome-widgets-elementor' ),
 				'selector'       => '{{WRAPPER}} .awea-testimonial-card',
 				'fields_options' => [
 					'border' => [ 'default' => 'solid' ],
@@ -484,7 +497,7 @@ class Widget_Awesome_Testimonials_Carousel extends Widget_Base {
 		$this->add_control(
 			'awea_card_border_hover',
 			[
-				'label'     => esc_html__( 'Border Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Border', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [
 					'default' => Global_Colors::COLOR_PRIMARY,
@@ -565,7 +578,7 @@ class Widget_Awesome_Testimonials_Carousel extends Widget_Base {
 		$this->add_control(
 			'awea_star_filled_color',
 			[
-				'label'     => esc_html__( 'Filled Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Filled', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#f59e0b',
 				'selectors' => [
@@ -577,7 +590,7 @@ class Widget_Awesome_Testimonials_Carousel extends Widget_Base {
 		$this->add_control(
 			'awea_star_empty_color',
 			[
-				'label'     => esc_html__( 'Empty Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Empty', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#e2e8f0',
 				'selectors' => [
@@ -617,6 +630,7 @@ class Widget_Awesome_Testimonials_Carousel extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'awea_speech_typo',
+				'label'    => esc_html__( 'Typography', 'awesome-widgets-elementor' ),
 				'selector' => '{{WRAPPER}} .awea-testimonial-text',
 				'global'   => [
 					'default' => Global_Typography::TYPOGRAPHY_TEXT,
@@ -640,7 +654,7 @@ class Widget_Awesome_Testimonials_Carousel extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_avatar_size',
 			[
-				'label'      => esc_html__( 'Photo Size', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Photo', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [ 'px' => [ 'min' => 32, 'max' => 84 ] ],
@@ -654,7 +668,7 @@ class Widget_Awesome_Testimonials_Carousel extends Widget_Base {
 		$this->add_control(
 			'awea_name_color',
 			[
-				'label'     => esc_html__( 'Name Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Name', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [
 					'default' => Global_Colors::COLOR_PRIMARY,
@@ -669,6 +683,7 @@ class Widget_Awesome_Testimonials_Carousel extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'awea_name_typo',
+				'label'    => esc_html__( 'Typography', 'awesome-widgets-elementor' ),
 				'selector' => '{{WRAPPER}} .awea-testimonial-name',
 				'global'   => [
 					'default' => Global_Typography::TYPOGRAPHY_PRIMARY,
@@ -679,7 +694,7 @@ class Widget_Awesome_Testimonials_Carousel extends Widget_Base {
 		$this->add_control(
 			'awea_desg_color',
 			[
-				'label'     => esc_html__( 'Role Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Role', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [
 					'default' => Global_Colors::COLOR_TEXT,
@@ -695,6 +710,7 @@ class Widget_Awesome_Testimonials_Carousel extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'awea_desg_typo',
+				'label'    => esc_html__( 'Typography', 'awesome-widgets-elementor' ),
 				'selector' => '{{WRAPPER}} .awea-testimonial-desg',
 				'global'   => [
 					'default' => Global_Typography::TYPOGRAPHY_SECONDARY,
@@ -719,7 +735,7 @@ class Widget_Awesome_Testimonials_Carousel extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_arrow_size',
 			[
-				'label'      => esc_html__( 'Box Size', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Box', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [ 'px' => [ 'min' => 32, 'max' => 64 ] ],
@@ -760,6 +776,7 @@ class Widget_Awesome_Testimonials_Carousel extends Widget_Base {
 			Group_Control_Border::get_type(),
 			[
 				'name'           => 'awea_arrow_border',
+				'label'          => esc_html__( 'Border', 'awesome-widgets-elementor' ),
 				'selector'       => '{{WRAPPER}} .awea-carousel-arrow-border',
 				'fields_options' => [
 					'border' => [ 'default' => 'solid' ],
@@ -800,7 +817,7 @@ class Widget_Awesome_Testimonials_Carousel extends Widget_Base {
 		$this->add_control(
 			'awea_dots_active_color',
 			[
-				'label'     => esc_html__( 'Active Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Active', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [
 					'default' => Global_Colors::COLOR_PRIMARY,

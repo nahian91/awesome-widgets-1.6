@@ -45,12 +45,19 @@ class Widget_Awesome_Counter extends Widget_Base {
 	}
 
 	protected function register_controls() {
+		$this->register_content_controls();$this->register_style_controls();
+	}
+
+	/**
+	 * Content Tab Controls
+	 */
+	protected function register_content_controls() {
 
 		/* ==========================================================================
-		   CONTENT: 1. ITEMS (REPEATER)
+		   CONTENT: 1. COUNTERS
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_section_items',
+			'awea_counter_section_items',
 			[
 				'label' => esc_html__( 'Counters', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
@@ -59,18 +66,18 @@ class Widget_Awesome_Counter extends Widget_Base {
 
 		$repeater = new Repeater();
 
-		$repeater->start_controls_tabs( 'awea_item_tabs' );
+		$repeater->start_controls_tabs( 'awea_counter_item_tabs' );
 
 		// --- TAB 1: NUMBER ---
 		$repeater->start_controls_tab(
-			'awea_tab_number',
+			'awea_counter_tab_number',
 			[ 'label' => esc_html__( 'Number', 'awesome-widgets-elementor' ) ]
 		);
 
 		$repeater->add_control(
-			'awea_start',
+			'awea_counter_start',
 			[
-				'label'   => esc_html__( 'Starting Number', 'awesome-widgets-elementor' ),
+				'label'   => esc_html__( 'Start Value', 'awesome-widgets-elementor' ),
 				'type'    => Controls_Manager::NUMBER,
 				'default' => 0,
 				'dynamic' => [ 'active' => true ],
@@ -78,9 +85,9 @@ class Widget_Awesome_Counter extends Widget_Base {
 		);
 
 		$repeater->add_control(
-			'awea_target',
+			'awea_counter_target',
 			[
-				'label'   => esc_html__( 'Ending Number', 'awesome-widgets-elementor' ),
+				'label'   => esc_html__( 'End Value', 'awesome-widgets-elementor' ),
 				'type'    => Controls_Manager::NUMBER,
 				'default' => 150,
 				'dynamic' => [ 'active' => true ],
@@ -88,9 +95,9 @@ class Widget_Awesome_Counter extends Widget_Base {
 		);
 
 		$repeater->add_control(
-			'awea_decimals',
+			'awea_counter_decimals',
 			[
-				'label'   => esc_html__( 'Decimal Places', 'awesome-widgets-elementor' ),
+				'label'   => esc_html__( 'Decimals', 'awesome-widgets-elementor' ),
 				'type'    => Controls_Manager::NUMBER,
 				'min'     => 0,
 				'max'     => 4,
@@ -100,7 +107,7 @@ class Widget_Awesome_Counter extends Widget_Base {
 		);
 
 		$repeater->add_control(
-			'awea_prefix',
+			'awea_counter_prefix',
 			[
 				'label'       => esc_html__( 'Prefix', 'awesome-widgets-elementor' ),
 				'type'        => Controls_Manager::TEXT,
@@ -111,7 +118,7 @@ class Widget_Awesome_Counter extends Widget_Base {
 		);
 
 		$repeater->add_control(
-			'awea_suffix',
+			'awea_counter_suffix',
 			[
 				'label'       => esc_html__( 'Suffix', 'awesome-widgets-elementor' ),
 				'type'        => Controls_Manager::TEXT,
@@ -122,7 +129,7 @@ class Widget_Awesome_Counter extends Widget_Base {
 		);
 
 		$repeater->add_control(
-			'awea_duration',
+			'awea_counter_duration',
 			[
 				'label'   => esc_html__( 'Animation Duration (ms)', 'awesome-widgets-elementor' ),
 				'type'    => Controls_Manager::NUMBER,
@@ -137,16 +144,18 @@ class Widget_Awesome_Counter extends Widget_Base {
 
 		// --- TAB 2: CONTENT ---
 		$repeater->start_controls_tab(
-			'awea_tab_content',
+			'awea_counter_tab_content',
 			[ 'label' => esc_html__( 'Content', 'awesome-widgets-elementor' ) ]
 		);
 
 		$repeater->add_control(
-			'awea_icon',
+			'awea_counter_icon',
 			[
-				'label'   => esc_html__( 'Icon', 'awesome-widgets-elementor' ),
-				'type'    => Controls_Manager::ICONS,
-				'default' => [
+				'label'       => esc_html__( 'Icon', 'awesome-widgets-elementor' ),
+				'type'        => Controls_Manager::ICONS,
+				'skin'        => 'inline',
+				'label_block' => false,
+				'default'     => [
 					'value'   => 'fas fa-rocket',
 					'library' => 'fa-solid',
 				],
@@ -154,7 +163,7 @@ class Widget_Awesome_Counter extends Widget_Base {
 		);
 
 		$repeater->add_control(
-			'awea_title',
+			'awea_counter_title',
 			[
 				'label'       => esc_html__( 'Label', 'awesome-widgets-elementor' ),
 				'type'        => Controls_Manager::TEXT,
@@ -165,9 +174,9 @@ class Widget_Awesome_Counter extends Widget_Base {
 		);
 
 		$repeater->add_control(
-			'awea_subtext',
+			'awea_counter_subtext',
 			[
-				'label'       => esc_html__( 'Subtext (Optional)', 'awesome-widgets-elementor' ),
+				'label'       => esc_html__( 'Subtext', 'awesome-widgets-elementor' ),
 				'type'        => Controls_Manager::TEXT,
 				'default'     => '',
 				'placeholder' => esc_html__( 'e.g. Verified Q4 metrics', 'awesome-widgets-elementor' ),
@@ -180,12 +189,12 @@ class Widget_Awesome_Counter extends Widget_Base {
 
 		// --- TAB 3: HIGHLIGHT ---
 		$repeater->start_controls_tab(
-			'awea_tab_highlight',
+			'awea_counter_tab_highlight',
 			[ 'label' => esc_html__( 'Highlight', 'awesome-widgets-elementor' ) ]
 		);
 
 		$repeater->add_control(
-			'awea_item_border',
+			'awea_counter_item_border',
 			[
 				'label'     => esc_html__( 'Card Border Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
@@ -196,12 +205,35 @@ class Widget_Awesome_Counter extends Widget_Base {
 		);
 
 		$repeater->add_control(
-			'awea_item_beam',
+			'awea_counter_item_beam',
 			[
-				'label'     => esc_html__( 'Hover Beam Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Beam Accent Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}} {{CURRENT_ITEM}}' => '--awea-cnt-item-beam: {{VALUE}};',
+					'{{WRAPPER}} {{CURRENT_ITEM}}' => '--awea_counter_item_beam: {{VALUE}};',
+				],
+			]
+		);
+
+		$repeater->add_control(
+			'awea_counter_item_icon_color',
+			[
+				'label'     => esc_html__( 'Icon Color', 'awesome-widgets-elementor' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => [
+					'{{WRAPPER}} {{CURRENT_ITEM}} .awea_counter_icon'     => 'color: {{VALUE}};',
+					'{{WRAPPER}} {{CURRENT_ITEM}} .awea_counter_icon svg' => 'fill: {{VALUE}};',
+				],
+			]
+		);
+
+		$repeater->add_control(
+			'awea_counter_item_icon_bg',
+			[
+				'label'     => esc_html__( 'Icon Background', 'awesome-widgets-elementor' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => [
+					'{{WRAPPER}} {{CURRENT_ITEM}} .awea_counter_icon' => 'background-color: {{VALUE}};',
 				],
 			]
 		);
@@ -211,32 +243,32 @@ class Widget_Awesome_Counter extends Widget_Base {
 		$repeater->end_controls_tabs();
 
 		$this->add_control(
-			'awea_items',
+			'awea_counter_items',
 			[
-				'label'       => esc_html__( 'Counter Cards', 'awesome-widgets-elementor' ),
+				'label'       => esc_html__( 'Metrics List', 'awesome-widgets-elementor' ),
 				'type'        => Controls_Manager::REPEATER,
 				'fields'      => $repeater->get_controls(),
-				'title_field' => '{{{ awea_prefix }}}{{{ awea_target }}}{{{ awea_suffix }}} — {{{ awea_title }}}',
+				'title_field' => '{{{ awea_counter_prefix }}}{{{ awea_counter_target }}}{{{ awea_counter_suffix }}} — {{{ awea_counter_title }}}',
 				'default'     => [
 					[
-						'awea_target' => 150,
-						'awea_suffix' => '+',
-						'awea_title'  => esc_html__( 'Sprints Completed', 'awesome-widgets-elementor' ),
-						'awea_icon'   => [ 'value' => 'fas fa-rocket', 'library' => 'fa-solid' ],
+						'awea_counter_target' => 150,
+						'awea_counter_suffix' => '+',
+						'awea_counter_title'  => esc_html__( 'Sprints Completed', 'awesome-widgets-elementor' ),
+						'awea_counter_icon'   => [ 'value' => 'fas fa-rocket', 'library' => 'fa-solid' ],
 					],
 					[
-						'awea_target'   => 99.9,
-						'awea_decimals' => 1,
-						'awea_suffix'   => '%',
-						'awea_title'    => esc_html__( 'Uptime SLA Guarantee', 'awesome-widgets-elementor' ),
-						'awea_icon'     => [ 'value' => 'fas fa-shield-alt', 'library' => 'fa-solid' ],
+						'awea_counter_target'   => 99.9,
+						'awea_counter_decimals' => 1,
+						'awea_counter_suffix'   => '%',
+						'awea_counter_title'    => esc_html__( 'Uptime SLA Guarantee', 'awesome-widgets-elementor' ),
+						'awea_counter_icon'     => [ 'value' => 'fas fa-shield-alt', 'library' => 'fa-solid' ],
 					],
 					[
-						'awea_prefix' => '$',
-						'awea_target' => 45,
-						'awea_suffix' => 'M',
-						'awea_title'  => esc_html__( 'Client Revenue Generated', 'awesome-widgets-elementor' ),
-						'awea_icon'   => [ 'value' => 'fas fa-chart-line', 'library' => 'fa-solid' ],
+						'awea_counter_prefix' => '$',
+						'awea_counter_target' => 45,
+						'awea_counter_suffix' => 'M',
+						'awea_counter_title'  => esc_html__( 'Client Revenue Generated', 'awesome-widgets-elementor' ),
+						'awea_counter_icon'   => [ 'value' => 'fas fa-chart-line', 'library' => 'fa-solid' ],
 					],
 				],
 			]
@@ -245,18 +277,18 @@ class Widget_Awesome_Counter extends Widget_Base {
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   CONTENT: 2. LAYOUT & OPTIONS
+		   CONTENT: 2. LAYOUT
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_section_layout',
+			'awea_counter_section_layout',
 			[
-				'label' => esc_html__( 'Layout & Options', 'awesome-widgets-elementor' ),
+				'label' => esc_html__( 'Layout', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
 			]
 		);
 
 		$this->add_responsive_control(
-			'awea_columns',
+			'awea_counter_columns',
 			[
 				'label'          => esc_html__( 'Columns', 'awesome-widgets-elementor' ),
 				'type'           => Controls_Manager::SELECT,
@@ -270,13 +302,13 @@ class Widget_Awesome_Counter extends Widget_Base {
 					'4' => '4',
 				],
 				'selectors'      => [
-					'{{WRAPPER}} .awea-cnt-grid' => 'grid-template-columns: repeat({{VALUE}}, minmax(0, 1fr));',
+					'{{WRAPPER}} .awea_counter_grid' => 'grid-template-columns: repeat({{VALUE}}, minmax(0, 1fr));',
 				],
 			]
 		);
 
 		$this->add_responsive_control(
-			'awea_gap',
+			'awea_counter_gap',
 			[
 				'label'      => esc_html__( 'Grid Gap', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
@@ -287,57 +319,76 @@ class Widget_Awesome_Counter extends Widget_Base {
 				],
 				'default'    => [ 'unit' => 'px', 'size' => 24 ],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-cnt-grid' => 'gap: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .awea_counter_grid' => 'gap: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
 
 		$this->add_control(
-			'awea_card_direction',
+			'awea_counter_card_direction',
 			[
-				'label'        => esc_html__( 'Card Layout', 'awesome-widgets-elementor' ),
+				'label'        => esc_html__( 'Card Direction', 'awesome-widgets-elementor' ),
 				'type'         => Controls_Manager::SELECT,
 				'default'      => 'vertical',
 				'options'      => [
-					'vertical'   => esc_html__( 'Vertical Stacked', 'awesome-widgets-elementor' ),
-					'horizontal' => esc_html__( 'Horizontal (Icon Left)', 'awesome-widgets-elementor' ),
+					'vertical'   => esc_html__( 'Vertical Stack', 'awesome-widgets-elementor' ),
+					'horizontal' => esc_html__( 'Horizontal Row', 'awesome-widgets-elementor' ),
 				],
-				'prefix_class' => 'awea-cnt-dir-',
-			]
-		);
-
-		$this->add_control(
-			'awea_thousand_sep',
-			[
-				'label'        => esc_html__( 'Thousand Separator ( , )', 'awesome-widgets-elementor' ),
-				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => esc_html__( 'Yes', 'awesome-widgets-elementor' ),
-				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
-				'return_value' => 'yes',
-				'default'      => 'yes',
-			]
-		);
-
-		$this->add_control(
-			'awea_beam_enable',
-			[
-				'label'        => esc_html__( 'Kinetic Border Beam', 'awesome-widgets-elementor' ),
-				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => esc_html__( 'Yes', 'awesome-widgets-elementor' ),
-				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
-				'return_value' => 'yes',
-				'default'      => 'yes',
-				'prefix_class' => 'awea-cnt-beam-',
+				'prefix_class' => 'awea_counter_dir_',
 			]
 		);
 
 		$this->end_controls_section();
 
 		/* ==========================================================================
+		   CONTENT: 3. OPTIONS
+		   ========================================================================== */
+		$this->start_controls_section(
+			'awea_counter_section_options',
+			[
+				'label' => esc_html__( 'Options', 'awesome-widgets-elementor' ),
+				'tab'   => Controls_Manager::TAB_CONTENT,
+			]
+		);
+
+		$this->add_control(
+			'awea_counter_thousand_sep',
+			[
+				'label'        => esc_html__( 'Thousand Separator (Commas)', 'awesome-widgets-elementor' ),
+				'type'         => Controls_Manager::SWITCHER,
+				'label_on'     => esc_html__( 'Yes', 'awesome-widgets-elementor' ),
+				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
+				'return_value' => 'yes',
+				'default'      => 'yes',
+			]
+		);
+
+		$this->add_control(
+			'awea_counter_beam_enable',
+			[
+				'label'        => esc_html__( 'Hover Kinetic Border Beam', 'awesome-widgets-elementor' ),
+				'type'         => Controls_Manager::SWITCHER,
+				'label_on'     => esc_html__( 'Yes', 'awesome-widgets-elementor' ),
+				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
+				'return_value' => 'yes',
+				'default'      => 'yes',
+				'prefix_class' => 'awea_counter_beam_',
+			]
+		);
+
+		$this->end_controls_section();
+	}
+
+	/**
+	 * Style Tab Controls
+	 */
+	protected function register_style_controls() {
+
+		/* ==========================================================================
 		   STYLE: 1. CARD
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_style_card',
+			'awea_counter_style_card',
 			[
 				'label' => esc_html__( 'Card', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
@@ -345,9 +396,9 @@ class Widget_Awesome_Counter extends Widget_Base {
 		);
 
 		$this->add_responsive_control(
-			'awea_card_align',
+			'awea_counter_card_align',
 			[
-				'label'                => esc_html__( 'Content Alignment', 'awesome-widgets-elementor' ),
+				'label'                => esc_html__( 'Alignment', 'awesome-widgets-elementor' ),
 				'type'                 => Controls_Manager::CHOOSE,
 				'options'              => [
 					'left'   => [
@@ -364,21 +415,21 @@ class Widget_Awesome_Counter extends Widget_Base {
 					],
 				],
 				'default'              => 'center',
-				'condition'            => [ 'awea_card_direction' => 'vertical' ],
+				'condition'            => [ 'awea_counter_card_direction' => 'vertical' ],
 				'selectors_dictionary' => [
 					'left'   => 'flex-start',
 					'center' => 'center',
 					'right'  => 'flex-end',
 				],
 				'selectors'            => [
-					'{{WRAPPER}}.awea-cnt-dir-vertical .awea-cnt-card'  => 'align-items: {{VALUE}}; text-align: {{VALUE}};',
-					'{{WRAPPER}}.awea-cnt-dir-vertical .awea-cnt-stats' => 'justify-content: {{VALUE}};',
+					'{{WRAPPER}}.awea_counter_dir_vertical .awea_counter_card'  => 'align-items: {{VALUE}}; text-align: {{VALUE}};',
+					'{{WRAPPER}}.awea_counter_dir_vertical .awea_counter_stats' => 'justify-content: {{VALUE}};',
 				],
 			]
 		);
 
 		$this->add_responsive_control(
-			'awea_card_padding',
+			'awea_counter_card_padding',
 			[
 				'label'      => esc_html__( 'Padding', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
@@ -392,13 +443,13 @@ class Widget_Awesome_Counter extends Widget_Base {
 					'isLinked' => false,
 				],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-cnt-card' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .awea_counter_card' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
 		);
 
 		$this->add_responsive_control(
-			'awea_card_radius',
+			'awea_counter_card_radius',
 			[
 				'label'      => esc_html__( 'Border Radius', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
@@ -412,39 +463,39 @@ class Widget_Awesome_Counter extends Widget_Base {
 					'isLinked' => true,
 				],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-cnt-card' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .awea_counter_card' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
 		);
 
 		$this->add_control(
-			'awea_beam_color',
+			'awea_counter_beam_color',
 			[
-				'label'     => esc_html__( 'Beam Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Kinetic Beam Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
-				'condition' => [ 'awea_beam_enable' => 'yes' ],
+				'condition' => [ 'awea_counter_beam_enable' => 'yes' ],
 				'selectors' => [
-					'{{WRAPPER}} .awea-cnt-grid' => '--awea-cnt-global-beam: {{VALUE}};',
+					'{{WRAPPER}} .awea_counter_grid' => '--awea_counter_global_beam: {{VALUE}};',
 				],
 			]
 		);
 
-		$this->start_controls_tabs( 'awea_card_tabs' );
+		$this->start_controls_tabs( 'awea_counter_card_tabs' );
 
 		$this->start_controls_tab(
-			'awea_card_normal',
+			'awea_counter_card_normal',
 			[ 'label' => esc_html__( 'Normal', 'awesome-widgets-elementor' ) ]
 		);
 
 		$this->add_control(
-			'awea_card_bg',
+			'awea_counter_card_bg',
 			[
 				'label'     => esc_html__( 'Background', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#ffffff',
 				'selectors' => [
-					'{{WRAPPER}} .awea-cnt-card' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .awea_counter_card' => 'background-color: {{VALUE}};',
 				],
 			]
 		);
@@ -452,8 +503,8 @@ class Widget_Awesome_Counter extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Border::get_type(),
 			[
-				'name'           => 'awea_card_border',
-				'selector'       => '{{WRAPPER}} .awea-cnt-card',
+				'name'           => 'awea_counter_card_border',
+				'selector'       => '{{WRAPPER}} .awea_counter_card',
 				'fields_options' => [
 					'border' => [ 'default' => 'solid' ],
 					'width'  => [
@@ -473,37 +524,37 @@ class Widget_Awesome_Counter extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Box_Shadow::get_type(),
 			[
-				'name'     => 'awea_card_shadow',
-				'selector' => '{{WRAPPER}} .awea-cnt-card',
+				'name'     => 'awea_counter_card_shadow',
+				'selector' => '{{WRAPPER}} .awea_counter_card',
 			]
 		);
 
 		$this->end_controls_tab();
 
 		$this->start_controls_tab(
-			'awea_card_hover',
+			'awea_counter_card_hover',
 			[ 'label' => esc_html__( 'Hover', 'awesome-widgets-elementor' ) ]
 		);
 
 		$this->add_control(
-			'awea_card_bg_hover',
+			'awea_counter_card_bg_hover',
 			[
 				'label'     => esc_html__( 'Background', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}} .awea-cnt-card:hover' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .awea_counter_card:hover' => 'background-color: {{VALUE}};',
 				],
 			]
 		);
 
 		$this->add_control(
-			'awea_card_border_hover',
+			'awea_counter_card_border_hover',
 			[
 				'label'     => esc_html__( 'Border Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
 				'selectors' => [
-					'{{WRAPPER}} .awea-cnt-card:hover' => 'border-color: {{VALUE}};',
+					'{{WRAPPER}} .awea_counter_card:hover' => 'border-color: {{VALUE}};',
 				],
 			]
 		);
@@ -511,8 +562,8 @@ class Widget_Awesome_Counter extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Box_Shadow::get_type(),
 			[
-				'name'     => 'awea_card_shadow_hover',
-				'selector' => '{{WRAPPER}} .awea-cnt-card:hover',
+				'name'     => 'awea_counter_card_shadow_hover',
+				'selector' => '{{WRAPPER}} .awea_counter_card:hover',
 			]
 		);
 
@@ -525,15 +576,15 @@ class Widget_Awesome_Counter extends Widget_Base {
 		   STYLE: 2. ICON
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_style_icon',
+			'awea_counter_style_icon',
 			[
-				'label' => esc_html__( 'Icon Box', 'awesome-widgets-elementor' ),
+				'label' => esc_html__( 'Icon', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
 
 		$this->add_responsive_control(
-			'awea_icon_box_size',
+			'awea_counter_icon_box_size',
 			[
 				'label'      => esc_html__( 'Box Size', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
@@ -541,13 +592,13 @@ class Widget_Awesome_Counter extends Widget_Base {
 				'range'      => [ 'px' => [ 'min' => 40, 'max' => 100 ] ],
 				'default'    => [ 'unit' => 'px', 'size' => 58 ],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-cnt-icon' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .awea_counter_icon' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
 
 		$this->add_responsive_control(
-			'awea_icon_size',
+			'awea_counter_icon_size',
 			[
 				'label'      => esc_html__( 'Icon Size', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
@@ -555,29 +606,37 @@ class Widget_Awesome_Counter extends Widget_Base {
 				'range'      => [ 'px' => [ 'min' => 14, 'max' => 48 ] ],
 				'default'    => [ 'unit' => 'px', 'size' => 22 ],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-cnt-icon i'   => 'font-size: {{SIZE}}{{UNIT}};',
-					'{{WRAPPER}} .awea-cnt-icon svg' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .awea_counter_icon i'   => 'font-size: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .awea_counter_icon svg' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
 
 		$this->add_responsive_control(
-			'awea_icon_space',
+			'awea_counter_icon_space',
 			[
-				'label'      => esc_html__( 'Spacing', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Spacing to Content', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [ 'px' => [ 'min' => 0, 'max' => 40 ] ],
 				'default'    => [ 'unit' => 'px', 'size' => 20 ],
 				'selectors'  => [
-					'{{WRAPPER}}.awea-cnt-dir-vertical .awea-cnt-icon'   => 'margin-bottom: {{SIZE}}{{UNIT}}; margin-right: 0;',
-					'{{WRAPPER}}.awea-cnt-dir-horizontal .awea-cnt-card' => 'gap: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}}.awea_counter_dir_vertical .awea_counter_icon'   => 'margin-bottom: {{SIZE}}{{UNIT}}; margin-inline-end: 0;',
+					'{{WRAPPER}}.awea_counter_dir_horizontal .awea_counter_card' => 'gap: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
 
+		$this->add_group_control(
+			Group_Control_Border::get_type(),
+			[
+				'name'     => 'awea_counter_icon_border',
+				'selector' => '{{WRAPPER}} .awea_counter_icon',
+			]
+		);
+
 		$this->add_responsive_control(
-			'awea_icon_radius',
+			'awea_counter_icon_radius',
 			[
 				'label'      => esc_html__( 'Border Radius', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
@@ -591,39 +650,39 @@ class Widget_Awesome_Counter extends Widget_Base {
 					'isLinked' => true,
 				],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-cnt-icon' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .awea_counter_icon' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
 		);
 
-		$this->start_controls_tabs( 'awea_icon_tabs' );
+		$this->start_controls_tabs( 'awea_counter_icon_tabs' );
 
 		$this->start_controls_tab(
-			'awea_icon_normal',
+			'awea_counter_icon_normal',
 			[ 'label' => esc_html__( 'Normal', 'awesome-widgets-elementor' ) ]
 		);
 
 		$this->add_control(
-			'awea_icon_color',
+			'awea_counter_icon_color',
 			[
-				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Icon Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
 				'selectors' => [
-					'{{WRAPPER}} .awea-cnt-icon'     => 'color: {{VALUE}};',
-					'{{WRAPPER}} .awea-cnt-icon svg' => 'fill: {{VALUE}};',
+					'{{WRAPPER}} .awea_counter_icon'     => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea_counter_icon svg' => 'fill: {{VALUE}};',
 				],
 			]
 		);
 
 		$this->add_control(
-			'awea_icon_bg',
+			'awea_counter_icon_bg',
 			[
 				'label'     => esc_html__( 'Background', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => 'rgba(79, 70, 229, 0.08)',
 				'selectors' => [
-					'{{WRAPPER}} .awea-cnt-icon' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .awea_counter_icon' => 'background-color: {{VALUE}};',
 				],
 			]
 		);
@@ -631,31 +690,31 @@ class Widget_Awesome_Counter extends Widget_Base {
 		$this->end_controls_tab();
 
 		$this->start_controls_tab(
-			'awea_icon_hover',
+			'awea_counter_icon_hover',
 			[ 'label' => esc_html__( 'Hover', 'awesome-widgets-elementor' ) ]
 		);
 
 		$this->add_control(
-			'awea_icon_color_hover',
+			'awea_counter_icon_color_hover',
 			[
-				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Icon Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#ffffff',
 				'selectors' => [
-					'{{WRAPPER}} .awea-cnt-card:hover .awea-cnt-icon'     => 'color: {{VALUE}};',
-					'{{WRAPPER}} .awea-cnt-card:hover .awea-cnt-icon svg' => 'fill: {{VALUE}};',
+					'{{WRAPPER}} .awea_counter_card:hover .awea_counter_icon'     => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea_counter_card:hover .awea_counter_icon svg' => 'fill: {{VALUE}};',
 				],
 			]
 		);
 
 		$this->add_control(
-			'awea_icon_bg_hover',
+			'awea_counter_icon_bg_hover',
 			[
 				'label'     => esc_html__( 'Background', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
 				'selectors' => [
-					'{{WRAPPER}} .awea-cnt-card:hover .awea-cnt-icon' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .awea_counter_card:hover .awea_counter_icon' => 'background-color: {{VALUE}};',
 				],
 			]
 		);
@@ -666,24 +725,24 @@ class Widget_Awesome_Counter extends Widget_Base {
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   STYLE: 3. NUMBER & AFFIXES
+		   STYLE: 3. NUMBER
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_style_number',
+			'awea_counter_style_number',
 			[
-				'label' => esc_html__( 'Number & Affixes', 'awesome-widgets-elementor' ),
+				'label' => esc_html__( 'Number', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
 
 		$this->add_control(
-			'awea_num_color',
+			'awea_counter_num_color',
 			[
-				'label'     => esc_html__( 'Number Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#0f172a',
 				'selectors' => [
-					'{{WRAPPER}} .awea-cnt-val' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea_counter_val' => 'color: {{VALUE}};',
 				],
 			]
 		);
@@ -691,14 +750,14 @@ class Widget_Awesome_Counter extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Typography::get_type(),
 			[
-				'name'     => 'awea_num_typo',
-				'selector' => '{{WRAPPER}} .awea-cnt-val',
+				'name'     => 'awea_counter_num_typo',
+				'selector' => '{{WRAPPER}} .awea_counter_val',
 				'global'   => [ 'default' => Global_Typography::TYPOGRAPHY_PRIMARY ],
 			]
 		);
 
 		$this->add_responsive_control(
-			'awea_num_space',
+			'awea_counter_num_space',
 			[
 				'label'      => esc_html__( 'Bottom Spacing', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
@@ -706,28 +765,32 @@ class Widget_Awesome_Counter extends Widget_Base {
 				'range'      => [ 'px' => [ 'min' => 0, 'max' => 30 ] ],
 				'default'    => [ 'unit' => 'px', 'size' => 8 ],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-cnt-stats' => 'margin-bottom: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .awea_counter_stats' => 'margin-bottom: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
 
-		$this->add_control(
-			'awea_affix_heading',
+		$this->end_controls_section();
+
+		/* ==========================================================================
+		   STYLE: 4. AFFIXES
+		   ========================================================================== */
+		$this->start_controls_section(
+			'awea_counter_style_affixes',
 			[
-				'label'     => esc_html__( 'Prefix & Suffix', 'awesome-widgets-elementor' ),
-				'type'      => Controls_Manager::HEADING,
-				'separator' => 'before',
+				'label' => esc_html__( 'Prefix & Suffix', 'awesome-widgets-elementor' ),
+				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
 
 		$this->add_control(
-			'awea_affix_color',
+			'awea_counter_affix_color',
 			[
 				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
 				'selectors' => [
-					'{{WRAPPER}} .awea-cnt-pre, {{WRAPPER}} .awea-cnt-suf' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea_counter_pre, {{WRAPPER}} .awea_counter_suf' => 'color: {{VALUE}};',
 				],
 			]
 		);
@@ -735,19 +798,34 @@ class Widget_Awesome_Counter extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Typography::get_type(),
 			[
-				'name'     => 'awea_affix_typo',
-				'selector' => '{{WRAPPER}} .awea-cnt-pre, {{WRAPPER}} .awea-cnt-suf',
+				'name'     => 'awea_counter_affix_typo',
+				'selector' => '{{WRAPPER}} .awea_counter_pre, {{WRAPPER}} .awea_counter_suf',
 				'global'   => [ 'default' => Global_Typography::TYPOGRAPHY_SECONDARY ],
+			]
+		);
+
+		$this->add_responsive_control(
+			'awea_counter_affix_gap',
+			[
+				'label'      => esc_html__( 'Horizontal Spacing', 'awesome-widgets-elementor' ),
+				'type'       => Controls_Manager::SLIDER,
+				'size_units' => [ 'px' ],
+				'range'      => [ 'px' => [ 'min' => 0, 'max' => 16 ] ],
+				'default'    => [ 'unit' => 'px', 'size' => 3 ],
+				'selectors'  => [
+					'{{WRAPPER}} .awea_counter_pre' => 'margin-inline-end: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .awea_counter_suf' => 'margin-inline-start: {{SIZE}}{{UNIT}};',
+				],
 			]
 		);
 
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   STYLE: 4. LABEL & SUBTEXT
+		   STYLE: 5. LABEL & SUBTEXT
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_style_label',
+			'awea_counter_style_label',
 			[
 				'label' => esc_html__( 'Label & Subtext', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
@@ -755,13 +833,13 @@ class Widget_Awesome_Counter extends Widget_Base {
 		);
 
 		$this->add_control(
-			'awea_label_color',
+			'awea_counter_label_color',
 			[
 				'label'     => esc_html__( 'Label Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#64748b',
 				'selectors' => [
-					'{{WRAPPER}} .awea-cnt-lbl' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea_counter_lbl' => 'color: {{VALUE}};',
 				],
 			]
 		);
@@ -769,29 +847,21 @@ class Widget_Awesome_Counter extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Typography::get_type(),
 			[
-				'name'     => 'awea_label_typo',
-				'selector' => '{{WRAPPER}} .awea-cnt-lbl',
+				'name'     => 'awea_counter_label_typo',
+				'selector' => '{{WRAPPER}} .awea_counter_lbl',
 				'global'   => [ 'default' => Global_Typography::TYPOGRAPHY_TEXT ],
 			]
 		);
 
 		$this->add_control(
-			'awea_subtext_heading',
+			'awea_counter_subtext_color',
 			[
-				'label'     => esc_html__( 'Subtext', 'awesome-widgets-elementor' ),
-				'type'      => Controls_Manager::HEADING,
-				'separator' => 'before',
-			]
-		);
-
-		$this->add_control(
-			'awea_subtext_color',
-			[
-				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Subtext Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#94a3b8',
+				'separator' => 'before',
 				'selectors' => [
-					'{{WRAPPER}} .awea-cnt-subtext' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea_counter_subtext' => 'color: {{VALUE}};',
 				],
 			]
 		);
@@ -799,8 +869,8 @@ class Widget_Awesome_Counter extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Typography::get_type(),
 			[
-				'name'     => 'awea_subtext_typo',
-				'selector' => '{{WRAPPER}} .awea-cnt-subtext',
+				'name'     => 'awea_counter_subtext_typo',
+				'selector' => '{{WRAPPER}} .awea_counter_subtext',
 				'global'   => [ 'default' => Global_Typography::TYPOGRAPHY_TEXT ],
 			]
 		);
@@ -810,39 +880,39 @@ class Widget_Awesome_Counter extends Widget_Base {
 
 	protected function render() {
 		$settings     = $this->get_settings_for_display();
-		$items        = $settings['awea_items'] ?? [];
-		$use_grouping = 'yes' === ( $settings['awea_thousand_sep'] ?? 'yes' );
+		$items        = $settings['awea_counter_items'] ?? [];
+		$use_grouping = 'yes' === ( $settings['awea_counter_thousand_sep'] ?? 'yes' );
 		$widget_id    = $this->get_id();
 
 		if ( empty( $items ) ) {
 			return;
 		}
 		?>
-		<div class="awea-cnt-grid" id="awea-cnt-<?php echo esc_attr( $widget_id ); ?>">
+		<div class="awea_counter_grid" id="awea_counter_<?php echo esc_attr( $widget_id ); ?>">
 			<?php foreach ( $items as $index => $item ) :
 				$id       = ! empty( $item['_id'] ) ? sanitize_html_class( $item['_id'] ) : $index;
-				$start    = '' !== ( $item['awea_start'] ?? '' ) ? floatval( $item['awea_start'] ) : 0;
-				$target   = '' !== ( $item['awea_target'] ?? '' ) ? floatval( $item['awea_target'] ) : 0;
-				$decimals = ! empty( $item['awea_decimals'] ) ? min( 4, absint( $item['awea_decimals'] ) ) : 0;
-				$duration = ! empty( $item['awea_duration'] ) ? absint( $item['awea_duration'] ) : 2200;
-				$prefix   = $item['awea_prefix'] ?? '';
-				$suffix   = $item['awea_suffix'] ?? '';
-				$title    = $item['awea_title'] ?? '';
-				$subtext  = $item['awea_subtext'] ?? '';
-				$has_icon = ! empty( $item['awea_icon']['value'] );
+				$start    = '' !== ( $item['awea_counter_start'] ?? '' ) ? floatval( $item['awea_counter_start'] ) : 0;
+				$target   = '' !== ( $item['awea_counter_target'] ?? '' ) ? floatval( $item['awea_counter_target'] ) : 0;
+				$decimals = ! empty( $item['awea_counter_decimals'] ) ? min( 4, absint( $item['awea_counter_decimals'] ) ) : 0;
+				$duration = ! empty( $item['awea_counter_duration'] ) ? absint( $item['awea_counter_duration'] ) : 2200;
+				$prefix   = $item['awea_counter_prefix'] ?? '';
+				$suffix   = $item['awea_counter_suffix'] ?? '';
+				$title    = $item['awea_counter_title'] ?? '';
+				$subtext  = $item['awea_counter_subtext'] ?? '';
+				$has_icon = ! empty( $item['awea_counter_icon']['value'] );
 
-				$card_key = 'card_' . $id;
+				$card_key = 'awea_counter_card_' . $id;
 				$this->remove_render_attribute( $card_key );
 				$this->add_render_attribute( $card_key, 'class', [
-					'awea-cnt-card',
+					'awea_counter_card',
 					'elementor-repeater-item-' . $id,
 				] );
 
-				$this->add_render_attribute( $card_key, 'data-start', (string) $start );
-				$this->add_render_attribute( $card_key, 'data-target', (string) $target );
-				$this->add_render_attribute( $card_key, 'data-decimals', (string) $decimals );
-				$this->add_render_attribute( $card_key, 'data-duration', (string) $duration );
-				$this->add_render_attribute( $card_key, 'data-grouping', $use_grouping ? '1' : '0' );
+				$this->add_render_attribute( $card_key, 'data-awea_counter_start', (string) $start );
+				$this->add_render_attribute( $card_key, 'data-awea_counter_target', (string) $target );
+				$this->add_render_attribute( $card_key, 'data-awea_counter_decimals', (string) $decimals );
+				$this->add_render_attribute( $card_key, 'data-awea_counter_duration', (string) $duration );
+				$this->add_render_attribute( $card_key, 'data-awea_counter_grouping', $use_grouping ? '1' : '0' );
 
 				$formatted_start = $use_grouping
 					? number_format( $start, $decimals, '.', ',' )
@@ -857,30 +927,30 @@ class Widget_Awesome_Counter extends Widget_Base {
 				<article <?php $this->print_render_attribute_string( $card_key ); ?>>
 
 					<?php if ( $has_icon ) : ?>
-						<div class="awea-cnt-icon" aria-hidden="true">
-							<?php Icons_Manager::render_icon( $item['awea_icon'], [ 'aria-hidden' => 'true' ] ); ?>
+						<div class="awea_counter_icon" aria-hidden="true">
+							<?php Icons_Manager::render_icon( $item['awea_counter_icon'], [ 'aria-hidden' => 'true' ] ); ?>
 						</div>
 					<?php endif; ?>
 
-					<div class="awea-cnt-content">
-						<div class="awea-cnt-stats" aria-label="<?php echo esc_attr( $final_aria_label ); ?>">
+					<div class="awea_counter_content">
+						<div class="awea_counter_stats" aria-label="<?php echo esc_attr( $final_aria_label ); ?>">
 							<?php if ( ! empty( $prefix ) ) : ?>
-								<span class="awea-cnt-pre" aria-hidden="true"><?php echo esc_html( $prefix ); ?></span>
+								<span class="awea_counter_pre" aria-hidden="true"><?php echo esc_html( $prefix ); ?></span>
 							<?php endif; ?>
 
-							<span class="awea-cnt-val" aria-hidden="true"><?php echo esc_html( $formatted_start ); ?></span>
+							<span class="awea_counter_val" aria-hidden="true"><?php echo esc_html( $formatted_start ); ?></span>
 
 							<?php if ( ! empty( $suffix ) ) : ?>
-								<span class="awea-cnt-suf" aria-hidden="true"><?php echo esc_html( $suffix ); ?></span>
+								<span class="awea_counter_suf" aria-hidden="true"><?php echo esc_html( $suffix ); ?></span>
 							<?php endif; ?>
 						</div>
 
 						<?php if ( ! empty( $title ) ) : ?>
-							<p class="awea-cnt-lbl"><?php echo esc_html( $title ); ?></p>
+							<p class="awea_counter_lbl"><?php echo esc_html( $title ); ?></p>
 						<?php endif; ?>
 
 						<?php if ( ! empty( $subtext ) ) : ?>
-							<span class="awea-cnt-subtext"><?php echo esc_html( $subtext ); ?></span>
+							<span class="awea_counter_subtext"><?php echo esc_html( $subtext ); ?></span>
 						<?php endif; ?>
 					</div>
 
@@ -890,22 +960,22 @@ class Widget_Awesome_Counter extends Widget_Base {
 
 		<script>
 		(function() {
-			function bindCounters(grid) {
-				if (!grid || grid.dataset.aweaBound === '1') return;
-				grid.dataset.aweaBound = '1';
+			function awea_counter_bind(grid) {
+				if (!grid || grid.dataset.aweaCounterBound === '1') return;
+				grid.dataset.aweaCounterBound = '1';
 
 				var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-				var cards = grid.querySelectorAll('.awea-cnt-card');
+				var cards = grid.querySelectorAll('.awea_counter_card');
 
 				cards.forEach(function(card) {
-					var valEl = card.querySelector('.awea-cnt-val');
+					var valEl = card.querySelector('.awea_counter_val');
 					if (!valEl) return;
 
-					var start    = parseFloat(card.getAttribute('data-start')) || 0;
-					var target   = parseFloat(card.getAttribute('data-target')) || 0;
-					var decimals = parseInt(card.getAttribute('data-decimals'), 10) || 0;
-					var duration = parseInt(card.getAttribute('data-duration'), 10) || 2200;
-					var grouping = card.getAttribute('data-grouping') === '1';
+					var start    = parseFloat(card.getAttribute('data-awea_counter_start')) || 0;
+					var target   = parseFloat(card.getAttribute('data-awea_counter_target')) || 0;
+					var decimals = parseInt(card.getAttribute('data-awea_counter_decimals'), 10) || 0;
+					var duration = parseInt(card.getAttribute('data-awea_counter_duration'), 10) || 2200;
+					var grouping = card.getAttribute('data-awea_counter_grouping') === '1';
 					var started  = false;
 
 					function formatNumber(num) {
@@ -963,21 +1033,21 @@ class Widget_Awesome_Counter extends Widget_Base {
 				});
 			}
 
-			function initById() {
-				bindCounters(document.getElementById('awea-cnt-<?php echo esc_js( $widget_id ); ?>'));
+			function awea_counter_init() {
+				awea_counter_bind(document.getElementById('awea_counter_<?php echo esc_js( $widget_id ); ?>'));
 			}
 
 			if (document.readyState === 'loading') {
-				document.addEventListener('DOMContentLoaded', initById);
+				document.addEventListener('DOMContentLoaded', awea_counter_init);
 			} else {
-				initById();
+				awea_counter_init();
 			}
 
-			if (window.elementorFrontend && window.elementorFrontend.hooks && !window.aweaCounterHooked) {
-				window.aweaCounterHooked = true;
+			if (window.elementorFrontend && window.elementorFrontend.hooks && !window.awea_counter_hooked) {
+				window.awea_counter_hooked = true;
 				window.elementorFrontend.hooks.addAction('frontend/element_ready/awesome-counter.default', function($scope) {
-					var el = $scope && $scope[0] ? $scope[0].querySelector('.awea-cnt-grid') : null;
-					bindCounters(el);
+					var el = $scope && $scope[0] ? $scope[0].querySelector('.awea_counter_grid') : null;
+					awea_counter_bind(el);
 				});
 			}
 		})();

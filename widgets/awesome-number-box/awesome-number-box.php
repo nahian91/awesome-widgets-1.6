@@ -48,7 +48,7 @@ class Widget_Awesome_Number_Box extends Widget_Base {
 	protected function register_controls() {
 
 		/* ==========================================================================
-		   CONTENT: 1. ITEMS (REPEATER)
+		   CONTENT: 1. ITEMS
 		   ========================================================================== */
 		$this->start_controls_section(
 			'awea_section_items',
@@ -82,7 +82,7 @@ class Widget_Awesome_Number_Box extends Widget_Base {
 		$repeater->add_control(
 			'awea_tag',
 			[
-				'label'       => esc_html__( 'Step Tag', 'awesome-widgets-elementor' ),
+				'label'       => esc_html__( 'Tag', 'awesome-widgets-elementor' ),
 				'type'        => Controls_Manager::TEXT,
 				'default'     => '',
 				'placeholder' => esc_html__( 'Phase 1', 'awesome-widgets-elementor' ),
@@ -131,7 +131,7 @@ class Widget_Awesome_Number_Box extends Widget_Base {
 		$repeater->add_control(
 			'awea_link_show',
 			[
-				'label'        => esc_html__( 'Show Link', 'awesome-widgets-elementor' ),
+				'label'        => esc_html__( 'Display', 'awesome-widgets-elementor' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'label_on'     => esc_html__( 'Yes', 'awesome-widgets-elementor' ),
 				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
@@ -154,7 +154,7 @@ class Widget_Awesome_Number_Box extends Widget_Base {
 		$repeater->add_control(
 			'awea_link_url',
 			[
-				'label'       => esc_html__( 'URL', 'awesome-widgets-elementor' ),
+				'label'       => esc_html__( 'Link', 'awesome-widgets-elementor' ),
 				'type'        => Controls_Manager::URL,
 				'dynamic'     => [ 'active' => true ],
 				'placeholder' => 'https://example.com',
@@ -187,7 +187,7 @@ class Widget_Awesome_Number_Box extends Widget_Base {
 		$repeater->add_control(
 			'awea_item_num_color',
 			[
-				'label'     => esc_html__( 'Number Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Number', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} {{CURRENT_ITEM}} .awea-nb-badge'     => 'color: {{VALUE}};',
@@ -199,7 +199,7 @@ class Widget_Awesome_Number_Box extends Widget_Base {
 		$repeater->add_control(
 			'awea_item_num_bg',
 			[
-				'label'     => esc_html__( 'Badge Accent', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Badge', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}}.awea-nb-mode-badge {{CURRENT_ITEM}} .awea-nb-badge'    => 'background-color: {{VALUE}}; border-color: {{VALUE}};',
@@ -212,7 +212,7 @@ class Widget_Awesome_Number_Box extends Widget_Base {
 		$repeater->add_control(
 			'awea_item_border',
 			[
-				'label'     => esc_html__( 'Card Border', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Border', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} {{CURRENT_ITEM}}' => 'border-color: {{VALUE}};',
@@ -227,7 +227,7 @@ class Widget_Awesome_Number_Box extends Widget_Base {
 		$this->add_control(
 			'awea_items',
 			[
-				'label'       => esc_html__( 'Cards', 'awesome-widgets-elementor' ),
+				'label'       => esc_html__( 'List', 'awesome-widgets-elementor' ),
 				'type'        => Controls_Manager::REPEATER,
 				'fields'      => $repeater->get_controls(),
 				'title_field' => '{{{ awea_number }}} — {{{ awea_title }}}',
@@ -260,12 +260,12 @@ class Widget_Awesome_Number_Box extends Widget_Base {
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   CONTENT: 2. LAYOUT
+		   CONTENT: 2. GRID
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_section_layout',
+			'awea_section_grid',
 			[
-				'label' => esc_html__( 'Layout', 'awesome-widgets-elementor' ),
+				'label' => esc_html__( 'Grid', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
 			]
 		);
@@ -293,7 +293,7 @@ class Widget_Awesome_Number_Box extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_gap',
 			[
-				'label'      => esc_html__( 'Grid Gap', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Gap', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px', 'rem' ],
 				'range'      => [
@@ -307,17 +307,30 @@ class Widget_Awesome_Number_Box extends Widget_Base {
 			]
 		);
 
+		$this->end_controls_section();
+
+		/* ==========================================================================
+		   CONTENT: 3. OPTIONS
+		   ========================================================================== */
+		$this->start_controls_section(
+			'awea_section_options',
+			[
+				'label' => esc_html__( 'Options', 'awesome-widgets-elementor' ),
+				'tab'   => Controls_Manager::TAB_CONTENT,
+			]
+		);
+
 		$this->add_control(
 			'awea_num_style',
 			[
-				'label'        => esc_html__( 'Number Style', 'awesome-widgets-elementor' ),
+				'label'        => esc_html__( 'Style', 'awesome-widgets-elementor' ),
 				'type'         => Controls_Manager::SELECT,
 				'default'      => 'badge',
 				'options'      => [
-					'badge'     => esc_html__( 'Solid Badge', 'awesome-widgets-elementor' ),
-					'outlined'  => esc_html__( 'Outlined Box', 'awesome-widgets-elementor' ),
+					'badge'     => esc_html__( 'Badge', 'awesome-widgets-elementor' ),
+					'outlined'  => esc_html__( 'Outlined', 'awesome-widgets-elementor' ),
 					'watermark' => esc_html__( 'Watermark', 'awesome-widgets-elementor' ),
-					'split'     => esc_html__( 'Split Side', 'awesome-widgets-elementor' ),
+					'split'     => esc_html__( 'Split', 'awesome-widgets-elementor' ),
 				],
 				'prefix_class' => 'awea-nb-mode-',
 			]
@@ -326,7 +339,7 @@ class Widget_Awesome_Number_Box extends Widget_Base {
 		$this->add_control(
 			'awea_title_tag',
 			[
-				'label'   => esc_html__( 'Title HTML Tag', 'awesome-widgets-elementor' ),
+				'label'   => esc_html__( 'Tag', 'awesome-widgets-elementor' ),
 				'type'    => Controls_Manager::SELECT,
 				'default' => 'h3',
 				'options' => [
@@ -411,7 +424,7 @@ class Widget_Awesome_Number_Box extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_card_radius',
 			[
-				'label'      => esc_html__( 'Border Radius', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Radius', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'default'    => [
@@ -451,6 +464,7 @@ class Widget_Awesome_Number_Box extends Widget_Base {
 			Group_Control_Border::get_type(),
 			[
 				'name'           => 'awea_card_border',
+				'label'          => esc_html__( 'Border', 'awesome-widgets-elementor' ),
 				'selector'       => '{{WRAPPER}} .awea-nb-card',
 				'fields_options' => [
 					'border' => [ 'default' => 'solid' ],
@@ -472,6 +486,7 @@ class Widget_Awesome_Number_Box extends Widget_Base {
 			Group_Control_Box_Shadow::get_type(),
 			[
 				'name'     => 'awea_card_shadow',
+				'label'    => esc_html__( 'Shadow', 'awesome-widgets-elementor' ),
 				'selector' => '{{WRAPPER}} .awea-nb-card',
 			]
 		);
@@ -498,7 +513,7 @@ class Widget_Awesome_Number_Box extends Widget_Base {
 		$this->add_control(
 			'awea_card_border_hover',
 			[
-				'label'     => esc_html__( 'Border Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Border', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
 				'selectors' => [
@@ -511,6 +526,7 @@ class Widget_Awesome_Number_Box extends Widget_Base {
 			Group_Control_Box_Shadow::get_type(),
 			[
 				'name'     => 'awea_card_shadow_hover',
+				'label'    => esc_html__( 'Shadow', 'awesome-widgets-elementor' ),
 				'selector' => '{{WRAPPER}} .awea-nb-card:hover',
 			]
 		);
@@ -521,12 +537,12 @@ class Widget_Awesome_Number_Box extends Widget_Base {
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   STYLE: 2. NUMBER BADGE (BADGE / OUTLINED / SPLIT)
+		   STYLE: 2. NUMBER
 		   ========================================================================== */
 		$this->start_controls_section(
 			'awea_style_badge',
 			[
-				'label'     => esc_html__( 'Number Badge', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Number', 'awesome-widgets-elementor' ),
 				'tab'       => Controls_Manager::TAB_STYLE,
 				'condition' => [ 'awea_num_style!' => 'watermark' ],
 			]
@@ -535,7 +551,7 @@ class Widget_Awesome_Number_Box extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_badge_size',
 			[
-				'label'      => esc_html__( 'Box Size', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Box', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [ 'px' => [ 'min' => 36, 'max' => 100 ] ],
@@ -563,7 +579,7 @@ class Widget_Awesome_Number_Box extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_badge_radius',
 			[
-				'label'      => esc_html__( 'Border Radius', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Radius', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'default'    => [
@@ -584,6 +600,7 @@ class Widget_Awesome_Number_Box extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'awea_badge_typo',
+				'label'    => esc_html__( 'Typography', 'awesome-widgets-elementor' ),
 				'selector' => '{{WRAPPER}} .awea-nb-badge',
 				'global'   => [ 'default' => Global_Typography::TYPOGRAPHY_PRIMARY ],
 			]
@@ -625,7 +642,7 @@ class Widget_Awesome_Number_Box extends Widget_Base {
 		$this->add_control(
 			'awea_badge_outline_color',
 			[
-				'label'     => esc_html__( 'Border Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Border', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
 				'condition' => [ 'awea_num_style' => 'outlined' ],
@@ -672,7 +689,7 @@ class Widget_Awesome_Number_Box extends Widget_Base {
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   STYLE: 3. WATERMARK (CONDITIONAL: WATERMARK MODE)
+		   STYLE: 3. WATERMARK
 		   ========================================================================== */
 		$this->start_controls_section(
 			'awea_style_watermark',
@@ -730,21 +747,13 @@ class Widget_Awesome_Number_Box extends Widget_Base {
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   STYLE: 4. TEXT & LINK
+		   STYLE: 4. TAG
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_style_text',
+			'awea_style_tag',
 			[
-				'label' => esc_html__( 'Typography & Link', 'awesome-widgets-elementor' ),
+				'label' => esc_html__( 'Tag', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
-			]
-		);
-
-		$this->add_control(
-			'awea_tag_heading',
-			[
-				'label' => esc_html__( 'Step Tag', 'awesome-widgets-elementor' ),
-				'type'  => Controls_Manager::HEADING,
 			]
 		);
 
@@ -752,6 +761,7 @@ class Widget_Awesome_Number_Box extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'awea_tag_typo',
+				'label'    => esc_html__( 'Typography', 'awesome-widgets-elementor' ),
 				'selector' => '{{WRAPPER}} .awea-nb-tag',
 				'global'   => [ 'default' => Global_Typography::TYPOGRAPHY_SECONDARY ],
 			]
@@ -760,7 +770,7 @@ class Widget_Awesome_Number_Box extends Widget_Base {
 		$this->add_control(
 			'awea_tag_color',
 			[
-				'label'     => esc_html__( 'Tag Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
 				'selectors' => [
@@ -769,12 +779,16 @@ class Widget_Awesome_Number_Box extends Widget_Base {
 			]
 		);
 
-		$this->add_control(
-			'awea_title_heading',
+		$this->end_controls_section();
+
+		/* ==========================================================================
+		   STYLE: 5. TITLE
+		   ========================================================================== */
+		$this->start_controls_section(
+			'awea_style_title',
 			[
-				'label'     => esc_html__( 'Title', 'awesome-widgets-elementor' ),
-				'type'      => Controls_Manager::HEADING,
-				'separator' => 'before',
+				'label' => esc_html__( 'Title', 'awesome-widgets-elementor' ),
+				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
 
@@ -782,6 +796,7 @@ class Widget_Awesome_Number_Box extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'awea_title_typo',
+				'label'    => esc_html__( 'Typography', 'awesome-widgets-elementor' ),
 				'selector' => '{{WRAPPER}} .awea-nb-title',
 				'global'   => [ 'default' => Global_Typography::TYPOGRAPHY_PRIMARY ],
 			]
@@ -802,7 +817,7 @@ class Widget_Awesome_Number_Box extends Widget_Base {
 		$this->add_control(
 			'awea_title_hover',
 			[
-				'label'     => esc_html__( 'Hover Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Hover', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
 				'selectors' => [
@@ -814,7 +829,7 @@ class Widget_Awesome_Number_Box extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_title_space',
 			[
-				'label'      => esc_html__( 'Bottom Spacing', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Spacing', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [ 'px' => [ 'min' => 0, 'max' => 40 ] ],
@@ -825,12 +840,16 @@ class Widget_Awesome_Number_Box extends Widget_Base {
 			]
 		);
 
-		$this->add_control(
-			'awea_desc_heading',
+		$this->end_controls_section();
+
+		/* ==========================================================================
+		   STYLE: 6. DESCRIPTION
+		   ========================================================================== */
+		$this->start_controls_section(
+			'awea_style_desc',
 			[
-				'label'     => esc_html__( 'Description', 'awesome-widgets-elementor' ),
-				'type'      => Controls_Manager::HEADING,
-				'separator' => 'before',
+				'label' => esc_html__( 'Description', 'awesome-widgets-elementor' ),
+				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
 
@@ -838,6 +857,7 @@ class Widget_Awesome_Number_Box extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'awea_desc_typo',
+				'label'    => esc_html__( 'Typography', 'awesome-widgets-elementor' ),
 				'selector' => '{{WRAPPER}} .awea-nb-desc',
 				'global'   => [ 'default' => Global_Typography::TYPOGRAPHY_TEXT ],
 			]
@@ -858,7 +878,7 @@ class Widget_Awesome_Number_Box extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_desc_space',
 			[
-				'label'      => esc_html__( 'Bottom Spacing', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Spacing', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [ 'px' => [ 'min' => 0, 'max' => 50 ] ],
@@ -869,12 +889,16 @@ class Widget_Awesome_Number_Box extends Widget_Base {
 			]
 		);
 
-		$this->add_control(
-			'awea_link_heading',
+		$this->end_controls_section();
+
+		/* ==========================================================================
+		   STYLE: 7. LINK
+		   ========================================================================== */
+		$this->start_controls_section(
+			'awea_style_link',
 			[
-				'label'     => esc_html__( 'Action Link', 'awesome-widgets-elementor' ),
-				'type'      => Controls_Manager::HEADING,
-				'separator' => 'before',
+				'label' => esc_html__( 'Link', 'awesome-widgets-elementor' ),
+				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
 
@@ -882,6 +906,7 @@ class Widget_Awesome_Number_Box extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'awea_link_typo',
+				'label'    => esc_html__( 'Typography', 'awesome-widgets-elementor' ),
 				'selector' => '{{WRAPPER}} .awea-nb-btn',
 				'global'   => [ 'default' => Global_Typography::TYPOGRAPHY_ACCENT ],
 			]
@@ -890,7 +915,7 @@ class Widget_Awesome_Number_Box extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_link_icon_size',
 			[
-				'label'      => esc_html__( 'Icon Size', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Icon', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [ 'px' => [ 'min' => 10, 'max' => 28 ] ],
@@ -918,7 +943,7 @@ class Widget_Awesome_Number_Box extends Widget_Base {
 		$this->add_control(
 			'awea_link_hover',
 			[
-				'label'     => esc_html__( 'Hover Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Hover', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#0f172a',
 				'selectors' => [

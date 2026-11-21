@@ -1,12 +1,12 @@
 /* ==========================================================================
-   Awesome Accordion Widget
+   Awesome Accordion Widget (v2.0.0)
    ========================================================================== */
 
-.awea-accordion-wrap {
-	--awea-acc-primary: var(--e-global-color-primary, #4f46e5);
-	--awea-acc-heading: #0f172a;
-	--awea-acc-text: #475569;
-	--awea-acc-border: #e2e8f0;
+.awea_accordion_wrap {
+	--awea_accordion_primary: var(--e-global-color-primary, #4f46e5);
+	--awea_accordion_heading: #0f172a;
+	--awea_accordion_text: #475569;
+	--awea_accordion_border: #e2e8f0;
 
 	display: flex;
 	flex-direction: column;
@@ -16,35 +16,35 @@
 	box-sizing: border-box;
 }
 
-.awea-accordion-wrap *,
-.awea-accordion-wrap *::before,
-.awea-accordion-wrap *::after {
+.awea_accordion_wrap *,
+.awea_accordion_wrap *::before,
+.awea_accordion_wrap *::after {
 	box-sizing: border-box;
 }
 
 /* --------------------------------------------------------------------------
-1. Item Box Shell
+   1. Item Box Shell
    -------------------------------------------------------------------------- */
-.awea-accordion-item {
+.awea_accordion_item {
 	background-color: #ffffff;
-	border: 1px solid var(--awea-acc-border);
+	border: 1px solid var(--awea_accordion_border);
 	border-radius: 16px;
 	overflow: hidden;
 	transition: background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
-.awea-accordion-item:hover {
+.awea_accordion_item:hover {
 	border-color: #cbd5e1;
 }
 
-.awea-accordion-item.is-active {
-	border-color: var(--awea-acc-primary);
+.awea_accordion_item.awea_accordion_is_active {
+	border-color: var(--awea_accordion_primary);
 }
 
 /* --------------------------------------------------------------------------
-2. Question / Title Bar
+   2. Question / Title Bar
    -------------------------------------------------------------------------- */
-.awea-accordion-heading-wrap {
+.awea_accordion_heading_wrap {
 	margin: 0;
 	padding: 0;
 	font-size: inherit;
@@ -52,7 +52,7 @@
 	line-height: inherit;
 }
 
-.awea-accordion-header {
+.awea_accordion_header {
 	width: 100%;
 	margin: 0;
 	padding: 20px 24px;
@@ -62,7 +62,7 @@
 	align-items: center;
 	justify-content: space-between;
 	gap: 16px;
-	text-align: left;
+	text-align: start;
 	cursor: pointer;
 	user-select: none;
 	appearance: none;
@@ -70,54 +70,76 @@
 	transition: background-color 0.25s ease;
 }
 
-.awea-accordion-header:focus-visible {
-	outline: 2px solid var(--awea-acc-primary);
+.awea_accordion_header:focus-visible {
+	outline: 2px solid var(--awea_accordion_primary);
 	outline-offset: -2px;
 }
 
 /* Left Icon Placement */
-.awea-icon-pos-left .awea-accordion-header {
+.awea_accordion_icon_pos_left .awea_accordion_header {
 	flex-direction: row-reverse;
 	justify-content: flex-end;
 }
 
-.awea-accordion-title-group {
+.awea_accordion_title_group {
 	display: flex;
-	align-items: baseline;
-	gap: 12px;
+	align-items: center;
+	gap: 14px;
 	flex: 1;
 	min-width: 0;
 }
 
-.awea-accordion-index {
+.awea_accordion_index {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
 	font-size: 0.875rem;
 	font-weight: 800;
-	color: var(--awea-acc-primary);
+	color: var(--awea_accordion_primary);
 	letter-spacing: 0.04em;
 	flex-shrink: 0;
-	opacity: 0.85;
+	opacity: 0.9;
+	transition: color 0.25s ease, background-color 0.25s ease;
 }
 
-.awea-accordion-title {
+.awea_accordion_lead_icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 18px;
+	line-height: 1;
+	color: var(--awea_accordion_primary);
+	flex-shrink: 0;
+	transition: color 0.25s ease;
+}
+
+.awea_accordion_lead_icon svg {
+	width: 18px;
+	height: 18px;
+	fill: currentColor;
+	display: block;
+}
+
+.awea_accordion_title {
 	margin: 0;
 	font-size: 1.075rem;
 	font-weight: 700;
 	line-height: 1.38;
-	color: var(--awea-acc-heading);
+	color: var(--awea_accordion_heading);
 	letter-spacing: -0.01em;
 	word-break: break-word;
 	transition: color 0.25s ease;
 }
 
-.awea-accordion-header:hover .awea-accordion-title,
-.awea-accordion-item.is-active .awea-accordion-title {
-	color: var(--awea-acc-primary);
+.awea_accordion_header:hover .awea_accordion_title,
+.awea_accordion_item.awea_accordion_is_active .awea_accordion_title {
+	color: var(--awea_accordion_primary);
 }
 
 /* --------------------------------------------------------------------------
-3. Expand / Collapse Icons
+   3. Expand / Collapse Icons
    -------------------------------------------------------------------------- */
-.awea-icon-box {
+.awea_accordion_icon_box {
 	width: 32px;
 	height: 32px;
 	border-radius: 50%;
@@ -127,11 +149,11 @@
 	align-items: center;
 	justify-content: center;
 	flex-shrink: 0;
-	transition: background-color 0.25s ease, transform 0.25s ease;
+	transition: background-color 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
 }
 
 /* Plus / Minus Animation */
-.awea-icon-line {
+.awea_accordion_icon_line {
 	position: absolute;
 	background-color: #64748b;
 	border-radius: 2px;
@@ -141,30 +163,30 @@
 		background-color 0.25s ease;
 }
 
-.awea-icon-line.h {
-	width: 15px;
+.awea_accordion_icon_line.awea_accordion_h {
+	width: 14px;
 	height: 2px;
 }
 
-.awea-icon-line.v {
+.awea_accordion_icon_line.awea_accordion_v {
 	width: 2px;
-	height: 15px;
+	height: 14px;
 }
 
-.awea-accordion-item.is-active .awea-icon-line.v {
+.awea_accordion_item.awea_accordion_is_active .awea_accordion_icon_line.awea_accordion_v {
 	transform: rotate(90deg);
 	opacity: 0;
 }
 
-.awea-accordion-item.is-active .awea-icon-line.h {
+.awea_accordion_item.awea_accordion_is_active .awea_accordion_icon_line.awea_accordion_h {
 	transform: rotate(180deg);
-	background-color: var(--awea-acc-primary);
+	background-color: var(--awea_accordion_primary);
 }
 
 /* Chevron Rotate Animation */
-.awea-icon-chevron {
-	width: 15px;
-	height: 15px;
+.awea_accordion_icon_chevron {
+	width: 14px;
+	height: 14px;
 	stroke: #64748b;
 	display: block;
 	transition:
@@ -172,73 +194,107 @@
 		stroke 0.25s ease;
 }
 
-.awea-accordion-item.is-active .awea-icon-chevron {
+.awea_accordion_item.awea_accordion_is_active .awea_accordion_icon_chevron {
 	transform: rotate(180deg);
-	stroke: var(--awea-acc-primary);
+	stroke: var(--awea_accordion_primary);
+}
+
+/* Custom Icon Toggle States */
+.awea_accordion_icon_custom {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 14px;
+	line-height: 1;
+	color: #64748b;
+	transition: color 0.25s ease;
+}
+
+.awea_accordion_icon_custom svg {
+	width: 14px;
+	height: 14px;
+	fill: currentColor;
+	display: block;
+}
+
+.awea_accordion_icon_state_active {
+	display: none;
+}
+
+.awea_accordion_item.awea_accordion_is_active .awea_accordion_icon_state_normal {
+	display: none;
+}
+
+.awea_accordion_item.awea_accordion_is_active .awea_accordion_icon_state_active {
+	display: inline-flex;
+	color: var(--awea_accordion_primary);
 }
 
 /* --------------------------------------------------------------------------
-4. Answer / Content Area
+   4. Answer / Content Area
    -------------------------------------------------------------------------- */
-.awea-accordion-collapse {
+.awea_accordion_collapse {
 	display: grid;
 	grid-template-rows: 0fr;
 	transition: grid-template-rows 0.38s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.awea-accordion-item.is-active .awea-accordion-collapse {
+.awea_accordion_item.awea_accordion_is_active .awea_accordion_collapse {
 	grid-template-rows: 1fr;
 }
 
-.awea-accordion-overflow {
+.awea_accordion_overflow {
 	overflow: hidden;
 	min-height: 0;
 }
 
-.awea-content-inner {
+.awea_accordion_content_inner {
 	padding: 0 24px 24px 24px;
 	font-size: 0.96rem;
 	line-height: 1.68;
-	color: var(--awea-acc-text);
+	color: var(--awea_accordion_text);
 	word-break: break-word;
 }
 
-.awea-content-inner p {
+.awea_accordion_content_inner p {
 	margin-top: 0;
 	margin-bottom: 12px;
 }
 
-.awea-content-inner p:last-child {
+.awea_accordion_content_inner p:last-child {
 	margin-bottom: 0;
 }
 
 /* --------------------------------------------------------------------------
-5. Accessibility & Mobile Adjustments
+   5. Accessibility & Mobile Adjustments
    -------------------------------------------------------------------------- */
 @media (prefers-reduced-motion: reduce) {
-	.awea-accordion-item,
-	.awea-accordion-header,
-	.awea-accordion-title,
-	.awea-accordion-collapse,
-	.awea-icon-box,
-	.awea-icon-line,
-	.awea-icon-chevron {
+	.awea_accordion_item,
+	.awea_accordion_header,
+	.awea_accordion_title,
+	.awea_accordion_index,
+	.awea_accordion_lead_icon,
+	.awea_accordion_collapse,
+	.awea_accordion_icon_box,
+	.awea_accordion_icon_line,
+	.awea_accordion_icon_chevron,
+	.awea_accordion_icon_custom {
 		transition: none !important;
 	}
 }
 
 @media (max-width: 640px) {
-	.awea-accordion-header {
+	.awea_accordion_header {
 		padding: 16px 18px;
 		gap: 12px;
 	}
 
-	.awea-content-inner {
+	.awea_accordion_content_inner {
 		padding: 0 18px 18px 18px;
 		font-size: 0.92rem;
 	}
 
-	.awea-accordion-title {
+	.awea_accordion_title {
 		font-size: 1rem;
 	}
 }

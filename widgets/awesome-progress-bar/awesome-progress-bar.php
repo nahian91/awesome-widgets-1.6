@@ -62,8 +62,8 @@ class Widget_Awesome_Progress_Bar extends Widget_Base {
 				'type'    => Controls_Manager::SELECT,
 				'default' => 'circle',
 				'options' => [
-					'circle' => esc_html__( 'Radial Circle', 'awesome-widgets-elementor' ),
-					'line'   => esc_html__( 'Linear Bar', 'awesome-widgets-elementor' ),
+					'circle' => esc_html__( 'Circle', 'awesome-widgets-elementor' ),
+					'line'   => esc_html__( 'Bar', 'awesome-widgets-elementor' ),
 				],
 			]
 		);
@@ -82,7 +82,7 @@ class Widget_Awesome_Progress_Bar extends Widget_Base {
 		$this->add_control(
 			'awea_percent',
 			[
-				'label'   => esc_html__( 'Percentage', 'awesome-widgets-elementor' ),
+				'label'   => esc_html__( 'Percent', 'awesome-widgets-elementor' ),
 				'type'    => Controls_Manager::SLIDER,
 				'default' => [
 					'unit' => '%',
@@ -99,6 +99,29 @@ class Widget_Awesome_Progress_Bar extends Widget_Base {
 		);
 
 		$this->add_control(
+			'awea_suffix',
+			[
+				'label'   => esc_html__( 'Suffix', 'awesome-widgets-elementor' ),
+				'type'    => Controls_Manager::TEXT,
+				'default' => '%',
+				'dynamic' => [ 'active' => true ],
+			]
+		);
+
+		$this->end_controls_section();
+
+		/* ==========================================================================
+		   CONTENT: 2. OPTIONS
+		   ========================================================================== */
+		$this->start_controls_section(
+			'awea_section_options',
+			[
+				'label' => esc_html__( 'Options', 'awesome-widgets-elementor' ),
+				'tab'   => Controls_Manager::TAB_CONTENT,
+			]
+		);
+
+		$this->add_control(
 			'awea_duration',
 			[
 				'label'   => esc_html__( 'Duration', 'awesome-widgets-elementor' ),
@@ -107,16 +130,6 @@ class Widget_Awesome_Progress_Bar extends Widget_Base {
 				'min'     => 300,
 				'max'     => 8000,
 				'step'    => 100,
-			]
-		);
-
-		$this->add_control(
-			'awea_suffix',
-			[
-				'label'   => esc_html__( 'Suffix', 'awesome-widgets-elementor' ),
-				'type'    => Controls_Manager::TEXT,
-				'default' => '%',
-				'dynamic' => [ 'active' => true ],
 			]
 		);
 
@@ -153,7 +166,7 @@ class Widget_Awesome_Progress_Bar extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_line_max_width',
 			[
-				'label'      => esc_html__( 'Max Width', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Width', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px', '%' ],
 				'range'      => [
@@ -171,7 +184,7 @@ class Widget_Awesome_Progress_Bar extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_container_alignment',
 			[
-				'label'     => esc_html__( 'Align', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Alignment', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::CHOOSE,
 				'options'   => [
 					'flex-start' => [ 'title' => esc_html__( 'Left', 'awesome-widgets-elementor' ), 'icon' => 'eicon-text-align-left' ],
@@ -201,7 +214,7 @@ class Widget_Awesome_Progress_Bar extends Widget_Base {
 		$this->add_control(
 			'awea_accent_color',
 			[
-				'label'     => esc_html__( 'Fill Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Fill', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [
 					'default' => Global_Colors::COLOR_PRIMARY,
@@ -216,7 +229,7 @@ class Widget_Awesome_Progress_Bar extends Widget_Base {
 		$this->add_control(
 			'awea_track_color',
 			[
-				'label'     => esc_html__( 'Track Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Track', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#e2e8f0',
 				'selectors' => [
@@ -229,7 +242,7 @@ class Widget_Awesome_Progress_Bar extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_stroke_width',
 			[
-				'label'      => esc_html__( 'Stroke Width', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Stroke', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [ 'px' => [ 'min' => 2, 'max' => 24 ] ],
@@ -245,7 +258,7 @@ class Widget_Awesome_Progress_Bar extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_line_height',
 			[
-				'label'      => esc_html__( 'Bar Height', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Height', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [ 'px' => [ 'min' => 4, 'max' => 36 ] ],
@@ -261,7 +274,7 @@ class Widget_Awesome_Progress_Bar extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_line_radius',
 			[
-				'label'      => esc_html__( 'Bar Radius', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Radius', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px', '%' ],
 				'range'      => [ 'px' => [ 'min' => 0, 'max' => 30 ] ],
@@ -304,6 +317,7 @@ class Widget_Awesome_Progress_Bar extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'awea_digit_typo',
+				'label'    => esc_html__( 'Digit Typography', 'awesome-widgets-elementor' ),
 				'selector' => '{{WRAPPER}} .awea-progress-percent',
 				'global'   => [
 					'default' => Global_Typography::TYPOGRAPHY_PRIMARY,
@@ -330,6 +344,7 @@ class Widget_Awesome_Progress_Bar extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'awea_label_typo',
+				'label'    => esc_html__( 'Label Typography', 'awesome-widgets-elementor' ),
 				'selector' => '{{WRAPPER}} .awea-progress-label',
 				'global'   => [
 					'default' => Global_Typography::TYPOGRAPHY_SECONDARY,

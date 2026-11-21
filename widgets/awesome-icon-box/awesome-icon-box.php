@@ -48,7 +48,7 @@ class Widget_Awesome_Icon_Box extends Widget_Base {
 	protected function register_controls() {
 
 		/* ==========================================================================
-		   CONTENT: 1. ITEMS (REPEATER)
+		   CONTENT: 1. ITEMS
 		   ========================================================================== */
 		$this->start_controls_section(
 			'awea_section_items',
@@ -83,7 +83,7 @@ class Widget_Awesome_Icon_Box extends Widget_Base {
 		$repeater->add_control(
 			'awea_badge',
 			[
-				'label'       => esc_html__( 'Corner Badge', 'awesome-widgets-elementor' ),
+				'label'       => esc_html__( 'Badge', 'awesome-widgets-elementor' ),
 				'type'        => Controls_Manager::TEXT,
 				'default'     => '',
 				'dynamic'     => [ 'active' => true ],
@@ -132,7 +132,7 @@ class Widget_Awesome_Icon_Box extends Widget_Base {
 		$repeater->add_control(
 			'awea_btn_link',
 			[
-				'label'   => esc_html__( 'URL', 'awesome-widgets-elementor' ),
+				'label'   => esc_html__( 'Link', 'awesome-widgets-elementor' ),
 				'type'    => Controls_Manager::URL,
 				'dynamic' => [ 'active' => true ],
 				'default' => [ 'url' => '#' ],
@@ -142,7 +142,7 @@ class Widget_Awesome_Icon_Box extends Widget_Base {
 		$repeater->add_control(
 			'awea_btn_show',
 			[
-				'label'        => esc_html__( 'Show Button', 'awesome-widgets-elementor' ),
+				'label'        => esc_html__( 'Button', 'awesome-widgets-elementor' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'label_on'     => esc_html__( 'Yes', 'awesome-widgets-elementor' ),
 				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
@@ -154,7 +154,7 @@ class Widget_Awesome_Icon_Box extends Widget_Base {
 		$repeater->add_control(
 			'awea_btn_text',
 			[
-				'label'     => esc_html__( 'Button Text', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Text', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::TEXT,
 				'default'   => esc_html__( 'Explore Module', 'awesome-widgets-elementor' ),
 				'dynamic'   => [ 'active' => true ],
@@ -178,7 +178,7 @@ class Widget_Awesome_Icon_Box extends Widget_Base {
 		$repeater->add_control(
 			'awea_btn_icon_pos',
 			[
-				'label'     => esc_html__( 'Icon Side', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Position', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::SELECT,
 				'default'   => 'right',
 				'options'   => [
@@ -200,7 +200,7 @@ class Widget_Awesome_Icon_Box extends Widget_Base {
 		$repeater->add_control(
 			'awea_item_icon_color',
 			[
-				'label'     => esc_html__( 'Icon Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Icon', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} {{CURRENT_ITEM}}' => '--awea-item-ico-color: {{VALUE}};',
@@ -211,7 +211,7 @@ class Widget_Awesome_Icon_Box extends Widget_Base {
 		$repeater->add_control(
 			'awea_item_icon_bg',
 			[
-				'label'     => esc_html__( 'Icon Box Accent', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Background', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} {{CURRENT_ITEM}}' => '--awea-item-ico-accent: {{VALUE}};',
@@ -222,7 +222,7 @@ class Widget_Awesome_Icon_Box extends Widget_Base {
 		$repeater->add_control(
 			'awea_item_border_color',
 			[
-				'label'     => esc_html__( 'Card Border', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Border', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} {{CURRENT_ITEM}}' => 'border-color: {{VALUE}};',
@@ -237,7 +237,7 @@ class Widget_Awesome_Icon_Box extends Widget_Base {
 		$this->add_control(
 			'awea_items',
 			[
-				'label'       => esc_html__( 'Cards', 'awesome-widgets-elementor' ),
+				'label'       => esc_html__( 'List', 'awesome-widgets-elementor' ),
 				'type'        => Controls_Manager::REPEATER,
 				'fields'      => $repeater->get_controls(),
 				'title_field' => '{{{ awea_title }}}',
@@ -268,12 +268,12 @@ class Widget_Awesome_Icon_Box extends Widget_Base {
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   CONTENT: 2. LAYOUT
+		   CONTENT: 2. GRID
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_section_layout',
+			'awea_section_grid',
 			[
-				'label' => esc_html__( 'Layout', 'awesome-widgets-elementor' ),
+				'label' => esc_html__( 'Grid', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
 			]
 		);
@@ -301,7 +301,7 @@ class Widget_Awesome_Icon_Box extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_gap',
 			[
-				'label'      => esc_html__( 'Grid Gap', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Gap', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px', 'rem' ],
 				'range'      => [
@@ -315,10 +315,23 @@ class Widget_Awesome_Icon_Box extends Widget_Base {
 			]
 		);
 
+		$this->end_controls_section();
+
+		/* ==========================================================================
+		   CONTENT: 3. ICON
+		   ========================================================================== */
+		$this->start_controls_section(
+			'awea_section_icon_layout',
+			[
+				'label' => esc_html__( 'Icon', 'awesome-widgets-elementor' ),
+				'tab'   => Controls_Manager::TAB_CONTENT,
+			]
+		);
+
 		$this->add_control(
 			'awea_icon_view',
 			[
-				'label'        => esc_html__( 'Icon View', 'awesome-widgets-elementor' ),
+				'label'        => esc_html__( 'View', 'awesome-widgets-elementor' ),
 				'type'         => Controls_Manager::SELECT,
 				'default'      => 'stacked',
 				'options'      => [
@@ -333,7 +346,7 @@ class Widget_Awesome_Icon_Box extends Widget_Base {
 		$this->add_control(
 			'awea_icon_shape',
 			[
-				'label'        => esc_html__( 'Icon Shape', 'awesome-widgets-elementor' ),
+				'label'        => esc_html__( 'Shape', 'awesome-widgets-elementor' ),
 				'type'         => Controls_Manager::SELECT,
 				'default'      => 'rounded',
 				'options'      => [
@@ -350,7 +363,7 @@ class Widget_Awesome_Icon_Box extends Widget_Base {
 		$this->add_control(
 			'awea_icon_pos',
 			[
-				'label'        => esc_html__( 'Icon Position', 'awesome-widgets-elementor' ),
+				'label'        => esc_html__( 'Position', 'awesome-widgets-elementor' ),
 				'type'         => Controls_Manager::CHOOSE,
 				'default'      => 'top',
 				'toggle'       => false,
@@ -372,16 +385,29 @@ class Widget_Awesome_Icon_Box extends Widget_Base {
 			]
 		);
 
+		$this->end_controls_section();
+
+		/* ==========================================================================
+		   CONTENT: 4. OPTIONS
+		   ========================================================================== */
+		$this->start_controls_section(
+			'awea_section_options',
+			[
+				'label' => esc_html__( 'Options', 'awesome-widgets-elementor' ),
+				'tab'   => Controls_Manager::TAB_CONTENT,
+			]
+		);
+
 		$this->add_control(
 			'awea_link_mode',
 			[
-				'label'   => esc_html__( 'Click Area', 'awesome-widgets-elementor' ),
+				'label'   => esc_html__( 'Link', 'awesome-widgets-elementor' ),
 				'type'    => Controls_Manager::SELECT,
 				'default' => 'button',
 				'options' => [
-					'button' => esc_html__( 'Button Only', 'awesome-widgets-elementor' ),
-					'title'  => esc_html__( 'Title & Button', 'awesome-widgets-elementor' ),
-					'card'   => esc_html__( 'Whole Card', 'awesome-widgets-elementor' ),
+					'button' => esc_html__( 'Button', 'awesome-widgets-elementor' ),
+					'title'  => esc_html__( 'Title', 'awesome-widgets-elementor' ),
+					'card'   => esc_html__( 'Card', 'awesome-widgets-elementor' ),
 				],
 			]
 		);
@@ -389,7 +415,7 @@ class Widget_Awesome_Icon_Box extends Widget_Base {
 		$this->add_control(
 			'awea_title_tag',
 			[
-				'label'   => esc_html__( 'Title HTML Tag', 'awesome-widgets-elementor' ),
+				'label'   => esc_html__( 'Tag', 'awesome-widgets-elementor' ),
 				'type'    => Controls_Manager::SELECT,
 				'default' => 'h3',
 				'options' => [
@@ -409,7 +435,7 @@ class Widget_Awesome_Icon_Box extends Widget_Base {
 		$this->add_control(
 			'awea_hover_motion',
 			[
-				'label'        => esc_html__( 'Hover Lift Effect', 'awesome-widgets-elementor' ),
+				'label'        => esc_html__( 'Lift', 'awesome-widgets-elementor' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'label_on'     => esc_html__( 'On', 'awesome-widgets-elementor' ),
 				'label_off'    => esc_html__( 'Off', 'awesome-widgets-elementor' ),
@@ -435,7 +461,7 @@ class Widget_Awesome_Icon_Box extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_align',
 			[
-				'label'                => esc_html__( 'Content Alignment', 'awesome-widgets-elementor' ),
+				'label'                => esc_html__( 'Alignment', 'awesome-widgets-elementor' ),
 				'type'                 => Controls_Manager::CHOOSE,
 				'options'              => [
 					'left'   => [
@@ -488,7 +514,7 @@ class Widget_Awesome_Icon_Box extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_card_radius',
 			[
-				'label'      => esc_html__( 'Border Radius', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Radius', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'default'    => [
@@ -528,6 +554,7 @@ class Widget_Awesome_Icon_Box extends Widget_Base {
 			Group_Control_Border::get_type(),
 			[
 				'name'           => 'awea_card_border',
+				'label'          => esc_html__( 'Border', 'awesome-widgets-elementor' ),
 				'selector'       => '{{WRAPPER}} .awea-icb-card',
 				'fields_options' => [
 					'border' => [ 'default' => 'solid' ],
@@ -549,6 +576,7 @@ class Widget_Awesome_Icon_Box extends Widget_Base {
 			Group_Control_Box_Shadow::get_type(),
 			[
 				'name'     => 'awea_card_shadow',
+				'label'    => esc_html__( 'Shadow', 'awesome-widgets-elementor' ),
 				'selector' => '{{WRAPPER}} .awea-icb-card',
 			]
 		);
@@ -574,7 +602,7 @@ class Widget_Awesome_Icon_Box extends Widget_Base {
 		$this->add_control(
 			'awea_card_border_hover',
 			[
-				'label'     => esc_html__( 'Border Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Border', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
 				'selectors' => [
@@ -587,6 +615,7 @@ class Widget_Awesome_Icon_Box extends Widget_Base {
 			Group_Control_Box_Shadow::get_type(),
 			[
 				'name'     => 'awea_card_shadow_hover',
+				'label'    => esc_html__( 'Shadow', 'awesome-widgets-elementor' ),
 				'selector' => '{{WRAPPER}} .awea-icb-card:hover',
 			]
 		);
@@ -610,7 +639,7 @@ class Widget_Awesome_Icon_Box extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_icon_box_size',
 			[
-				'label'      => esc_html__( 'Box Size', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Box', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [ 'px' => [ 'min' => 36, 'max' => 120 ] ],
@@ -625,7 +654,7 @@ class Widget_Awesome_Icon_Box extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_icon_size',
 			[
-				'label'      => esc_html__( 'Icon Size', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Size', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [ 'px' => [ 'min' => 12, 'max' => 72 ] ],
@@ -654,7 +683,7 @@ class Widget_Awesome_Icon_Box extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_icon_radius',
 			[
-				'label'      => esc_html__( 'Border Radius', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Radius', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'condition'  => [
@@ -678,7 +707,7 @@ class Widget_Awesome_Icon_Box extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_icon_border_width',
 			[
-				'label'      => esc_html__( 'Border Width', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Border', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [ 'px' => [ 'min' => 1, 'max' => 6 ] ],
@@ -727,7 +756,7 @@ class Widget_Awesome_Icon_Box extends Widget_Base {
 		$this->add_control(
 			'awea_icon_border_color',
 			[
-				'label'     => esc_html__( 'Border Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Border', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
 				'condition' => [
@@ -774,7 +803,7 @@ class Widget_Awesome_Icon_Box extends Widget_Base {
 		$this->add_control(
 			'awea_icon_border_hover',
 			[
-				'label'     => esc_html__( 'Border Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Border', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
 				'condition' => [
@@ -798,7 +827,7 @@ class Widget_Awesome_Icon_Box extends Widget_Base {
 		$this->start_controls_section(
 			'awea_style_badge',
 			[
-				'label' => esc_html__( 'Corner Badge', 'awesome-widgets-elementor' ),
+				'label' => esc_html__( 'Badge', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -831,6 +860,7 @@ class Widget_Awesome_Icon_Box extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'awea_badge_typo',
+				'label'    => esc_html__( 'Typography', 'awesome-widgets-elementor' ),
 				'selector' => '{{WRAPPER}} .awea-icb-badge',
 				'global'   => [ 'default' => Global_Typography::TYPOGRAPHY_SECONDARY ],
 			]
@@ -840,6 +870,7 @@ class Widget_Awesome_Icon_Box extends Widget_Base {
 			Group_Control_Border::get_type(),
 			[
 				'name'     => 'awea_badge_border',
+				'label'    => esc_html__( 'Border', 'awesome-widgets-elementor' ),
 				'selector' => '{{WRAPPER}} .awea-icb-badge',
 			]
 		);
@@ -867,7 +898,7 @@ class Widget_Awesome_Icon_Box extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_badge_radius',
 			[
-				'label'      => esc_html__( 'Border Radius', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Radius', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'default'    => [
@@ -901,6 +932,7 @@ class Widget_Awesome_Icon_Box extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'awea_title_typo',
+				'label'    => esc_html__( 'Typography', 'awesome-widgets-elementor' ),
 				'selector' => '{{WRAPPER}} .awea-icb-title',
 				'global'   => [ 'default' => Global_Typography::TYPOGRAPHY_PRIMARY ],
 			]
@@ -909,7 +941,7 @@ class Widget_Awesome_Icon_Box extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_title_space',
 			[
-				'label'      => esc_html__( 'Bottom Spacing', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Spacing', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [ 'px' => [ 'min' => 0, 'max' => 40 ] ],
@@ -990,6 +1022,7 @@ class Widget_Awesome_Icon_Box extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'awea_desc_typo',
+				'label'    => esc_html__( 'Typography', 'awesome-widgets-elementor' ),
 				'selector' => '{{WRAPPER}} .awea-icb-desc',
 				'global'   => [ 'default' => Global_Typography::TYPOGRAPHY_TEXT ],
 			]
@@ -998,7 +1031,7 @@ class Widget_Awesome_Icon_Box extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_desc_space',
 			[
-				'label'      => esc_html__( 'Bottom Spacing', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Spacing', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [ 'px' => [ 'min' => 0, 'max' => 50 ] ],
@@ -1026,6 +1059,7 @@ class Widget_Awesome_Icon_Box extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'awea_btn_typo',
+				'label'    => esc_html__( 'Typography', 'awesome-widgets-elementor' ),
 				'selector' => '{{WRAPPER}} .awea-icb-btn',
 				'global'   => [ 'default' => Global_Typography::TYPOGRAPHY_ACCENT ],
 			]
@@ -1034,7 +1068,7 @@ class Widget_Awesome_Icon_Box extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_btn_icon_size',
 			[
-				'label'      => esc_html__( 'Icon Size', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Icon', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [ 'px' => [ 'min' => 10, 'max' => 28 ] ],
@@ -1069,7 +1103,7 @@ class Widget_Awesome_Icon_Box extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_btn_radius',
 			[
-				'label'      => esc_html__( 'Border Radius', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Radius', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'default'    => [
@@ -1122,6 +1156,7 @@ class Widget_Awesome_Icon_Box extends Widget_Base {
 			Group_Control_Border::get_type(),
 			[
 				'name'           => 'awea_btn_border',
+				'label'          => esc_html__( 'Border', 'awesome-widgets-elementor' ),
 				'selector'       => '{{WRAPPER}} .awea-icb-btn',
 				'fields_options' => [
 					'border' => [ 'default' => 'solid' ],
@@ -1174,7 +1209,7 @@ class Widget_Awesome_Icon_Box extends Widget_Base {
 		$this->add_control(
 			'awea_btn_border_hover',
 			[
-				'label'     => esc_html__( 'Border Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Border', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .awea-icb-btn:hover, {{WRAPPER}} .awea-icb-btn:focus-visible, {{WRAPPER}} .awea-icb-card:hover .awea-icb-btn' => 'border-color: {{VALUE}};',

@@ -46,22 +46,30 @@ class Widget_Awesome_CTA extends Widget_Base {
 	}
 
 	protected function register_controls() {
+		$this->register_content_controls();
+		$this->register_style_controls();
+	}
+
+	/**
+	 * Content Tab Controls
+	 */
+	protected function register_content_controls() {
 
 		/* ==========================================================================
-		   CONTENT: 1. CONTENT
+		   CONTENT: 1. BADGE
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_section_content',
+			'awea_cta_section_badge',
 			[
-				'label' => esc_html__( 'Content', 'awesome-widgets-elementor' ),
+				'label' => esc_html__( 'Badge', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
 			]
 		);
 
 		$this->add_control(
-			'awea_badge_show',
+			'awea_cta_badge_show',
 			[
-				'label'        => esc_html__( 'Show Badge', 'awesome-widgets-elementor' ),
+				'label'        => esc_html__( 'Display Badge', 'awesome-widgets-elementor' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'label_on'     => esc_html__( 'Yes', 'awesome-widgets-elementor' ),
 				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
@@ -71,44 +79,58 @@ class Widget_Awesome_CTA extends Widget_Base {
 		);
 
 		$this->add_control(
-			'awea_badge_icon',
+			'awea_cta_badge_icon',
 			[
-				'label'     => esc_html__( 'Badge Icon', 'awesome-widgets-elementor' ),
-				'type'      => Controls_Manager::ICONS,
-				'default'   => [
+				'label'       => esc_html__( 'Icon', 'awesome-widgets-elementor' ),
+				'type'        => Controls_Manager::ICONS,
+				'skin'        => 'inline',
+				'label_block' => false,
+				'default'     => [
 					'value'   => 'fas fa-bolt',
 					'library' => 'fa-solid',
 				],
-				'condition' => [ 'awea_badge_show' => 'yes' ],
+				'condition'   => [ 'awea_cta_badge_show' => 'yes' ],
 			]
 		);
 
 		$this->add_control(
-			'awea_badge_text',
+			'awea_cta_badge_text',
 			[
-				'label'       => esc_html__( 'Badge Text', 'awesome-widgets-elementor' ),
+				'label'       => esc_html__( 'Text', 'awesome-widgets-elementor' ),
 				'type'        => Controls_Manager::TEXT,
 				'default'     => esc_html__( 'Ready to Launch', 'awesome-widgets-elementor' ),
 				'dynamic'     => [ 'active' => true ],
 				'label_block' => true,
-				'condition'   => [ 'awea_badge_show' => 'yes' ],
+				'condition'   => [ 'awea_cta_badge_show' => 'yes' ],
 			]
 		);
 
-		$this->add_control(
-			'awea_title',
+		$this->end_controls_section();
+
+		/* ==========================================================================
+		   CONTENT: 2. CONTENT
+		   ========================================================================== */
+		$this->start_controls_section(
+			'awea_cta_section_content',
 			[
-				'label'     => esc_html__( 'Title', 'awesome-widgets-elementor' ),
-				'type'      => Controls_Manager::TEXTAREA,
-				'rows'      => 3,
-				'default'   => esc_html__( 'Elevate Your Digital Presence Today.', 'awesome-widgets-elementor' ),
-				'dynamic'   => [ 'active' => true ],
-				'separator' => 'before',
+				'label' => esc_html__( 'Content', 'awesome-widgets-elementor' ),
+				'tab'   => Controls_Manager::TAB_CONTENT,
 			]
 		);
 
 		$this->add_control(
-			'awea_hl_text',
+			'awea_cta_title',
+			[
+				'label'   => esc_html__( 'Title', 'awesome-widgets-elementor' ),
+				'type'    => Controls_Manager::TEXTAREA,
+				'rows'    => 3,
+				'default' => esc_html__( 'Elevate Your Digital Presence Today.', 'awesome-widgets-elementor' ),
+				'dynamic' => [ 'active' => true ],
+			]
+		);
+
+		$this->add_control(
+			'awea_cta_hl_text',
 			[
 				'label'       => esc_html__( 'Highlight Phrase', 'awesome-widgets-elementor' ),
 				'type'        => Controls_Manager::TEXT,
@@ -119,25 +141,25 @@ class Widget_Awesome_CTA extends Widget_Base {
 		);
 
 		$this->add_control(
-			'awea_hl_style',
+			'awea_cta_hl_style',
 			[
 				'label'        => esc_html__( 'Highlight Style', 'awesome-widgets-elementor' ),
 				'type'         => Controls_Manager::SELECT,
 				'default'      => 'color',
 				'options'      => [
 					'color'     => esc_html__( 'Accent Color', 'awesome-widgets-elementor' ),
-					'underline' => esc_html__( 'Clean Underline', 'awesome-widgets-elementor' ),
-					'marker'    => esc_html__( 'Soft Marker', 'awesome-widgets-elementor' ),
+					'underline' => esc_html__( 'Underline', 'awesome-widgets-elementor' ),
+					'marker'    => esc_html__( 'Marker Pill', 'awesome-widgets-elementor' ),
 				],
-				'condition'    => [ 'awea_hl_text!' => '' ],
-				'prefix_class' => 'awea-cta-hl-',
+				'condition'    => [ 'awea_cta_hl_text!' => '' ],
+				'prefix_class' => 'awea_cta_hl_',
 			]
 		);
 
 		$this->add_control(
-			'awea_title_tag',
+			'awea_cta_title_tag',
 			[
-				'label'   => esc_html__( 'Title HTML Tag', 'awesome-widgets-elementor' ),
+				'label'   => esc_html__( 'HTML Tag', 'awesome-widgets-elementor' ),
 				'type'    => Controls_Manager::SELECT,
 				'default' => 'h2',
 				'options' => [
@@ -153,7 +175,7 @@ class Widget_Awesome_CTA extends Widget_Base {
 		);
 
 		$this->add_control(
-			'awea_desc',
+			'awea_cta_desc',
 			[
 				'label'   => esc_html__( 'Description', 'awesome-widgets-elementor' ),
 				'type'    => Controls_Manager::TEXTAREA,
@@ -164,7 +186,7 @@ class Widget_Awesome_CTA extends Widget_Base {
 		);
 
 		$this->add_control(
-			'awea_note',
+			'awea_cta_note',
 			[
 				'label'       => esc_html__( 'Micro-Trust Footnote', 'awesome-widgets-elementor' ),
 				'type'        => Controls_Manager::TEXT,
@@ -177,10 +199,10 @@ class Widget_Awesome_CTA extends Widget_Base {
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   CONTENT: 2. PRIMARY BUTTON
+		   CONTENT: 3. PRIMARY BUTTON
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_section_btn1',
+			'awea_cta_section_btn1',
 			[
 				'label' => esc_html__( 'Primary Button', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
@@ -188,9 +210,9 @@ class Widget_Awesome_CTA extends Widget_Base {
 		);
 
 		$this->add_control(
-			'awea_btn1_show',
+			'awea_cta_btn1_show',
 			[
-				'label'        => esc_html__( 'Show Button', 'awesome-widgets-elementor' ),
+				'label'        => esc_html__( 'Display Button', 'awesome-widgets-elementor' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'label_on'     => esc_html__( 'Yes', 'awesome-widgets-elementor' ),
 				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
@@ -200,61 +222,72 @@ class Widget_Awesome_CTA extends Widget_Base {
 		);
 
 		$this->add_control(
-			'awea_btn1_text',
+			'awea_cta_btn1_text',
 			[
 				'label'     => esc_html__( 'Label', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::TEXT,
 				'default'   => esc_html__( 'Get Started Now', 'awesome-widgets-elementor' ),
 				'dynamic'   => [ 'active' => true ],
-				'condition' => [ 'awea_btn1_show' => 'yes' ],
+				'condition' => [ 'awea_cta_btn1_show' => 'yes' ],
 			]
 		);
 
 		$this->add_control(
-			'awea_btn1_link',
+			'awea_cta_btn1_link',
 			[
 				'label'     => esc_html__( 'Link', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::URL,
 				'dynamic'   => [ 'active' => true ],
 				'default'   => [ 'url' => '#' ],
-				'condition' => [ 'awea_btn1_show' => 'yes' ],
+				'condition' => [ 'awea_cta_btn1_show' => 'yes' ],
 			]
 		);
 
 		$this->add_control(
-			'awea_btn1_icon',
+			'awea_cta_btn1_icon',
 			[
-				'label'     => esc_html__( 'Icon', 'awesome-widgets-elementor' ),
-				'type'      => Controls_Manager::ICONS,
-				'default'   => [
+				'label'       => esc_html__( 'Icon', 'awesome-widgets-elementor' ),
+				'type'        => Controls_Manager::ICONS,
+				'skin'        => 'inline',
+				'label_block' => false,
+				'default'     => [
 					'value'   => 'fas fa-arrow-right',
 					'library' => 'fa-solid',
 				],
-				'condition' => [ 'awea_btn1_show' => 'yes' ],
+				'condition'   => [ 'awea_cta_btn1_show' => 'yes' ],
 			]
 		);
 
 		$this->add_control(
-			'awea_btn1_icon_pos',
+			'awea_cta_btn1_icon_pos',
 			[
 				'label'     => esc_html__( 'Icon Position', 'awesome-widgets-elementor' ),
-				'type'      => Controls_Manager::SELECT,
-				'default'   => 'right',
+				'type'      => Controls_Manager::CHOOSE,
 				'options'   => [
-					'left'  => esc_html__( 'Left', 'awesome-widgets-elementor' ),
-					'right' => esc_html__( 'Right', 'awesome-widgets-elementor' ),
+					'left'  => [
+						'title' => esc_html__( 'Before', 'awesome-widgets-elementor' ),
+						'icon'  => 'eicon-h-align-left',
+					],
+					'right' => [
+						'title' => esc_html__( 'After', 'awesome-widgets-elementor' ),
+						'icon'  => 'eicon-h-align-right',
+					],
 				],
-				'condition' => [ 'awea_btn1_show' => 'yes' ],
+				'default'   => 'right',
+				'condition' => [
+					'awea_cta_btn1_show'        => 'yes',
+					'awea_cta_btn1_icon[value]!' => '',
+				],
 			]
 		);
 
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   CONTENT: 3. SECOND BUTTON
+		   CONTENT: 4. SECONDARY BUTTON
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_section_btn2',
+			'awea_cta_section_btn2',
 			[
 				'label' => esc_html__( 'Secondary Button', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
@@ -262,9 +295,9 @@ class Widget_Awesome_CTA extends Widget_Base {
 		);
 
 		$this->add_control(
-			'awea_btn2_show',
+			'awea_cta_btn2_show',
 			[
-				'label'        => esc_html__( 'Show Button', 'awesome-widgets-elementor' ),
+				'label'        => esc_html__( 'Display Button', 'awesome-widgets-elementor' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'label_on'     => esc_html__( 'Yes', 'awesome-widgets-elementor' ),
 				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
@@ -274,61 +307,72 @@ class Widget_Awesome_CTA extends Widget_Base {
 		);
 
 		$this->add_control(
-			'awea_btn2_text',
+			'awea_cta_btn2_text',
 			[
 				'label'     => esc_html__( 'Label', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::TEXT,
 				'default'   => esc_html__( 'Book Live Demo', 'awesome-widgets-elementor' ),
 				'dynamic'   => [ 'active' => true ],
-				'condition' => [ 'awea_btn2_show' => 'yes' ],
+				'condition' => [ 'awea_cta_btn2_show' => 'yes' ],
 			]
 		);
 
 		$this->add_control(
-			'awea_btn2_link',
+			'awea_cta_btn2_link',
 			[
 				'label'     => esc_html__( 'Link', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::URL,
 				'dynamic'   => [ 'active' => true ],
 				'default'   => [ 'url' => '#' ],
-				'condition' => [ 'awea_btn2_show' => 'yes' ],
+				'condition' => [ 'awea_cta_btn2_show' => 'yes' ],
 			]
 		);
 
 		$this->add_control(
-			'awea_btn2_icon',
+			'awea_cta_btn2_icon',
 			[
-				'label'     => esc_html__( 'Icon', 'awesome-widgets-elementor' ),
-				'type'      => Controls_Manager::ICONS,
-				'default'   => [
+				'label'       => esc_html__( 'Icon', 'awesome-widgets-elementor' ),
+				'type'        => Controls_Manager::ICONS,
+				'skin'        => 'inline',
+				'label_block' => false,
+				'default'     => [
 					'value'   => 'fas fa-calendar-check',
 					'library' => 'fa-solid',
 				],
-				'condition' => [ 'awea_btn2_show' => 'yes' ],
+				'condition'   => [ 'awea_cta_btn2_show' => 'yes' ],
 			]
 		);
 
 		$this->add_control(
-			'awea_btn2_icon_pos',
+			'awea_cta_btn2_icon_pos',
 			[
 				'label'     => esc_html__( 'Icon Position', 'awesome-widgets-elementor' ),
-				'type'      => Controls_Manager::SELECT,
-				'default'   => 'left',
+				'type'      => Controls_Manager::CHOOSE,
 				'options'   => [
-					'left'  => esc_html__( 'Left', 'awesome-widgets-elementor' ),
-					'right' => esc_html__( 'Right', 'awesome-widgets-elementor' ),
+					'left'  => [
+						'title' => esc_html__( 'Before', 'awesome-widgets-elementor' ),
+						'icon'  => 'eicon-h-align-left',
+					],
+					'right' => [
+						'title' => esc_html__( 'After', 'awesome-widgets-elementor' ),
+						'icon'  => 'eicon-h-align-right',
+					],
 				],
-				'condition' => [ 'awea_btn2_show' => 'yes' ],
+				'default'   => 'left',
+				'condition' => [
+					'awea_cta_btn2_show'        => 'yes',
+					'awea_cta_btn2_icon[value]!' => '',
+				],
 			]
 		);
 
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   CONTENT: 4. LAYOUT
+		   CONTENT: 5. LAYOUT
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_section_layout',
+			'awea_cta_section_layout',
 			[
 				'label' => esc_html__( 'Layout', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
@@ -336,21 +380,21 @@ class Widget_Awesome_CTA extends Widget_Base {
 		);
 
 		$this->add_control(
-			'awea_layout_mode',
+			'awea_cta_layout_mode',
 			[
-				'label'        => esc_html__( 'Layout Style', 'awesome-widgets-elementor' ),
+				'label'        => esc_html__( 'Layout Mode', 'awesome-widgets-elementor' ),
 				'type'         => Controls_Manager::SELECT,
 				'default'      => 'stacked',
 				'options'      => [
-					'stacked' => esc_html__( 'Stacked', 'awesome-widgets-elementor' ),
-					'split'   => esc_html__( 'Split Row', 'awesome-widgets-elementor' ),
+					'stacked' => esc_html__( 'Stacked Center / Hero', 'awesome-widgets-elementor' ),
+					'split'   => esc_html__( 'Split Horizontal Banner', 'awesome-widgets-elementor' ),
 				],
-				'prefix_class' => 'awea-cta-mode-',
+				'prefix_class' => 'awea_cta_mode_',
 			]
 		);
 
 		$this->add_responsive_control(
-			'awea_align',
+			'awea_cta_align',
 			[
 				'label'                => esc_html__( 'Alignment', 'awesome-widgets-elementor' ),
 				'type'                 => Controls_Manager::CHOOSE,
@@ -369,35 +413,67 @@ class Widget_Awesome_CTA extends Widget_Base {
 					],
 				],
 				'default'              => 'center',
-				'condition'            => [ 'awea_layout_mode' => 'stacked' ],
+				'condition'            => [ 'awea_cta_layout_mode' => 'stacked' ],
 				'selectors_dictionary' => [
-					'left'   => 'flex-start',
-					'center' => 'center',
-					'right'  => 'flex-end',
+					'left'   => 'start; --awea_cta_justify: flex-start; --awea_cta_ml: 0; --awea_cta_mr: auto',
+					'center' => 'center; --awea_cta_justify: center; --awea_cta_ml: auto; --awea_cta_mr: auto',
+					'right'  => 'end; --awea_cta_justify: flex-end; --awea_cta_ml: auto; --awea_cta_mr: 0',
 				],
 				'selectors'            => [
-					'{{WRAPPER}}.awea-cta-mode-stacked .awea-cta-box'     => 'text-align: {{VALUE}};',
-					'{{WRAPPER}}.awea-cta-mode-stacked .awea-cta-copy'    => 'align-items: {{VALUE}};',
-					'{{WRAPPER}}.awea-cta-mode-stacked .awea-cta-actions' => 'justify-content: {{VALUE}};',
+					'{{WRAPPER}}.awea_cta_mode_stacked .awea_cta_box'  => 'text-align: {{VALUE}};',
+					'{{WRAPPER}}.awea_cta_mode_stacked .awea_cta_copy' => 'align-items: var(--awea_cta_justify);',
+				],
+			]
+		);
+
+		$this->add_responsive_control(
+			'awea_cta_split_valign',
+			[
+				'label'     => esc_html__( 'Vertical Alignment', 'awesome-widgets-elementor' ),
+				'type'      => Controls_Manager::CHOOSE,
+				'options'   => [
+					'flex-start' => [
+						'title' => esc_html__( 'Top', 'awesome-widgets-elementor' ),
+						'icon'  => 'eicon-v-align-top',
+					],
+					'center'     => [
+						'title' => esc_html__( 'Middle', 'awesome-widgets-elementor' ),
+						'icon'  => 'eicon-v-align-middle',
+					],
+					'flex-end'   => [
+						'title' => esc_html__( 'Bottom', 'awesome-widgets-elementor' ),
+						'icon'  => 'eicon-v-align-bottom',
+					],
+				],
+				'default'   => 'center',
+				'condition' => [ 'awea_cta_layout_mode' => 'split' ],
+				'selectors' => [
+					'{{WRAPPER}}.awea_cta_mode_split .awea_cta_inner' => 'align-items: {{VALUE}};',
 				],
 			]
 		);
 
 		$this->end_controls_section();
+	}
+
+	/**
+	 * Style Tab Controls
+	 */
+	protected function register_style_controls() {
 
 		/* ==========================================================================
 		   STYLE: 1. BOX
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_style_box',
+			'awea_cta_style_box',
 			[
-				'label' => esc_html__( 'Container Box', 'awesome-widgets-elementor' ),
+				'label' => esc_html__( 'Box Container', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
 
 		$this->add_responsive_control(
-			'awea_max_width',
+			'awea_cta_max_width',
 			[
 				'label'      => esc_html__( 'Content Max Width', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
@@ -408,13 +484,13 @@ class Widget_Awesome_CTA extends Widget_Base {
 				],
 				'default'    => [ 'unit' => 'px', 'size' => 1160 ],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-cta-inner' => 'max-width: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .awea_cta_inner' => 'max-width: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
 
 		$this->add_responsive_control(
-			'awea_padding',
+			'awea_cta_padding',
 			[
 				'label'      => esc_html__( 'Padding', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
@@ -428,7 +504,7 @@ class Widget_Awesome_CTA extends Widget_Base {
 					'isLinked' => false,
 				],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-cta-box' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .awea_cta_box' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
 		);
@@ -436,17 +512,17 @@ class Widget_Awesome_CTA extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Background::get_type(),
 			[
-				'name'     => 'awea_bg',
+				'name'     => 'awea_cta_bg',
 				'types'    => [ 'classic', 'gradient' ],
-				'selector' => '{{WRAPPER}} .awea-cta-box',
+				'selector' => '{{WRAPPER}} .awea_cta_box',
 			]
 		);
 
 		$this->add_group_control(
 			Group_Control_Border::get_type(),
 			[
-				'name'           => 'awea_border',
-				'selector'       => '{{WRAPPER}} .awea-cta-box',
+				'name'           => 'awea_cta_border',
+				'selector'       => '{{WRAPPER}} .awea_cta_box',
 				'fields_options' => [
 					'border' => [ 'default' => 'solid' ],
 					'width'  => [
@@ -464,7 +540,7 @@ class Widget_Awesome_CTA extends Widget_Base {
 		);
 
 		$this->add_responsive_control(
-			'awea_radius',
+			'awea_cta_radius',
 			[
 				'label'      => esc_html__( 'Border Radius', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
@@ -478,7 +554,7 @@ class Widget_Awesome_CTA extends Widget_Base {
 					'isLinked' => true,
 				],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-cta-box' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .awea_cta_box' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
 		);
@@ -486,8 +562,8 @@ class Widget_Awesome_CTA extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Box_Shadow::get_type(),
 			[
-				'name'     => 'awea_box_shadow',
-				'selector' => '{{WRAPPER}} .awea-cta-box',
+				'name'     => 'awea_cta_box_shadow',
+				'selector' => '{{WRAPPER}} .awea_cta_box',
 			]
 		);
 
@@ -497,41 +573,41 @@ class Widget_Awesome_CTA extends Widget_Base {
 		   STYLE: 2. BADGE
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_style_badge',
+			'awea_cta_style_badge',
 			[
 				'label'     => esc_html__( 'Badge', 'awesome-widgets-elementor' ),
 				'tab'       => Controls_Manager::TAB_STYLE,
-				'condition' => [ 'awea_badge_show' => 'yes' ],
+				'condition' => [ 'awea_cta_badge_show' => 'yes' ],
 			]
 		);
 
 		$this->add_control(
-			'awea_badge_color',
+			'awea_cta_badge_color',
 			[
 				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
 				'selectors' => [
-					'{{WRAPPER}} .awea-cta-badge'     => 'color: {{VALUE}};',
-					'{{WRAPPER}} .awea-cta-badge svg' => 'fill: {{VALUE}};',
+					'{{WRAPPER}} .awea_cta_badge'     => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea_cta_badge svg' => 'fill: {{VALUE}};',
 				],
 			]
 		);
 
 		$this->add_control(
-			'awea_badge_bg',
+			'awea_cta_badge_bg',
 			[
 				'label'     => esc_html__( 'Background', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => 'rgba(79, 70, 229, 0.08)',
 				'selectors' => [
-					'{{WRAPPER}} .awea-cta-badge' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .awea_cta_badge' => 'background-color: {{VALUE}};',
 				],
 			]
 		);
 
 		$this->add_responsive_control(
-			'awea_badge_icon_size',
+			'awea_cta_badge_icon_size',
 			[
 				'label'      => esc_html__( 'Icon Size', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
@@ -539,8 +615,8 @@ class Widget_Awesome_CTA extends Widget_Base {
 				'range'      => [ 'px' => [ 'min' => 10, 'max' => 28 ] ],
 				'default'    => [ 'unit' => 'px', 'size' => 13 ],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-cta-badge-ico i'   => 'font-size: {{SIZE}}{{UNIT}};',
-					'{{WRAPPER}} .awea-cta-badge-ico svg' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .awea_cta_badge_ico i'   => 'font-size: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .awea_cta_badge_ico svg' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
@@ -548,8 +624,8 @@ class Widget_Awesome_CTA extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Border::get_type(),
 			[
-				'name'           => 'awea_badge_border',
-				'selector'       => '{{WRAPPER}} .awea-cta-badge',
+				'name'           => 'awea_cta_badge_border',
+				'selector'       => '{{WRAPPER}} .awea_cta_badge',
 				'fields_options' => [
 					'border' => [ 'default' => 'solid' ],
 					'width'  => [
@@ -569,14 +645,14 @@ class Widget_Awesome_CTA extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Typography::get_type(),
 			[
-				'name'     => 'awea_badge_typo',
-				'selector' => '{{WRAPPER}} .awea-cta-badge',
+				'name'     => 'awea_cta_badge_typo',
+				'selector' => '{{WRAPPER}} .awea_cta_badge',
 				'global'   => [ 'default' => Global_Typography::TYPOGRAPHY_SECONDARY ],
 			]
 		);
 
 		$this->add_responsive_control(
-			'awea_badge_padding',
+			'awea_cta_badge_padding',
 			[
 				'label'      => esc_html__( 'Padding', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
@@ -590,13 +666,13 @@ class Widget_Awesome_CTA extends Widget_Base {
 					'isLinked' => false,
 				],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-cta-badge' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .awea_cta_badge' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
 		);
 
 		$this->add_responsive_control(
-			'awea_badge_radius',
+			'awea_cta_badge_radius',
 			[
 				'label'      => esc_html__( 'Border Radius', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
@@ -610,13 +686,13 @@ class Widget_Awesome_CTA extends Widget_Base {
 					'isLinked' => true,
 				],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-cta-badge' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .awea_cta_badge' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
 		);
 
 		$this->add_responsive_control(
-			'awea_badge_space',
+			'awea_cta_badge_space',
 			[
 				'label'      => esc_html__( 'Bottom Spacing', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
@@ -624,7 +700,7 @@ class Widget_Awesome_CTA extends Widget_Base {
 				'range'      => [ 'px' => [ 'min' => 8, 'max' => 60 ] ],
 				'default'    => [ 'unit' => 'px', 'size' => 22 ],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-cta-badge' => 'margin-bottom: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .awea_cta_badge' => 'margin-bottom: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
@@ -632,45 +708,37 @@ class Widget_Awesome_CTA extends Widget_Base {
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   STYLE: 3. TITLE & TEXT
+		   STYLE: 3. TITLE
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_style_text',
+			'awea_cta_style_title',
 			[
-				'label' => esc_html__( 'Typography & Content', 'awesome-widgets-elementor' ),
+				'label' => esc_html__( 'Title', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
 
 		$this->add_control(
-			'awea_title_heading',
-			[
-				'label' => esc_html__( 'Title', 'awesome-widgets-elementor' ),
-				'type'  => Controls_Manager::HEADING,
-			]
-		);
-
-		$this->add_control(
-			'awea_title_color',
+			'awea_cta_title_color',
 			[
 				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#0f172a',
 				'selectors' => [
-					'{{WRAPPER}} .awea-cta-title' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea_cta_title' => 'color: {{VALUE}};',
 				],
 			]
 		);
 
 		$this->add_control(
-			'awea_hl_color',
+			'awea_cta_hl_color',
 			[
 				'label'     => esc_html__( 'Highlight Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
-				'condition' => [ 'awea_hl_text!' => '' ],
+				'condition' => [ 'awea_cta_hl_text!' => '' ],
 				'selectors' => [
-					'{{WRAPPER}} .awea-cta-hl' => 'color: {{VALUE}}; --awea-cta-hl: {{VALUE}};',
+					'{{WRAPPER}} .awea_cta_hl' => 'color: {{VALUE}}; --awea_cta_hl: {{VALUE}};',
 				],
 			]
 		);
@@ -678,14 +746,14 @@ class Widget_Awesome_CTA extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Typography::get_type(),
 			[
-				'name'     => 'awea_title_typo',
-				'selector' => '{{WRAPPER}} .awea-cta-title',
+				'name'     => 'awea_cta_title_typo',
+				'selector' => '{{WRAPPER}} .awea_cta_title',
 				'global'   => [ 'default' => Global_Typography::TYPOGRAPHY_PRIMARY ],
 			]
 		);
 
 		$this->add_responsive_control(
-			'awea_title_space',
+			'awea_cta_title_space',
 			[
 				'label'      => esc_html__( 'Bottom Spacing', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
@@ -693,28 +761,32 @@ class Widget_Awesome_CTA extends Widget_Base {
 				'range'      => [ 'px' => [ 'min' => 8, 'max' => 60 ] ],
 				'default'    => [ 'unit' => 'px', 'size' => 16 ],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-cta-title' => 'margin-bottom: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .awea_cta_title' => 'margin-bottom: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
 
-		$this->add_control(
-			'awea_desc_heading',
+		$this->end_controls_section();
+
+		/* ==========================================================================
+		   STYLE: 4. DESCRIPTION
+		   ========================================================================== */
+		$this->start_controls_section(
+			'awea_cta_style_desc',
 			[
-				'label'     => esc_html__( 'Description', 'awesome-widgets-elementor' ),
-				'type'      => Controls_Manager::HEADING,
-				'separator' => 'before',
+				'label' => esc_html__( 'Description', 'awesome-widgets-elementor' ),
+				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
 
 		$this->add_control(
-			'awea_desc_color',
+			'awea_cta_desc_color',
 			[
 				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#475569',
 				'selectors' => [
-					'{{WRAPPER}} .awea-cta-desc' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea_cta_desc' => 'color: {{VALUE}};',
 				],
 			]
 		);
@@ -722,14 +794,14 @@ class Widget_Awesome_CTA extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Typography::get_type(),
 			[
-				'name'     => 'awea_desc_typo',
-				'selector' => '{{WRAPPER}} .awea-cta-desc',
+				'name'     => 'awea_cta_desc_typo',
+				'selector' => '{{WRAPPER}} .awea_cta_desc',
 				'global'   => [ 'default' => Global_Typography::TYPOGRAPHY_TEXT ],
 			]
 		);
 
 		$this->add_responsive_control(
-			'awea_desc_width',
+			'awea_cta_desc_width',
 			[
 				'label'      => esc_html__( 'Max Width', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
@@ -740,45 +812,48 @@ class Widget_Awesome_CTA extends Widget_Base {
 				],
 				'default'    => [ 'unit' => 'px', 'size' => 640 ],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-cta-desc' => 'max-width: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .awea_cta_desc' => 'max-width: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
 
 		$this->add_responsive_control(
-			'awea_desc_space',
+			'awea_cta_desc_space',
 			[
 				'label'      => esc_html__( 'Bottom Spacing', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [ 'px' => [ 'min' => 0, 'max' => 64 ] ],
 				'default'    => [ 'unit' => 'px', 'size' => 34 ],
-				'condition'  => [ 'awea_layout_mode' => 'stacked' ],
+				'condition'  => [ 'awea_cta_layout_mode' => 'stacked' ],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-cta-desc' => 'margin-bottom: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .awea_cta_desc' => 'margin-bottom: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
 
-		$this->add_control(
-			'awea_note_heading',
+		$this->end_controls_section();
+
+		/* ==========================================================================
+		   STYLE: 5. FOOTNOTE
+		   ========================================================================== */
+		$this->start_controls_section(
+			'awea_cta_style_note',
 			[
 				'label'     => esc_html__( 'Footnote', 'awesome-widgets-elementor' ),
-				'type'      => Controls_Manager::HEADING,
-				'separator' => 'before',
-				'condition' => [ 'awea_note!' => '' ],
+				'tab'       => Controls_Manager::TAB_STYLE,
+				'condition' => [ 'awea_cta_note!' => '' ],
 			]
 		);
 
 		$this->add_control(
-			'awea_note_color',
+			'awea_cta_note_color',
 			[
 				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#64748b',
-				'condition' => [ 'awea_note!' => '' ],
 				'selectors' => [
-					'{{WRAPPER}} .awea-cta-note' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea_cta_note' => 'color: {{VALUE}};',
 				],
 			]
 		);
@@ -786,22 +861,35 @@ class Widget_Awesome_CTA extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Typography::get_type(),
 			[
-				'name'      => 'awea_note_typo',
-				'selector'  => '{{WRAPPER}} .awea-cta-note',
-				'global'    => [ 'default' => Global_Typography::TYPOGRAPHY_TEXT ],
-				'condition' => [ 'awea_note!' => '' ],
+				'name'     => 'awea_cta_note_typo',
+				'selector' => '{{WRAPPER}} .awea_cta_note',
+				'global'   => [ 'default' => Global_Typography::TYPOGRAPHY_TEXT ],
+			]
+		);
+
+		$this->add_responsive_control(
+			'awea_cta_note_space',
+			[
+				'label'      => esc_html__( 'Top Spacing', 'awesome-widgets-elementor' ),
+				'type'       => Controls_Manager::SLIDER,
+				'size_units' => [ 'px' ],
+				'range'      => [ 'px' => [ 'min' => 4, 'max' => 40 ] ],
+				'default'    => [ 'unit' => 'px', 'size' => 16 ],
+				'selectors'  => [
+					'{{WRAPPER}} .awea_cta_note' => 'margin-top: {{SIZE}}{{UNIT}};',
+				],
 			]
 		);
 
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   STYLE: 4. BUTTONS
+		   STYLE: 6. BUTTONS (SHARED)
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_style_buttons',
+			'awea_cta_style_buttons',
 			[
-				'label' => esc_html__( 'Buttons', 'awesome-widgets-elementor' ),
+				'label' => esc_html__( 'Buttons (Shared)', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -809,14 +897,14 @@ class Widget_Awesome_CTA extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Typography::get_type(),
 			[
-				'name'     => 'awea_btn_typo',
-				'selector' => '{{WRAPPER}} .awea-cta-btn',
+				'name'     => 'awea_cta_btn_typo',
+				'selector' => '{{WRAPPER}} .awea_cta_btn',
 				'global'   => [ 'default' => Global_Typography::TYPOGRAPHY_ACCENT ],
 			]
 		);
 
 		$this->add_responsive_control(
-			'awea_btn_icon_size',
+			'awea_cta_btn_icon_size',
 			[
 				'label'      => esc_html__( 'Icon Size', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
@@ -824,28 +912,28 @@ class Widget_Awesome_CTA extends Widget_Base {
 				'range'      => [ 'px' => [ 'min' => 10, 'max' => 28 ] ],
 				'default'    => [ 'unit' => 'px', 'size' => 15 ],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-cta-ico i'   => 'font-size: {{SIZE}}{{UNIT}};',
-					'{{WRAPPER}} .awea-cta-ico svg' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .awea_cta_ico i'   => 'font-size: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .awea_cta_ico svg' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
 
 		$this->add_responsive_control(
-			'awea_btn_gap',
+			'awea_cta_btn_gap',
 			[
-				'label'      => esc_html__( 'Button Spacing', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Gap Between Buttons', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [ 'px' => [ 'min' => 4, 'max' => 40 ] ],
 				'default'    => [ 'unit' => 'px', 'size' => 12 ],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-cta-actions' => 'gap: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .awea_cta_actions' => 'gap: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
 
 		$this->add_responsive_control(
-			'awea_btn_padding',
+			'awea_cta_btn_padding',
 			[
 				'label'      => esc_html__( 'Padding', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
@@ -859,13 +947,13 @@ class Widget_Awesome_CTA extends Widget_Base {
 					'isLinked' => false,
 				],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-cta-btn' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .awea_cta_btn' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
 		);
 
 		$this->add_responsive_control(
-			'awea_btn_radius',
+			'awea_cta_btn_radius',
 			[
 				'label'      => esc_html__( 'Border Radius', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
@@ -879,53 +967,53 @@ class Widget_Awesome_CTA extends Widget_Base {
 					'isLinked' => true,
 				],
 				'selectors'  => [
-					'{{WRAPPER}} .awea-cta-btn' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .awea_cta_btn' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
 		);
 
-		// Primary Button Colors
-		$this->add_control(
-			'awea_btn1_heading',
+		$this->end_controls_section();
+
+		/* ==========================================================================
+		   STYLE: 7. PRIMARY BUTTON
+		   ========================================================================== */
+		$this->start_controls_section(
+			'awea_cta_style_btn1',
 			[
 				'label'     => esc_html__( 'Primary Button', 'awesome-widgets-elementor' ),
-				'type'      => Controls_Manager::HEADING,
-				'separator' => 'before',
-				'condition' => [ 'awea_btn1_show' => 'yes' ],
+				'tab'       => Controls_Manager::TAB_STYLE,
+				'condition' => [ 'awea_cta_btn1_show' => 'yes' ],
 			]
 		);
 
-		$this->start_controls_tabs(
-			'awea_btn1_tabs',
-			[ 'condition' => [ 'awea_btn1_show' => 'yes' ] ]
-		);
+		$this->start_controls_tabs( 'awea_cta_btn1_tabs' );
 
 		$this->start_controls_tab(
-			'awea_btn1_normal',
+			'awea_cta_btn1_normal',
 			[ 'label' => esc_html__( 'Normal', 'awesome-widgets-elementor' ) ]
 		);
 
 		$this->add_control(
-			'awea_btn1_color',
+			'awea_cta_btn1_color',
 			[
-				'label'     => esc_html__( 'Text Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#ffffff',
 				'selectors' => [
-					'{{WRAPPER}} .awea-cta-btn-primary'     => 'color: {{VALUE}};',
-					'{{WRAPPER}} .awea-cta-btn-primary svg' => 'fill: {{VALUE}};',
+					'{{WRAPPER}} .awea_cta_btn_primary'     => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea_cta_btn_primary svg' => 'fill: {{VALUE}};',
 				],
 			]
 		);
 
 		$this->add_control(
-			'awea_btn1_bg',
+			'awea_cta_btn1_bg',
 			[
 				'label'     => esc_html__( 'Background', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
 				'selectors' => [
-					'{{WRAPPER}} .awea-cta-btn-primary' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .awea_cta_btn_primary' => 'background-color: {{VALUE}};',
 				],
 			]
 		);
@@ -933,8 +1021,8 @@ class Widget_Awesome_CTA extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Border::get_type(),
 			[
-				'name'           => 'awea_btn1_border',
-				'selector'       => '{{WRAPPER}} .awea-cta-btn-primary',
+				'name'           => 'awea_cta_btn1_border',
+				'selector'       => '{{WRAPPER}} .awea_cta_btn_primary',
 				'fields_options' => [
 					'border' => [ 'default' => 'solid' ],
 					'width'  => [
@@ -951,94 +1039,110 @@ class Widget_Awesome_CTA extends Widget_Base {
 			]
 		);
 
+		$this->add_group_control(
+			Group_Control_Box_Shadow::get_type(),
+			[
+				'name'     => 'awea_cta_btn1_shadow',
+				'selector' => '{{WRAPPER}} .awea_cta_btn_primary',
+			]
+		);
+
 		$this->end_controls_tab();
 
 		$this->start_controls_tab(
-			'awea_btn1_hover',
+			'awea_cta_btn1_hover',
 			[ 'label' => esc_html__( 'Hover', 'awesome-widgets-elementor' ) ]
 		);
 
 		$this->add_control(
-			'awea_btn1_color_hover',
+			'awea_cta_btn1_color_hover',
 			[
-				'label'     => esc_html__( 'Text Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#ffffff',
 				'selectors' => [
-					'{{WRAPPER}} .awea-cta-btn-primary:hover, {{WRAPPER}} .awea-cta-btn-primary:focus-visible'         => 'color: {{VALUE}};',
-					'{{WRAPPER}} .awea-cta-btn-primary:hover svg, {{WRAPPER}} .awea-cta-btn-primary:focus-visible svg' => 'fill: {{VALUE}};',
+					'{{WRAPPER}} .awea_cta_btn_primary:hover, {{WRAPPER}} .awea_cta_btn_primary:focus-visible'         => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea_cta_btn_primary:hover svg, {{WRAPPER}} .awea_cta_btn_primary:focus-visible svg' => 'fill: {{VALUE}};',
 				],
 			]
 		);
 
 		$this->add_control(
-			'awea_btn1_bg_hover',
+			'awea_cta_btn1_bg_hover',
 			[
 				'label'     => esc_html__( 'Background', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#0f172a',
 				'selectors' => [
-					'{{WRAPPER}} .awea-cta-btn-primary:hover, {{WRAPPER}} .awea-cta-btn-primary:focus-visible' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .awea_cta_btn_primary:hover, {{WRAPPER}} .awea_cta_btn_primary:focus-visible' => 'background-color: {{VALUE}};',
 				],
 			]
 		);
 
 		$this->add_control(
-			'awea_btn1_border_hover',
+			'awea_cta_btn1_border_hover',
 			[
 				'label'     => esc_html__( 'Border Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}} .awea-cta-btn-primary:hover, {{WRAPPER}} .awea-cta-btn-primary:focus-visible' => 'border-color: {{VALUE}};',
+					'{{WRAPPER}} .awea_cta_btn_primary:hover, {{WRAPPER}} .awea_cta_btn_primary:focus-visible' => 'border-color: {{VALUE}};',
 				],
+			]
+		);
+
+		$this->add_group_control(
+			Group_Control_Box_Shadow::get_type(),
+			[
+				'name'     => 'awea_cta_btn1_shadow_hover',
+				'selector' => '{{WRAPPER}} .awea_cta_btn_primary:hover, {{WRAPPER}} .awea_cta_btn_primary:focus-visible',
 			]
 		);
 
 		$this->end_controls_tab();
 		$this->end_controls_tabs();
 
-		// Secondary Button Colors
-		$this->add_control(
-			'awea_btn2_heading',
+		$this->end_controls_section();
+
+		/* ==========================================================================
+		   STYLE: 8. SECONDARY BUTTON
+		   ========================================================================== */
+		$this->start_controls_section(
+			'awea_cta_style_btn2',
 			[
 				'label'     => esc_html__( 'Secondary Button', 'awesome-widgets-elementor' ),
-				'type'      => Controls_Manager::HEADING,
-				'separator' => 'before',
-				'condition' => [ 'awea_btn2_show' => 'yes' ],
+				'tab'       => Controls_Manager::TAB_STYLE,
+				'condition' => [ 'awea_cta_btn2_show' => 'yes' ],
 			]
 		);
 
-		$this->start_controls_tabs(
-			'awea_btn2_tabs',
-			[ 'condition' => [ 'awea_btn2_show' => 'yes' ] ]
-		);
+		$this->start_controls_tabs( 'awea_cta_btn2_tabs' );
 
 		$this->start_controls_tab(
-			'awea_btn2_normal',
+			'awea_cta_btn2_normal',
 			[ 'label' => esc_html__( 'Normal', 'awesome-widgets-elementor' ) ]
 		);
 
 		$this->add_control(
-			'awea_btn2_color',
+			'awea_cta_btn2_color',
 			[
-				'label'     => esc_html__( 'Text Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#0f172a',
 				'selectors' => [
-					'{{WRAPPER}} .awea-cta-btn-secondary'     => 'color: {{VALUE}};',
-					'{{WRAPPER}} .awea-cta-btn-secondary svg' => 'fill: {{VALUE}};',
+					'{{WRAPPER}} .awea_cta_btn_secondary'     => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea_cta_btn_secondary svg' => 'fill: {{VALUE}};',
 				],
 			]
 		);
 
 		$this->add_control(
-			'awea_btn2_bg',
+			'awea_cta_btn2_bg',
 			[
 				'label'     => esc_html__( 'Background', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#ffffff',
 				'selectors' => [
-					'{{WRAPPER}} .awea-cta-btn-secondary' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .awea_cta_btn_secondary' => 'background-color: {{VALUE}};',
 				],
 			]
 		);
@@ -1046,8 +1150,8 @@ class Widget_Awesome_CTA extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Border::get_type(),
 			[
-				'name'           => 'awea_btn2_border',
-				'selector'       => '{{WRAPPER}} .awea-cta-btn-secondary',
+				'name'           => 'awea_cta_btn2_border',
+				'selector'       => '{{WRAPPER}} .awea_cta_btn_secondary',
 				'fields_options' => [
 					'border' => [ 'default' => 'solid' ],
 					'width'  => [
@@ -1064,47 +1168,63 @@ class Widget_Awesome_CTA extends Widget_Base {
 			]
 		);
 
+		$this->add_group_control(
+			Group_Control_Box_Shadow::get_type(),
+			[
+				'name'     => 'awea_cta_btn2_shadow',
+				'selector' => '{{WRAPPER}} .awea_cta_btn_secondary',
+			]
+		);
+
 		$this->end_controls_tab();
 
 		$this->start_controls_tab(
-			'awea_btn2_hover',
+			'awea_cta_btn2_hover',
 			[ 'label' => esc_html__( 'Hover', 'awesome-widgets-elementor' ) ]
 		);
 
 		$this->add_control(
-			'awea_btn2_color_hover',
+			'awea_cta_btn2_color_hover',
 			[
-				'label'     => esc_html__( 'Text Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#0f172a',
 				'selectors' => [
-					'{{WRAPPER}} .awea-cta-btn-secondary:hover, {{WRAPPER}} .awea-cta-btn-secondary:focus-visible'         => 'color: {{VALUE}};',
-					'{{WRAPPER}} .awea-cta-btn-secondary:hover svg, {{WRAPPER}} .awea-cta-btn-secondary:focus-visible svg' => 'fill: {{VALUE}};',
+					'{{WRAPPER}} .awea_cta_btn_secondary:hover, {{WRAPPER}} .awea_cta_btn_secondary:focus-visible'         => 'color: {{VALUE}};',
+					'{{WRAPPER}} .awea_cta_btn_secondary:hover svg, {{WRAPPER}} .awea_cta_btn_secondary:focus-visible svg' => 'fill: {{VALUE}};',
 				],
 			]
 		);
 
 		$this->add_control(
-			'awea_btn2_bg_hover',
+			'awea_cta_btn2_bg_hover',
 			[
 				'label'     => esc_html__( 'Background', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#f1f5f9',
 				'selectors' => [
-					'{{WRAPPER}} .awea-cta-btn-secondary:hover, {{WRAPPER}} .awea-cta-btn-secondary:focus-visible' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .awea_cta_btn_secondary:hover, {{WRAPPER}} .awea_cta_btn_secondary:focus-visible' => 'background-color: {{VALUE}};',
 				],
 			]
 		);
 
 		$this->add_control(
-			'awea_btn2_border_hover',
+			'awea_cta_btn2_border_hover',
 			[
 				'label'     => esc_html__( 'Border Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#0f172a',
 				'selectors' => [
-					'{{WRAPPER}} .awea-cta-btn-secondary:hover, {{WRAPPER}} .awea-cta-btn-secondary:focus-visible' => 'border-color: {{VALUE}};',
+					'{{WRAPPER}} .awea_cta_btn_secondary:hover, {{WRAPPER}} .awea_cta_btn_secondary:focus-visible' => 'border-color: {{VALUE}};',
 				],
+			]
+		);
+
+		$this->add_group_control(
+			Group_Control_Box_Shadow::get_type(),
+			[
+				'name'     => 'awea_cta_btn2_shadow_hover',
+				'selector' => '{{WRAPPER}} .awea_cta_btn_secondary:hover, {{WRAPPER}} .awea_cta_btn_secondary:focus-visible',
 			]
 		);
 
@@ -1128,7 +1248,7 @@ class Widget_Awesome_CTA extends Widget_Base {
 
 		return preg_replace(
 			$pattern,
-			'<span class="awea-cta-hl">$1</span>',
+			'<span class="awea_cta_hl">$1</span>',
 			$safe_title,
 			1
 		);
@@ -1136,50 +1256,50 @@ class Widget_Awesome_CTA extends Widget_Base {
 
 	protected function render() {
 		$settings   = $this->get_settings_for_display();
-		$badge_show = 'yes' === ( $settings['awea_badge_show'] ?? 'no' );
-		$badge_text = $settings['awea_badge_text'] ?? '';
+		$badge_show = 'yes' === ( $settings['awea_cta_badge_show'] ?? 'no' );
+		$badge_text = $settings['awea_cta_badge_text'] ?? '';
 
-		$title     = $settings['awea_title'] ?? '';
-		$hl_text   = trim( $settings['awea_hl_text'] ?? '' );
-		$title_tag = Utils::validate_html_tag( $settings['awea_title_tag'] ?? 'h2' );
-		$desc      = $settings['awea_desc'] ?? '';
-		$note      = $settings['awea_note'] ?? '';
+		$title     = $settings['awea_cta_title'] ?? '';
+		$hl_text   = trim( $settings['awea_cta_hl_text'] ?? '' );
+		$title_tag = Utils::validate_html_tag( $settings['awea_cta_title_tag'] ?? 'h2' );
+		$desc      = $settings['awea_cta_desc'] ?? '';
+		$note      = $settings['awea_cta_note'] ?? '';
 
-		$btn1_show  = 'yes' === ( $settings['awea_btn1_show'] ?? 'no' );
-		$btn1_text  = $settings['awea_btn1_text'] ?? '';
-		$btn1_pos   = $settings['awea_btn1_icon_pos'] ?? 'right';
-		$has_b1_ico = ! empty( $settings['awea_btn1_icon']['value'] );
+		$btn1_show  = 'yes' === ( $settings['awea_cta_btn1_show'] ?? 'no' );
+		$btn1_text  = $settings['awea_cta_btn1_text'] ?? '';
+		$btn1_pos   = $settings['awea_cta_btn1_icon_pos'] ?? 'right';
+		$has_b1_ico = ! empty( $settings['awea_cta_btn1_icon']['value'] );
 
-		$btn2_show  = 'yes' === ( $settings['awea_btn2_show'] ?? 'no' );
-		$btn2_text  = $settings['awea_btn2_text'] ?? '';
-		$btn2_pos   = $settings['awea_btn2_icon_pos'] ?? 'left';
-		$has_b2_ico = ! empty( $settings['awea_btn2_icon']['value'] );
+		$btn2_show  = 'yes' === ( $settings['awea_cta_btn2_show'] ?? 'no' );
+		$btn2_text  = $settings['awea_cta_btn2_text'] ?? '';
+		$btn2_pos   = $settings['awea_cta_btn2_icon_pos'] ?? 'left';
+		$has_b2_ico = ! empty( $settings['awea_cta_btn2_icon']['value'] );
 
-		$this->remove_render_attribute( 'btn1' );
+		$this->remove_render_attribute( 'awea_cta_btn1' );
 		if ( $btn1_show ) {
-			$btn1_link = ! empty( $settings['awea_btn1_link']['url'] ) ? $settings['awea_btn1_link'] : [ 'url' => '#' ];
-			$this->add_link_attributes( 'btn1', $btn1_link );
-			$this->add_render_attribute( 'btn1', 'class', 'awea-cta-btn awea-cta-btn-primary' );
+			$btn1_link = ! empty( $settings['awea_cta_btn1_link']['url'] ) ? $settings['awea_cta_btn1_link'] : [ 'url' => '#' ];
+			$this->add_link_attributes( 'awea_cta_btn1', $btn1_link );
+			$this->add_render_attribute( 'awea_cta_btn1', 'class', 'awea_cta_btn awea_cta_btn_primary' );
 		}
 
-		$this->remove_render_attribute( 'btn2' );
+		$this->remove_render_attribute( 'awea_cta_btn2' );
 		if ( $btn2_show ) {
-			$btn2_link = ! empty( $settings['awea_btn2_link']['url'] ) ? $settings['awea_btn2_link'] : [ 'url' => '#' ];
-			$this->add_link_attributes( 'btn2', $btn2_link );
-			$this->add_render_attribute( 'btn2', 'class', 'awea-cta-btn awea-cta-btn-secondary' );
+			$btn2_link = ! empty( $settings['awea_cta_btn2_link']['url'] ) ? $settings['awea_cta_btn2_link'] : [ 'url' => '#' ];
+			$this->add_link_attributes( 'awea_cta_btn2', $btn2_link );
+			$this->add_render_attribute( 'awea_cta_btn2', 'class', 'awea_cta_btn awea_cta_btn_secondary' );
 		}
 
 		$formatted_title = $this->format_highlighted_title( $title, $hl_text );
 		?>
-		<section class="awea-cta-box">
-			<div class="awea-cta-inner">
+		<section class="awea_cta_box">
+			<div class="awea_cta_inner">
 
-				<div class="awea-cta-copy">
+				<div class="awea_cta_copy">
 					<?php if ( $badge_show && ! empty( $badge_text ) ) : ?>
-						<div class="awea-cta-badge">
-							<?php if ( ! empty( $settings['awea_badge_icon']['value'] ) ) : ?>
-								<span class="awea-cta-badge-ico" aria-hidden="true">
-									<?php Icons_Manager::render_icon( $settings['awea_badge_icon'], [ 'aria-hidden' => 'true' ] ); ?>
+						<div class="awea_cta_badge">
+							<?php if ( ! empty( $settings['awea_cta_badge_icon']['value'] ) ) : ?>
+								<span class="awea_cta_badge_ico" aria-hidden="true">
+									<?php Icons_Manager::render_icon( $settings['awea_cta_badge_icon'], [ 'aria-hidden' => 'true' ] ); ?>
 								</span>
 							<?php endif; ?>
 							<span><?php echo esc_html( $badge_text ); ?></span>
@@ -1187,51 +1307,51 @@ class Widget_Awesome_CTA extends Widget_Base {
 					<?php endif; ?>
 
 					<?php if ( ! empty( $title ) ) : ?>
-						<<?php Utils::print_validated_html_tag( $title_tag ); ?> class="awea-cta-title">
+						<<?php Utils::print_validated_html_tag( $title_tag ); ?> class="awea_cta_title">
 							<?php echo $formatted_title; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 						</<?php Utils::print_validated_html_tag( $title_tag ); ?>>
 					<?php endif; ?>
 
 					<?php if ( ! empty( $desc ) ) : ?>
-						<p class="awea-cta-desc"><?php echo wp_kses_post( $desc ); ?></p>
+						<p class="awea_cta_desc"><?php echo wp_kses_post( $desc ); ?></p>
 					<?php endif; ?>
 				</div>
 
 				<?php if ( ( $btn1_show && ! empty( $btn1_text ) ) || ( $btn2_show && ! empty( $btn2_text ) ) || ! empty( $note ) ) : ?>
-					<div class="awea-cta-action-col">
+					<div class="awea_cta_action_col">
 						<?php if ( ( $btn1_show && ! empty( $btn1_text ) ) || ( $btn2_show && ! empty( $btn2_text ) ) ) : ?>
-							<div class="awea-cta-actions">
+							<div class="awea_cta_actions">
 								<?php if ( $btn1_show && ! empty( $btn1_text ) ) : ?>
-									<a <?php $this->print_render_attribute_string( 'btn1' ); ?>>
+									<a <?php $this->print_render_attribute_string( 'awea_cta_btn1' ); ?>>
 										<?php if ( 'left' === $btn1_pos && $has_b1_ico ) : ?>
-											<span class="awea-cta-ico awea-cta-ico-left" aria-hidden="true">
-												<?php Icons_Manager::render_icon( $settings['awea_btn1_icon'], [ 'aria-hidden' => 'true' ] ); ?>
+											<span class="awea_cta_ico awea_cta_ico_left" aria-hidden="true">
+												<?php Icons_Manager::render_icon( $settings['awea_cta_btn1_icon'], [ 'aria-hidden' => 'true' ] ); ?>
 											</span>
 										<?php endif; ?>
 
 										<span><?php echo esc_html( $btn1_text ); ?></span>
 
 										<?php if ( 'right' === $btn1_pos && $has_b1_ico ) : ?>
-											<span class="awea-cta-ico awea-cta-ico-right" aria-hidden="true">
-												<?php Icons_Manager::render_icon( $settings['awea_btn1_icon'], [ 'aria-hidden' => 'true' ] ); ?>
+											<span class="awea_cta_ico awea_cta_ico_right" aria-hidden="true">
+												<?php Icons_Manager::render_icon( $settings['awea_cta_btn1_icon'], [ 'aria-hidden' => 'true' ] ); ?>
 											</span>
 										<?php endif; ?>
 									</a>
 								<?php endif; ?>
 
 								<?php if ( $btn2_show && ! empty( $btn2_text ) ) : ?>
-									<a <?php $this->print_render_attribute_string( 'btn2' ); ?>>
+									<a <?php $this->print_render_attribute_string( 'awea_cta_btn2' ); ?>>
 										<?php if ( 'left' === $btn2_pos && $has_b2_ico ) : ?>
-											<span class="awea-cta-ico awea-cta-ico-left" aria-hidden="true">
-												<?php Icons_Manager::render_icon( $settings['awea_btn2_icon'], [ 'aria-hidden' => 'true' ] ); ?>
+											<span class="awea_cta_ico awea_cta_ico_left" aria-hidden="true">
+												<?php Icons_Manager::render_icon( $settings['awea_cta_btn2_icon'], [ 'aria-hidden' => 'true' ] ); ?>
 											</span>
 										<?php endif; ?>
 
 										<span><?php echo esc_html( $btn2_text ); ?></span>
 
 										<?php if ( 'right' === $btn2_pos && $has_b2_ico ) : ?>
-											<span class="awea-cta-ico awea-cta-ico-right" aria-hidden="true">
-												<?php Icons_Manager::render_icon( $settings['awea_btn2_icon'], [ 'aria-hidden' => 'true' ] ); ?>
+											<span class="awea_cta_ico awea_cta_ico_right" aria-hidden="true">
+												<?php Icons_Manager::render_icon( $settings['awea_cta_btn2_icon'], [ 'aria-hidden' => 'true' ] ); ?>
 											</span>
 										<?php endif; ?>
 									</a>
@@ -1240,7 +1360,7 @@ class Widget_Awesome_CTA extends Widget_Base {
 						<?php endif; ?>
 
 						<?php if ( ! empty( $note ) ) : ?>
-							<p class="awea-cta-note"><?php echo esc_html( $note ); ?></p>
+							<p class="awea_cta_note"><?php echo esc_html( $note ); ?></p>
 						<?php endif; ?>
 					</div>
 				<?php endif; ?>
@@ -1256,75 +1376,75 @@ class Widget_Awesome_CTA extends Widget_Base {
 	protected function content_template() {
 		?>
 		<#
-		var tag      = elementor.helpers.validateHTMLTag( settings.awea_title_tag || 'h2' );
-		var title    = settings.awea_title || '';
-		var hlText   = ( settings.awea_hl_text || '' ).trim();
-		var badgeIco = elementor.helpers.renderIcon( view, settings.awea_badge_icon, { 'aria-hidden': true }, 'i', 'object' );
-		var btn1Ico  = elementor.helpers.renderIcon( view, settings.awea_btn1_icon, { 'aria-hidden': true }, 'i', 'object' );
-		var btn2Ico  = elementor.helpers.renderIcon( view, settings.awea_btn2_icon, { 'aria-hidden': true }, 'i', 'object' );
-		var btn1Url  = ( settings.awea_btn1_link && settings.awea_btn1_link.url ) ? settings.awea_btn1_link.url : '#';
-		var btn2Url  = ( settings.awea_btn2_link && settings.awea_btn2_link.url ) ? settings.awea_btn2_link.url : '#';
+		var tag      = elementor.helpers.validateHTMLTag( settings.awea_cta_title_tag || 'h2' );
+		var title    = settings.awea_cta_title || '';
+		var hlText   = ( settings.awea_cta_hl_text || '' ).trim();
+		var badgeIco = elementor.helpers.renderIcon( view, settings.awea_cta_badge_icon, { 'aria-hidden': true }, 'i', 'object' );
+		var btn1Ico  = elementor.helpers.renderIcon( view, settings.awea_cta_btn1_icon, { 'aria-hidden': true }, 'i', 'object' );
+		var btn2Ico  = elementor.helpers.renderIcon( view, settings.awea_cta_btn2_icon, { 'aria-hidden': true }, 'i', 'object' );
+		var btn1Url  = ( settings.awea_cta_btn1_link && settings.awea_cta_btn1_link.url ) ? settings.awea_cta_btn1_link.url : '#';
+		var btn2Url  = ( settings.awea_cta_btn2_link && settings.awea_cta_btn2_link.url ) ? settings.awea_cta_btn2_link.url : '#';
 
 		if ( hlText ) {
 			var escapedRegex = hlText.replace( /[.*+?^${}()|[\]\\]/g, '\\$&' );
 			var hlRegex      = new RegExp( '(' + escapedRegex + ')(?![^<]*>)' );
-			title            = title.replace( hlRegex, '<span class="awea-cta-hl">$1</span>' );
+			title            = title.replace( hlRegex, '<span class="awea_cta_hl">$1</span>' );
 		}
 		#>
-		<section class="awea-cta-box">
-			<div class="awea-cta-inner">
+		<section class="awea_cta_box">
+			<div class="awea_cta_inner">
 
-				<div class="awea-cta-copy">
-					<# if ( 'yes' === settings.awea_badge_show && settings.awea_badge_text ) { #>
-						<div class="awea-cta-badge">
+				<div class="awea_cta_copy">
+					<# if ( 'yes' === settings.awea_cta_badge_show && settings.awea_cta_badge_text ) { #>
+						<div class="awea_cta_badge">
 							<# if ( badgeIco && badgeIco.rendered ) { #>
-								<span class="awea-cta-badge-ico" aria-hidden="true">{{{ badgeIco.value }}}</span>
+								<span class="awea_cta_badge_ico" aria-hidden="true">{{{ badgeIco.value }}}</span>
 							<# } #>
-							<span>{{{ settings.awea_badge_text }}}</span>
+							<span>{{{ settings.awea_cta_badge_text }}}</span>
 						</div>
 					<# } #>
 
 					<# if ( title ) { #>
-						<{{{ tag }}} class="awea-cta-title">{{{ title }}}</{{{ tag }}}>
+						<{{{ tag }}} class="awea_cta_title">{{{ title }}}</{{{ tag }}}>
 					<# } #>
 
-					<# if ( settings.awea_desc ) { #>
-						<p class="awea-cta-desc">{{{ settings.awea_desc }}}</p>
+					<# if ( settings.awea_cta_desc ) { #>
+						<p class="awea_cta_desc">{{{ settings.awea_cta_desc }}}</p>
 					<# } #>
 				</div>
 
-				<# if ( ( 'yes' === settings.awea_btn1_show && settings.awea_btn1_text ) || ( 'yes' === settings.awea_btn2_show && settings.awea_btn2_text ) || settings.awea_note ) { #>
-					<div class="awea-cta-action-col">
-						<# if ( ( 'yes' === settings.awea_btn1_show && settings.awea_btn1_text ) || ( 'yes' === settings.awea_btn2_show && settings.awea_btn2_text ) ) { #>
-							<div class="awea-cta-actions">
-								<# if ( 'yes' === settings.awea_btn1_show && settings.awea_btn1_text ) { #>
-									<a href="{{ btn1Url }}" class="awea-cta-btn awea-cta-btn-primary">
-										<# if ( 'left' === settings.awea_btn1_icon_pos && btn1Ico && btn1Ico.rendered ) { #>
-											<span class="awea-cta-ico awea-cta-ico-left" aria-hidden="true">{{{ btn1Ico.value }}}</span>
+				<# if ( ( 'yes' === settings.awea_cta_btn1_show && settings.awea_cta_btn1_text ) || ( 'yes' === settings.awea_cta_btn2_show && settings.awea_cta_btn2_text ) || settings.awea_cta_note ) { #>
+					<div class="awea_cta_action_col">
+						<# if ( ( 'yes' === settings.awea_cta_btn1_show && settings.awea_cta_btn1_text ) || ( 'yes' === settings.awea_cta_btn2_show && settings.awea_cta_btn2_text ) ) { #>
+							<div class="awea_cta_actions">
+								<# if ( 'yes' === settings.awea_cta_btn1_show && settings.awea_cta_btn1_text ) { #>
+									<a href="{{ btn1Url }}" class="awea_cta_btn awea_cta_btn_primary">
+										<# if ( 'left' === settings.awea_cta_btn1_icon_pos && btn1Ico && btn1Ico.rendered ) { #>
+											<span class="awea_cta_ico awea_cta_ico_left" aria-hidden="true">{{{ btn1Ico.value }}}</span>
 										<# } #>
-										<span>{{{ settings.awea_btn1_text }}}</span>
-										<# if ( 'right' === settings.awea_btn1_icon_pos && btn1Ico && btn1Ico.rendered ) { #>
-											<span class="awea-cta-ico awea-cta-ico-right" aria-hidden="true">{{{ btn1Ico.value }}}</span>
+										<span>{{{ settings.awea_cta_btn1_text }}}</span>
+										<# if ( 'right' === settings.awea_cta_btn1_icon_pos && btn1Ico && btn1Ico.rendered ) { #>
+											<span class="awea_cta_ico awea_cta_ico_right" aria-hidden="true">{{{ btn1Ico.value }}}</span>
 										<# } #>
 									</a>
 								<# } #>
 
-								<# if ( 'yes' === settings.awea_btn2_show && settings.awea_btn2_text ) { #>
-									<a href="{{ btn2Url }}" class="awea-cta-btn awea-cta-btn-secondary">
-										<# if ( 'left' === settings.awea_btn2_icon_pos && btn2Ico && btn2Ico.rendered ) { #>
-											<span class="awea-cta-ico awea-cta-ico-left" aria-hidden="true">{{{ btn2Ico.value }}}</span>
+								<# if ( 'yes' === settings.awea_cta_btn2_show && settings.awea_cta_btn2_text ) { #>
+									<a href="{{ btn2Url }}" class="awea_cta_btn awea_cta_btn_secondary">
+										<# if ( 'left' === settings.awea_cta_btn2_icon_pos && btn2Ico && btn2Ico.rendered ) { #>
+											<span class="awea_cta_ico awea_cta_ico_left" aria-hidden="true">{{{ btn2Ico.value }}}</span>
 										<# } #>
-										<span>{{{ settings.awea_btn2_text }}}</span>
-										<# if ( 'right' === settings.awea_btn2_icon_pos && btn2Ico && btn2Ico.rendered ) { #>
-											<span class="awea-cta-ico awea-cta-ico-right" aria-hidden="true">{{{ btn2Ico.value }}}</span>
+										<span>{{{ settings.awea_cta_btn2_text }}}</span>
+										<# if ( 'right' === settings.awea_cta_btn2_icon_pos && btn2Ico && btn2Ico.rendered ) { #>
+											<span class="awea_cta_ico awea_cta_ico_right" aria-hidden="true">{{{ btn2Ico.value }}}</span>
 										<# } #>
 									</a>
 								<# } #>
 							</div>
 						<# } #>
 
-						<# if ( settings.awea_note ) { #>
-							<p class="awea-cta-note">{{{ settings.awea_note }}}</p>
+						<# if ( settings.awea_cta_note ) { #>
+							<p class="awea_cta_note">{{{ settings.awea_cta_note }}}</p>
 						<# } #>
 					</div>
 				<# } #>

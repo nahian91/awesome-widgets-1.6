@@ -1,77 +1,92 @@
 /* ==========================================================================
-   Awesome Business Hours Widget
+   Awesome Business Hours Widget (v2.0.0)
    ========================================================================== */
 
-.awea-bh-root {
-	--awea-bh-bg: #0f172a;
-	--awea-bh-panel-bg: rgba(255, 255, 255, 0.03);
-	--awea-bh-border: rgba(255, 255, 255, 0.1);
-	--awea-bh-divider: rgba(255, 255, 255, 0.08);
-	--awea-bh-title: #ffffff;
-	--awea-bh-desc: #94a3b8;
-	--awea-bh-muted: #64748b;
-	--awea-bh-day: #f1f5f9;
-	--awea-bh-time: #94a3b8;
-	--awea-bh-today-time: #ffffff;
-	--awea-bh-accent: var(--e-global-color-accent, #38bdf8);
-	--awea-bh-ico-bg: rgba(255, 255, 255, 0.06);
-	--awea-bh-ico-border: rgba(255, 255, 255, 0.12);
-	--awea-bh-ico-color: #ffffff;
+.awea_business_hours_root {
+	--awea_business_hours_bg: #0f172a;
+	--awea_business_hours_panel_bg: rgba(255, 255, 255, 0.03);
+	--awea_business_hours_border: rgba(255, 255, 255, 0.1);
+	--awea_business_hours_divider: rgba(255, 255, 255, 0.08);
+	--awea_business_hours_title: #ffffff;
+	--awea_business_hours_desc: #94a3b8;
+	--awea_business_hours_muted: #64748b;
+	--awea_business_hours_day: #f1f5f9;
+	--awea_business_hours_time: #94a3b8;
+	--awea_business_hours_today_time: #ffffff;
+	--awea_business_hours_accent: var(--e-global-color-accent, #38bdf8);
+	--awea_business_hours_ico_bg: rgba(255, 255, 255, 0.06);
+	--awea_business_hours_ico_border: rgba(255, 255, 255, 0.12);
+	--awea_business_hours_ico_color: #ffffff;
 
 	width: 100%;
 	position: relative;
 	box-sizing: border-box;
 }
 
-.awea-bh-root *,
-.awea-bh-root *::before,
-.awea-bh-root *::after {
+.awea_business_hours_root *,
+.awea_business_hours_root *::before,
+.awea_business_hours_root *::after {
 	box-sizing: border-box;
 }
 
 /* Clean Light Surface Preset */
-.awea-bh-theme-light .awea-bh-root {
-	--awea-bh-bg: #ffffff;
-	--awea-bh-panel-bg: #f8fafc;
-	--awea-bh-border: #e2e8f0;
-	--awea-bh-divider: #e2e8f0;
-	--awea-bh-title: #0f172a;
-	--awea-bh-desc: #475569;
-	--awea-bh-muted: #64748b;
-	--awea-bh-day: #0f172a;
-	--awea-bh-time: #475569;
-	--awea-bh-today-time: #0f172a;
-	--awea-bh-accent: var(--e-global-color-primary, #4f46e5);
-	--awea-bh-ico-bg: #f1f5f9;
-	--awea-bh-ico-border: #e2e8f0;
-	--awea-bh-ico-color: #0f172a;
+.awea_business_hours_theme_light .awea_business_hours_root {
+	--awea_business_hours_bg: #ffffff;
+	--awea_business_hours_panel_bg: #f8fafc;
+	--awea_business_hours_border: #e2e8f0;
+	--awea_business_hours_divider: #e2e8f0;
+	--awea_business_hours_title: #0f172a;
+	--awea_business_hours_desc: #475569;
+	--awea_business_hours_muted: #64748b;
+	--awea_business_hours_day: #0f172a;
+	--awea_business_hours_time: #475569;
+	--awea_business_hours_today_time: #0f172a;
+	--awea_business_hours_accent: var(--e-global-color-primary, #4f46e5);
+	--awea_business_hours_ico_bg: #f1f5f9;
+	--awea_business_hours_ico_border: #e2e8f0;
+	--awea_business_hours_ico_color: #0f172a;
 }
 
-.awea-bh-card {
+.awea_business_hours_card {
 	display: grid;
 	grid-template-columns: 1fr 1.15fr;
-	background-color: var(--awea-bh-bg);
-	border: 1px solid var(--awea-bh-border);
+	background-color: var(--awea_business_hours_bg);
+	border: 1px solid var(--awea_business_hours_border);
 	border-radius: 28px;
 	overflow: hidden;
 }
 
+/* Schedule Left Swap */
+.awea_business_hours_pos_left .awea_business_hours_card {
+	grid-template-columns: 1.15fr 1fr;
+}
+
+.awea_business_hours_pos_left .awea_business_hours_right {
+	order: 1;
+	border-inline-start: none;
+	border-inline-end: 1px solid var(--awea_business_hours_divider);
+}
+
+.awea_business_hours_pos_left .awea_business_hours_left {
+	order: 2;
+}
+
 /* Stacked Single-Column Mode */
-.awea-bh-mode-stacked .awea-bh-card {
+.awea_business_hours_mode_stacked .awea_business_hours_card {
 	grid-template-columns: 1fr;
 }
 
 /* --------------------------------------------------------------------------
    1. Left Status Panel
    -------------------------------------------------------------------------- */
-.awea-bh-left {
+.awea_business_hours_left {
 	padding: 48px;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 }
 
-.awea-bh-badge {
+.awea_business_hours_badge {
 	display: inline-flex;
 	align-items: center;
 	gap: 9px;
@@ -87,27 +102,27 @@
 	line-height: 1.2;
 }
 
-.awea-bh-badge.is-open {
+.awea_business_hours_badge.awea_business_hours_is_open {
 	background-color: rgba(34, 197, 94, 0.14);
 	color: #22c55e;
 	border: 1px solid rgba(34, 197, 94, 0.28);
 }
 
-.awea-bh-theme-dark .awea-bh-badge.is-open {
+.awea_business_hours_theme_dark .awea_business_hours_badge.awea_business_hours_is_open {
 	color: #4ade80;
 }
 
-.awea-bh-badge.is-closed {
+.awea_business_hours_badge.awea_business_hours_is_closed {
 	background-color: rgba(239, 68, 68, 0.12);
 	color: #ef4444;
 	border: 1px solid rgba(239, 68, 68, 0.26);
 }
 
-.awea-bh-theme-dark .awea-bh-badge.is-closed {
+.awea_business_hours_theme_dark .awea_business_hours_badge.awea_business_hours_is_closed {
 	color: #f87171;
 }
 
-.awea-bh-pulse {
+.awea_business_hours_pulse {
 	width: 8px;
 	height: 8px;
 	border-radius: 50%;
@@ -116,16 +131,16 @@
 	flex-shrink: 0;
 }
 
-.awea-bh-pulse::after {
+.awea_business_hours_pulse::after {
 	content: "";
 	position: absolute;
 	inset: 0;
 	border-radius: 50%;
 	background-color: currentColor;
-	animation: aweaBhPulse 2.4s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+	animation: awea_business_hours_pulse 2.4s cubic-bezier(0.16, 1, 0.3, 1) infinite;
 }
 
-@keyframes aweaBhPulse {
+@keyframes awea_business_hours_pulse {
 	0% {
 		transform: scale(1);
 		opacity: 0.85;
@@ -140,42 +155,42 @@
 	}
 }
 
-.awea-bh-title {
+.awea_business_hours_title {
 	margin: 0 0 14px 0;
 	font-size: clamp(1.85rem, 3.6vw, 2.5rem);
 	font-weight: 800;
 	letter-spacing: -0.025em;
 	line-height: 1.15;
-	color: var(--awea-bh-title);
+	color: var(--awea_business_hours_title);
 	word-break: break-word;
 }
 
-.awea-bh-desc {
+.awea_business_hours_desc {
 	margin: 0 0 32px 0;
 	max-width: 440px;
 	font-size: 1rem;
 	line-height: 1.65;
-	color: var(--awea-bh-desc);
+	color: var(--awea_business_hours_desc);
 	word-break: break-word;
 }
 
 /* Direct Support Phone */
-.awea-bh-phone {
+.awea_business_hours_phone {
 	margin-top: auto;
 	padding-top: 8px;
 }
 
-.awea-bh-phone-label {
+.awea_business_hours_phone_label {
 	display: block;
 	font-size: 0.72rem;
 	font-weight: 700;
 	text-transform: uppercase;
 	letter-spacing: 0.09em;
-	color: var(--awea-bh-muted);
+	color: var(--awea_business_hours_muted);
 	margin-bottom: 8px;
 }
 
-.awea-bh-phone-link {
+.awea_business_hours_phone_link {
 	display: inline-flex;
 	align-items: center;
 	gap: 12px;
@@ -184,42 +199,46 @@
 	transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
-.awea-bh-phone-link:hover {
+.awea_business_hours_phone_link:hover {
 	opacity: 0.88;
 }
 
-.awea-bh-phone-link:focus-visible {
-	outline: 2px solid var(--awea-bh-accent);
+.awea_business_hours_phone_link:focus-visible {
+	outline: 2px solid var(--awea_business_hours_accent);
 	outline-offset: 4px;
 	border-radius: 10px;
 }
 
-.awea-bh-phone-ico {
+.awea_business_hours_phone_ico {
 	width: 42px;
 	height: 42px;
 	border-radius: 12px;
-	background-color: var(--awea-bh-ico-bg);
-	border: 1px solid var(--awea-bh-ico-border);
+	background-color: var(--awea_business_hours_ico_bg);
+	border: 1px solid var(--awea_business_hours_ico_border);
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
-	color: var(--awea-bh-ico-color);
+	font-size: 16px;
+	line-height: 1;
+	color: var(--awea_business_hours_ico_color);
 	flex-shrink: 0;
 	transition: transform 0.25s ease;
 }
 
-.awea-bh-phone-link:hover .awea-bh-phone-ico {
+.awea_business_hours_phone_link:hover .awea_business_hours_phone_ico {
 	transform: scale(1.05);
 }
 
-.awea-bh-phone-ico svg {
-	width: 17px;
-	height: 17px;
+.awea_business_hours_phone_ico svg {
+	width: 16px;
+	height: 16px;
+	fill: currentColor;
+	display: block;
 }
 
-.awea-bh-phone-num {
+.awea_business_hours_phone_num {
 	font-weight: 800;
-	color: var(--awea-bh-title);
+	color: var(--awea_business_hours_title);
 	font-size: 1.25rem;
 	letter-spacing: -0.02em;
 }
@@ -227,111 +246,112 @@
 /* --------------------------------------------------------------------------
    2. Right Weekly Schedule
    -------------------------------------------------------------------------- */
-.awea-bh-right {
+.awea_business_hours_right {
 	padding: 48px;
-	background-color: var(--awea-bh-panel-bg);
-	border-left: 1px solid var(--awea-bh-divider);
+	background-color: var(--awea_business_hours_panel_bg);
+	border-inline-start: 1px solid var(--awea_business_hours_divider);
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 }
 
-.awea-bh-mode-stacked .awea-bh-right {
-	border-left: none;
-	border-top: 1px solid var(--awea-bh-divider);
+.awea_business_hours_mode_stacked .awea_business_hours_right {
+	border-inline-start: none;
+	border-inline-end: none;
+	border-top: 1px solid var(--awea_business_hours_divider);
 }
 
-.awea-bh-list {
+.awea_business_hours_list {
 	display: flex;
 	flex-direction: column;
 }
 
-.awea-bh-row {
+.awea_business_hours_row {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
 	gap: 16px;
 	padding: 16px 0;
-	border-bottom: 1px solid var(--awea-bh-divider);
-	transition: border-color 0.25s ease;
+	border-bottom: 1px solid var(--awea_business_hours_divider);
+	transition: border-color 0.25s ease, background-color 0.25s ease;
 }
 
-.awea-bh-row:first-child {
+.awea_business_hours_row:first-child {
 	padding-top: 0;
 }
 
-.awea-bh-row:last-child {
+.awea_business_hours_row:last-child {
 	border-bottom: none;
 	padding-bottom: 0;
 }
 
-.awea-bh-day-wrap {
+.awea_business_hours_day_wrap {
 	display: inline-flex;
 	align-items: center;
 	gap: 10px;
 }
 
-.awea-bh-dot {
+.awea_business_hours_dot {
 	display: none;
 	width: 7px;
 	height: 7px;
 	border-radius: 50%;
-	background-color: var(--awea-bh-accent);
+	background-color: var(--awea_business_hours_accent);
 	flex-shrink: 0;
 }
 
-.awea-bh-row.is-today .awea-bh-dot {
+.awea_business_hours_row.awea_business_hours_is_today .awea_business_hours_dot {
 	display: inline-block;
 }
 
-.awea-bh-day {
+.awea_business_hours_day {
 	font-weight: 600;
 	font-size: 0.98rem;
-	color: var(--awea-bh-day);
+	color: var(--awea_business_hours_day);
 }
 
-.awea-bh-time {
+.awea_business_hours_time {
 	font-weight: 500;
-	color: var(--awea-bh-time);
+	color: var(--awea_business_hours_time);
 	font-variant-numeric: tabular-nums;
 	font-size: 0.94rem;
-	text-align: right;
+	text-align: end;
 }
 
 /* Active Current Day */
-.awea-bh-row.is-today {
-	border-bottom-color: var(--awea-bh-accent);
+.awea_business_hours_row.awea_business_hours_is_today {
+	border-bottom-color: var(--awea_business_hours_accent);
 }
 
-.awea-bh-row.is-today .awea-bh-day {
+.awea_business_hours_row.awea_business_hours_is_today .awea_business_hours_day {
 	font-weight: 800;
-	color: var(--awea-bh-accent);
+	color: var(--awea_business_hours_accent);
 }
 
-.awea-bh-row.is-today .awea-bh-time {
-	color: var(--awea-bh-today-time);
+.awea_business_hours_row.awea_business_hours_is_today .awea_business_hours_time {
+	color: var(--awea_business_hours_today_time);
 	font-weight: 700;
 }
 
 /* Closed Day */
-.awea-bh-row.is-closed .awea-bh-day {
+.awea_business_hours_row.awea_business_hours_is_closed .awea_business_hours_day {
 	opacity: 0.55;
 }
 
-.awea-bh-row.is-closed .awea-bh-time {
+.awea_business_hours_row.awea_business_hours_is_closed .awea_business_hours_time {
 	color: #ef4444;
 	font-weight: 700;
 	letter-spacing: 0.05em;
 }
 
-.awea-bh-theme-dark .awea-bh-row.is-closed .awea-bh-time {
+.awea_business_hours_theme_dark .awea_business_hours_row.awea_business_hours_is_closed .awea_business_hours_time {
 	color: #f87171;
 }
 
-.awea-bh-tz {
+.awea_business_hours_tz {
 	margin-top: 20px;
 	font-size: 0.78rem;
-	color: var(--awea-bh-muted);
+	color: var(--awea_business_hours_muted);
 	letter-spacing: 0.03em;
 }
 
@@ -339,32 +359,40 @@
    3. Accessibility & Responsive Breakpoints
    -------------------------------------------------------------------------- */
 @media (prefers-reduced-motion: reduce) {
-	.awea-bh-pulse::after {
+	.awea_business_hours_pulse::after {
 		animation: none !important;
 	}
 }
 
 @media (max-width: 900px) {
-	.awea-bh-card {
+	.awea_business_hours_card,
+	.awea_business_hours_pos_left .awea_business_hours_card {
 		grid-template-columns: 1fr;
 		border-radius: 22px;
 	}
 
-	.awea-bh-left {
+	.awea_business_hours_pos_left .awea_business_hours_left,
+	.awea_business_hours_pos_left .awea_business_hours_right {
+		order: initial;
+	}
+
+	.awea_business_hours_left {
 		padding: 32px 24px;
 	}
 
-	.awea-bh-right {
+	.awea_business_hours_right,
+	.awea_business_hours_pos_left .awea_business_hours_right {
 		padding: 28px 24px 32px 24px;
-		border-left: none;
-		border-top: 1px solid var(--awea-bh-divider);
+		border-inline-start: none;
+		border-inline-end: none;
+		border-top: 1px solid var(--awea_business_hours_divider);
 	}
 
-	.awea-bh-title {
+	.awea_business_hours_title {
 		font-size: 1.85rem;
 	}
 
-	.awea-bh-phone-num {
+	.awea_business_hours_phone_num {
 		font-size: 1.15rem;
 	}
 }

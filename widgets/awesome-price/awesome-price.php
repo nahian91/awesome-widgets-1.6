@@ -47,7 +47,7 @@ class Widget_Awesome_Price extends Widget_Base {
 	protected function register_controls() {
 
 		/* ==========================================================================
-		   CONTENT: 1. ITEMS (REPEATER)
+		   CONTENT: 1. TIERS
 		   ========================================================================== */
 		$this->start_controls_section(
 			'awea_section_items',
@@ -93,7 +93,7 @@ class Widget_Awesome_Price extends Widget_Base {
 		$repeater->add_control(
 			'awea_ribbon',
 			[
-				'label'     => esc_html__( 'Ribbon Text', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Ribbon', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::TEXT,
 				'default'   => esc_html__( 'Most Popular', 'awesome-widgets-elementor' ),
 				'dynamic'   => [ 'active' => true ],
@@ -187,7 +187,7 @@ class Widget_Awesome_Price extends Widget_Base {
 		$repeater->add_control(
 			'awea_features_list',
 			[
-				'label'       => esc_html__( 'Checklist', 'awesome-widgets-elementor' ),
+				'label'       => esc_html__( 'List', 'awesome-widgets-elementor' ),
 				'type'        => Controls_Manager::REPEATER,
 				'fields'      => $feature_sub_repeater->get_controls(),
 				'default'     => [
@@ -222,7 +222,7 @@ class Widget_Awesome_Price extends Widget_Base {
 		$repeater->add_control(
 			'awea_btn_link',
 			[
-				'label'       => esc_html__( 'URL', 'awesome-widgets-elementor' ),
+				'label'       => esc_html__( 'Link', 'awesome-widgets-elementor' ),
 				'type'        => Controls_Manager::URL,
 				'dynamic'     => [ 'active' => true ],
 				'default'     => [ 'url' => '#' ],
@@ -241,7 +241,7 @@ class Widget_Awesome_Price extends Widget_Base {
 		$repeater->add_control(
 			'awea_item_border',
 			[
-				'label'     => esc_html__( 'Card Border', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Border', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} {{CURRENT_ITEM}}' => 'border-color: {{VALUE}};',
@@ -252,7 +252,7 @@ class Widget_Awesome_Price extends Widget_Base {
 		$repeater->add_control(
 			'awea_item_bg',
 			[
-				'label'     => esc_html__( 'Card Background', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Background', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} {{CURRENT_ITEM}}' => 'background-color: {{VALUE}};',
@@ -267,7 +267,7 @@ class Widget_Awesome_Price extends Widget_Base {
 		$this->add_control(
 			'awea_pricing_tiers',
 			[
-				'label'       => esc_html__( 'Tiers', 'awesome-widgets-elementor' ),
+				'label'       => esc_html__( 'List', 'awesome-widgets-elementor' ),
 				'type'        => Controls_Manager::REPEATER,
 				'fields'      => $repeater->get_controls(),
 				'title_field' => '{{{ awea_title }}} ({{{ awea_currency }}}{{{ awea_price }}})',
@@ -296,12 +296,12 @@ class Widget_Awesome_Price extends Widget_Base {
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   CONTENT: 2. LAYOUT
+		   CONTENT: 2. GRID
 		   ========================================================================== */
 		$this->start_controls_section(
 			'awea_section_layout',
 			[
-				'label' => esc_html__( 'Layout', 'awesome-widgets-elementor' ),
+				'label' => esc_html__( 'Grid', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
 			]
 		);
@@ -402,6 +402,7 @@ class Widget_Awesome_Price extends Widget_Base {
 			Group_Control_Border::get_type(),
 			[
 				'name'           => 'awea_card_border',
+				'label'          => esc_html__( 'Border', 'awesome-widgets-elementor' ),
 				'selector'       => '{{WRAPPER}} .awea-pricing-card',
 				'fields_options' => [
 					'border' => [ 'default' => 'solid' ],
@@ -423,6 +424,7 @@ class Widget_Awesome_Price extends Widget_Base {
 			Group_Control_Box_Shadow::get_type(),
 			[
 				'name'     => 'awea_card_shadow',
+				'label'    => esc_html__( 'Shadow', 'awesome-widgets-elementor' ),
 				'selector' => '{{WRAPPER}} .awea-pricing-card',
 			]
 		);
@@ -449,7 +451,7 @@ class Widget_Awesome_Price extends Widget_Base {
 		$this->add_control(
 			'awea_card_border_hover',
 			[
-				'label'     => esc_html__( 'Border Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Border', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [
 					'default' => Global_Colors::COLOR_PRIMARY,
@@ -464,6 +466,7 @@ class Widget_Awesome_Price extends Widget_Base {
 			Group_Control_Box_Shadow::get_type(),
 			[
 				'name'     => 'awea_card_shadow_hover',
+				'label'    => esc_html__( 'Shadow', 'awesome-widgets-elementor' ),
 				'selector' => '{{WRAPPER}} .awea-pricing-card:hover',
 			]
 		);
@@ -471,13 +474,16 @@ class Widget_Awesome_Price extends Widget_Base {
 		$this->end_controls_tab();
 		$this->end_controls_tabs();
 
-		// Featured Overrides
-		$this->add_control(
-			'awea_heading_featured_style',
+		$this->end_controls_section();
+
+		/* ==========================================================================
+		   STYLE: 2. FEATURED
+		   ========================================================================== */
+		$this->start_controls_section(
+			'awea_style_featured',
 			[
-				'label'     => esc_html__( 'Featured', 'awesome-widgets-elementor' ),
-				'type'      => Controls_Manager::HEADING,
-				'separator' => 'before',
+				'label' => esc_html__( 'Featured', 'awesome-widgets-elementor' ),
+				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
 
@@ -495,7 +501,7 @@ class Widget_Awesome_Price extends Widget_Base {
 		$this->add_control(
 			'awea_featured_border',
 			[
-				'label'     => esc_html__( 'Border Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Border', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [
 					'default' => Global_Colors::COLOR_PRIMARY,
@@ -509,12 +515,12 @@ class Widget_Awesome_Price extends Widget_Base {
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   STYLE: 2. HEADER
+		   STYLE: 3. TITLE
 		   ========================================================================== */
 		$this->start_controls_section(
 			'awea_style_header',
 			[
-				'label' => esc_html__( 'Header', 'awesome-widgets-elementor' ),
+				'label' => esc_html__( 'Title', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -522,7 +528,7 @@ class Widget_Awesome_Price extends Widget_Base {
 		$this->add_control(
 			'awea_header_color',
 			[
-				'label'     => esc_html__( 'Title Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [
 					'default' => Global_Colors::COLOR_PRIMARY,
@@ -536,7 +542,7 @@ class Widget_Awesome_Price extends Widget_Base {
 		$this->add_control(
 			'awea_header_bg',
 			[
-				'label'     => esc_html__( 'Title Background', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Background', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => 'rgba(79, 70, 229, 0.08)',
 				'selectors' => [
@@ -549,6 +555,7 @@ class Widget_Awesome_Price extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'awea_header_typo',
+				'label'    => esc_html__( 'Typography', 'awesome-widgets-elementor' ),
 				'selector' => '{{WRAPPER}} .awea-pricing-plan-tag',
 				'global'   => [
 					'default' => Global_Typography::TYPOGRAPHY_SECONDARY,
@@ -556,12 +563,16 @@ class Widget_Awesome_Price extends Widget_Base {
 			]
 		);
 
-		$this->add_control(
-			'awea_heading_ribbon_style',
+		$this->end_controls_section();
+
+		/* ==========================================================================
+		   STYLE: 4. RIBBON
+		   ========================================================================== */
+		$this->start_controls_section(
+			'awea_style_ribbon',
 			[
-				'label'     => esc_html__( 'Ribbon', 'awesome-widgets-elementor' ),
-				'type'      => Controls_Manager::HEADING,
-				'separator' => 'before',
+				'label' => esc_html__( 'Ribbon', 'awesome-widgets-elementor' ),
+				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
 
@@ -595,6 +606,7 @@ class Widget_Awesome_Price extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'awea_ribbon_typo',
+				'label'    => esc_html__( 'Typography', 'awesome-widgets-elementor' ),
 				'selector' => '{{WRAPPER}} .awea-pricing-ribbon',
 				'global'   => [
 					'default' => Global_Typography::TYPOGRAPHY_SECONDARY,
@@ -605,12 +617,12 @@ class Widget_Awesome_Price extends Widget_Base {
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   STYLE: 3. PRICING
+		   STYLE: 5. CURRENCY
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_style_pricing',
+			'awea_style_currency',
 			[
-				'label' => esc_html__( 'Pricing', 'awesome-widgets-elementor' ),
+				'label' => esc_html__( 'Currency', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -618,7 +630,7 @@ class Widget_Awesome_Price extends Widget_Base {
 		$this->add_control(
 			'awea_currency_color',
 			[
-				'label'     => esc_html__( 'Currency Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [
 					'default' => Global_Colors::COLOR_PRIMARY,
@@ -633,7 +645,7 @@ class Widget_Awesome_Price extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'awea_currency_typo',
-				'label'    => esc_html__( 'Currency Typography', 'awesome-widgets-elementor' ),
+				'label'    => esc_html__( 'Typography', 'awesome-widgets-elementor' ),
 				'selector' => '{{WRAPPER}} .awea-pricing-currency',
 				'global'   => [
 					'default' => Global_Typography::TYPOGRAPHY_SECONDARY,
@@ -641,10 +653,23 @@ class Widget_Awesome_Price extends Widget_Base {
 			]
 		);
 
+		$this->end_controls_section();
+
+		/* ==========================================================================
+		   STYLE: 6. AMOUNT
+		   ========================================================================== */
+		$this->start_controls_section(
+			'awea_style_amount',
+			[
+				'label' => esc_html__( 'Amount', 'awesome-widgets-elementor' ),
+				'tab'   => Controls_Manager::TAB_STYLE,
+			]
+		);
+
 		$this->add_control(
 			'awea_price_color',
 			[
-				'label'     => esc_html__( 'Amount Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [
 					'default' => Global_Colors::COLOR_PRIMARY,
@@ -652,7 +677,6 @@ class Widget_Awesome_Price extends Widget_Base {
 				'selectors' => [
 					'{{WRAPPER}} .awea-pricing-amount' => 'color: {{VALUE}};',
 				],
-				'separator' => 'before',
 			]
 		);
 
@@ -660,6 +684,7 @@ class Widget_Awesome_Price extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'awea_price_typo',
+				'label'    => esc_html__( 'Typography', 'awesome-widgets-elementor' ),
 				'selector' => '{{WRAPPER}} .awea-pricing-amount',
 				'global'   => [
 					'default' => Global_Typography::TYPOGRAPHY_PRIMARY,
@@ -667,10 +692,23 @@ class Widget_Awesome_Price extends Widget_Base {
 			]
 		);
 
+		$this->end_controls_section();
+
+		/* ==========================================================================
+		   STYLE: 7. PERIOD
+		   ========================================================================== */
+		$this->start_controls_section(
+			'awea_style_period',
+			[
+				'label' => esc_html__( 'Period', 'awesome-widgets-elementor' ),
+				'tab'   => Controls_Manager::TAB_STYLE,
+			]
+		);
+
 		$this->add_control(
 			'awea_period_color',
 			[
-				'label'     => esc_html__( 'Period Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [
 					'default' => Global_Colors::COLOR_TEXT,
@@ -678,7 +716,6 @@ class Widget_Awesome_Price extends Widget_Base {
 				'selectors' => [
 					'{{WRAPPER}} .awea-pricing-cycle' => 'color: {{VALUE}};',
 				],
-				'separator' => 'before',
 			]
 		);
 
@@ -686,7 +723,7 @@ class Widget_Awesome_Price extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'awea_period_typo',
-				'label'    => esc_html__( 'Period Typography', 'awesome-widgets-elementor' ),
+				'label'    => esc_html__( 'Typography', 'awesome-widgets-elementor' ),
 				'selector' => '{{WRAPPER}} .awea-pricing-cycle',
 				'global'   => [
 					'default' => Global_Typography::TYPOGRAPHY_TEXT,
@@ -697,7 +734,7 @@ class Widget_Awesome_Price extends Widget_Base {
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   STYLE: 4. FEATURES
+		   STYLE: 8. FEATURES
 		   ========================================================================== */
 		$this->start_controls_section(
 			'awea_style_features',
@@ -710,7 +747,7 @@ class Widget_Awesome_Price extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_feature_icon_size',
 			[
-				'label'      => esc_html__( 'Icon Size', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Icon', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [ 'px' => [ 'min' => 10, 'max' => 28 ] ],
@@ -725,7 +762,7 @@ class Widget_Awesome_Price extends Widget_Base {
 		$this->add_control(
 			'awea_feature_icon_color',
 			[
-				'label'     => esc_html__( 'Icon Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Accent', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [
 					'default' => Global_Colors::COLOR_ACCENT,
@@ -740,7 +777,7 @@ class Widget_Awesome_Price extends Widget_Base {
 		$this->add_control(
 			'awea_feature_text_color',
 			[
-				'label'     => esc_html__( 'Text Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [
 					'default' => Global_Colors::COLOR_TEXT,
@@ -754,7 +791,7 @@ class Widget_Awesome_Price extends Widget_Base {
 		$this->add_control(
 			'awea_feature_disabled_color',
 			[
-				'label'     => esc_html__( 'Excluded Item Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Excluded', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#94a3b8',
 				'selectors' => [
@@ -769,6 +806,7 @@ class Widget_Awesome_Price extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'awea_feature_text_typo',
+				'label'    => esc_html__( 'Typography', 'awesome-widgets-elementor' ),
 				'selector' => '{{WRAPPER}} .awea-pricing-feature-item',
 				'global'   => [
 					'default' => Global_Typography::TYPOGRAPHY_TEXT,
@@ -793,7 +831,7 @@ class Widget_Awesome_Price extends Widget_Base {
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   STYLE: 5. BUTTON
+		   STYLE: 9. BUTTON
 		   ========================================================================== */
 		$this->start_controls_section(
 			'awea_style_button',
@@ -807,6 +845,7 @@ class Widget_Awesome_Price extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'awea_btn_typo',
+				'label'    => esc_html__( 'Typography', 'awesome-widgets-elementor' ),
 				'selector' => '{{WRAPPER}} .awea-pricing-btn-cta',
 				'global'   => [
 					'default' => Global_Typography::TYPOGRAPHY_SECONDARY,

@@ -59,7 +59,7 @@ class Widget_Awesome_Heading extends Widget_Base {
 		$this->add_control(
 			'awea_badge_show',
 			[
-				'label'        => esc_html__( 'Show Badge', 'awesome-widgets-elementor' ),
+				'label'        => esc_html__( 'Display', 'awesome-widgets-elementor' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'label_on'     => esc_html__( 'Yes', 'awesome-widgets-elementor' ),
 				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
@@ -92,7 +92,7 @@ class Widget_Awesome_Heading extends Widget_Base {
 		$this->add_control(
 			'awea_badge_dot',
 			[
-				'label'        => esc_html__( 'Pulse Dot', 'awesome-widgets-elementor' ),
+				'label'        => esc_html__( 'Dot', 'awesome-widgets-elementor' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'label_on'     => esc_html__( 'Yes', 'awesome-widgets-elementor' ),
 				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
@@ -129,7 +129,7 @@ class Widget_Awesome_Heading extends Widget_Base {
 		$this->add_control(
 			'awea_highlight_text',
 			[
-				'label'       => esc_html__( 'Highlight Phrase', 'awesome-widgets-elementor' ),
+				'label'       => esc_html__( 'Highlight', 'awesome-widgets-elementor' ),
 				'description' => esc_html__( 'Type any word or phrase from your Title to highlight it.', 'awesome-widgets-elementor' ),
 				'type'        => Controls_Manager::TEXT,
 				'default'     => esc_html__( 'Standard Grid.', 'awesome-widgets-elementor' ),
@@ -141,13 +141,13 @@ class Widget_Awesome_Heading extends Widget_Base {
 		$this->add_control(
 			'awea_highlight_style',
 			[
-				'label'        => esc_html__( 'Highlight Style', 'awesome-widgets-elementor' ),
+				'label'        => esc_html__( 'Style', 'awesome-widgets-elementor' ),
 				'type'         => Controls_Manager::SELECT,
 				'default'      => 'color',
 				'options'      => [
-					'color'     => esc_html__( 'Accent Color', 'awesome-widgets-elementor' ),
-					'underline' => esc_html__( 'Clean Underline', 'awesome-widgets-elementor' ),
-					'marker'    => esc_html__( 'Soft Marker', 'awesome-widgets-elementor' ),
+					'color'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
+					'underline' => esc_html__( 'Underline', 'awesome-widgets-elementor' ),
+					'marker'    => esc_html__( 'Marker', 'awesome-widgets-elementor' ),
 				],
 				'condition'    => [ 'awea_highlight_text!' => '' ],
 				'prefix_class' => 'awea-hd-hl-',
@@ -157,7 +157,7 @@ class Widget_Awesome_Heading extends Widget_Base {
 		$this->add_control(
 			'awea_title_tag',
 			[
-				'label'   => esc_html__( 'HTML Tag', 'awesome-widgets-elementor' ),
+				'label'   => esc_html__( 'Tag', 'awesome-widgets-elementor' ),
 				'type'    => Controls_Manager::SELECT,
 				'default' => 'h2',
 				'options' => [
@@ -174,10 +174,23 @@ class Widget_Awesome_Heading extends Widget_Base {
 			]
 		);
 
+		$this->end_controls_section();
+
+		/* ==========================================================================
+		   CONTENT: 3. DESCRIPTION
+		   ========================================================================== */
+		$this->start_controls_section(
+			'awea_section_description',
+			[
+				'label' => esc_html__( 'Description', 'awesome-widgets-elementor' ),
+				'tab'   => Controls_Manager::TAB_CONTENT,
+			]
+		);
+
 		$this->add_control(
 			'awea_desc',
 			[
-				'label'   => esc_html__( 'Description', 'awesome-widgets-elementor' ),
+				'label'   => esc_html__( 'Text', 'awesome-widgets-elementor' ),
 				'type'    => Controls_Manager::TEXTAREA,
 				'rows'    => 4,
 				'default' => esc_html__( 'Reimagining digital interfaces through clean architectural structure, balanced typography, and effortless clarity.', 'awesome-widgets-elementor' ),
@@ -188,7 +201,7 @@ class Widget_Awesome_Heading extends Widget_Base {
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   CONTENT: 3. DIVIDER
+		   CONTENT: 4. DIVIDER
 		   ========================================================================== */
 		$this->start_controls_section(
 			'awea_section_divider',
@@ -206,9 +219,9 @@ class Widget_Awesome_Heading extends Widget_Base {
 				'default'      => 'beam',
 				'options'      => [
 					'none'  => esc_html__( 'None', 'awesome-widgets-elementor' ),
-					'beam'  => esc_html__( 'Flowing Beam', 'awesome-widgets-elementor' ),
-					'solid' => esc_html__( 'Solid Line', 'awesome-widgets-elementor' ),
-					'dots'  => esc_html__( 'Accent Dots', 'awesome-widgets-elementor' ),
+					'beam'  => esc_html__( 'Beam', 'awesome-widgets-elementor' ),
+					'solid' => esc_html__( 'Line', 'awesome-widgets-elementor' ),
+					'dots'  => esc_html__( 'Dots', 'awesome-widgets-elementor' ),
 				],
 				'prefix_class' => 'awea-hd-div-',
 			]
@@ -221,8 +234,8 @@ class Widget_Awesome_Heading extends Widget_Base {
 				'type'      => Controls_Manager::SELECT,
 				'default'   => 'below',
 				'options'   => [
-					'above' => esc_html__( 'Above Title', 'awesome-widgets-elementor' ),
-					'below' => esc_html__( 'Below Title', 'awesome-widgets-elementor' ),
+					'above' => esc_html__( 'Above', 'awesome-widgets-elementor' ),
+					'below' => esc_html__( 'Below', 'awesome-widgets-elementor' ),
 				],
 				'condition' => [ 'awea_divider_style!' => 'none' ],
 			]
@@ -231,21 +244,20 @@ class Widget_Awesome_Heading extends Widget_Base {
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   CONTENT: 4. BUTTONS
+		   CONTENT: 5. PRIMARY
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_section_buttons',
+			'awea_section_btn1',
 			[
-				'label' => esc_html__( 'Buttons', 'awesome-widgets-elementor' ),
+				'label' => esc_html__( 'Primary', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
 			]
 		);
 
-		// Primary Button
 		$this->add_control(
 			'awea_btn1_show',
 			[
-				'label'        => esc_html__( 'Primary Button', 'awesome-widgets-elementor' ),
+				'label'        => esc_html__( 'Display', 'awesome-widgets-elementor' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'label_on'     => esc_html__( 'Yes', 'awesome-widgets-elementor' ),
 				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
@@ -292,7 +304,7 @@ class Widget_Awesome_Heading extends Widget_Base {
 		$this->add_control(
 			'awea_btn1_icon_pos',
 			[
-				'label'     => esc_html__( 'Icon Position', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Position', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::SELECT,
 				'default'   => 'right',
 				'options'   => [
@@ -303,17 +315,28 @@ class Widget_Awesome_Heading extends Widget_Base {
 			]
 		);
 
-		// Secondary Button
+		$this->end_controls_section();
+
+		/* ==========================================================================
+		   CONTENT: 6. SECONDARY
+		   ========================================================================== */
+		$this->start_controls_section(
+			'awea_section_btn2',
+			[
+				'label' => esc_html__( 'Secondary', 'awesome-widgets-elementor' ),
+				'tab'   => Controls_Manager::TAB_CONTENT,
+			]
+		);
+
 		$this->add_control(
 			'awea_btn2_show',
 			[
-				'label'        => esc_html__( 'Second Button', 'awesome-widgets-elementor' ),
+				'label'        => esc_html__( 'Display', 'awesome-widgets-elementor' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'label_on'     => esc_html__( 'Yes', 'awesome-widgets-elementor' ),
 				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
 				'return_value' => 'yes',
 				'default'      => 'no',
-				'separator'    => 'before',
 			]
 		);
 
@@ -351,7 +374,7 @@ class Widget_Awesome_Heading extends Widget_Base {
 		$this->add_control(
 			'awea_btn2_icon_pos',
 			[
-				'label'     => esc_html__( 'Icon Position', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Position', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::SELECT,
 				'default'   => 'right',
 				'options'   => [
@@ -365,7 +388,7 @@ class Widget_Awesome_Heading extends Widget_Base {
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   CONTENT: 5. LAYOUT
+		   CONTENT: 7. LAYOUT
 		   ========================================================================== */
 		$this->start_controls_section(
 			'awea_section_layout',
@@ -412,7 +435,7 @@ class Widget_Awesome_Heading extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_max_width',
 			[
-				'label'      => esc_html__( 'Max Width', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Width', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px', '%' ],
 				'range'      => [
@@ -469,7 +492,7 @@ class Widget_Awesome_Heading extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_badge_icon_size',
 			[
-				'label'      => esc_html__( 'Icon Size', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Icon', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [ 'px' => [ 'min' => 10, 'max' => 28 ] ],
@@ -485,6 +508,7 @@ class Widget_Awesome_Heading extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'awea_badge_typo',
+				'label'    => esc_html__( 'Typography', 'awesome-widgets-elementor' ),
 				'selector' => '{{WRAPPER}} .awea-hd-badge',
 				'global'   => [ 'default' => Global_Typography::TYPOGRAPHY_SECONDARY ],
 			]
@@ -494,6 +518,7 @@ class Widget_Awesome_Heading extends Widget_Base {
 			Group_Control_Border::get_type(),
 			[
 				'name'           => 'awea_badge_border',
+				'label'          => esc_html__( 'Border', 'awesome-widgets-elementor' ),
 				'selector'       => '{{WRAPPER}} .awea-hd-badge',
 				'fields_options' => [
 					'border' => [ 'default' => 'solid' ],
@@ -514,7 +539,7 @@ class Widget_Awesome_Heading extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_badge_radius',
 			[
-				'label'      => esc_html__( 'Border Radius', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Radius', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'default'    => [
@@ -554,7 +579,7 @@ class Widget_Awesome_Heading extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_badge_space',
 			[
-				'label'      => esc_html__( 'Bottom Spacing', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Spacing', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [ 'px' => [ 'min' => 0, 'max' => 60 ] ],
@@ -594,7 +619,7 @@ class Widget_Awesome_Heading extends Widget_Base {
 		$this->add_control(
 			'awea_hl_color',
 			[
-				'label'     => esc_html__( 'Highlight Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Highlight', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
 				'condition' => [ 'awea_highlight_text!' => '' ],
@@ -608,6 +633,7 @@ class Widget_Awesome_Heading extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'awea_title_typo',
+				'label'    => esc_html__( 'Typography', 'awesome-widgets-elementor' ),
 				'selector' => '{{WRAPPER}} .awea-hd-title',
 				'global'   => [ 'default' => Global_Typography::TYPOGRAPHY_PRIMARY ],
 			]
@@ -616,7 +642,7 @@ class Widget_Awesome_Heading extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_title_space',
 			[
-				'label'      => esc_html__( 'Bottom Spacing', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Spacing', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [ 'px' => [ 'min' => 0, 'max' => 80 ] ],
@@ -677,7 +703,7 @@ class Widget_Awesome_Heading extends Widget_Base {
 		$this->add_control(
 			'awea_div_track',
 			[
-				'label'     => esc_html__( 'Track Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Track', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#e2e8f0',
 				'condition' => [ 'awea_divider_style' => 'beam' ],
@@ -704,7 +730,7 @@ class Widget_Awesome_Heading extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_div_space',
 			[
-				'label'      => esc_html__( 'Bottom Spacing', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Spacing', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [ 'px' => [ 'min' => 0, 'max' => 60 ] ],
@@ -745,6 +771,7 @@ class Widget_Awesome_Heading extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'awea_desc_typo',
+				'label'    => esc_html__( 'Typography', 'awesome-widgets-elementor' ),
 				'selector' => '{{WRAPPER}} .awea-hd-desc',
 				'global'   => [ 'default' => Global_Typography::TYPOGRAPHY_TEXT ],
 			]
@@ -753,7 +780,7 @@ class Widget_Awesome_Heading extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_desc_width',
 			[
-				'label'      => esc_html__( 'Max Width', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Width', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px', '%' ],
 				'range'      => [
@@ -770,7 +797,7 @@ class Widget_Awesome_Heading extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_desc_space',
 			[
-				'label'      => esc_html__( 'Bottom Spacing', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Spacing', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [ 'px' => [ 'min' => 0, 'max' => 80 ] ],
@@ -798,6 +825,7 @@ class Widget_Awesome_Heading extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'awea_btn_typo',
+				'label'    => esc_html__( 'Typography', 'awesome-widgets-elementor' ),
 				'selector' => '{{WRAPPER}} .awea-hd-btn',
 				'global'   => [ 'default' => Global_Typography::TYPOGRAPHY_ACCENT ],
 			]
@@ -806,7 +834,7 @@ class Widget_Awesome_Heading extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_btn_icon_size',
 			[
-				'label'      => esc_html__( 'Icon Size', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Icon', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [ 'px' => [ 'min' => 10, 'max' => 28 ] ],
@@ -821,7 +849,7 @@ class Widget_Awesome_Heading extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_btn_gap',
 			[
-				'label'      => esc_html__( 'Button Spacing', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Gap', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [ 'px' => [ 'min' => 4, 'max' => 40 ] ],
@@ -855,7 +883,7 @@ class Widget_Awesome_Heading extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_btn_radius',
 			[
-				'label'      => esc_html__( 'Border Radius', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Radius', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'default'    => [
@@ -872,21 +900,21 @@ class Widget_Awesome_Heading extends Widget_Base {
 			]
 		);
 
-		// Primary Button Tabs
-		$this->add_control(
-			'awea_btn1_heading',
+		$this->end_controls_section();
+
+		/* ==========================================================================
+		   STYLE: 6. PRIMARY
+		   ========================================================================== */
+		$this->start_controls_section(
+			'awea_style_btn1',
 			[
-				'label'     => esc_html__( 'Primary Button', 'awesome-widgets-elementor' ),
-				'type'      => Controls_Manager::HEADING,
-				'separator' => 'before',
+				'label'     => esc_html__( 'Primary', 'awesome-widgets-elementor' ),
+				'tab'       => Controls_Manager::TAB_STYLE,
 				'condition' => [ 'awea_btn1_show' => 'yes' ],
 			]
 		);
 
-		$this->start_controls_tabs(
-			'awea_btn1_tabs',
-			[ 'condition' => [ 'awea_btn1_show' => 'yes' ] ]
-		);
+		$this->start_controls_tabs( 'awea_btn1_tabs' );
 
 		$this->start_controls_tab(
 			'awea_btn1_normal',
@@ -922,6 +950,7 @@ class Widget_Awesome_Heading extends Widget_Base {
 			Group_Control_Border::get_type(),
 			[
 				'name'           => 'awea_btn1_border',
+				'label'          => esc_html__( 'Border', 'awesome-widgets-elementor' ),
 				'selector'       => '{{WRAPPER}} .awea-hd-btn-primary',
 				'fields_options' => [
 					'border' => [ 'default' => 'solid' ],
@@ -974,7 +1003,7 @@ class Widget_Awesome_Heading extends Widget_Base {
 		$this->add_control(
 			'awea_btn1_border_hover',
 			[
-				'label'     => esc_html__( 'Border Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Border', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .awea-hd-btn-primary:hover, {{WRAPPER}} .awea-hd-btn-primary:focus-visible' => 'border-color: {{VALUE}};',
@@ -985,21 +1014,21 @@ class Widget_Awesome_Heading extends Widget_Base {
 		$this->end_controls_tab();
 		$this->end_controls_tabs();
 
-		// Secondary Button Tabs
-		$this->add_control(
-			'awea_btn2_heading',
+		$this->end_controls_section();
+
+		/* ==========================================================================
+		   STYLE: 7. SECONDARY
+		   ========================================================================== */
+		$this->start_controls_section(
+			'awea_style_btn2',
 			[
-				'label'     => esc_html__( 'Second Button', 'awesome-widgets-elementor' ),
-				'type'      => Controls_Manager::HEADING,
-				'separator' => 'before',
+				'label'     => esc_html__( 'Secondary', 'awesome-widgets-elementor' ),
+				'tab'       => Controls_Manager::TAB_STYLE,
 				'condition' => [ 'awea_btn2_show' => 'yes' ],
 			]
 		);
 
-		$this->start_controls_tabs(
-			'awea_btn2_tabs',
-			[ 'condition' => [ 'awea_btn2_show' => 'yes' ] ]
-		);
+		$this->start_controls_tabs( 'awea_btn2_tabs' );
 
 		$this->start_controls_tab(
 			'awea_btn2_normal',
@@ -1035,6 +1064,7 @@ class Widget_Awesome_Heading extends Widget_Base {
 			Group_Control_Border::get_type(),
 			[
 				'name'           => 'awea_btn2_border',
+				'label'          => esc_html__( 'Border', 'awesome-widgets-elementor' ),
 				'selector'       => '{{WRAPPER}} .awea-hd-btn-secondary',
 				'fields_options' => [
 					'border' => [ 'default' => 'solid' ],
@@ -1087,7 +1117,7 @@ class Widget_Awesome_Heading extends Widget_Base {
 		$this->add_control(
 			'awea_btn2_border_hover',
 			[
-				'label'     => esc_html__( 'Border Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Border', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#0f172a',
 				'selectors' => [

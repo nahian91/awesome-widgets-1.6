@@ -1,11 +1,11 @@
 /* ==========================================================================
-   Awesome Breadcrumb Widget
+   Awesome Breadcrumb Widget (v2.0.0)
    ========================================================================== */
 
-.awea-bc-hero {
-	--awea-bc-justify: center;
-	--awea-bc-ml: auto;
-	--awea-bc-mr: auto;
+.awea_breadcrumb_hero {
+	--awea_breadcrumb_justify: center;
+	--awea_breadcrumb_ml: auto;
+	--awea_breadcrumb_mr: auto;
 
 	position: relative;
 	width: 100%;
@@ -17,16 +17,16 @@
 	box-sizing: border-box;
 }
 
-.awea-bc-hero *,
-.awea-bc-hero *::before,
-.awea-bc-hero *::after {
+.awea_breadcrumb_hero *,
+.awea_breadcrumb_hero *::before,
+.awea_breadcrumb_hero *::after {
 	box-sizing: border-box;
 }
 
 /* --------------------------------------------------------------------------
-1. Backdrop Overlay
+   1. Backdrop Overlay
    -------------------------------------------------------------------------- */
-.awea-bc-hero::before {
+.awea_breadcrumb_hero::before {
 	content: "";
 	position: absolute;
 	inset: 0;
@@ -36,11 +36,12 @@
 	transition: opacity 0.3s ease;
 }
 
-.awea-bc-inner {
+.awea_breadcrumb_inner {
 	position: relative;
 	z-index: 2;
 	display: flex;
 	flex-direction: column;
+	align-items: var(--awea_breadcrumb_justify, center);
 	gap: 16px;
 	width: 100%;
 	max-width: 1240px;
@@ -48,9 +49,13 @@
 }
 
 /* --------------------------------------------------------------------------
-2. Page Title & Subtitle
+   2. Page Title & Subtitle
    -------------------------------------------------------------------------- */
-.awea-bc-title {
+.awea_breadcrumb_header {
+	width: 100%;
+}
+
+.awea_breadcrumb_title {
 	margin: 0;
 	font-size: clamp(1.875rem, 4.2vw, 3rem);
 	font-weight: 800;
@@ -60,9 +65,9 @@
 	word-break: break-word;
 }
 
-.awea-bc-subtitle {
+.awea_breadcrumb_subtitle {
 	max-width: 640px;
-	margin: 10px var(--awea-bc-mr, auto) 0 var(--awea-bc-ml, auto);
+	margin: 10px var(--awea_breadcrumb_mr, auto) 0 var(--awea_breadcrumb_ml, auto);
 	font-size: 1.025rem;
 	line-height: 1.6;
 	color: rgba(255, 255, 255, 0.72);
@@ -70,19 +75,19 @@
 }
 
 /* --------------------------------------------------------------------------
-3. Breadcrumb Navigation Trail
+   3. Breadcrumb Navigation Trail
    -------------------------------------------------------------------------- */
-.awea-bc-nav {
+.awea_breadcrumb_nav {
 	display: flex;
 	align-items: center;
-	justify-content: var(--awea-bc-justify, center);
+	justify-content: var(--awea_breadcrumb_justify, center);
 }
 
-.awea-bc-list {
+.awea_breadcrumb_list {
 	display: inline-flex;
 	flex-wrap: wrap;
 	align-items: center;
-	justify-content: var(--awea-bc-justify, center);
+	justify-content: var(--awea_breadcrumb_justify, center);
 	list-style: none;
 	margin: 0;
 	padding: 0;
@@ -90,7 +95,7 @@
 	line-height: 1.4;
 }
 
-.awea-bc-pill-yes .awea-bc-list {
+.awea_breadcrumb_pill_yes .awea_breadcrumb_list {
 	padding: 8px 18px;
 	border-radius: 100px;
 	background-color: rgba(255, 255, 255, 0.08);
@@ -99,37 +104,37 @@
 	-webkit-backdrop-filter: blur(10px);
 }
 
-.awea-bc-item {
+.awea_breadcrumb_item {
 	display: inline-flex;
 	align-items: center;
 	line-height: 1.35;
 }
 
-.awea-bc-item a,
-.awea-bc-text {
+.awea_breadcrumb_item a,
+.awea_breadcrumb_text {
 	display: inline-flex;
 	align-items: center;
 	gap: 6px;
 }
 
-.awea-bc-item a {
+.awea_breadcrumb_item a {
 	color: rgba(255, 255, 255, 0.74);
 	text-decoration: none;
 	transition: color 0.2s ease;
 }
 
-.awea-bc-item a:hover,
-.awea-bc-item a:focus-visible {
+.awea_breadcrumb_item a:hover,
+.awea_breadcrumb_item a:focus-visible {
 	color: #ffffff;
 }
 
-.awea-bc-item a:focus-visible {
+.awea_breadcrumb_item a:focus-visible {
 	outline: 2px solid currentColor;
 	outline-offset: 3px;
 	border-radius: 4px;
 }
 
-.awea-bc-home-ico {
+.awea_breadcrumb_home_ico {
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
@@ -137,27 +142,27 @@
 	flex-shrink: 0;
 }
 
-.awea-bc-home-ico svg {
+.awea_breadcrumb_home_ico svg {
 	width: 13px;
 	height: 13px;
 	fill: currentColor;
 	display: block;
 }
 
-.awea-bc-home-ico i {
+.awea_breadcrumb_home_ico i {
 	font-size: 13px;
 	line-height: 1;
 }
 
-.awea-bc-item.is-current {
+.awea_breadcrumb_item.awea_breadcrumb_is_current {
 	color: #ffffff;
 	font-weight: 700;
 }
 
 /* --------------------------------------------------------------------------
-4. Separators
+   4. Separators
    -------------------------------------------------------------------------- */
-.awea-bc-sep {
+.awea_breadcrumb_sep {
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
@@ -168,35 +173,39 @@
 	flex-shrink: 0;
 }
 
-.awea-bc-sep svg {
+.awea_breadcrumb_sep svg {
 	width: 13px;
 	height: 13px;
 	display: block;
 }
 
-.awea-bc-sep i {
+[dir="rtl"] .awea_breadcrumb_sep_chevron {
+	transform: scaleX(-1);
+}
+
+.awea_breadcrumb_sep i {
 	font-size: 12px;
 	line-height: 1;
 }
 
 /* --------------------------------------------------------------------------
-5. Responsive Breakpoints
+   5. Responsive Breakpoints
    -------------------------------------------------------------------------- */
 @media (max-width: 768px) {
-	.awea-bc-title {
+	.awea_breadcrumb_title {
 		font-size: 1.85rem;
 	}
 
-	.awea-bc-subtitle {
+	.awea_breadcrumb_subtitle {
 		font-size: 0.94rem;
 	}
 
-	.awea-bc-list {
+	.awea_breadcrumb_list {
 		font-size: 0.84rem;
 		row-gap: 4px;
 	}
 
-	.awea-bc-pill-yes .awea-bc-list {
+	.awea_breadcrumb_pill_yes .awea_breadcrumb_list {
 		padding: 7px 14px;
 		border-radius: 16px;
 	}

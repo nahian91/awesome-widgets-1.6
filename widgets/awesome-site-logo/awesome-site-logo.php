@@ -80,7 +80,7 @@ class Widget_Awesome_Site_Logo extends Widget_Base {
 				'default'   => 'custom',
 				'options'   => [
 					'custom'    => esc_html__( 'Custom', 'awesome-widgets-elementor' ),
-					'site_logo' => esc_html__( 'WordPress Site Identity', 'awesome-widgets-elementor' ),
+					'site_logo' => esc_html__( 'Identity', 'awesome-widgets-elementor' ),
 				],
 				'condition' => [
 					'awea_logo_type' => 'image',
@@ -107,7 +107,7 @@ class Widget_Awesome_Site_Logo extends Widget_Base {
 		$this->add_control(
 			'awea_retina_logo',
 			[
-				'label'       => esc_html__( 'Retina Logo (2x)', 'awesome-widgets-elementor' ),
+				'label'       => esc_html__( 'Retina', 'awesome-widgets-elementor' ),
 				'description' => esc_html__( 'Optional high-DPI 2x version for crisp rendering on Retina displays.', 'awesome-widgets-elementor' ),
 				'type'        => Controls_Manager::MEDIA,
 				'dynamic'     => [ 'active' => true ],
@@ -121,7 +121,7 @@ class Widget_Awesome_Site_Logo extends Widget_Base {
 		$this->add_control(
 			'awea_enable_hover_logo',
 			[
-				'label'        => esc_html__( 'Hover Image', 'awesome-widgets-elementor' ),
+				'label'        => esc_html__( 'Hover', 'awesome-widgets-elementor' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'label_on'     => esc_html__( 'Yes', 'awesome-widgets-elementor' ),
 				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
@@ -138,7 +138,7 @@ class Widget_Awesome_Site_Logo extends Widget_Base {
 		$this->add_control(
 			'awea_custom_hover_logo',
 			[
-				'label'     => esc_html__( 'Hover Image', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Hover', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::MEDIA,
 				'dynamic'   => [ 'active' => true ],
 				'condition' => [
@@ -152,7 +152,7 @@ class Widget_Awesome_Site_Logo extends Widget_Base {
 		$this->add_control(
 			'awea_enable_sticky_logo',
 			[
-				'label'        => esc_html__( 'Sticky Header Logo', 'awesome-widgets-elementor' ),
+				'label'        => esc_html__( 'Sticky', 'awesome-widgets-elementor' ),
 				'description'  => esc_html__( 'Automatically switches logo when parent header becomes sticky.', 'awesome-widgets-elementor' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'label_on'     => esc_html__( 'Yes', 'awesome-widgets-elementor' ),
@@ -168,7 +168,7 @@ class Widget_Awesome_Site_Logo extends Widget_Base {
 		$this->add_control(
 			'awea_sticky_logo',
 			[
-				'label'     => esc_html__( 'Sticky Image', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Sticky', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::MEDIA,
 				'dynamic'   => [ 'active' => true ],
 				'condition' => [
@@ -195,7 +195,7 @@ class Widget_Awesome_Site_Logo extends Widget_Base {
 		$this->add_control(
 			'awea_show_logo_icon',
 			[
-				'label'        => esc_html__( 'Brand Icon', 'awesome-widgets-elementor' ),
+				'label'        => esc_html__( 'Icon', 'awesome-widgets-elementor' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'label_on'     => esc_html__( 'Yes', 'awesome-widgets-elementor' ),
 				'label_off'    => esc_html__( 'No', 'awesome-widgets-elementor' ),
@@ -240,7 +240,7 @@ class Widget_Awesome_Site_Logo extends Widget_Base {
 		$this->add_control(
 			'awea_title_tag',
 			[
-				'label'     => esc_html__( 'HTML Tag', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Tag', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::SELECT,
 				'default'   => 'span',
 				'options'   => [
@@ -273,7 +273,7 @@ class Widget_Awesome_Site_Logo extends Widget_Base {
 		$this->add_control(
 			'awea_text_logo_tagline',
 			[
-				'label'       => esc_html__( 'Tagline Text', 'awesome-widgets-elementor' ),
+				'label'       => esc_html__( 'Text', 'awesome-widgets-elementor' ),
 				'type'        => Controls_Manager::TEXT,
 				'default'     => get_bloginfo( 'description' ),
 				'dynamic'     => [ 'active' => true ],
@@ -293,7 +293,7 @@ class Widget_Awesome_Site_Logo extends Widget_Base {
 		$this->start_controls_section(
 			'awea_section_layout',
 			[
-				'label' => esc_html__( 'Layout & Link', 'awesome-widgets-elementor' ),
+				'label' => esc_html__( 'Layout', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
 			]
 		);
@@ -307,7 +307,7 @@ class Widget_Awesome_Site_Logo extends Widget_Base {
 				'options' => [
 					'none'   => esc_html__( 'None', 'awesome-widgets-elementor' ),
 					'home'   => esc_html__( 'Home', 'awesome-widgets-elementor' ),
-					'custom' => esc_html__( 'Custom URL', 'awesome-widgets-elementor' ),
+					'custom' => esc_html__( 'Custom', 'awesome-widgets-elementor' ),
 				],
 			]
 		);
@@ -395,7 +395,7 @@ class Widget_Awesome_Site_Logo extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_logo_max_height',
 			[
-				'label'      => esc_html__( 'Max Height', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Height', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px', 'vh' ],
 				'range'      => [
@@ -410,7 +410,7 @@ class Widget_Awesome_Site_Logo extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_logo_radius',
 			[
-				'label'      => esc_html__( 'Border Radius', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Radius', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'selectors'  => [
@@ -423,6 +423,7 @@ class Widget_Awesome_Site_Logo extends Widget_Base {
 			Group_Control_Border::get_type(),
 			[
 				'name'     => 'awea_logo_border',
+				'label'    => esc_html__( 'Border', 'awesome-widgets-elementor' ),
 				'selector' => '{{WRAPPER}} .awea-site-logo-wrap img',
 			]
 		);
@@ -491,12 +492,12 @@ class Widget_Awesome_Site_Logo extends Widget_Base {
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   STYLE: 2. BRAND ICON (TEXT MODE)
+		   STYLE: 2. ICON
 		   ========================================================================== */
 		$this->start_controls_section(
 			'awea_style_logo_icon',
 			[
-				'label'     => esc_html__( 'Brand Icon', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Icon', 'awesome-widgets-elementor' ),
 				'tab'       => Controls_Manager::TAB_STYLE,
 				'condition' => [
 					'awea_logo_type'      => 'text',
@@ -567,9 +568,17 @@ class Widget_Awesome_Site_Logo extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'awea_title_typo',
+				'label'    => esc_html__( 'Typography', 'awesome-widgets-elementor' ),
 				'global'   => [ 'default' => Global_Typography::TYPOGRAPHY_PRIMARY ],
 				'selector' => '{{WRAPPER}} .awe-logo-title',
 			]
+		);
+
+		$this->start_controls_tabs( 'awea_title_style_tabs' );
+
+		$this->start_controls_tab(
+			'awea_title_style_normal',
+			[ 'label' => esc_html__( 'Normal', 'awesome-widgets-elementor' ) ]
 		);
 
 		$this->add_control(
@@ -584,10 +593,17 @@ class Widget_Awesome_Site_Logo extends Widget_Base {
 			]
 		);
 
+		$this->end_controls_tab();
+
+		$this->start_controls_tab(
+			'awea_title_style_hover',
+			[ 'label' => esc_html__( 'Hover', 'awesome-widgets-elementor' ) ]
+		);
+
 		$this->add_control(
 			'awea_title_color_hover',
 			[
-				'label'     => esc_html__( 'Hover Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [ 'default' => Global_Colors::COLOR_PRIMARY ],
 				'selectors' => [
@@ -595,6 +611,9 @@ class Widget_Awesome_Site_Logo extends Widget_Base {
 				],
 			]
 		);
+
+		$this->end_controls_tab();
+		$this->end_controls_tabs();
 
 		$this->end_controls_section();
 
@@ -617,6 +636,7 @@ class Widget_Awesome_Site_Logo extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'awea_tagline_typo',
+				'label'    => esc_html__( 'Typography', 'awesome-widgets-elementor' ),
 				'global'   => [ 'default' => Global_Typography::TYPOGRAPHY_TEXT ],
 				'selector' => '{{WRAPPER}} .awe-logo-tagline',
 			]
@@ -637,7 +657,7 @@ class Widget_Awesome_Site_Logo extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_tagline_space',
 			[
-				'label'      => esc_html__( 'Top Spacing', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Spacing', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [ 'px' => [ 'min' => 0, 'max' => 24 ] ],

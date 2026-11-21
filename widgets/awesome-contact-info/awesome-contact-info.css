@@ -1,75 +1,75 @@
 /* ==========================================================================
-   Awesome Contact Info Widget
+   Awesome Contact Info Widget (v2.0.0)
    ========================================================================== */
 
-.awea-ci-wrap {
-	--awea-ci-primary: var(--e-global-color-primary, #4f46e5);
-	--awea-ci-heading: #0f172a;
-	--awea-ci-muted: #64748b;
-	--awea-ci-subtext: #94a3b8;
-	--awea-ci-border: #e2e8f0;
+.awea_contact_info_wrap {
+	--awea_contact_info_primary: var(--e-global-color-primary, #4f46e5);
+	--awea_contact_info_heading: #0f172a;
+	--awea_contact_info_muted: #64748b;
+	--awea_contact_info_subtext: #94a3b8;
+	--awea_contact_info_border: #e2e8f0;
 
 	width: 100%;
 	position: relative;
 	box-sizing: border-box;
 }
 
-.awea-ci-wrap *,
-.awea-ci-wrap *::before,
-.awea-ci-wrap *::after {
+.awea_contact_info_wrap *,
+.awea_contact_info_wrap *::before,
+.awea_contact_info_wrap *::after {
 	box-sizing: border-box;
 }
 
 /* --------------------------------------------------------------------------
-1. Directory Header
+   1. Directory Header
    -------------------------------------------------------------------------- */
-.awea-ci-header {
+.awea_contact_info_header {
 	margin-bottom: 28px;
-	border-left: 3px solid var(--awea-ci-primary);
-	padding-left: 16px;
+	border-inline-start: 3px solid var(--awea_contact_info_primary);
+	padding-inline-start: 16px;
 }
 
-.awea-ci-header.awea-ci-no-bar {
-	border-left: none;
-	padding-left: 0;
+.awea_contact_info_header.awea_contact_info_no_bar {
+	border-inline-start: none;
+	padding-inline-start: 0;
 }
 
-.awea-ci-title {
+.awea_contact_info_title {
 	margin: 0;
 	font-size: clamp(1.6rem, 3.2vw, 2.15rem);
 	font-weight: 800;
 	letter-spacing: -0.025em;
 	line-height: 1.18;
-	color: var(--awea-ci-heading);
+	color: var(--awea_contact_info_heading);
 	word-break: break-word;
 }
 
-.awea-ci-subtitle {
+.awea_contact_info_subtitle {
 	margin: 6px 0 0 0;
 	font-size: 0.96rem;
 	line-height: 1.55;
-	color: var(--awea-ci-muted);
+	color: var(--awea_contact_info_muted);
 	word-break: break-word;
 }
 
 /* --------------------------------------------------------------------------
-2. Responsive Contact Grid & Cards
+   2. Responsive Contact Grid & Cards
    -------------------------------------------------------------------------- */
-.awea-ci-grid {
+.awea_contact_info_grid {
 	display: grid;
 	grid-template-columns: repeat(1, minmax(0, 1fr));
 	gap: 14px;
 	width: 100%;
 }
 
-.awea-ci-row {
+.awea_contact_info_row {
 	position: relative;
 	display: flex;
 	align-items: center;
 	gap: 16px;
 	padding: 20px 22px;
 	background-color: #ffffff;
-	border: 1px solid var(--awea-ci-border);
+	border: 1px solid var(--awea_contact_info_border);
 	border-radius: 18px;
 	transition:
 		background-color 0.25s ease,
@@ -79,34 +79,34 @@
 }
 
 /* Vertical Card Layout Mode */
-.awea-ci-dir-vertical .awea-ci-row {
+.awea_contact_info_dir_vertical .awea_contact_info_row {
 	flex-direction: column;
 	align-items: flex-start;
 }
 
-.awea-ci-dir-vertical .awea-ci-actions {
+.awea_contact_info_dir_vertical .awea_contact_info_actions {
 	margin-top: auto;
 	padding-top: 6px;
 	width: 100%;
 	justify-content: space-between;
 }
 
-.awea-ci-row:hover {
-	border-color: var(--awea-ci-primary);
+.awea_contact_info_row:hover {
+	border-color: var(--awea_contact_info_primary);
 }
 
-.awea-ci-has-link,
-.awea-ci-row-copy {
+.awea_contact_info_has_link,
+.awea_contact_info_row_copy {
 	cursor: pointer;
 }
 
-.awea-ci-row-copy:focus-visible {
-	outline: 2px solid var(--awea-ci-primary);
+.awea_contact_info_row_copy:focus-visible {
+	outline: 2px solid var(--awea_contact_info_primary);
 	outline-offset: 2px;
 }
 
 /* Full-Card Link Overlay */
-.awea-ci-cover-link {
+.awea_contact_info_cover_link {
 	position: absolute;
 	inset: 0;
 	z-index: 2;
@@ -114,15 +114,15 @@
 	border-radius: inherit;
 }
 
-.awea-ci-cover-link:focus-visible {
-	outline: 2px solid var(--awea-ci-primary);
+.awea_contact_info_cover_link:focus-visible {
+	outline: 2px solid var(--awea_contact_info_primary);
 	outline-offset: 2px;
 }
 
 /* --------------------------------------------------------------------------
-3. Leading Icon Box
+   3. Leading Icon Box
    -------------------------------------------------------------------------- */
-.awea-ci-icon {
+.awea_contact_info_icon {
 	position: relative;
 	z-index: 1;
 	width: 50px;
@@ -130,7 +130,7 @@
 	border-radius: 14px;
 	background-color: rgba(79, 70, 229, 0.08);
 	border: 1px solid rgba(79, 70, 229, 0.14);
-	color: var(--awea-ci-primary);
+	color: var(--awea_contact_info_primary);
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
@@ -142,32 +142,32 @@
 		transform 0.25s ease;
 }
 
-.awea-ci-icon i {
+.awea_contact_info_icon i {
 	font-size: 18px;
 	line-height: 1;
 }
 
-.awea-ci-icon svg {
+.awea_contact_info_icon svg {
 	width: 18px;
 	height: 18px;
 	display: block;
 	fill: currentColor;
 }
 
-.awea-ci-row:hover .awea-ci-icon {
-	background-color: var(--awea-ci-primary);
-	border-color: var(--awea-ci-primary);
+.awea_contact_info_row:hover .awea_contact_info_icon {
+	background-color: var(--awea_contact_info_primary);
+	border-color: var(--awea_contact_info_primary);
 	color: #ffffff;
 }
 
-.awea-ci-row:hover .awea-ci-icon svg {
+.awea_contact_info_row:hover .awea_contact_info_icon svg {
 	fill: #ffffff;
 }
 
 /* --------------------------------------------------------------------------
-4. Text Body
+   4. Text Body
    -------------------------------------------------------------------------- */
-.awea-ci-body {
+.awea_contact_info_body {
 	position: relative;
 	z-index: 1;
 	flex: 1 1 auto;
@@ -177,42 +177,42 @@
 	min-width: 0;
 }
 
-.awea-ci-label {
+.awea_contact_info_label {
 	display: block;
 	font-size: 0.72rem;
 	font-weight: 700;
 	text-transform: uppercase;
 	letter-spacing: 0.09em;
-	color: var(--awea-ci-muted);
+	color: var(--awea_contact_info_muted);
 	line-height: 1.25;
 }
 
-.awea-ci-value {
+.awea_contact_info_value {
 	display: block;
 	font-size: 1.0625rem;
 	font-weight: 800;
-	color: var(--awea-ci-heading);
+	color: var(--awea_contact_info_heading);
 	letter-spacing: -0.015em;
 	word-break: break-word;
 	line-height: 1.35;
 	transition: color 0.25s ease;
 }
 
-.awea-ci-row:hover .awea-ci-value {
-	color: var(--awea-ci-primary);
+.awea_contact_info_row:hover .awea_contact_info_value {
+	color: var(--awea_contact_info_primary);
 }
 
-.awea-ci-subtext {
+.awea_contact_info_subtext {
 	display: block;
 	font-size: 0.84rem;
-	color: var(--awea-ci-subtext);
+	color: var(--awea_contact_info_subtext);
 	line-height: 1.4;
 }
 
 /* --------------------------------------------------------------------------
-5. Trailing Actions (Copy Button + External Arrow)
+   5. Trailing Actions (Copy Button + External Arrow)
    -------------------------------------------------------------------------- */
-.awea-ci-actions {
+.awea_contact_info_actions {
 	position: relative;
 	z-index: 3;
 	display: inline-flex;
@@ -221,7 +221,7 @@
 	flex-shrink: 0;
 }
 
-.awea-ci-copy-btn {
+.awea_contact_info_copy_btn {
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
@@ -232,7 +232,7 @@
 	padding: 0 10px;
 	border-radius: 10px;
 	background-color: #f1f5f9;
-	border: 1px solid var(--awea-ci-border);
+	border: 1px solid var(--awea_contact_info_border);
 	color: #475569;
 	font-family: inherit;
 	font-size: 0.75rem;
@@ -247,107 +247,118 @@
 		color 0.2s ease;
 }
 
-.awea-ci-copy-btn:hover {
+.awea_contact_info_copy_btn:hover {
 	background-color: #ffffff;
-	border-color: var(--awea-ci-heading);
-	color: var(--awea-ci-heading);
+	border-color: var(--awea_contact_info_heading);
+	color: var(--awea_contact_info_heading);
 }
 
-.awea-ci-copy-btn:focus-visible {
-	outline: 2px solid var(--awea-ci-primary);
+.awea_contact_info_copy_btn:focus-visible {
+	outline: 2px solid var(--awea_contact_info_primary);
 	outline-offset: 2px;
 }
 
-.awea-ci-copy-btn svg {
+.awea_contact_info_copy_btn svg {
 	width: 14px;
 	height: 14px;
 	flex-shrink: 0;
 }
 
-.awea-ci-ico-check,
-.awea-ci-copy-label {
+.awea_contact_info_ico_check,
+.awea_contact_info_copy_label {
 	display: none;
 }
 
-.awea-ci-row.is-copied .awea-ci-ico-copy {
+.awea_contact_info_row.awea_contact_info_is_copied .awea_contact_info_ico_copy {
 	display: none;
 }
 
-.awea-ci-row.is-copied .awea-ci-ico-check,
-.awea-ci-row.is-copied .awea-ci-copy-label {
+.awea_contact_info_row.awea_contact_info_is_copied .awea_contact_info_ico_check,
+.awea_contact_info_row.awea_contact_info_is_copied .awea_contact_info_copy_label {
 	display: inline-block;
 }
 
-.awea-ci-row.is-copied .awea-ci-copy-btn {
+.awea_contact_info_row.awea_contact_info_is_copied .awea_contact_info_copy_btn {
 	background-color: #ecfdf5;
 	border-color: #10b981;
 	color: #059669;
 }
 
-.awea-ci-arrow {
+.awea_contact_info_arrow {
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
 	width: 34px;
 	height: 34px;
 	border-radius: 10px;
-	color: var(--awea-ci-subtext);
+	font-size: 18px;
+	line-height: 1;
+	color: var(--awea_contact_info_subtext);
 	transition:
 		color 0.25s ease,
 		transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.awea-ci-arrow svg {
+.awea_contact_info_arrow svg {
 	width: 18px;
 	height: 18px;
+	display: block;
 }
 
-.awea-ci-row:hover .awea-ci-arrow {
-	color: var(--awea-ci-primary);
+[dir="rtl"] .awea_contact_info_arrow_default {
+	transform: scaleX(-1);
+}
+
+.awea_contact_info_row:hover .awea_contact_info_arrow {
+	color: var(--awea_contact_info_primary);
 	transform: translate(2px, -2px);
 }
 
+[dir="rtl"] .awea_contact_info_row:hover .awea_contact_info_arrow {
+	transform: translate(-2px, -2px);
+}
+
 /* --------------------------------------------------------------------------
-6. Accessibility & Responsive
+   6. Accessibility & Responsive
    -------------------------------------------------------------------------- */
 @media (prefers-reduced-motion: reduce) {
-	.awea-ci-row,
-	.awea-ci-icon,
-	.awea-ci-arrow,
-	.awea-ci-copy-btn {
+	.awea_contact_info_row,
+	.awea_contact_info_icon,
+	.awea_contact_info_arrow,
+	.awea_contact_info_copy_btn {
 		transition: none !important;
 		transform: none !important;
 	}
 }
 
 @media (max-width: 640px) {
-	.awea-ci-header {
+	.awea_contact_info_header {
 		margin-bottom: 22px;
-		padding-left: 14px;
+		padding-inline-start: 14px;
 	}
 
-	.awea-ci-row {
+	.awea_contact_info_row {
 		padding: 16px;
 		border-radius: 14px;
 		gap: 12px;
 	}
 
-	:where(.awea-ci-icon) {
+	:where(.awea_contact_info_icon) {
 		width: 42px;
 		height: 42px;
 		border-radius: 12px;
 	}
 
-	:where(.awea-ci-icon) i {
+	:where(.awea_contact_info_icon) i {
 		font-size: 16px;
 	}
 
-	:where(.awea-ci-icon) svg {
+	:where(.awea_contact_info_icon) svg {
 		width: 16px;
 		height: 16px;
 	}
 
-	.awea-ci-value {
+	.awea_contact_info_value {
 		font-size: 0.98rem;
 	}
 }

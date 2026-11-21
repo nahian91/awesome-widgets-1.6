@@ -48,7 +48,7 @@ class Widget_Awesome_Price_Menu extends Widget_Base {
 	protected function register_controls() {
 
 		/* ==========================================================================
-		   CONTENT: 1. ITEMS (REPEATER)
+		   CONTENT: 1. ITEMS
 		   ========================================================================== */
 		$this->start_controls_section(
 			'awea_section_items',
@@ -86,7 +86,7 @@ class Widget_Awesome_Price_Menu extends Widget_Base {
 		$repeater->add_control(
 			'awea_item_badge',
 			[
-				'label'       => esc_html__( 'Tag / Dietary Badge', 'awesome-widgets-elementor' ),
+				'label'       => esc_html__( 'Badge', 'awesome-widgets-elementor' ),
 				'type'        => Controls_Manager::TEXT,
 				'default'     => '',
 				'placeholder' => esc_html__( 'Chef’s Pick', 'awesome-widgets-elementor' ),
@@ -128,7 +128,7 @@ class Widget_Awesome_Price_Menu extends Widget_Base {
 		$this->add_control(
 			'awea_price_menu_items',
 			[
-				'label'       => esc_html__( 'Menu List', 'awesome-widgets-elementor' ),
+				'label'       => esc_html__( 'List', 'awesome-widgets-elementor' ),
 				'type'        => Controls_Manager::REPEATER,
 				'fields'      => $repeater->get_controls(),
 				'default'     => [
@@ -157,12 +157,12 @@ class Widget_Awesome_Price_Menu extends Widget_Base {
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   CONTENT: 2. SETTINGS
+		   CONTENT: 2. OPTIONS
 		   ========================================================================== */
 		$this->start_controls_section(
 			'awea_section_settings',
 			[
-				'label' => esc_html__( 'Settings', 'awesome-widgets-elementor' ),
+				'label' => esc_html__( 'Options', 'awesome-widgets-elementor' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
 			]
 		);
@@ -170,7 +170,7 @@ class Widget_Awesome_Price_Menu extends Widget_Base {
 		$this->add_control(
 			'awea_title_tag',
 			[
-				'label'   => esc_html__( 'Title HTML Tag', 'awesome-widgets-elementor' ),
+				'label'   => esc_html__( 'Tag', 'awesome-widgets-elementor' ),
 				'type'    => Controls_Manager::SELECT,
 				'default' => 'h4',
 				'options' => [
@@ -202,7 +202,7 @@ class Widget_Awesome_Price_Menu extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_container_max_width',
 			[
-				'label'      => esc_html__( 'Max Width', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Width', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px', '%', 'vw' ],
 				'range'      => [
@@ -239,7 +239,7 @@ class Widget_Awesome_Price_Menu extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_container_radius',
 			[
-				'label'      => esc_html__( 'Border Radius', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Radius', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'default'    => [
@@ -280,6 +280,7 @@ class Widget_Awesome_Price_Menu extends Widget_Base {
 			Group_Control_Border::get_type(),
 			[
 				'name'           => 'awea_container_border',
+				'label'          => esc_html__( 'Border', 'awesome-widgets-elementor' ),
 				'selector'       => '{{WRAPPER}} .awea-price-menu-list',
 				'fields_options' => [
 					'border' => [ 'default' => 'solid' ],
@@ -301,6 +302,7 @@ class Widget_Awesome_Price_Menu extends Widget_Base {
 			Group_Control_Box_Shadow::get_type(),
 			[
 				'name'     => 'awea_container_shadow',
+				'label'    => esc_html__( 'Shadow', 'awesome-widgets-elementor' ),
 				'selector' => '{{WRAPPER}} .awea-price-menu-list',
 			]
 		);
@@ -328,7 +330,7 @@ class Widget_Awesome_Price_Menu extends Widget_Base {
 		$this->add_control(
 			'awea_container_border_hover',
 			[
-				'label'     => esc_html__( 'Border Color', 'awesome-widgets-elementor' ),
+				'label'     => esc_html__( 'Border', 'awesome-widgets-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'global'    => [
 					'default' => Global_Colors::COLOR_PRIMARY,
@@ -343,6 +345,7 @@ class Widget_Awesome_Price_Menu extends Widget_Base {
 			Group_Control_Box_Shadow::get_type(),
 			[
 				'name'     => 'awea_container_shadow_hover',
+				'label'    => esc_html__( 'Shadow', 'awesome-widgets-elementor' ),
 				'selector' => '{{WRAPPER}} .awea-price-menu-list:hover',
 			]
 		);
@@ -353,7 +356,46 @@ class Widget_Awesome_Price_Menu extends Widget_Base {
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   STYLE: 2. PHOTO
+		   STYLE: 2. ROWS
+		   ========================================================================== */
+		$this->start_controls_section(
+			'awea_style_rows',
+			[
+				'label' => esc_html__( 'Rows', 'awesome-widgets-elementor' ),
+				'tab'   => Controls_Manager::TAB_STYLE,
+			]
+		);
+
+		$this->add_responsive_control(
+			'awea_row_gap',
+			[
+				'label'      => esc_html__( 'Spacing', 'awesome-widgets-elementor' ),
+				'type'       => Controls_Manager::SLIDER,
+				'size_units' => [ 'px', 'em' ],
+				'range'      => [ 'px' => [ 'min' => 10, 'max' => 60 ] ],
+				'default'    => [ 'unit' => 'px', 'size' => 24 ],
+				'selectors'  => [
+					'{{WRAPPER}} .awea-price-menu:not(:last-child)' => 'margin-bottom: {{SIZE}}{{UNIT}}; padding-bottom: {{SIZE}}{{UNIT}};',
+				],
+			]
+		);
+
+		$this->add_control(
+			'awea_row_divider_color',
+			[
+				'label'     => esc_html__( 'Divider', 'awesome-widgets-elementor' ),
+				'type'      => Controls_Manager::COLOR,
+				'default'   => 'rgba(15, 23, 42, 0.06)',
+				'selectors' => [
+					'{{WRAPPER}} .awea-price-menu:not(:last-child)' => 'border-bottom-color: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->end_controls_section();
+
+		/* ==========================================================================
+		   STYLE: 3. PHOTO
 		   ========================================================================== */
 		$this->start_controls_section(
 			'awea_section_style_image',
@@ -389,7 +431,7 @@ class Widget_Awesome_Price_Menu extends Widget_Base {
 		$this->add_responsive_control(
 			'awea_thumb_radius',
 			[
-				'label'      => esc_html__( 'Border Radius', 'awesome-widgets-elementor' ),
+				'label'      => esc_html__( 'Radius', 'awesome-widgets-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'default'    => [
@@ -410,6 +452,7 @@ class Widget_Awesome_Price_Menu extends Widget_Base {
 			Group_Control_Border::get_type(),
 			[
 				'name'     => 'awea_thumb_border',
+				'label'    => esc_html__( 'Border', 'awesome-widgets-elementor' ),
 				'selector' => '{{WRAPPER}} .awea-price-menu-thumb',
 			]
 		);
@@ -417,22 +460,13 @@ class Widget_Awesome_Price_Menu extends Widget_Base {
 		$this->end_controls_section();
 
 		/* ==========================================================================
-		   STYLE: 3. TEXT & LEADER
+		   STYLE: 4. TITLE
 		   ========================================================================== */
 		$this->start_controls_section(
-			'awea_section_style_typography',
-			[
-				'label' => esc_html__( 'Typography & Leader', 'awesome-widgets-elementor' ),
-				'tab'   => Controls_Manager::TAB_STYLE,
-			]
-		);
-
-		// Item Title
-		$this->add_control(
-			'awea_heading_title',
+			'awea_style_title',
 			[
 				'label' => esc_html__( 'Title', 'awesome-widgets-elementor' ),
-				'type'  => Controls_Manager::HEADING,
+				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
 
@@ -440,6 +474,7 @@ class Widget_Awesome_Price_Menu extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'awea_title_typography',
+				'label'    => esc_html__( 'Typography', 'awesome-widgets-elementor' ),
 				'selector' => '{{WRAPPER}} .awea-price-menu-title',
 				'global'   => [
 					'default' => Global_Typography::TYPOGRAPHY_PRIMARY,
@@ -490,13 +525,16 @@ class Widget_Awesome_Price_Menu extends Widget_Base {
 		$this->end_controls_tab();
 		$this->end_controls_tabs();
 
-		// Badge
-		$this->add_control(
-			'awea_heading_badge',
+		$this->end_controls_section();
+
+		/* ==========================================================================
+		   STYLE: 5. BADGE
+		   ========================================================================== */
+		$this->start_controls_section(
+			'awea_style_badge',
 			[
-				'label'     => esc_html__( 'Tag Badge', 'awesome-widgets-elementor' ),
-				'type'      => Controls_Manager::HEADING,
-				'separator' => 'before',
+				'label' => esc_html__( 'Badge', 'awesome-widgets-elementor' ),
+				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
 
@@ -504,6 +542,7 @@ class Widget_Awesome_Price_Menu extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'awea_badge_typography',
+				'label'    => esc_html__( 'Typography', 'awesome-widgets-elementor' ),
 				'selector' => '{{WRAPPER}} .awea-price-menu-badge',
 				'global'   => [
 					'default' => Global_Typography::TYPOGRAPHY_SECONDARY,
@@ -535,13 +574,16 @@ class Widget_Awesome_Price_Menu extends Widget_Base {
 			]
 		);
 
-		// Price Amount
-		$this->add_control(
-			'awea_heading_price',
+		$this->end_controls_section();
+
+		/* ==========================================================================
+		   STYLE: 6. PRICE
+		   ========================================================================== */
+		$this->start_controls_section(
+			'awea_style_price',
 			[
-				'label'     => esc_html__( 'Price', 'awesome-widgets-elementor' ),
-				'type'      => Controls_Manager::HEADING,
-				'separator' => 'before',
+				'label' => esc_html__( 'Price', 'awesome-widgets-elementor' ),
+				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
 
@@ -563,6 +605,7 @@ class Widget_Awesome_Price_Menu extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'awea_price_typography',
+				'label'    => esc_html__( 'Typography', 'awesome-widgets-elementor' ),
 				'selector' => '{{WRAPPER}} .awea-price',
 				'global'   => [
 					'default' => Global_Typography::TYPOGRAPHY_PRIMARY,
@@ -570,13 +613,16 @@ class Widget_Awesome_Price_Menu extends Widget_Base {
 			]
 		);
 
-		// Leader Line
-		$this->add_control(
-			'awea_heading_leader',
+		$this->end_controls_section();
+
+		/* ==========================================================================
+		   STYLE: 7. LEADER
+		   ========================================================================== */
+		$this->start_controls_section(
+			'awea_style_leader',
 			[
-				'label'     => esc_html__( 'Leader Line', 'awesome-widgets-elementor' ),
-				'type'      => Controls_Manager::HEADING,
-				'separator' => 'before',
+				'label' => esc_html__( 'Leader', 'awesome-widgets-elementor' ),
+				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
 
@@ -626,13 +672,16 @@ class Widget_Awesome_Price_Menu extends Widget_Base {
 			]
 		);
 
-		// Description
-		$this->add_control(
-			'awea_heading_desc',
+		$this->end_controls_section();
+
+		/* ==========================================================================
+		   STYLE: 8. DESCRIPTION
+		   ========================================================================== */
+		$this->start_controls_section(
+			'awea_style_desc',
 			[
-				'label'     => esc_html__( 'Description', 'awesome-widgets-elementor' ),
-				'type'      => Controls_Manager::HEADING,
-				'separator' => 'before',
+				'label' => esc_html__( 'Description', 'awesome-widgets-elementor' ),
+				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
 
@@ -654,6 +703,7 @@ class Widget_Awesome_Price_Menu extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'awea_desc_typography',
+				'label'    => esc_html__( 'Typography', 'awesome-widgets-elementor' ),
 				'selector' => '{{WRAPPER}} .awea-description',
 				'global'   => [
 					'default' => Global_Typography::TYPOGRAPHY_TEXT,
@@ -671,42 +721,6 @@ class Widget_Awesome_Price_Menu extends Widget_Base {
 				'default'    => [ 'unit' => 'px', 'size' => 6 ],
 				'selectors'  => [
 					'{{WRAPPER}} .awea-description' => 'margin-top: {{SIZE}}{{UNIT}};',
-				],
-			]
-		);
-
-		// Rows & Dividers
-		$this->add_control(
-			'awea_heading_row_spacing',
-			[
-				'label'     => esc_html__( 'Row Dividers', 'awesome-widgets-elementor' ),
-				'type'      => Controls_Manager::HEADING,
-				'separator' => 'before',
-			]
-		);
-
-		$this->add_responsive_control(
-			'awea_row_gap',
-			[
-				'label'      => esc_html__( 'Spacing', 'awesome-widgets-elementor' ),
-				'type'       => Controls_Manager::SLIDER,
-				'size_units' => [ 'px', 'em' ],
-				'range'      => [ 'px' => [ 'min' => 10, 'max' => 60 ] ],
-				'default'    => [ 'unit' => 'px', 'size' => 24 ],
-				'selectors'  => [
-					'{{WRAPPER}} .awea-price-menu:not(:last-child)' => 'margin-bottom: {{SIZE}}{{UNIT}}; padding-bottom: {{SIZE}}{{UNIT}};',
-				],
-			]
-		);
-
-		$this->add_control(
-			'awea_row_divider_color',
-			[
-				'label'     => esc_html__( 'Color', 'awesome-widgets-elementor' ),
-				'type'      => Controls_Manager::COLOR,
-				'default'   => 'rgba(15, 23, 42, 0.06)',
-				'selectors' => [
-					'{{WRAPPER}} .awea-price-menu:not(:last-child)' => 'border-bottom-color: {{VALUE}};',
 				],
 			]
 		);
