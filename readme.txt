@@ -106,7 +106,7 @@ With its clean structure and deep customizability, you can quickly add stunning,
 - **Header Footer Builder Widget**  
   Easily assign, render, and style custom Elementor templates for site-wide headers and footers with sticky/shrinking scroll telemetry.
 
-*Note:* This plugin is an add-on for [Elementor Page Builder](https://wordpress.org/plugins/elementor/) and requires Elementor installed to function.
+*Note:* This plugin is an add-on for [Elementor Page Builder](https://WordPress.org/plugins/elementor/) and requires Elementor installed to function.
 
 == Installation ==
 
